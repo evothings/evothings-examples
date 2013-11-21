@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<!--
+This is an app that demonstrates how to control the Philips Hue Lights:
+https://www.meethue.com/
+Please note that you must manually edit the IP-address of the Hue Bridge
+for this example to work. See comment below in the code.
+-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+    <title>Lights Demo</title>
+    <link href="libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+    html, body
+    {
+        margin: 20px 20px;
+        background-color: rgb(255,255,255);
+    }
+    div
+    {
+        margin: 10px 0px;
+    }
+    .lead
+    {
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <h1>Lights Demo</h1>
+
+    <div class="form-group">
+        <p class="lead">Enter IP-address of the Hue Bridge:</p>
+        <input id="HueBridgeIpAddress" class="form-control input-lg"
+            value="192.168.0.x" type="url"/>
+    </div>
+
+    <div class="form-group">
+        <p class="lead">Press the button on the Hue Bridge, then tap Connect:</p>
+        <button id="connectButton" type="button" class="btn btn-lg btn-success"
+            onclick="app.connect()">Connect</button>
+    </div>
+
+    <div class="form-group">
+        <div class="btn-group" data-toggle="buttons">
+            <label id="lightButton1" class="btn btn-lg btn-primary"
+                onclick="app.selectLight(1)">
+                <input type="radio"/>Light 1
+            </label>
+            <label id="lightButton2" class="btn btn-lg btn-primary"
+                onclick="app.selectLight(3)">
+                <input type="radio"/>Light 2
+            </label>
+            <!-- Uncomment for a third light:
+            <label id="lightButton3" class="btn btn-lg btn-primary"
+                onclick="app.selectLight(3)">
+                <input type="radio"/>Light 3
+            </label>
+            -->
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-lg btn-success"
+                onclick="app.lightsOn()">Lights On</button>
+            <button type="button" class="btn btn-lg btn-danger"
+                onclick="app.lightsOff()">Lights Off</button>
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-lg btn-primary" id="btn_color_1"
+                onclick="app.lightsSetColor1()">Color 1</button>
+            <button type="button" class="btn btn-lg btn-primary" id="btn_color_2"
+                onclick="app.lightsSetColor2()">Color 2</button>
+            <button type="button" class="btn btn-lg btn-primary" id="btn_color_3"
+                onclick="app.lightsSetColor3()">Color 3</button>
+        </div>
+        <div>
+            <button type="button" class="btn btn-lg btn-success"
+                 onclick="app.lightsEffectOn()">Color Loop</button>
+            <button type="button" class="btn btn-lg btn-danger"
+                onclick="app.lightsEffectOff()">Solid Color</button>
+        </div>
+    </div>
+
+    <script src="libs/jquery-2.0.3.js"></script>
+    <script src="libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script>
+    // Application object.
+    var app = {};
+
+    // User name (you can change this, must be at least 10 characters).
+    app.user = 'miki123456';
+
+    // Default light.
+    app.lightId = 1;
+
+    app.bridgeIP = null;
+
+    // define colors that the lights can be configured with
+    app.hueColors = [
+        {'hue': 1000,  'bri': 75, 'sat': 250},
+        {'hue': 10000, 'bri': 75, 'sat': 250},
+        {'hue': 30000, 'bri': 75, 'sat': 250}
+    ];
+
+    // Display the selected default light.
+    $('#lightButton' + app.lightId).button('toggle');
+
+    $(function() {
+        app.fetchBridgeIP(app.checkConnection);
+
+        app.changeButtonColors();
+    });
+
+    app.getCSSHSL = function(hsl)
+    {
+        return 'hsl(' + (360 * hsl.hue / 65535) + ', ' +
+                Math.round(100 * hsl.sat / 255) + '%, ' +
+                Math.round(100 * hsl.bri / 255) + '%)';
+    };
+
+    app.changeButtonColors = function()
+    {
+        for (var i in app.hueColors) {
+            $('#btn_color_' + (parseInt(i)+1))
+                .css('background', app.getCSSHSL(app.hueColors[i]))
+                .css('borderColor', app.getCSSHSL(app.hueColors[i]));
+        }
+    };
+
+    // You can lookup the ip-address of the Hue Bridge by using
+    // this on the command line (ping detectes the Hue Bridge):
+    //   ping 255.255.255.255
+    // followed by (arp lists detected clients):
+    //   arp -a
+    // Look at the MAC-address under the Hue Bridge and find the
+    // matching ip-address in the arp listing.
+    app.getHueBridgeIpAddress = function()
+    {
+        return app.bridgeIP || $('#HueBridgeIpAddress').val();
+    };
+
+    app.setHueBridgeIpAddress = function(ipAddress)
+    {
+        app.bridgeIP = ipAddress;
+        $('#HueBridgeIpAddress').val(app.bridgeIP);
+    };
+
+    app.fetchBridgeIP = function(successFun, failFun) {
+        $.getJSON('http://www.meethue.com/api/nupnp', function(data) {
+            if (data[0] && data[0].hasOwnProperty('internalipaddress')) {
+                app.setHueBridgeIpAddress(data[0].internalipaddress);
+                if (successFun) successFun();
+            }
+        })
+            .fail(failFun);
+    };
+
+    app.checkConnection = function()
+    {
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: 'http://' + app.getHueBridgeIpAddress() +'/api/' + app.user + '/config',
+            success:
+                function() {
+                    $('#connectButton').html('Connected');
+                }
+        });
+    };
+
+    app.connect = function()
+    {
+        $('#connectButton').html('Connecting...')
+        app.registerUser(
+            app.user,
+            function(json)
+            {
+                if (json[0].error)
+                {
+                    $('#connectButton').html('Could not connect')
+                }
+                else if (json[0].success)
+                {
+                    $('#connectButton').html('Connected');
+                }
+                else
+                {
+                    $('#connectButton').html('Something went wrong')
+                }
+            },
+            function()
+            {
+                $('#connectButton').html('Could not find Hue Bridge')
+            })
+    };
+
+    app.registerUser = function(userName, successFun, failFun)
+    {
+        var data = {"devicetype":"test user","username":userName}
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            timeout: 3000,
+            url: 'http://' + app.getHueBridgeIpAddress() +'/api/',
+            data: JSON.stringify(data),
+            success: function(data) { successFun(data) },
+            error: function(a, err) { failFun(err) }
+        });
+    };
+
+    app.selectLight = function(lightId)
+    {
+        app.lightId = lightId;
+    };
+
+    app.lightsOn = function()
+    {
+        app.lightSetState(app.lightId, {"on":true});
+    };
+
+    app.lightsOff = function()
+    {
+        app.lightSetState(app.lightId, {"on":false});
+    };
+
+    app.lightsSetColor1 = function()
+    {
+        app.lightSetState(app.lightId, app.hueColors[0]);
+    };
+
+    app.lightsSetColor2 = function()
+    {
+        app.lightSetState(app.lightId, app.hueColors[1]);
+    };
+
+    app.lightsSetColor3 = function()
+    {
+        app.lightSetState(app.lightId, app.hueColors[2]);
+    };
+
+    app.lightsEffectOn = function()
+    {
+        app.lightSetState(app.lightId, {"effect":"colorloop"});
+    };
+
+    app.lightsEffectOff = function()
+    {
+        app.lightSetState(app.lightId, {"effect":"none"});
+    };
+
+    app.lightSetState = function(lightId, state)
+    {
+        $.ajax({
+            type: 'PUT',
+            dataType: 'json',
+            url: 'http://' + app.getHueBridgeIpAddress() +'/api/' +
+                app.user + '/lights/' + lightId + '/state',
+            data: JSON.stringify(state),
+            success: function(data) { },
+            error: function(a, err) { }
+        });
+    };
+    </script>
+</body>
+</html>
