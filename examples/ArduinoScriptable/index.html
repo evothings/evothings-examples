@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<!--
+This is an app that demonstrates how to control an Arduio board over WiFi:
+http://arduino.cc/
+Please note that you must enter the IP-address of the Arduino
+WiFi shield for this example to work. See comment below in the code.
+-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+    <title>Arduino Scriptable</title>
+    <link href="libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+    html, body
+    {
+        margin: 20px 20px;
+        background-color: rgb(255,255,255);
+    }
+    div
+    {
+        margin: 10px 0px;
+    }
+    .lead
+    {
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <h1>Arduino Scriptable</h1>
+
+        <div class="form-group">
+            <p class="lead">Enter IP-address of the Arduino:</p>
+            <input type="text" class="form-control input-lg" id="ArduinoIpAddress"
+                value="192.168.20.135" type="url"/>
+        </div>
+
+        <div class="form-group">
+            <p class="lead">Script your Arduino using JavaScript!</p>
+            <textarea class="form-control input-lg" id="ArduinoScript" rows="10">
+// Turning a LED on/off.
+arduino.pinMode(5, OUTPUT)
+/*function UpdateLed(n) {
+    arduino.digitalWrite(5, n%2)
+    n && setTimeout(UpdateLed, 1000, n-1)
+}
+UpdateLed(2)*/</textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-success" onclick="app.runScript()">
+                Run Script</button>
+            <button class="btn btn-lg btn-primary" onclick="app.reset()">
+                Reset</button>
+        </div>
+
+    <script src="libs/jquery-2.0.3.js"></script>
+    <script src="libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script src="cordova.js"></script>
+    <script src="arduino.js"></script>
+    <script>
+    var app = {}
+
+    app.runScript = function()
+    {
+    	arduino.ipAddress = $('#ArduinoIpAddress').val()
+        try
+        {
+            eval($('#ArduinoScript').val())
+        }
+        catch (err)
+        {
+            alert(err)
+        }
+    }
+
+    app.reset = function()
+    {
+        window.location.reload(false)
+    }
+    </script>
+</body>
+</html>
