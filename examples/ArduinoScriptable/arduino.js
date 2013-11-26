@@ -76,7 +76,7 @@ arduino.sendRequest = function(command, callbackFun)
 	{
 		arduino.write(
 			arduino.socketId,
-			command,
+			command + '\n',
 			function(bytesWritten)
 			{
 				callbackFun(bytesWritten === command.length)
