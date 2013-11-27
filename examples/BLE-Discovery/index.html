@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.5" />
+		<link rel="stylesheet" type="text/css" href="css/themes/default/jquery.mobile-1.4.0-beta.1.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<title>BLE-demo</title>
+
+		<script src="js/jquery.js"></script>
+		<script>
+			var console = hyper;
+			window.onerror = function(msg, url, line) {
+				console.log(msg+": "+url+":"+line);
+			};
+		</script>
+
+		<script src="js/jquery.mobile-1.4.0-beta.1.js"></script>
+		<script src="cordova.js"></script>
+		<script src="js/index.js"></script>
+		<script>
+			app.initialize();
+		</script>
+	</head>
+	<body>
+	<div data-role="page" id="first" data-theme="a">
+		<div data-role="header">
+			<h1>BLE demo</h1>
+		</div>
+
+		<div data-role="content">
+			<h2>Test</h2>
+			<div id="testList" data-role="collapsible-set" data-theme="a"></div>
+			<div id="testListTemplate" data-role="collapsible-set" data-theme="a">
+				<div data-role="collapsible">
+					<h2></h2>
+					<ul data-role="listview" data-theme="b" data-divider-theme="b">
+						<li></li>
+					</ul>
+				</div>
+			</div>
+			<h2>Devices</h2>
+			<!-- TODO: buttons to start/stop scan. -->
+			<ul data-role="listview" id="deviceList">
+				<li>Address RSSI Name</li>
+			</ul>
+		</div><!-- /content -->
+
+	</div><!-- /page #first -->
+
+	<div data-role="page" id="connected" data-theme="a">
+		<div data-role="header">
+			<h1>BLE demo</h1>
+			<h3 id="deviceName"></h3>
+			<h3>State: <span id="deviceState"></span></h3>
+		</div>
+
+		<div data-role="content">
+			<h2>Services</h2>
+			<div id="serviceList" data-role="collapsible-set" data-theme="a"></div>
+		</div>
+	</div>
+
+	</body>
+</html>
