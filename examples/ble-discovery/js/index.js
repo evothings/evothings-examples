@@ -1,7 +1,7 @@
 
-var ble = window.BLE;
+var ble = cordova.require('com.evothings.ble.BLE');
 
-var formatFlags = function(name, flags, translation) {
+function formatFlags(name, flags, translation) {
 	var str = name+':';
 	for (var key in translation) {
 		if((flags & key) != 0)
@@ -140,7 +140,7 @@ function testList(refresh) {
 }
 
 $( document ).on( 'pageinit', '#first', function( event ) {
-	testList(true);
+	//testList(true);
 });
 
 var app = {
@@ -161,11 +161,15 @@ var app = {
 	// function, we must explicity call 'app.receivedEvent(...);'
 	onDeviceReady: function() {
 		app.receivedEvent('deviceready');
-		ble = window.BLE;
 
-		//console.log("testCharConversion");
-		// once this passes, we can startLeScan().
-		//app.testCharConversion();
+		app.resetBLE();
+	},
+	// Update DOM on a Received Event
+	receivedEvent: function(id) {
+		console.log('Received Event: ' + id);
+	},
+
+	resetBLE: function() {
 		console.log("resetting...");
 		ble.stopScan();
 		ble.reset(function() {
@@ -174,10 +178,6 @@ var app = {
 		}, function(err) {
 			console.log("reset error: "+err);
 		});
-	},
-	// Update DOM on a Received Event
-	receivedEvent: function(id) {
-		console.log('Received Event: ' + id);
 	},
 
 	testCharConversion: function() {
@@ -220,6 +220,7 @@ var app = {
 			$("#deviceList").listview("refresh");
 		}, function(errorCode) {
 			console.log('startScan error: ' + errorCode);
+			app.resetBLE();
 		});
 	},
 
@@ -236,6 +237,7 @@ var app = {
 			}
 		}, function(errorCode) {
 			console.log('connect error: ' + errorCode);
+			app.resetBLE();
 		});
 	},
 

@@ -24,7 +24,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.5" />
 		<link rel="stylesheet" type="text/css" href="css/themes/default/jquery.mobile-1.4.0-beta.1.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/index.css" />
-		<title>BLE-demo</title>
+		<title>BLE-Discovery</title>
 
 		<script src="js/jquery.js"></script>
 		<script>
@@ -36,6 +36,7 @@
 
 		<script src="js/jquery.mobile-1.4.0-beta.1.js"></script>
 		<script src="cordova.js"></script>
+		<script type="text/javascript" src="plugins/com.evothings.ble/ble.js"></script>
 		<script src="js/index.js"></script>
 		<script>
 			app.initialize();
@@ -44,12 +45,14 @@
 	<body>
 	<div data-role="page" id="first" data-theme="a">
 		<div data-role="header">
-			<h1>BLE demo</h1>
+			<h1>BLE Discovery</h1>
 		</div>
 
 		<div data-role="content">
+<!--
 			<h2>Test</h2>
 			<div id="testList" data-role="collapsible-set" data-theme="a"></div>
+-->
 			<div id="testListTemplate" data-role="collapsible-set" data-theme="a">
 				<div data-role="collapsible">
 					<h2></h2>
@@ -69,7 +72,7 @@
 
 	<div data-role="page" id="connected" data-theme="a">
 		<div data-role="header">
-			<h1>BLE demo</h1>
+			<h1>BLE Discovery</h1>
 			<h3 id="deviceName"></h3>
 			<h3>State: <span id="deviceState"></span></h3>
 		</div>
