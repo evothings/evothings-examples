@@ -3,59 +3,53 @@
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
-
         <meta name="viewport" content="user-scalable=1,initial-scale=1,width=device-width" />
-        <title>Cordova Demo</title>
-
-   		<link href="libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    	<script src="libs/jquery/jquery-2.0.3.min.js"></script>
-    	<script src="libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-
+        <title>Cordova Basic</title>
+   		<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <style>
-    	body
-    	{
-			margin: 10px;
-			background-color: rgb(255,150,0);
+    	body {
+			margin: 10px 15px;
+			background-color: rgb(255,255,255);
 		}
-    	h1
-    	{
+    	h1 {
 			font-weight: bold;
-			color: white;
+			color: black;
 		}
-		div
-		{
+    	p {
+			font-size: 120%;
+		}
+		.div-spacing {
 			margin: 20px 0px;
 		}
 		</style>
     </head>
     <body>
         <div>
-        	<h1>Cordova Demo</h1>
+        	<h1>Cordova Basic</h1>
+        	<p>This app demonstrates basic Cordova functionality. For the app to work, you need to run it in the EvoThings Client App, or build a native Cordova app yourself.</p>
         </div>
-        <div>
+        <div class = "div-spacing">
             <button class="btn btn-lg btn-success"
             	onclick="messagebox('Hello EvoThings!')">
             	Hello
-            </button>
-            <button class="btn btn-lg btn-primary"
-            	onclick="navigator.notification.beep(1)">
-            	Beep
             </button>
             <button class="btn btn-lg btn-danger"
             	onclick="navigator.notification.vibrate(1000)">
             	Vibrate
             </button>
         </div>
-        <div>
-        	<h3 id="compass-heading">[Waiting for compass]</h3>
-        	<h3 id="compass-direction"></h3>
-        </div>
+        <div class="panel panel-primary">
+        	<div class="panel-heading">
+   				<h3 class="panel-title">Compass</h3>
+  			</div>
+  			<div class="panel-body">
+        		<p id="compass-heading">[Waiting for compass]</p>
+        		<p id="compass-direction"></p>
+  			</div>
+		</div>
 
-        <div>
-			<p>&nbsp;<br/>Copyright &copy; 2013 Evothings AB</p>
-			<p><a href="http://evothings.com">evothings.com</a></p>
-        </div>
-
+    	<script src="libs/jquery/jquery-2.0.3.min.js"></script>
+    	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
         <script src="cordova.js"></script>
         <script type="text/javascript">
         function messagebox(message)

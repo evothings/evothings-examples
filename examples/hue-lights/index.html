@@ -10,19 +10,16 @@ for this example to work. See comment below in the code.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
     <title>Lights Demo</title>
-    <link href="libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <style>
-    html, body
-    {
-        margin: 20px 20px;
+    html, body {
+        margin: 0px 10px;
         background-color: rgb(255,255,255);
     }
-    div
-    {
+    div {
         margin: 10px 0px;
     }
-    .lead
-    {
+    .lead {
         font-weight: bold;
     }
     </style>
@@ -49,22 +46,20 @@ for this example to work. See comment below in the code.
                 <input type="radio"/>Light 1
             </label>
             <label id="lightButton2" class="btn btn-lg btn-primary"
-                onclick="app.selectLight(3)">
+                onclick="app.selectLight(2)">
                 <input type="radio"/>Light 2
             </label>
-            <!-- Uncomment for a third light:
             <label id="lightButton3" class="btn btn-lg btn-primary"
                 onclick="app.selectLight(3)">
                 <input type="radio"/>Light 3
             </label>
-            -->
         </div>
 
         <div>
             <button type="button" class="btn btn-lg btn-success"
-                onclick="app.lightsOn()">Lights On</button>
+                onclick="app.lightOn()">Light On</button>
             <button type="button" class="btn btn-lg btn-danger"
-                onclick="app.lightsOff()">Lights Off</button>
+                onclick="app.lightOff()">Light Off</button>
         </div>
 
         <div>
@@ -83,46 +78,50 @@ for this example to work. See comment below in the code.
         </div>
     </div>
 
-    <script src="libs/jquery-2.0.3.js"></script>
-    <script src="libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script src="libs/jquery/jquery-2.0.3.js"></script>
+    <script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
     <script>
     // Application object.
     var app = {};
 
     // User name (you can change this, must be at least 10 characters).
-    app.user = 'miki123456';
+    app.user = 'evo1234567';
 
     // Default light.
     app.lightId = 1;
 
     app.bridgeIP = null;
 
-    // define colors that the lights can be configured with
+    // Define colors that the lights can be configured with.
+    // The colour buttons are set to these colours.
     app.hueColors = [
-        {'hue': 1000,  'bri': 75, 'sat': 250},
-        {'hue': 10000, 'bri': 75, 'sat': 250},
-        {'hue': 30000, 'bri': 75, 'sat': 250}
+        {'hue':1000,  'bri':75, 'sat':250},
+        {'hue':10000, 'bri':75, 'sat':250},
+        {'hue':30000, 'bri':75, 'sat':250}
     ];
 
     // Display the selected default light.
     $('#lightButton' + app.lightId).button('toggle');
 
-    $(function() {
+	// When page has loaded, this function runs to
+	// look for the IP address of the HurBridge.
+    $(function()
+    {
         app.fetchBridgeIP(app.checkConnection);
-
         app.changeButtonColors();
     });
 
     app.getCSSHSL = function(hsl)
     {
-        return 'hsl(' + (360 * hsl.hue / 65535) + ', ' +
-                Math.round(100 * hsl.sat / 255) + '%, ' +
+        return 'hsl(' + (360 * hsl.hue / 65535) + ',' +
+                Math.round(100 * hsl.sat / 255) + '%,' +
                 Math.round(100 * hsl.bri / 255) + '%)';
     };
 
     app.changeButtonColors = function()
     {
-        for (var i in app.hueColors) {
+        for (var i in app.hueColors)
+        {
             $('#btn_color_' + (parseInt(i)+1))
                 .css('background', app.getCSSHSL(app.hueColors[i]))
                 .css('borderColor', app.getCSSHSL(app.hueColors[i]));
@@ -147,14 +146,17 @@ for this example to work. See comment below in the code.
         $('#HueBridgeIpAddress').val(app.bridgeIP);
     };
 
-    app.fetchBridgeIP = function(successFun, failFun) {
-        $.getJSON('http://www.meethue.com/api/nupnp', function(data) {
-            if (data[0] && data[0].hasOwnProperty('internalipaddress')) {
+	// Get the IP address of the HueBridge on this network.
+    app.fetchBridgeIP = function(successFun, failFun)
+    {
+        $.getJSON('http://www.meethue.com/api/nupnp', function(data)
+        {
+            if (data[0] && data[0].hasOwnProperty('internalipaddress'))
+            {
                 app.setHueBridgeIpAddress(data[0].internalipaddress);
                 if (successFun) successFun();
             }
-        })
-            .fail(failFun);
+        }).fail(failFun);
     };
 
     app.checkConnection = function()
@@ -162,7 +164,9 @@ for this example to work. See comment below in the code.
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: 'http://' + app.getHueBridgeIpAddress() +'/api/' + app.user + '/config',
+            url: 'http://' +
+            	app.getHueBridgeIpAddress() +'/api/' +
+            	app.user + '/config',
             success:
                 function() {
                     $('#connectButton').html('Connected');
@@ -193,12 +197,12 @@ for this example to work. See comment below in the code.
             function()
             {
                 $('#connectButton').html('Could not find Hue Bridge')
-            })
+            });
     };
 
     app.registerUser = function(userName, successFun, failFun)
     {
-        var data = {"devicetype":"test user","username":userName}
+        var data = {"devicetype":"test user", "username":userName}
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -215,12 +219,12 @@ for this example to work. See comment below in the code.
         app.lightId = lightId;
     };
 
-    app.lightsOn = function()
+    app.lightOn = function()
     {
         app.lightSetState(app.lightId, {"on":true});
     };
 
-    app.lightsOff = function()
+    app.lightOff = function()
     {
         app.lightSetState(app.lightId, {"on":false});
     };
