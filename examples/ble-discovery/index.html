@@ -21,22 +21,20 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="format-detection" content="telephone=no" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.5" />
-		<link rel="stylesheet" type="text/css" href="css/themes/default/jquery.mobile-1.4.0-beta.1.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/index.css" />
-		<title>BLE-Discovery</title>
-
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.0-beta.1.min.css" />
+		<link rel="stylesheet" href="css/index.css" />
+		<title>BLE Discovery</title>
 		<script src="js/jquery.js"></script>
 		<script>
-			var console = hyper;
+			if (window.hyper) { console.log = hyper.log; }
 			window.onerror = function(msg, url, line) {
 				console.log(msg+": "+url+":"+line);
 			};
 		</script>
-
 		<script src="js/jquery.mobile-1.4.0-beta.1.js"></script>
 		<script src="cordova.js"></script>
-		<script type="text/javascript" src="plugins/com.evothings.ble/ble.js"></script>
+		<script src="plugins/com.evothings.ble/ble.js"></script>
 		<script src="js/index.js"></script>
 		<script>
 			app.initialize();
@@ -61,11 +59,15 @@
 					</ul>
 				</div>
 			</div>
-			<h2>Devices</h2>
+			<h2>Devices (auto discovery mode)</h2>
 			<!-- TODO: buttons to start/stop scan. -->
 			<ul data-role="listview" id="deviceList">
 				<li>Address RSSI Name</li>
 			</ul>
+			<div style="margin-top:30px;padding:0px 10px;border:1px solid;">
+			<p>This app automatically scans for BLE devices. Note that you must run this app in the EvoThings client app, or build a Cordova app with the plugin com.evothings.ble. Device with support for Bluetooth 4.0 and Android 4.3 or higher required.</p>
+        <p>How to use: The app  should detect running BLE devices. There are known problems with BLE stop working on multiple reloads. Restart the EvoThings client app in this case.</p>
+        	</div>
 		</div><!-- /content -->
 
 	</div><!-- /page #first -->

@@ -17,37 +17,49 @@
     specific language governing permissions and limitations
     under the License.
 -->
+<!--
+	Description:
+
+	BLE example application that demonstrates how to communicate
+	with an Arduino BLE shield.
+
+	Requirements:
+
+	See text in the app user interface.
+-->
 <html>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="format-detection" content="telephone=no" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.5" />
-		<title>ArduinoBLE</title>
-
-		<script type="text/javascript">
-			var console = hyper;
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Arduino BLE</title>
+		<script>
+			if (window.hyper) { console.log = hyper.log; }
 			window.onerror = function(msg, url, line) {
 				console.log(msg+": "+url+":"+line);
 			};
 		</script>
-
-		<style type="text/css">
+		<style>
 			canvas { border: 1px solid black; }
 		</style>
-
-		<script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="plugins/com.evothings.ble/ble.js"></script>
+		<script src="cordova.js"></script>
+		<script src="plugins/com.evothings.ble/ble.js"></script>
 	</head>
 	<body>
-		<button id="on" onClick="app.on();">ON</button>
-		<button id="off" onClick="app.off();">OFF</button>
+        <h1>Arduino BLE</h1>
+		<div>
+			<button id="on" onclick="app.on();">ON</button>
+			<button id="off" onclick="app.off();">OFF</button>
+			<br/>
+			<canvas id="canvas" />
+		</div>
+        <p>This app shows how to connect to an Arduino BLE shield. Note that you must run this app in the EvoThings client app, or build a Cordova app with the plugin com.evothings.ble. Device with support for Bluetooth 4.0 and Android 4.3 or higher required.</p>
+        <p>How to use: The input from analog pin A4 is plotted on the canvas. Exemple setup used is 5V+ to variable resistor with output in parallel to ~3K-resistor connected to ground and a direct wire to A4.</p>
+        <p>There are known problems with BLE stop working on multiple reloads. Restart the EvoThings client app in this case.</p>
 
-		<br>
-		<canvas id="canvas" />
-
-		<script type="text/javascript" src="index.js"></script>
-		<script type="text/javascript">
-				app.initialize();
+		<script src="index.js"></script>
+		<script>
+			app.initialize();
 		</script>
 	</body>
 </html>

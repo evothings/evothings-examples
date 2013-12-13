@@ -1,3 +1,4 @@
+// JavaScript code for the BLE Discovery example app.
 
 var ble = cordova.require('com.evothings.ble.BLE');
 

@@ -1,3 +1,4 @@
+// JavaScript code for the Arduino BLE example app.
 
 var ble = cordova.require('com.evothings.ble.BLE');
 
@@ -18,7 +19,8 @@ var app = {
 		console.log("width: "+document.body.clientWidth);
 		console.log("height: "+document.body.clientHeight);
 		canvas.width = document.body.clientWidth * 0.9;
-		canvas.height = document.body.clientHeight * 1.8;
+		canvas.height = document.body.clientHeight * 0.9;
+		//canvas.height = document.body.clientHeight * 1.8;
 		// doesn't help against blurry lines.
 		canvas.style.width = canvas.width + "px";
 		canvas.style.height = canvas.height + "px";
