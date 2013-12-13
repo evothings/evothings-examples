@@ -87,11 +87,12 @@
 			var offset = 45/2
 			if (heading < offset) return 'Facing North'
 			if (heading < offset + 45) return 'Facing North-East'
-			if (heading < offset + 90) return 'Facing South-East'
-			if (heading < offset + 135) return 'Facing South'
-			if (heading < offset + 180) return 'Facing South-West'
-			if (heading < offset + 225) return 'Facing West'
-			if (heading < offset + 270) return 'Facing North-West'
+			if (heading < offset + 90) return 'Facing East'
+			if (heading < offset + 135) return 'Facing South-East'
+			if (heading < offset + 180) return 'Facing South'
+			if (heading < offset + 225) return 'Facing South-West'
+			if (heading < offset + 270) return 'Facing West'
+			if (heading < offset + 315) return 'Facing North-West'
 			return 'Facing North'
 		}
 
