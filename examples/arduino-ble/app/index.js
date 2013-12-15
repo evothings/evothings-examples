@@ -18,8 +18,12 @@ var app = {
 		var canvas = document.getElementById('canvas');
 		console.log("width: "+document.body.clientWidth);
 		console.log("height: "+document.body.clientHeight);
-		canvas.width = document.body.clientWidth * 0.9;
-		canvas.height = document.body.clientHeight * 0.9;
+		var size = 0.9 * Math.min(
+			document.body.clientWidth,
+			document.body.clientHeight);
+		canvas.width = size;
+		canvas.height = size;
+		//canvas.width = document.body.clientWidth * 0.9;
 		//canvas.height = document.body.clientHeight * 1.8;
 		// doesn't help against blurry lines.
 		canvas.style.width = canvas.width + "px";
