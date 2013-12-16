@@ -28,15 +28,15 @@ for this example to work. See comment below in the code.
     <h1>Lights Demo</h1>
 
     <div class="form-group">
-        <p class="lead">Enter IP-address of the Hue Bridge:</p>
-        <input id="HueBridgeIpAddress" class="form-control input-lg"
-            value="192.168.0.x" type="url"/>
+        <p class="lead">Press the button on the Hue Bridge, then tap Connect. This will automatically find the IP-address of the Hue.</p>
+        <button id="connectButton" type="button" class="btn btn-lg btn-success"
+            onclick="app.connect()">Connect</button>
     </div>
 
     <div class="form-group">
-        <p class="lead">Press the button on the Hue Bridge, then tap Connect:</p>
-        <button id="connectButton" type="button" class="btn btn-lg btn-success"
-            onclick="app.connect()">Connect</button>
+        <p class="lead">IP-address of the Hue Bridge:</p>
+        <input id="HueBridgeIpAddress" class="form-control input-lg"
+            value="192.168.0.x" type="url"/>
     </div>
 
     <div class="form-group">
