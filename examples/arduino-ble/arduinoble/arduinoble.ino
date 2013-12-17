@@ -6,7 +6,7 @@
 #include <services.h>
 
 // Define input/output pins
-#define INPUT_PIN A4
+#define INPUT_PIN A0
 #define LED_PIN 2
 
 // This function is called only once, at reset.
