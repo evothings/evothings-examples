@@ -1,6 +1,32 @@
 // JavaScript code for the Arduino BLE example app.
 
-var ble = cordova.require('com.evothings.ble.BLE');
+var ble = null;
+
+if (window.hyper) { console.log = hyper.log; }
+
+window.onerror = function(msg, url, line) {
+	console.log(msg+": "+url+":"+line);
+};
+
+$(document).ready( function(){
+	//Get the canvas & context
+	var c = $('#canvas');
+	var ct = c.get(0).getContext('2d');
+	var container = $(c).parent();
+
+	//Run function when browser resizes
+	$(window).resize( respondCanvas );
+
+	function respondCanvas(){ 
+		c.attr('width', $(container).width() ); //max width
+		//c.attr('height', $(container).height() ); //max height
+
+		//Call a function to redraw other content (texts, images etc)
+	}
+
+	//Initial call 
+	respondCanvas();
+});
 
 var formatFlags = function(name, flags, translation) {
 	var str = name+':';
@@ -12,22 +38,9 @@ var formatFlags = function(name, flags, translation) {
 }
 
 var app = {
-    // Application Constructor
+	// Application Constructor
 	initialize: function() {
 		console.log("initialize");
-		var canvas = document.getElementById('canvas');
-		console.log("width: "+document.body.clientWidth);
-		console.log("height: "+document.body.clientHeight);
-		var size = 0.9 * Math.min(
-			document.body.clientWidth,
-			document.body.clientHeight);
-		canvas.width = size;
-		canvas.height = size;
-		//canvas.width = document.body.clientWidth * 0.9;
-		//canvas.height = document.body.clientHeight * 1.8;
-		// doesn't help against blurry lines.
-		canvas.style.width = canvas.width + "px";
-		canvas.style.height = canvas.height + "px";
 		this.bindEvents();
 	},
 	// Bind Event Listeners
@@ -43,6 +56,8 @@ var app = {
 	// function, we must explicity call 'app.receivedEvent(...);'
 	onDeviceReady: function() {
 		app.receivedEvent('deviceready');
+
+		ble = cordova.require('com.evothings.ble.BLE');
 
 		if(window.sessionStorage.getItem('deviceState') == 2) {
 			app.checkServices(window.sessionStorage.getItem('device'));
