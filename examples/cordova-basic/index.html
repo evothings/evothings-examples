@@ -1,63 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=1,initial-scale=1,width=device-width" />
-        <title>Cordova Basic</title>
-   		<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <style>
-    	body {
+	<head>
+		<meta charset="utf-8" />
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="user-scalable=1,initial-scale=1,width=device-width" />
+		<title>Cordova Basic</title>
+		<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style>
+		body {
 			margin: 10px 15px;
 			background-color: rgb(255,255,255);
 		}
-    	h1 {
+		h1 {
 			font-weight: bold;
 			color: black;
 		}
-    	p {
+		p {
 			font-size: 120%;
 		}
 		.div-spacing {
 			margin: 20px 0px;
 		}
 		</style>
-    </head>
-    <body>
-        <div>
-        	<h1>Cordova Basic</h1>
-        	<p>This app demonstrates basic Cordova functionality. For the app to work, you need to run it in the EvoThings Client App, or build a native Cordova app yourself.</p>
-        </div>
-        <div class = "div-spacing">
-            <button class="btn btn-lg btn-success"
-            	onclick="messagebox('Hello EvoThings!')">
-            	Native Dialog
-            </button>
-            <button class="btn btn-lg btn-danger"
-            	onclick="navigator.notification.vibrate(1000)">
-            	Vibrate
-            </button>
-        </div>
-        <div class="panel panel-primary">
-        	<div class="panel-heading">
-   				<h3 class="panel-title">Compass</h3>
-  			</div>
-  			<div class="panel-body">
-        		<p id="compass-heading">[Waiting for compass]</p>
-        		<p id="compass-direction"></p>
-  			</div>
+	</head>
+	<body>
+		<div>
+			<h1>Cordova Basic</h1>
+			<p>This app demonstrates basic Cordova functionality. For the app to work, you need to run it in the EvoThings Client App, or build a native Cordova app yourself.</p>
+		</div>
+		<div class = "div-spacing">
+			<button class="btn btn-lg btn-success"
+				onclick="messagebox('Hello EvoThings!')">
+				Native Dialog
+			</button>
+			<button class="btn btn-lg btn-danger"
+				onclick="navigator.notification.vibrate(1000)">
+				Vibrate
+			</button>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Compass</h3>
+			</div>
+			<div class="panel-body">
+				<p id="compass-heading">[Waiting for compass]</p>
+				<p id="compass-direction"></p>
+			</div>
 		</div>
 
-    	<script src="libs/jquery/jquery-2.0.3.min.js"></script>
-    	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
-        <script src="cordova.js"></script>
-        <script type="text/javascript">
-        function messagebox(message)
-        {
+		<script src="libs/jquery/jquery-2.0.3.min.js"></script>
+		<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
+		<script src="cordova.js"></script>
+		<script type="text/javascript">
+		function messagebox(message)
+		{
 			navigator.notification.alert(
-    			message,
-    			function alertDismissed() {})
-    	}
+				message,
+				function alertDismissed() {})
+		}
 
 		function onDeviceReady()
 		{
@@ -113,7 +113,7 @@
 			document.getElementById('compass-direction').innerHTML = data
 		}
 
-    	document.addEventListener("deviceready", onDeviceReady, false)
-        </script>
-    </body>
+		document.addEventListener("deviceready", onDeviceReady, false)
+		</script>
+	</body>
 </html>
