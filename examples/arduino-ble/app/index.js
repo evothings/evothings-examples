@@ -1,5 +1,6 @@
 // JavaScript code for the Arduino BLE example app.
 
+// BLE plugin object.
 var ble = null;
 
 if (window.hyper) { console.log = hyper.log; }
@@ -17,17 +18,18 @@ $(document).ready( function(){
 	//Run function when browser resizes
 	$(window).resize( respondCanvas );
 
-	function respondCanvas(){ 
+	function respondCanvas(){
 		c.attr('width', $(container).width() ); //max width
 		//c.attr('height', $(container).height() ); //max height
 
 		//Call a function to redraw other content (texts, images etc)
 	}
 
-	//Initial call 
+	//Initial call
 	respondCanvas();
 });
 
+// TODO: Move global function to app object?
 var formatFlags = function(name, flags, translation) {
 	var str = name+':';
 	for (var key in translation) {
@@ -57,7 +59,7 @@ var app = {
 	onDeviceReady: function() {
 		app.receivedEvent('deviceready');
 
-		ble = cordova.require('com.evothings.ble.BLE');
+		ble = evothings.ble;
 
 		if(window.sessionStorage.getItem('deviceState') == 2) {
 			app.checkServices(window.sessionStorage.getItem('device'));

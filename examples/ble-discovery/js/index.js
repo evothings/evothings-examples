@@ -1,17 +1,22 @@
 // JavaScript code for the BLE Discovery example app.
 
-var ble = cordova.require('com.evothings.ble.BLE');
+// TODO: Add comments to functions, shorten long lines.
 
-function formatFlags(name, flags, translation) {
-	var str = name+':';
-	for (var key in translation) {
-		if((flags & key) != 0)
-			str += ' '+translation[key];
-	}
-	return str;
-}
+// BLE plugin object.
+var ble = null;
 
+// Closure that adds jQueryMobile helper methods.
 (function ( $ ) {
+
+	// Set format flags.
+	function formatFlags(name, flags, translation) {
+		var str = name+':';
+		for (var key in translation) {
+			if((flags & key) != 0)
+				str += ' '+translation[key];
+		}
+		return str;
+	}
 
 	$.fn.addCollapsibleSet = function(options) {
 		var params = $.extend({
@@ -128,6 +133,8 @@ function formatFlags(name, flags, translation) {
 
 }( jQuery ));
 
+// TODO: Is this function used?
+// Move function from global scope to app object?
 function testList(refresh) {
 	$('#testList').addCollapsible({template: $('#testListTemplate'), title: 'testtitle1'})
 				  .addCollapsibleSet()
@@ -140,15 +147,18 @@ function testList(refresh) {
 		$('#testList').closest('div[data-role=page]').trigger('create');
 }
 
-$( document ).on( 'pageinit', '#first', function( event ) {
+// TODO: Not used?
+$(document).on('pageinit', '#first', function(event) {
 	//testList(true);
 });
 
+// Application object.
 var app = {
 	// Application Constructor
 	initialize: function() {
 		this.bindEvents();
 	},
+
 	// Bind Event Listeners
 	//
 	// Bind any events that are required on startup. Common events are:
@@ -156,16 +166,19 @@ var app = {
 	bindEvents: function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);
 	},
+
 	// deviceready Event Handler
 	//
 	// The scope of 'this' is the event. In order to call the 'receivedEvent'
 	// function, we must explicity call 'app.receivedEvent(...);'
 	onDeviceReady: function() {
+		ble = evothings.ble;
 		app.receivedEvent('deviceready');
-
 		app.resetBLE();
 	},
-	// Update DOM on a Received Event
+
+	// TODO: Update DOM on a Received Event.
+	// Currently logging event.
 	receivedEvent: function(id) {
 		console.log('Received Event: ' + id);
 	},
