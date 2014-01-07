@@ -150,7 +150,7 @@ String readRequest(WiFiClient* client)
 			// Exit loop if end of line.
 			if ('\n' == c)
 			{
-			    return request;
+				return request;
 			}
 
 			// Add byte to request line.

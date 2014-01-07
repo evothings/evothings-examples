@@ -7,38 +7,38 @@ Please note that you must enter the IP-address of the Arduino
 WiFi shield for this example to work. See comment below in the code.
 -->
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
-    <title>Arduino Scriptable</title>
-    <link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <style>
-    html, body
-    {
-        margin: 10px 10px;
-        background-color: rgb(255,255,255);
-    }
-    div
-    {
-        margin: 10px 0px;
-    }
-    .lead
-    {
-        font-weight: bold;
-    }
-    </style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+	<title>Arduino Scriptable</title>
+	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style>
+	html, body
+	{
+		margin: 10px 10px;
+		background-color: rgb(255,255,255);
+	}
+	div
+	{
+		margin: 10px 0px;
+	}
+	.lead
+	{
+		font-weight: bold;
+	}
+	</style>
 </head>
 <body>
-    <h1>Arduino Scriptable</h1>
+	<h1>Arduino Scriptable</h1>
 
-        <div class="form-group">
-            <p class="lead">Enter IP-address of the Arduino:</p>
-            <input type="text" class="form-control input-lg" id="ArduinoIpAddress"
-                value="192.168.0.x" type="url"/>
-        </div>
+		<div class="form-group">
+			<p class="lead">Enter IP-address of the Arduino:</p>
+			<input type="text" class="form-control input-lg" id="ArduinoIpAddress"
+				value="192.168.0.x" type="url"/>
+		</div>
 
-        <div class="form-group">
-            <p class="lead">Script your Arduino using JavaScript!</p>
-            <textarea class="form-control input-lg" id="ArduinoScript" rows="14">
+		<div class="form-group">
+			<p class="lead">Script your Arduino using JavaScript!</p>
+			<textarea class="form-control input-lg" id="ArduinoScript" rows="14">
 // Blinking a LED.
 var pin = 2, delay = 1000
 arduino.port = 3300
@@ -53,40 +53,40 @@ function ledOff() {
 }
 ledOn() // Start blinking
 </textarea>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-lg btn-success" onclick="app.runScript()">
-                Run Script</button>
-            <button class="btn btn-lg btn-danger" onclick="app.reset()">
-                Reset</button>
-        </div>
+		</div>
+		<div class="form-group">
+			<button class="btn btn-lg btn-success" onclick="app.runScript()">
+				Run Script</button>
+			<button class="btn btn-lg btn-danger" onclick="app.reset()">
+				Reset</button>
+		</div>
 
-    <script src="libs/jquery/jquery-2.0.3.js"></script>
-    <script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
-    <script src="cordova.js"></script>
-    <script src="arduino.js"></script>
-    <script>
-    var app = {}
+	<script src="libs/jquery/jquery-2.0.3.js"></script>
+	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="arduino.js"></script>
+	<script>
+	var app = {}
 
-    app.runScript = function()
-    {
-    	arduino.clearAllTimers()
-    	arduino.ipAddress = $('#ArduinoIpAddress').val()
-        try
-        {
-            eval($('#ArduinoScript').val())
-        }
-        catch (err)
-        {
-            alert(err)
-        }
-    }
+	app.runScript = function()
+	{
+		arduino.clearAllTimers()
+		arduino.ipAddress = $('#ArduinoIpAddress').val()
+		try
+		{
+			eval($('#ArduinoScript').val())
+		}
+		catch (err)
+		{
+			alert(err)
+		}
+	}
 
-    app.reset = function()
-    {
-        arduino.clearAllTimers()
-        window.location.reload(false)
-    }
+	app.reset = function()
+	{
+		arduino.clearAllTimers()
+		window.location.reload(false)
+	}
 
 /*
 // Alternative script.
@@ -95,11 +95,11 @@ var pin = 2
 arduino.port = 3300
 arduino.pinMode(pin, OUTPUT)
 function UpdateLed(n) {
-    arduino.digitalWrite(pin, n % 2)
-    n && setTimeout(UpdateLed, 1000, n - 1)
+	arduino.digitalWrite(pin, n % 2)
+	n && setTimeout(UpdateLed, 1000, n - 1)
 }
 UpdateLed(10) // Blinks 5 times
 */
-    </script>
+	</script>
 </body>
 </html>

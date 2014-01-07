@@ -54,7 +54,7 @@ arduino.port = 2220
 
 arduino.getIpAddress = function()
 {
-    return arduino.ipAddress
+	return arduino.ipAddress
 }
 
 arduino.digitalWrite = function(pin, value)
@@ -210,12 +210,12 @@ arduino.printObject = function (obj, level)
 			var value = obj[prop]
 			if (typeof value === 'object')
 			{
-			    console.log(level + prop + ':')
-			    arduino.printObject(value, level + '  ')
+				console.log(level + prop + ':')
+				arduino.printObject(value, level + '  ')
 			}
 			else
 			{
-			    console.log(level + prop + ': ' +value)
+				console.log(level + prop + ': ' +value)
 			}
 		}
 	}
