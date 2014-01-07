@@ -81,36 +81,53 @@ for this example to work. See comment below in the code.
 	<script src="libs/jquery/jquery-2.0.3.js"></script>
 	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
 	<script>
-	// Application object.
+	/** Application object. */
 	var app = {};
 
-	// User name (you can change this, must be at least 10 characters).
+	/** User name (you can change this, must be at least 10 characters). */
 	app.user = 'evo1234567';
 
-	// Default light.
+	/** Default light. */
 	app.lightId = 1;
 
+	/** IP-address of the Hue Bridge. */
 	app.bridgeIP = null;
 
-	// Define colors that the lights can be configured with.
-	// The colour buttons are set to these colours.
+	/** Define colors that the lights can be configured with.
+		The colour buttons are set to these colours. */
 	app.hueColors = [
 		{'hue':1000,  'bri':75, 'sat':250},
 		{'hue':10000, 'bri':75, 'sat':250},
 		{'hue':30000, 'bri':75, 'sat':250}
 	];
 
-	// Display the selected default light.
+	/** Display the selected default light. */
 	$('#lightButton' + app.lightId).button('toggle');
 
-	// When page has loaded, this function runs to
-	// look for the IP address of the HurBridge.
+	/** Called when the page has finished loading: */
 	$(function()
 	{
-		app.fetchBridgeIP(app.checkConnection);
+		/** Try to find the local IP address of the Hue Bridge and determine
+			whether we are already authorized to control its lights. */
+		app.fetchBridgeIP(
+			function()
+			{
+				app.checkConnection(
+					function()
+					{
+						/** If the connection test passes, update the UI to
+							show that we are connected to the Hue Bridge. */
+						$('#connectButton').html('Connected');
+					},
+					function() { });
+			});
+		/** Initialize the colors of the color setting buttons to their
+			corresponding light colors. */
 		app.changeButtonColors();
 	});
 
+	/** Convert HSB to HSL as a CSS color value
+		TODO: correct conversion algorithm */
 	app.getCSSHSL = function(hsl)
 	{
 		return 'hsl(' + (360 * hsl.hue / 65535) + ',' +
@@ -118,6 +135,8 @@ for this example to work. See comment below in the code.
 				Math.round(100 * hsl.bri / 255) + '%)';
 	};
 
+	/** Set the background color of each color setting buttons
+		to the corresponding light color. */
 	app.changeButtonColors = function()
 	{
 		for (var i in app.hueColors)
@@ -128,25 +147,26 @@ for this example to work. See comment below in the code.
 		}
 	};
 
-	// You can lookup the ip-address of the Hue Bridge by using
-	// this on the command line (ping detectes the Hue Bridge):
-	//   ping 255.255.255.255
-	// followed by (arp lists detected clients):
-	//   arp -a
-	// Look at the MAC-address under the Hue Bridge and find the
-	// matching ip-address in the arp listing.
+	/** You can lookup the ip-address of the Hue Bridge by using
+		this on the command line (ping detectes the Hue Bridge):
+		ping 255.255.255.255
+		followed by (arp lists detected clients):
+		arp -a
+		Look at the MAC-address under the Hue Bridge and find the
+		matching ip-address in the arp listing. */
 	app.getHueBridgeIpAddress = function()
 	{
 		return app.bridgeIP || $('#HueBridgeIpAddress').val();
 	};
 
+	/** Store the Hue Bridge IP and update the UI's text field. */
 	app.setHueBridgeIpAddress = function(ipAddress)
 	{
 		app.bridgeIP = ipAddress;
 		$('#HueBridgeIpAddress').val(app.bridgeIP);
 	};
 
-	// Get the IP address of the HueBridge on this network.
+	/** Get the local IP address of the Hue Bridge. */
 	app.fetchBridgeIP = function(successFun, failFun)
 	{
 		$.getJSON('http://www.meethue.com/api/nupnp', function(data)
@@ -159,7 +179,8 @@ for this example to work. See comment below in the code.
 		}).fail(failFun);
 	};
 
-	app.checkConnection = function()
+	/** Tests the connection to the Hue Bridge by sending a request to it. */
+	app.checkConnection = function(successFun, failFun)
 	{
 		$.ajax({
 			type: 'GET',
@@ -167,13 +188,12 @@ for this example to work. See comment below in the code.
 			url: 'http://' +
 				app.getHueBridgeIpAddress() +'/api/' +
 				app.user + '/config',
-			success:
-				function() {
-					$('#connectButton').html('Connected');
-				}
+			success: successFun,
+			error: function(a, err) { failFun(err) }
 		});
 	};
 
+	/** Tries to connect to the Hue Bridge and updates the UI accordingly. */
 	app.connect = function()
 	{
 		$('#connectButton').html('Connecting...')
@@ -200,6 +220,7 @@ for this example to work. See comment below in the code.
 			});
 	};
 
+	/** Sends an authorization request to the Hue Bridge. */
 	app.registerUser = function(userName, successFun, failFun)
 	{
 		var data = {"devicetype":"test user", "username":userName}
@@ -254,6 +275,7 @@ for this example to work. See comment below in the code.
 		app.lightSetState(app.lightId, {"effect":"none"});
 	};
 
+	/** Sets a light's state by sending a request to the Hue Bridge. */
 	app.lightSetState = function(lightId, state)
 	{
 		$.ajax({
