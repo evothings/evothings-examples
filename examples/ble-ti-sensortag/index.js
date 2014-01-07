@@ -1,7 +1,11 @@
 // JavaScript code for the BLE TI SensorTag example app.
 
-var ble = cordova.require('com.evothings.ble.BLE');
+// TODO: Shorten long lines, add function comments.
 
+// The BLE plugin object.
+var ble = null;
+
+// TODO: Move global function to app object?
 var formatFlags = function(name, flags, translation) {
 	var str = name+':';
 	for (var key in translation) {
@@ -16,6 +20,7 @@ var app = {
 	initialize: function() {
 		this.bindEvents();
 	},
+
 	// Bind Event Listeners
 	//
 	// Bind any events that are required on startup. Common events are:
@@ -23,11 +28,15 @@ var app = {
 	bindEvents: function() {
 		document.addEventListener('deviceready', this.onDeviceReady, false);
 	},
+
 	// deviceready Event Handler
 	//
 	// The scope of 'this' is the event. In order to call the 'receivedEvent'
 	// function, we must explicity call 'app.receivedEvent(...);'
 	onDeviceReady: function() {
+
+		ble = evothings.ble;
+
 		app.receivedEvent('deviceready');
 
 		/*
@@ -37,6 +46,7 @@ var app = {
 
 		app.startStuff();
 	},
+
 	startStuff: function() {
 		var device = window.sessionStorage.getItem('device');
 		var address = window.sessionStorage.getItem('address');
@@ -166,7 +176,7 @@ var app = {
 			//console.log('byteLength: '+data.byteLength);
 			var a = new Int16Array(data);
 			//console.log('length: '+a.length);
-			console.log('data: '+a[0]+' '+a[1]+' '+a[2]);
+			//console.log('data: '+a[0]+' '+a[1]+' '+a[2]);
 			app.drawLines(a);
 		}, function(errorCode) {
 			console.log('notification error: '+errorCode);
