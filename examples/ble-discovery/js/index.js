@@ -5,18 +5,18 @@
 // BLE plugin object.
 var ble = null;
 
+// Set format flags.
+function formatFlags(name, flags, translation) {
+	var str = name+':';
+	for (var key in translation) {
+		if((flags & key) != 0)
+			str += ' '+translation[key];
+	}
+	return str;
+}
+
 // Closure that adds jQueryMobile helper methods.
 (function ( $ ) {
-
-	// Set format flags.
-	function formatFlags(name, flags, translation) {
-		var str = name+':';
-		for (var key in translation) {
-			if((flags & key) != 0)
-				str += ' '+translation[key];
-		}
-		return str;
-	}
 
 	$.fn.addCollapsibleSet = function(options) {
 		var params = $.extend({
