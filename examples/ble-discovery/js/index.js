@@ -127,6 +127,7 @@ app.stopLeScan = function()
 	console.log('Stopping scan...');
 	evothings.ble.stopScan();
 	app.isScanning = false;
+	clearTimeout(app.scanTimer);
 };
 
 // Run a timer to restart scan in case the device does
