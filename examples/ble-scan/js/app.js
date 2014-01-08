@@ -1,5 +1,11 @@
 // JavaScript code for the BLE Scan example app.
 
+if (window.hyper) { console.log = hyper.log; }
+
+window.onerror = function(msg, url, line) {
+	console.log(msg+": "+url+":"+line);
+};
+
 // Application object.
 var app = {};
 
