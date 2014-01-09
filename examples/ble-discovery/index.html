@@ -26,12 +26,6 @@
 		<link rel="stylesheet" href="css/index.css" />
 		<title>BLE Discovery</title>
 		<script src="js/jquery.js"></script>
-		<script>
-			if (window.hyper) { console.log = hyper.log; }
-			window.onerror = function(msg, url, line) {
-				console.log(msg+": "+url+":"+line);
-			};
-		</script>
 		<script src="js/jquery.mobile-1.4.0-beta.1.js"></script>
 		<script src="cordova.js"></script>
 		<script src="js/index.js"></script>
@@ -46,26 +40,16 @@
 		</div>
 
 		<div data-role="content">
-<!--
-			<h2>Test</h2>
-			<div id="testList" data-role="collapsible-set" data-theme="a"></div>
--->
-			<div id="testListTemplate" data-role="collapsible-set" data-theme="a">
-				<div data-role="collapsible">
-					<h2></h2>
-					<ul data-role="listview" data-theme="b" data-divider-theme="b">
-						<li></li>
-					</ul>
-				</div>
-			</div>
 			<h2>Devices (auto discovery)</h2>
 			<!-- TODO: buttons to start/stop scan. -->
 			<ul data-role="listview" id="deviceList">
 				<li>Address RSSI Name</li>
 			</ul>
 			<div style="margin-top:30px;padding:0px 10px;border:1px solid;">
-			<p>This app automatically scans for BLE devices. Note that you must run this app in the EvoThings client app, or build a Cordova app with the plugin com.evothings.ble. Device with support for Bluetooth 4.0 and Android 4.3 or higher required.</p>
-			<p>How to use: The app  should detect running BLE devices. There are known problems with BLE stop working on multiple reloads. Restart the EvoThings client app in this case.</p>
+			<p>This app automatically scans for BLE devices.</p>
+			<p><b>Requirements:</b> <b>1)</b> The EvoThings client app or your own Cordova app having the plugin com.evothings.ble. <b>2)</b> A device with support for Bluetooth 4.0 and Android 4.3 or higher.</p>
+			<p><b>How to use:</b> Make sure that your BLE devices are discoverable. Press a discovered device in the list to retrieve its services.</p>
+			<p><b>Troubleshooting:</b> There are known problems with that BLE stops working on multiple reloads. In this case, <b>1)</b> stop the EvoThings client app, <b>2)</b> turn off and on your Bluetooth, and <b>3)</b> start the EvoThings client app again. Additionally, you can use the EvoThings Workbench Tools to see any error messages that may help in your investigation.</p>
 			</div>
 		</div><!-- /content -->
 
@@ -81,6 +65,15 @@
 		<div data-role="content">
 			<h2>Services</h2>
 			<div id="serviceList" data-role="collapsible-set" data-theme="a"></div>
+
+			<div id="servicesListTemplate" data-role="collapsible-set" data-theme="a">
+				<div data-role="collapsible">
+					<h2></h2>
+					<ul data-role="listview" data-theme="b" data-divider-theme="b">
+						<li></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 

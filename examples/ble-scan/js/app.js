@@ -1,5 +1,11 @@
 // JavaScript code for the BLE Scan example app.
 
+if (window.hyper) { console.log = hyper.log; }
+
+window.onerror = function(msg, url, line) {
+	console.log(msg+": "+url+":"+line);
+};
+
 // Application object.
 var app = {};
 
@@ -10,7 +16,7 @@ app.devices = {};
 app.isScanning = false;
 
 // Time for last scan event. This is useful for
-// when the device does not support continuos scan.
+// when the device does not support continuous scan.
 app.lastScanEvent = 0;
 
 // UI methods.
@@ -44,6 +50,7 @@ app.startScan = function(callbackFun)
 	app.isScanning = true;
 	app.lastScanEvent = new Date();
 	app.runScanTimer();
+
 	evothings.ble.startScan(
 		function(device)
 		{
@@ -75,6 +82,7 @@ app.stopScan = function()
 {
 	evothings.ble.stopScan();
 	app.isScanning = false;
+	clearTimeout(app.scanTimer);
 };
 
 // Run a timer to restart scan in case the device does

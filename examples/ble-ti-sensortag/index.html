@@ -49,8 +49,9 @@
 	<body>
 		<h1>BLE TI SensorTag</h1>
 		<div><canvas id="canvas" width="200" height="300" /></div>
-		<p>This app charts magnetometer data from the Texas Instruments SensorTag. Note that you must run this app in the EvoThings client app, or build a Cordova app with the plugin com.evothings.ble. Device with support for Bluetooth 4.0 and Android 4.3 or higher required.</p>
-		<p>How to use: Activate the SensorTag, if everything works the tag is discovered and data is plotted to the canvas. There are known problems with BLE stop working on multiple reloads. Restart the EvoThings client app in this case.</p>
+		<p>This app charts magnetometer data from the Texas Instruments SensorTag. Note that you must run this app in the EvoThings client app, or build a Cordova app with the plugin com.evothings.ble. A device with support for Bluetooth 4.0 and Android 4.3 or higher is required.</p>
+		<p><b>How to use:</b> Activate the SensorTag, if everything works the tag is discovered and data is plotted to the canvas. Move your SensorTag close to a magnet to see the plot change. For example, move it close to your laptop or mobile phone which often contain sources of magnetism, or go fetch a fridge magnet from your kitchen and use that.</p>
+		<p><b>Troubleshooting:</b> There are known problems with that BLE stops working on multiple reloads. In this case, <b>1)</b> stop the EvoThings client app, <b>2)</b> turn off and on your Bluetooth, and <b>3)</b> start the EvoThings client app again. Additionally, you can use the EvoThings Workbench Tools to see any error messages that may help in your investigation.</p>
 
 		<script src="cordova.js"></script>
 		<script src="index.js"></script>
