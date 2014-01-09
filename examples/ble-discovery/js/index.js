@@ -34,6 +34,9 @@ app.scanInterval = 5000;
 // Track whether scanning is ongoing to avoid multiple intervals.
 app.isScanning = false;
 
+// Track whether reset is ongoing to avoid conflicts with any connections.
+app.isResetting = false;
+
 // Time for last scan event. This is useful for
 // when the device does not support continuous scan.
 app.lastScanEvent = 0;
@@ -83,8 +86,10 @@ app.resetBLE = function()
 {
 	console.log("resetting...");
 	ble.stopScan();
+	app.isResetting = true;
 	ble.reset(function()
 	{
+		app.isResetting = false;
 		console.log("reset complete!");
 		app.startLeScan();
 	}, function(err)
@@ -145,8 +150,11 @@ app.startLeScan = function()
 		console.log('scan result: ' + res);
 		var p = document.getElementById('deviceList');
 		var li = document.createElement('li');
-		li.innerHTML = "<a href=\"#connected\" onClick=\"app.connect('" +
-			r.address + "', '" + r.name + "')\">" + res + "</a>";
+		var $a = $("<a href=\"#connected\">" + res + "</a>");
+		$(li).append($a);
+		$a.bind("click",
+			{address: r.address, name: r.name},
+			app.eventDeviceClicked);
 		p.appendChild(li);
 		$("#deviceList").listview("refresh");
 	}, function(errorCode)
@@ -156,7 +164,20 @@ app.startLeScan = function()
 	});
 };
 
-	// Stop scanning for devices.
+/** Handler for when device in devices list was clicked. */
+app.eventDeviceClicked = function(event) {
+	if (app.isResetting) // Reset process active.
+	{
+		// Avoid navigation to the services ("connected") page.
+		event.preventDefault();
+		alert('BLE reset in progress.\nPlease try again.');
+		// TODO: listen for reset finished event and make the connection.
+		return;
+	}
+	app.connect(event.data.address, event.data.name);
+};
+
+// Stop scanning for devices.
 app.stopLeScan = function()
 {
 	console.log('Stopping scan...');
