@@ -6,13 +6,32 @@ if (window.hyper) { console.log = hyper.log; }
 
 window.onerror = function(msg, url, line)
 {
-	console.log(msg+": "+url+":"+line);
+	console.log(msg + ": " + url + ":" + line);
 };
+
+$(document).ready( function()
+{
+	/** Add event handler for when the first page is shown. */
+	$(document).on('pageshow', '#first', function (data)
+	{
+		// Start device discovery.
+		app.resetBLE();
+		// Clear the list of device services
+		$("#serviceList").empty();
+	});
+});
+
+/** BLE plugin, is loaded asynchronously so the
+	variable is redefined in the onDeviceReady handler. */
+var ble = null;
 
 // Application object.
 var app = {};
 
-// Track if scanning is ongoing.
+// BLE device scanning will be made with this interval in milliseconds.
+app.scanInterval = 5000;
+
+// Track whether scanning is ongoing to avoid multiple intervals.
 app.isScanning = false;
 
 // Time for last scan event. This is useful for
@@ -46,6 +65,9 @@ app.bindEvents = function()
 // function, we must explicity call 'app.receivedEvent(...);'
 app.onDeviceReady = function()
 {
+	// The plugin was loaded asynchronously and can here be referenced.
+	ble = evothings.ble;
+
 	app.receivedEvent('deviceready');
 	app.resetBLE();
 };
@@ -60,30 +82,39 @@ app.receivedEvent = function(id)
 app.resetBLE = function()
 {
 	console.log("resetting...");
-	evothings.ble.stopScan();
-	evothings.ble.reset(function() {
+	ble.stopScan();
+	ble.reset(function()
+	{
 		console.log("reset complete!");
 		app.startLeScan();
-	}, function(err) {
-		console.log("reset error: "+err);
+	}, function(err)
+	{
+		console.log("reset error: " + err);
 	});
 };
 
 app.testCharConversion = function()
 {
 	var fail = false;
-	for (var i = 0; i < 256; i++) {
-		evothings.ble.testCharConversion(i, function(s) {
+	for (var i = 0; i < 256; i++)
+	{
+		ble.testCharConversion(i, function(s)
+		{
 			s = new Uint8Array(s);
-			if(s[0] != i) {
-				console.log("testCharConversion mismatch: "+s[0]+" "+i);
+			if (s[0] != i)
+			{
+				console.log("testCharConversion mismatch: " + s[0] + " " + i);
 				console.log(s);
 				fail = true;
 			}
-			if(i == 255) {
-				if(fail) {
+			if (i == 255)
+			{
+				if (fail)
+				{
 					console.log("testCharConversion fail!");
-				} else {
+				}
+				else
+				{
 					console.log("testCharConversion success!");
 				}
 			}
@@ -102,20 +133,24 @@ app.startLeScan = function()
 	app.lastScanEvent = new Date();
 	app.runScanTimer();
 
-	evothings.ble.startScan(function(r) {
+	ble.startScan(function(r)
+	{
 		//address, rssi, name, scanRecord
-		if(app.knownDevices[r.address]) {
+		if (app.knownDevices[r.address])
+		{
 			return;
 		}
 		app.knownDevices[r.address] = r;
-		var res = r.address+" "+r.rssi+" "+r.name
+		var res = r.address + " " + r.rssi + " " + r.name;
 		console.log('scan result: ' + res);
 		var p = document.getElementById('deviceList');
 		var li = document.createElement('li');
-		li.innerHTML = "<a href=\"#connected\" onClick=\"app.connect('"+r.address+"', '"+r.name+"')\">"+res+"</a>";
+		li.innerHTML = "<a href=\"#connected\" onClick=\"app.connect('" +
+			r.address + "', '" + r.name + "')\">" + res + "</a>";
 		p.appendChild(li);
 		$("#deviceList").listview("refresh");
-	}, function(errorCode) {
+	}, function(errorCode)
+	{
 		console.log('startScan error: ' + errorCode);
 		app.resetBLE();
 	});
@@ -125,7 +160,7 @@ app.startLeScan = function()
 app.stopLeScan = function()
 {
 	console.log('Stopping scan...');
-	evothings.ble.stopScan();
+	ble.stopScan();
 	app.isScanning = false;
 	clearTimeout(app.scanTimer);
 };
@@ -136,31 +171,32 @@ app.runScanTimer = function()
 {
 	if (app.isScanning)
 	{
-		var scanInterval = 5000;
 		var timeSinceLastScan = new Date() - app.lastScanEvent;
-		if (timeSinceLastScan > scanInterval)
+		if (timeSinceLastScan > app.scanInterval)
 		{
 			if (app.scanTimer) { clearTimeout(app.scanTimer); }
 			app.startLeScan(app.callbackFun);
 		}
-		app.scanTimer = setTimeout(app.runScanTimer, scanInterval);
+		app.scanTimer = setTimeout(app.runScanTimer, app.scanInterval);
 	}
 };
 
 app.connect = function(address, name)
 {
-	$("#serviceList").empty();
 	app.stopLeScan();
 	console.log('connect('+address+')');
 	document.getElementById('deviceName').innerHTML = address + " " + name;
-	evothings.ble.connect(address, function(r) {
+	ble.connect(address, function(r)
+	{
 		console.log('connect '+r.device+' state '+r.state);
 		document.getElementById('deviceState').innerHTML = r.state;
-		if(r.state == 2) {	// connected
+		if (r.state == 2) // connected
+		{
 			console.log('connected, requesting services...');
 			app.getServices(r.device);
 		}
-	}, function(errorCode) {
+	}, function(errorCode)
+	{
 		console.log('connect error: ' + errorCode);
 		app.resetBLE();
 	});
@@ -171,7 +207,8 @@ app.getServices = function(device)
 	var first = true;
 	var serviceCount;
 	var services = [];
-	var finish = function() {
+	var finish = function()
+	{
 		console.log('finish');
 		var p = $("#serviceList");
 		p.empty();
@@ -182,7 +219,9 @@ app.getServices = function(device)
 			//console.log('s'+s.handle+': '+s.type+' '+s.uuid+'. '+s.characteristicCount+' chars.');
 
 			var $c = $("#serviceList").
-				addCollapsible({template: $('#servicesListTemplate'), title: 's'+s.handle+': '+s.type+' '+s.uuid+'. '+s.characteristicCount+' chars.'});
+				addCollapsible({template: $('#servicesListTemplate'),
+					title: 's' + s.handle + ': ' + s.type + ' ' +
+					s.uuid + '. ' + s.characteristicCount + ' chars.'});
 
 			if (s.characteristicCount > 0)
 				$cs = $c.addCollapsibleSet();
@@ -193,7 +232,8 @@ app.getServices = function(device)
 				var c = cc.c;
 				//console.log(' c'+c.handle+': '+c.uuid+'. '+c.descriptorCount+' desc.');
 
-				var $c = $cs.addCollapsible({title: 'c'+c.handle+': '+c.uuid+'. '+c.descriptorCount+' desc.'});
+				var $c = $cs.addCollapsible({title: 'c' + c.handle + ': ' +
+					c.uuid + '. ' + c.descriptorCount + ' desc.'});
 
 				var $lv;
 				if (c.descriptorCount > 0)
@@ -215,9 +255,9 @@ app.getServices = function(device)
 						// without it, all strings would be added to the last descriptor.
 						function f(h, c, lvi)
 						{
-							evothings.ble.readDescriptor(device, h, function(data)
+							ble.readDescriptor(device, h, function(data)
 							{
-								var s = evothings.ble.fromUtf8(data);
+								var s = ble.fromUtf8(data);
 								//console.log("rdw "+h+": "+s);
 								c.collapsibleTitleElm().prepend(s + ' ');
 							},
@@ -234,7 +274,7 @@ app.getServices = function(device)
 		}
 		$('#connected').trigger('create');
 	};
-	evothings.ble.services(device, function(s)
+	ble.services(device, function(s)
 	{
 		serviceCount = s.serviceCount;
 		if (first)
@@ -252,14 +292,14 @@ app.getServices = function(device)
 				finish();
 			}
 		}
-		evothings.ble.characteristics(device, s.handle, function(c)
+		ble.characteristics(device, s.handle, function(c)
 		{
 			//console.log(' c'+c.handle+"/"+s.characteristicCount+" "+c.descriptorCount);
 			var characteristic = {c:c, d:[]};
 			//msg += ' c'+c.handle+': '+c.uuid+'. '+c.descriptorCount+' desc.'+"\n";
-			//dumpFlags('  permissions', c.permissions, evothings.ble.permission);
-			formatFlags('  properties', c.properties, evothings.ble.property);
-			formatFlags('  writeType', c.writeType, evothings.ble.writeType);
+			//dumpFlags('  permissions', c.permissions, ble.permission);
+			formatFlags('  properties', c.properties, ble.property);
+			formatFlags('  writeType', c.writeType, ble.writeType);
 			if (c.descriptorCount == 0)
 			{
 				service.c.push(characteristic);
@@ -270,12 +310,12 @@ app.getServices = function(device)
 					finish();
 				}
 			}
-			evothings.ble.descriptors(device, c.handle, function(d)
+			ble.descriptors(device, c.handle, function(d)
 			{
 				//console.log('  d'+d.handle+"/"+c.descriptorCount);
 				characteristic.d.push(d);
 				//msg += '  d'+d.handle+': '+d.uuid+"\n";
-				//dumpFlags('   permissions', d.permissions, evothings.ble.permission);
+				//dumpFlags('   permissions', d.permissions, ble.permission);
 				if (characteristic.d.length == c.descriptorCount) service.c.push(characteristic);
 				if (service.c.length == s.characteristicCount) services.push(service);
 				if (services.length == serviceCount)
@@ -308,7 +348,22 @@ function formatFlags(name, flags, translation)
 	return str;
 }
 
-// Closure that adds jQueryMobile helper methods.
+/** jQuery Mobile Collapsible dynamic UI helper methods
+
+	These purpose of these methods is to simplify the creation and modification
+	of a jQuery Mobile collapsible list. It uses a hidden template element from
+	which sub-elements are cloned and inserted into the (visible) collapsible
+	list.
+
+	Template element:
+	<div id="collapsible-template" data-role="collapsible-set" data-theme="a">
+		<div data-role="collapsible">
+			<h2></h2>
+			<ul data-role="listview" data-theme="b" data-divider-theme="b">
+				<li></li>
+			</ul>
+		</div>
+	</div> */
 (function ( $ ) {
 
 	$.fn.addCollapsibleSet = function(options)

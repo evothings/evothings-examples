@@ -40,18 +40,6 @@
 		</div>
 
 		<div data-role="content">
-<!--
-			<h2>Test</h2>
-			<div id="testList" data-role="collapsible-set" data-theme="a"></div>
--->
-			<div id="testListTemplate" data-role="collapsible-set" data-theme="a">
-				<div data-role="collapsible">
-					<h2></h2>
-					<ul data-role="listview" data-theme="b" data-divider-theme="b">
-						<li></li>
-					</ul>
-				</div>
-			</div>
 			<h2>Devices (auto discovery)</h2>
 			<!-- TODO: buttons to start/stop scan. -->
 			<ul data-role="listview" id="deviceList">
@@ -76,6 +64,15 @@
 		<div data-role="content">
 			<h2>Services</h2>
 			<div id="serviceList" data-role="collapsible-set" data-theme="a"></div>
+
+			<div id="servicesListTemplate" data-role="collapsible-set" data-theme="a">
+				<div data-role="collapsible">
+					<h2></h2>
+					<ul data-role="listview" data-theme="b" data-divider-theme="b">
+						<li></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 
