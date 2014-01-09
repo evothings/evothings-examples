@@ -2,13 +2,6 @@
 
 // TODO: Add comments to functions, shorten long lines.
 
-if (window.hyper) { console.log = hyper.log; }
-
-window.onerror = function(msg, url, line)
-{
-	console.log(msg + ": " + url + ":" + line);
-};
-
 $(document).ready( function()
 {
 	/** Add event handler for when the first page is shown. */
