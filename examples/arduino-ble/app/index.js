@@ -3,13 +3,6 @@
 // BLE plugin object.
 var ble = null;
 
-if (window.hyper) { console.log = hyper.log; }
-
-window.onerror = function(msg, url, line)
-{
-	console.log(msg+": "+url+":"+line);
-};
-
 $(document).ready( function()
 {
 	// Get the canvas & context
