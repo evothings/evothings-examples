@@ -22,7 +22,7 @@ function respondCanvas()
 	var container = $(c).parent();
 
 	c.attr('width', $(container).width() ); //max width
-	//c.attr('height', $(container).height() ); //max height
+	c.attr('height', $(container).height() ); //max height
 
 	// Call a function to redraw other content (texts, images etc)
 }
