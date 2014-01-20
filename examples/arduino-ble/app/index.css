@@ -21,7 +21,7 @@ h3 { font-size:1em; }
 #on, #off {
 	display:block;
 	position:absolute;
-	/*  Button width should be 97% of space to left ot #controls box. So 100%
+	/*  Button width should be 97% of space to left of #controls box. So 97%
 		must be scaled by the ratio of how much bigger/smaller that space is
 		compared to the containing box.
 		97*((100-58)/58) = 70 */
