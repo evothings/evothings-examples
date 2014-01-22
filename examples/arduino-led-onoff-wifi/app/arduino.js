@@ -48,9 +48,13 @@ arduino.clearAllTimers = function()
 	arduino.timerIntervals = []
 }
 
+// The IP address of the Arduino board.
+// The application must set this value.
 arduino.ipAddress = ''
 
-arduino.port = 2220
+// The port number used by the Arduino server.
+// The application must set this value.
+arduino.port = 0
 
 arduino.getIpAddress = function()
 {
