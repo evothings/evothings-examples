@@ -1,29 +1,31 @@
 // JavaScript code for the Arduino BLE example app.
 
-// BLE plugin object.
+/** BLE plugin, is loaded asynchronously so the
+	variable is redefined in the onDeviceReady handler. */
 var ble = null;
 
 $(document).ready( function()
+{
+	// Adjust canvas size when browser resizes
+	$(window).resize( respondCanvas );
+
+	// Adjust the canvas size when the document has loaded.
+	respondCanvas();
+});
+
+/* Adjust the canvas dimensions based on its container dimensions. */
+function respondCanvas()
 {
 	// Get the canvas & context
 	var c = $('#canvas');
 	var ct = c.get(0).getContext('2d');
 	var container = $(c).parent();
 
-	// Run function when browser resizes
-	$(window).resize( respondCanvas );
+	c.attr('width', $(container).width() ); //max width
+	c.attr('height', $(container).height() ); //max height
 
-	function respondCanvas()
-	{
-		c.attr('width', $(container).width() ); //max width
-		//c.attr('height', $(container).height() ); //max height
-
-		// Call a function to redraw other content (texts, images etc)
-	}
-
-	// Initial call
-	respondCanvas();
-});
+	// Call a function to redraw other content (texts, images etc)
+}
 
 // TODO: Move global function to app object?
 var formatFlags = function(name, flags, translation)
