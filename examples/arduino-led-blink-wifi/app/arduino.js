@@ -122,7 +122,8 @@ arduino.sendRequest = function(command, callbackFun)
 			command + '\n',
 			function(bytesWritten)
 			{
-				callbackFun(bytesWritten === command.length)
+				// Command length is +1 due to the added newline.
+				callbackFun(bytesWritten === command.length + 1)
 			}
 		)
 	}
