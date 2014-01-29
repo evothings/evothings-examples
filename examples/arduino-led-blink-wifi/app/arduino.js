@@ -228,5 +228,8 @@ arduino.printObject = function (obj, level)
 
 arduino.callbackFun = function(result)
 {
-	console.log('Callback result: ' + result)
+	if (result == false)
+	{
+		alert('Failed to send the command to the Arduino.')
+	}
 }
