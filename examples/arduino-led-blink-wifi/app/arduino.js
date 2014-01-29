@@ -122,7 +122,8 @@ arduino.sendRequest = function(command, callbackFun)
 			command + '\n',
 			function(bytesWritten)
 			{
-				callbackFun(bytesWritten === command.length)
+				// Command length is +1 due to the added newline.
+				callbackFun(bytesWritten === command.length + 1)
 			}
 		)
 	}
@@ -227,5 +228,8 @@ arduino.printObject = function (obj, level)
 
 arduino.callbackFun = function(result)
 {
-	console.log('Callback result: ' + result)
+	if (result == false)
+	{
+		alert('Failed to send the command to the Arduino.')
+	}
 }
