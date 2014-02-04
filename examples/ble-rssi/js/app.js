@@ -83,7 +83,6 @@ app.connectToDevice = function(device)
 			}
 			else if (deviceInfo.state == 0) // Disconnected
 			{
-				hyper.log('device disconnected' )
 				evothings.ble.close(device.handle);
 				delete app.devices[device.address];
 				app.ui.displayDeviceList();
@@ -91,7 +90,6 @@ app.connectToDevice = function(device)
 		},
 		function(errorCode)
 		{
-			hyper.log('connect err: ' + errorCode )
 			// Error connecting device.
 			delete app.devices[device.address];
 			app.ui.displayDeviceList();
