@@ -166,7 +166,7 @@ arduino.write = function(socketId, string, callbackFun)
 // callbackFun(resultCode, string)
 arduino.read = function(socketId, bufferSize, callbackFun)
 {
-	chrome.socket.write(
+	chrome.socket.read(
 		socketId,
 		bufferSize,
 		function(readInfo)
