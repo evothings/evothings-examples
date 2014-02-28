@@ -16,7 +16,7 @@ app.initialize = function()
 	// Important to stop scanning when page reloads/closes!
 	window.addEventListener('beforeunload', function(e)
 	{
-		app.stopScan();
+		evothings.ble.reset();
 	});
 };
 
@@ -54,7 +54,7 @@ app.startScan = function(callbackFun)
 // Stop scanning for devices.
 app.stopScan = function()
 {
-	evothings.ble.stopScan();
+	evothings.ble.reset();
 };
 
 // Called when Start Scan button is selected.
@@ -99,15 +99,22 @@ app.ui.displayDeviceList = function()
 	var i = 1;
 	$.each(app.devices, function(key, device)
 	{
+		// Compute a display percent width value from signal strength.
+		// rssi is a negative value, zero is max signal strength.
+		var rssiWidth = Math.max(0, (100 + device.rssi));
+
 		// Set background color for this item.
 		var bgcolor = i++ % 2 ? 'rgb(225,225,225)' : 'rgb(245,245,245)';
 
 		// Create a div tag to display sensor data.
 		var element = $(
-			'<div class="device-info" style="background:' + bgcolor + '">'
+			'<div class="device-info" style="background:' + bgcolor + ';">'
+			//'<div class="device-info" style="background:rgb(200,200,200);">'
 			+	'<b>' + device.name + '</b><br/>'
 			+	device.address + '<br/>'
 			+	device.rssi + '<br/>'
+			+ 	'<div style="background:rgb(255,0,0);height:20px;width:'
+			+ 		rssiWidth + '%;"></div>'
 			+ '</div>'
 		);
 

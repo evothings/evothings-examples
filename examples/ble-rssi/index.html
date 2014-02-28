@@ -23,18 +23,8 @@
 		<meta name="format-detection" content="telephone=no" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		<title>BLE RSSI</title>
-		<script>
-		// Redirect console to EvoThings Workbench.
-		if (window.hyper) { console.log = hyper.log; }
-		</script>
-		<script src="js/jquery.js"></script>
-		<script src="cordova.js"></script>
-		<script src="js/app.js"></script>
+		<link rel="stylesheet" href="common.css" />
 		<style>
-		button {
-			font-size: 150%;
-			padding: 5px;
-		}
 		#scan-status {
 			font-size: 150%;
 			margin: 5px 0px;
@@ -47,6 +37,13 @@
 			padding: 2px 2px;
 		}
 		</style>
+		<script>
+		// Redirect console to EvoThings Workbench.
+		if (window.hyper) { console.log = hyper.log; }
+		</script>
+		<script src="lib/jquery.js"></script>
+		<script src="cordova.js"></script>
+		<script src="app.js"></script>
 	</head>
 	<body>
 		<h1>BLE RSSI</h1>

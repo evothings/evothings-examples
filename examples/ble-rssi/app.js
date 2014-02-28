@@ -16,7 +16,7 @@ app.initialize = function()
 	// Important to stop scanning when page reloads/closes!
 	window.addEventListener('beforeunload', function(e)
 	{
-		app.stopScan();
+		evothings.ble.reset();
 	});
 };
 
