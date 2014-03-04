@@ -11,10 +11,14 @@ app.initialize = function()
 {
 	document.addEventListener('deviceready', app.onDeviceReady, false);
 
-	// Important reset BLE when page reloads/closes!
-	window.addEventListener('beforeunload', function(e)
+	// Important close devices or reset BLE when page reloads!
+	window.hyper && window.hyper.onReload(function()
 	{
-		evothings.ble.reset();
+		app.onStopButton();
+
+		// Alternatively reset BLE, this takes some
+		// time on Android, but might be needed.
+		//evothings.ble.reset();
 	});
 };
 
@@ -30,73 +34,77 @@ app.showInfo = function(info)
 
 app.onStartButton = function()
 {
+	app.onStopButton();
 	app.startScan();
+	app.showInfo('Starting');
 };
 
 app.onStopButton = function()
 {
-	// Reset BLE plugin.
-	evothings.ble.reset();
-
-	// Reset device.
-	app.device = null;
+	// Stop any ongoing scan and close devices.
+	easyble.stopScan();
+	easyble.closeConnectedDevices();
+	app.showInfo('Stopped');
 };
 
 app.startScan = function()
 {
 	easyble.startScan(
-		function(deviceInfo)
+		function(device)
 		{
-			app.showInfo('Device found:' + deviceInfo.name);
+			app.showInfo('Device found:' + device.name);
 
 			// Connect if we have found a sensor tag.
-			if (app.deviceIsSensorTag(deviceInfo))
+			if (app.deviceIsSensorTag(device))
 			{
 				easyble.stopScan();
-				app.connectToDevice(deviceInfo);
+				app.connectToDevice(device);
 			}
 		},
 		function(errorCode)
 		{
-			console.log('startScan error: ' + errorCode);
+			app.showInfo('startScan error: ' + errorCode);
 			//app.reset();
 		});
 };
 
-app.deviceIsSensorTag = function(deviceInfo)
+app.deviceIsSensorTag = function(device)
 {
-	return (deviceInfo != null) &&
-		(deviceInfo.name != null) &&
-		(deviceInfo.name.indexOf('Sensor Tag') > -1 ||
-			deviceInfo.name.indexOf('SensorTag') > -1);
+	return (device != null) &&
+		(device.name != null) &&
+		(device.name.indexOf('Sensor Tag') > -1 ||
+			device.name.indexOf('SensorTag') > -1);
 };
 
 // Read services for a device.
-app.connectToDevice = function(deviceInfo)
+app.connectToDevice = function(device)
 {
-	deviceInfo.connectToDevice(
-		app.checkServices,
+	device.connect(
+		function(device)
+		{
+			app.readServices(device);
+		},
 		function(errorCode)
 		{
-			console.log('Connect error: ' + errorCode);
+			app.showInfo('Connect error: ' + errorCode);
+			evothings.ble.reset();
+			// This can cause an infinite loop...
+			//app.connectToDevice(device);
 		});
 };
 
-app.checkServices = function(deviceInfo)
+app.readServices = function(device)
 {
-	deviceInfo.readServicesForDevice(
-		function(deviceInfo)
-		{
-			deviceInfo.readCharacteristicsForServices(
-				['f000aa10-0451-4000-b000-000000000000',
-				 'f000aa30-0451-4000-b000-000000000000'],
-				app.startMagnetometerNotification,
-				//app.startAccelerometerNotification,
-				function(errorCode)
-				{
-					console.log('Error reading characteristics: ' + errorCode);
-				});
-		},
+	device.readServices(
+		[
+		'f000aa10-0451-4000-b000-000000000000', // Accelerometer service UUID.
+		'f000aa30-0451-4000-b000-000000000000'  // Magnetometer service UUID.
+		],
+		// Function that monitors magnetometer data.
+		app.startMagnetometerNotification,
+		// Use this function to monitor accelerometer data
+		// (comment out the above line if you try this).
+		//app.startAccelerometerNotification,
 		function(errorCode)
 		{
 			console.log('Error reading services: ' + errorCode);
@@ -105,29 +113,28 @@ app.checkServices = function(deviceInfo)
 
 // Read magnetometer data using a notification.
 // http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Magnetometer
-app.startMagnetometerNotification = function(deviceInfo)
+// http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
+app.startMagnetometerNotification = function(device)
 {
-	//app.printObject(deviceInfo);
-
 	// Set mag period to 100 ms.
-	deviceInfo.writeCharacteristic(
+	device.writeCharacteristic(
 		'f000aa33-0451-4000-b000-000000000000',
 		new Uint8Array([10]));
 
 	// Set mag conf to ON.
-	deviceInfo.writeCharacteristic(
+	device.writeCharacteristic(
 		'f000aa32-0451-4000-b000-000000000000',
 		new Uint8Array([1]));
 
 	// Causes crash on iOS, see this thread:
 	// http://stackoverflow.com/questions/13561136/corebluetooth-writevaluefordescriptor-issue
 	// Set mag notification to ON.
-	deviceInfo.writeDescriptor(
+	device.writeDescriptor(
 		'00002902-0000-1000-8000-00805f9b34fb',
 		new Uint8Array([1,0]));
 
 	// Start notification of mag data.
-	deviceInfo.enableNotification(
+	device.enableNotification(
 		'f000aa31-0451-4000-b000-000000000000',
 		function(data)
 		{
@@ -135,7 +142,7 @@ app.startMagnetometerNotification = function(deviceInfo)
 			var dataArray = new Int16Array(data);
 			//console.log('length: '+dataArray.length);
 			//console.log('data: '+dataArray[0]+' '+dataArray[1]+' '+dataArray[2]);
-			app.drawLines(dataArray);
+			app.drawLines(dataArray, 3000);
 		},
 		function(errorCode)
 		{
@@ -143,31 +150,24 @@ app.startMagnetometerNotification = function(deviceInfo)
 		});
 };
 
-app.drawLines = function(dataArray)
+// The magnitude param controls how sensitive the plotting
+// of data should be.
+app.drawLines = function(dataArray, magnitude)
 {
 	var canvas = document.getElementById('canvas');
-	//if (!app.drawingContent)
-	{
-		app.drawingContext = canvas.getContext('2d');
-	}
-
+	var context = canvas.getContext('2d');
 	var dataPoints = app.dataPoints;
-	var context = app.drawingContext;
 
+	// Add recent data.
 	dataPoints.push(dataArray);
 	if (dataPoints.length > canvas.width)
 	{
 		dataPoints.splice(0, (dataPoints.length - canvas.width));
 	}
 
-	context.clearRect(0, 0, canvas.width, canvas.height);
-	//console.log(canvas.width+' '+canvas.height);
-
-	var magnitude = 5000;
-
 	function calcY(i)
 	{
-		return ((i * canvas.height) / (magnitude*2)) + (canvas.height / 2);
+		return ((i * canvas.height) / (magnitude * 2)) + (canvas.height / 2);
 	}
 
 	function drawLine(offset, color)
@@ -179,13 +179,16 @@ app.drawLines = function(dataArray)
 		for (var i = dataPoints.length-2; i >= 0; i--)
 		{
 			var y = calcY(dataPoints[i][offset]);
-			//console.log(i+': '+x+' '+y);
 			context.lineTo(x, y);
 			x++;
 		}
 		context.stroke();
 	}
 
+	// Clear background.
+	context.clearRect(0, 0, canvas.width, canvas.height);
+
+	// Draw lines.
 	drawLine(0, '#f00');
 	drawLine(1, '#0f0');
 	drawLine(2, '#00f');
@@ -194,44 +197,43 @@ app.drawLines = function(dataArray)
 // Initialize the app.
 app.initialize();
 
-/*
 // If you would want to read accelerometer data, here is a function for that.
 // http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Accelerometer_2
-app.startAccelerometerNotification = function(deviceInfo)
+// http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
+app.startAccelerometerNotification = function(device)
 {
-	//app.printObject(deviceInfo);
+	//app.printObject(device);
 
 	// Set accelerometer configuration to ON.
-	deviceInfo.writeCharacteristic(
+	device.writeCharacteristic(
 		'f000aa12-0451-4000-b000-000000000000',
 		new Uint8Array([1]));
 
 	// Set accelerometer period to 100 ms.
-	deviceInfo.writeCharacteristic(
+	device.writeCharacteristic(
 		'f000aa13-0451-4000-b000-000000000000',
 		new Uint8Array([10]));
 
 	// Causes crash on iOS, see this thread:
 	// http://stackoverflow.com/questions/13561136/corebluetooth-writevaluefordescriptor-issue
 	// Set mag notification to ON.
-	deviceInfo.writeDescriptor(
+	device.writeDescriptor(
 		'00002902-0000-1000-8000-00805f9b34fb',
 		new Uint8Array([1,0]));
 
 	// Start accelerometer notification.
-	deviceInfo.enableNotification(
+	device.enableNotification(
 		'f000aa11-0451-4000-b000-000000000000',
 		function(data)
 		{
 			//console.log('byteLength: '+data.byteLength);
 			var dataArray = new Int8Array(data);
 			//console.log('length: '+dataArray.length);
-			console.log('data: '+dataArray[0]+' '+dataArray[1]+' '+dataArray[2]);
-			app.drawLines(dataArray);
+			//console.log('data: '+dataArray[0]+' '+dataArray[1]+' '+dataArray[2]);
+			app.drawLines(dataArray, 100);
 		},
 		function(errorCode)
 		{
 			console.log('enableNotification error: ' + errorCode);
 		});
 };
-*/

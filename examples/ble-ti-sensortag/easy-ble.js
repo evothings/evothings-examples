@@ -1,31 +1,52 @@
-// Library for making BLE programming easier.
+/**
+ * File: easyble.js
+ * Description: Library for making BLE programming easier.
+ * Author: Miki
+ *
+ * Note: The object type called "device" below, is the "DeviceInfo"
+ * object obtained by calling evothings.ble.startScan, enhanced with
+ * additional properties and functions to allow easy access to
+ * object methods. Properties are also added to the Characteristic
+ * and Descriptor object. Added properties are prefixed with two
+ * underscores.
+ */
 
 // Object that holds BLE data and functions.
 var easyble = (function()
 {
+	/** Main object in the EasyBLE API. */
 	var easyble = {};
 
-	easyble.knownDevices = {};
+	/** Internal properties and functions. */
+	var internal = {};
 
+	/** Table of discovered devices. */
+	internal.knownDevices = {};
+
+	/** Table of connected devices. */
+	internal.connectedDevices = {};
+
+	/** Start scanning for devices. */
 	easyble.startScan = function(win, fail)
 	{
 		easyble.stopScan();
-		evothings.ble.startScan(function(deviceInfo)
+		internal.knownDevices = {};
+		evothings.ble.startScan(function(device)
 		{
 			// Check if we already have got the device.
-			if (easyble.knownDevices[deviceInfo.address])
+			if (internal.knownDevices[device.address])
 			{
 				return;
 			}
 
 			// Add the device to known devices, so that we do not handle it again.
-			easyble.knownDevices[deviceInfo.address] = deviceInfo;
+			internal.knownDevices[device.address] = device;
 
 			// Add methods to the device info object.
-			easyble.addMethodsToDeviceInfoObject(deviceInfo);
+			internal.addMethodsToDeviceObject(device);
 
 			// Call callback function with device info.
-			win(deviceInfo);
+			win(device);
 		},
 		function(errorCode)
 		{
@@ -33,77 +54,115 @@ var easyble = (function()
 		});
 	};
 
-	// This allows calling methods on the deviceInfo object
-	// in an object-oriented style.
-	easyble.addMethodsToDeviceInfoObject = function(deviceInfo)
-	{
-		deviceInfo.connectToDevice = function(win, fail)
-		{
-			easyble.connectToDevice(deviceInfo, win, fail);
-		};
-
-		deviceInfo.closeDevice = function()
-		{
-			easyble.closeDevice(deviceInfo);
-		};
-
-		deviceInfo.readServicesForDevice = function(win, fail)
-		{
-			easyble.readServicesForDevice(deviceInfo, win, fail);
-		};
-
-		deviceInfo.readCharacteristicsForServices = function(serviceUUIDs, win, fail)
-		{
-			easyble.readCharacteristicsForServices(deviceInfo, serviceUUIDs, win, fail);
-		};
-
-		deviceInfo.readCharacteristic = function(characteristicUUID, win, fail)
-		{
-			easyble.readCharacteristic(deviceInfo, characteristicUUID, win, fail);
-		};
-
-		deviceInfo.readDescriptor = function(descriptorUUID, win, fail)
-		{
-			easyble.readDescriptor(deviceInfo, descriptorUUID, win, fail);
-		};
-
-		deviceInfo.writeCharacteristic = function(characteristicUUID, value, win, fail)
-		{
-			easyble.writeCharacteristic(deviceInfo, characteristicUUID, value, win, fail);
-		};
-
-		deviceInfo.writeDescriptor = function(descriptorUUID, value, win, fail)
-		{
-			easyble.writeDescriptor(deviceInfo, descriptorUUID, value, win, fail);
-		};
-
-		deviceInfo.enableNotification = function(characteristicUUID, win, fail)
-		{
-			easyble.enableNotification(deviceInfo, characteristicUUID, win, fail);
-		};
-
-		deviceInfo.disableNotification = function(characteristicUUID, win, fail)
-		{
-			easyble.disableNotification(deviceInfo, characteristicUUID, win, fail);
-		};
-	};
-
+	/** Stop scanning for devices. */
 	easyble.stopScan = function()
 	{
 		evothings.ble.stopScan();
-		easyble.knownDevices = {};
 	};
 
-	easyble.connectToDevice = function(deviceInfo, win, fail)
+	/** Close all connected devices. */
+	easyble.closeConnectedDevices = function()
 	{
-		evothings.ble.connect(deviceInfo.address, function(connectInfo)
+		for (var key in internal.connectedDevices)
+		{
+			var device = internal.connectedDevices[key];
+			internal.closeDevice(device);
+			internal.connectedDevices[key] = null;
+		}
+	};
+
+	/**
+	 * Add functions to the device object to allow calling them
+	 * in an object-oriented style.
+	 */
+	internal.addMethodsToDeviceObject = function(device)
+	{
+		/** Connect to the device. */
+		device.connect = function(win, fail)
+		{
+			internal.connectToDevice(device, win, fail);
+		};
+
+		/** Close the device. */
+		device.close = function()
+		{
+			internal.closeDevice(device);
+		};
+
+		/** Read devices RSSI. Device must be connected. */
+		device.readRSSI = function(win, fail)
+		{
+			evothings.ble.rssi(device.deviceHandle, win, fail);
+		};
+
+		/** Read all service info for the specified service UUIDs.
+		// If serviceUUIDs is null, info for all services is read
+		// (this can be time-consuming compared to reading a
+		// selected number of services). */
+		device.readServices = function(serviceUUIDs, win, fail)
+		{
+			internal.readServices(device, serviceUUIDs, win, fail);
+		};
+
+		/** Read value of characteristic. */
+		device.readCharacteristic = function(characteristicUUID, win, fail)
+		{
+			internal.readCharacteristic(device, characteristicUUID, win, fail);
+		};
+
+		/** Read value of descriptor. */
+		device.readDescriptor = function(descriptorUUID, win, fail)
+		{
+			internal.readDescriptor(device, descriptorUUID, win, fail);
+		};
+
+		/** Write value of characteristic. */
+		device.writeCharacteristic = function(characteristicUUID, value, win, fail)
+		{
+			internal.writeCharacteristic(device, characteristicUUID, value, win, fail);
+		};
+
+		/** Write value of descriptor. */
+		device.writeDescriptor = function(descriptorUUID, value, win, fail)
+		{
+			internal.writeDescriptor(device, descriptorUUID, value, win, fail);
+		};
+
+		/** Subscribe to characteristic value updates. */
+		device.enableNotification = function(characteristicUUID, win, fail)
+		{
+			internal.enableNotification(device, characteristicUUID, win, fail);
+		};
+
+		/** Unsubscribe from characteristic updates. */
+		device.disableNotification = function(characteristicUUID, win, fail)
+		{
+			internal.disableNotification(device, characteristicUUID, win, fail);
+		};
+	};
+
+	/** Connect to a device. */
+	internal.connectToDevice = function(device, win, fail)
+	{
+		evothings.ble.connect(device.address, function(connectInfo)
 		{
 			if (connectInfo.state == 2) // connected
 			{
-				deviceInfo.deviceHandle = connectInfo.deviceHandle;
-				deviceInfo.uuidMap = {};
+				device.deviceHandle = connectInfo.deviceHandle;
+				device.__uuidMap = {};
+				internal.connectedDevices[device.address] = device;
 
-				win(deviceInfo);
+				win(device);
+			}
+			else if (connectInfo.state == 0) // disconnected
+			{
+				internal.connectedDevices[device.address] = null;
+				// TODO: How to signal disconnect?
+				// Call error callback?
+				// Additional callback? (connect, disconnect, fail)
+				// Additional parameter on win callback with connect state?
+				// (Last one is the best option I think).
+				//fail('disconnected');
 			}
 		},
 		function(errorCode)
@@ -112,28 +171,35 @@ var easyble = (function()
 		});
 	};
 
-	easyble.closeDevice = function(deviceInfo)
+	internal.closeDevice = function(device)
 	{
-		evothings.ble.close(deviceInfo.handle);
+		device && evothings.ble.close(device.deviceHandle);
 	};
 
-	easyble.readServicesForDevice = function(deviceInfo, win, fail)
+	/**
+	 * Obtain device services, them read characteristics and descriptors
+	 * for the services with the given uuid(s).
+	 * If serviceUUIDs is null, info is read for all services.
+	 */
+	internal.readServices = function(device, serviceUUIDs, win, fail)
 	{
-		// Array that stores services.
-		deviceInfo.services = [];
-
 		// Read services.
 		evothings.ble.services(
-			deviceInfo.deviceHandle,
+			device.deviceHandle,
 			function(services)
 			{
+				// Array that stores services.
+				device.__services = [];
+
 				for (var i = 0; i < services.length; ++i)
 				{
 					var service = services[i];
-					deviceInfo.services.push(service);
-					deviceInfo.uuidMap[service.uuid] = service;
+					device.__services.push(service);
+					device.__uuidMap[service.uuid] = service;
 				}
-				win(deviceInfo);
+
+				internal.readCharacteristicsForServices(
+					device, serviceUUIDs, win, fail);
 			},
 			function(errorCode)
 			{
@@ -144,15 +210,16 @@ var easyble = (function()
 	/**
 	 * Read characteristics and descriptors for the services with the given uuid(s).
 	 * If serviceUUIDs is null, info for all services are read.
+	 * Internal function.
 	 */
-	easyble.readCharacteristicsForServices = function(deviceInfo, serviceUUIDs, win, fail)
+	internal.readCharacteristicsForServices = function(device, serviceUUIDs, win, fail)
 	{
 		var readCounter = 0;
 
 		var characteristicsCallbackFun = function(service)
 		{
 			// Array with characteristics for service.
-			service.characteristics = [];
+			service.__characteristics = [];
 
 			return function(characteristics)
 			{
@@ -161,12 +228,12 @@ var easyble = (function()
 				for (var i = 0; i < characteristics.length; ++i)
 				{
 					var characteristic = characteristics[i];
-					service.characteristics.push(characteristic);
-					deviceInfo.uuidMap[characteristic.uuid] = characteristic;
+					service.__characteristics.push(characteristic);
+					device.__uuidMap[characteristic.uuid] = characteristic;
 
 					// Read descriptors for characteristic.
 					evothings.ble.descriptors(
-						deviceInfo.deviceHandle,
+						device.deviceHandle,
 						characteristic.handle,
 						descriptorsCallbackFun(characteristic),
 						function(errorCode)
@@ -180,7 +247,7 @@ var easyble = (function()
 		var descriptorsCallbackFun = function(characteristic)
 		{
 			// Array with descriptors for characteristic.
-			characteristic.descriptors = [];
+			characteristic.__descriptors = [];
 
 			return function(descriptors)
 			{
@@ -188,13 +255,13 @@ var easyble = (function()
 				for (var i = 0; i < descriptors.length; ++i)
 				{
 					var descriptor = descriptors[i];
-					characteristic.descriptors.push(descriptor);
-					deviceInfo.uuidMap[descriptor.uuid] = descriptor;
+					characteristic.__descriptors.push(descriptor);
+					device.__uuidMap[descriptor.uuid] = descriptor;
 				}
 				if (0 == readCounter)
 				{
 					// Everything is read.
-					win(deviceInfo);
+					win(device);
 				}
 			};
 		};
@@ -205,7 +272,7 @@ var easyble = (function()
 			for (var i = 0; i < serviceUUIDs.length; ++i)
 			{
 				var uuid = serviceUUIDs[i];
-				var service = deviceInfo.uuidMap[uuid];
+				var service = device.__uuidMap[uuid];
 				if (!service)
 				{
 					fail('Service not found: ' + uuid);
@@ -214,7 +281,7 @@ var easyble = (function()
 
 				// Read characteristics for service. Will also read descriptors.
 				evothings.ble.characteristics(
-					deviceInfo.deviceHandle,
+					device.deviceHandle,
 					service.handle,
 					characteristicsCallbackFun(service),
 					function(errorCode)
@@ -226,11 +293,11 @@ var easyble = (function()
 		else
 		{
 			// Read info for all services.
-			for (var i = 0; i < deviceInfo.services.length; ++i)
+			for (var i = 0; i < device.__services.length; ++i)
 			{
 				// Read characteristics for service. Will also read descriptors.
 				evothings.ble.characteristics(
-					deviceInfo.deviceHandle,
+					device.deviceHandle,
 					service.handle,
 					characteristicsCallbackFun(service),
 					function(errorCode)
@@ -241,9 +308,9 @@ var easyble = (function()
 		}
 	};
 
-	easyble.readCharacteristic = function(deviceInfo, characteristicUUID, win, fail)
+	internal.readCharacteristic = function(device, characteristicUUID, win, fail)
 	{
-		var characteristic = deviceInfo.uuidMap[characteristicUUID];
+		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
 			fail && fail('Characteristic not found: ' + characteristicUUID);
@@ -251,15 +318,15 @@ var easyble = (function()
 		}
 
 		evothings.ble.readCharacteristic(
-			deviceInfo.deviceHandle,
+			device.deviceHandle,
 			characteristic.handle,
 			win,
 			fail);
 	};
 
-	easyble.readDescriptor = function(deviceInfo, descriptorUUID, win, fail)
+	internal.readDescriptor = function(device, descriptorUUID, win, fail)
 	{
-		var descriptor = deviceInfo.uuidMap[descriptorUUID];
+		var descriptor = device.__uuidMap[descriptorUUID];
 		if (!descriptor)
 		{
 			fail && fail('Descriptor not found: ' + descriptorUUID);
@@ -267,7 +334,7 @@ var easyble = (function()
 		}
 
 		evothings.ble.readDescriptor(
-			deviceInfo.deviceHandle,
+			device.deviceHandle,
 			descriptor.handle,
 			value,
 			function()
@@ -280,9 +347,9 @@ var easyble = (function()
 			});
 	};
 
-	easyble.writeCharacteristic = function(deviceInfo, characteristicUUID, value, win, fail)
+	internal.writeCharacteristic = function(device, characteristicUUID, value, win, fail)
 	{
-		var characteristic = deviceInfo.uuidMap[characteristicUUID];
+		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
 			fail && fail('Characteristic not found: ' + characteristicUUID);
@@ -290,7 +357,7 @@ var easyble = (function()
 		}
 
 		evothings.ble.writeCharacteristic(
-			deviceInfo.deviceHandle,
+			device.deviceHandle,
 			characteristic.handle,
 			value,
 			function()
@@ -303,9 +370,9 @@ var easyble = (function()
 			});
 	};
 
-	easyble.writeDescriptor = function(deviceInfo, descriptorUUID, value, win, fail)
+	internal.writeDescriptor = function(device, descriptorUUID, value, win, fail)
 	{
-		var descriptor = deviceInfo.uuidMap[descriptorUUID];
+		var descriptor = device.__uuidMap[descriptorUUID];
 		if (!descriptor)
 		{
 			fail && fail('Descriptor not found: ' + descriptorUUID);
@@ -313,7 +380,7 @@ var easyble = (function()
 		}
 
 		evothings.ble.writeDescriptor(
-			deviceInfo.deviceHandle,
+			device.deviceHandle,
 			descriptor.handle,
 			value,
 			function()
@@ -326,9 +393,9 @@ var easyble = (function()
 			});
 	};
 
-	easyble.enableNotification = function(deviceInfo, characteristicUUID, win, fail)
+	internal.enableNotification = function(device, characteristicUUID, win, fail)
 	{
-		var characteristic = deviceInfo.uuidMap[characteristicUUID];
+		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
 			fail && fail('Characteristic not found: ' + characteristicUUID);
@@ -336,15 +403,15 @@ var easyble = (function()
 		}
 
 		evothings.ble.enableNotification(
-			deviceInfo.deviceHandle,
+			device.deviceHandle,
 			characteristic.handle,
 			win,
 			fail);
 	};
 
-	easyble.disableNotification = function(deviceInfo, characteristicUUID, win, fail)
+	internal.disableNotification = function(device, characteristicUUID, win, fail)
 	{
-		var characteristic = deviceInfo.uuidMap[characteristicUUID];
+		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
 			fail && fail('Characteristic not found: ' + characteristicUUID);
@@ -352,14 +419,14 @@ var easyble = (function()
 		}
 
 		evothings.ble.disableNotification(
-			deviceInfo.deviceHandle,
+			device.deviceHandle,
 			characteristic.handle,
 			win,
 			fail);
 	};
 
 	// For debugging. Example call:
-	//   easyble.printObject(deviceInfo, console.log);
+	// easyble.printObject(device, console.log);
 	easyble.printObject = function(obj, printFun)
 	{
 		function print(obj, level)
