@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<!--
+This is an app that demonstrates how to control an Arduio board over WiFi:
+http://arduino.cc/
+Please note that you must enter the IP-address of the Arduino
+WiFi shield for this example to work.
+-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+	<title>Arduino LED On/Off</title>
+	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style>
+	html, body {
+		margin: 10px 10px;
+		background-color: rgb(255,255,255);
+	}
+	div {
+		margin: 10px 0px;
+	}
+	.lead {
+		font-weight: bold;
+	}
+	</style>
+</head>
+<body>
+	<h1>Arduino LED On/Off</h1>
+
+	<div class="form-group">
+		<p class="lead">Enter IP-address of the Arduino:</p>
+		<input id="ArduinoIpAddress" class="form-control input-lg"
+			value="192.168.0.x" type="url"/>
+	</div>
+
+	<div class="form-group">
+		<button type="button" class="btn btn-lg btn-success"
+			onclick="app.ledOn()">Led On</button>
+		<button type="button" class="btn btn-lg btn-danger"
+			onclick="app.ledOff()">Led Off</button>
+	</div>
+
+	<script src="libs/jquery/jquery-2.0.3.js"></script>
+	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="arduino.js"></script>
+	<script>
+	var app = {}
+
+	// Arduino server port.
+	arduino.port = 3300
+
+	// Pin for LED.
+	app.pin = 2
+
+	// Turn on LED.
+	app.ledOn = function()
+	{
+		app.writePin(app.pin, HIGH)
+	}
+
+	// Turn off LED.
+	app.ledOff = function()
+	{
+		app.writePin(app.pin, LOW)
+	}
+
+	app.writePin = function(pin, value)
+	{
+		arduino.ipAddress = $('#ArduinoIpAddress').val()
+		arduino.pinMode(pin, OUTPUT)
+		arduino.digitalWrite(pin, value)
+	}
+	</script>
+</body>
+</html>
