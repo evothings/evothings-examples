@@ -111,9 +111,9 @@ var easyble = (function()
 		};
 
 		/** Read value of descriptor. */
-		device.readDescriptor = function(descriptorUUID, win, fail)
+		device.readDescriptor = function(characteristicUUID, descriptorUUID, win, fail)
 		{
-			internal.readDescriptor(device, descriptorUUID, win, fail);
+			internal.readDescriptor(device, characteristicUUID, descriptorUUID, win, fail);
 		};
 
 		/** Write value of characteristic. */
@@ -123,9 +123,9 @@ var easyble = (function()
 		};
 
 		/** Write value of descriptor. */
-		device.writeDescriptor = function(descriptorUUID, value, win, fail)
+		device.writeDescriptor = function(characteristicUUID, descriptorUUID, value, win, fail)
 		{
-			internal.writeDescriptor(device, descriptorUUID, value, win, fail);
+			internal.writeDescriptor(device, characteristicUUID, descriptorUUID, value, win, fail);
 		};
 
 		/** Subscribe to characteristic value updates. */
@@ -256,7 +256,7 @@ var easyble = (function()
 				{
 					var descriptor = descriptors[i];
 					characteristic.__descriptors.push(descriptor);
-					device.__uuidMap[descriptor.uuid] = descriptor;
+					device.__uuidMap[descriptor.uuid + ':' + characteristic.uuid] = descriptor;
 				}
 				if (0 == readCounter)
 				{
@@ -296,6 +296,7 @@ var easyble = (function()
 			for (var i = 0; i < device.__services.length; ++i)
 			{
 				// Read characteristics for service. Will also read descriptors.
+				var service = device.__services[i];
 				evothings.ble.characteristics(
 					device.deviceHandle,
 					service.handle,
@@ -324,9 +325,9 @@ var easyble = (function()
 			fail);
 	};
 
-	internal.readDescriptor = function(device, descriptorUUID, win, fail)
+	internal.readDescriptor = function(device, characteristicUUID, descriptorUUID, win, fail)
 	{
-		var descriptor = device.__uuidMap[descriptorUUID];
+		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
 			fail && fail('Descriptor not found: ' + descriptorUUID);
@@ -370,9 +371,9 @@ var easyble = (function()
 			});
 	};
 
-	internal.writeDescriptor = function(device, descriptorUUID, value, win, fail)
+	internal.writeDescriptor = function(device, characteristicUUID, descriptorUUID, value, win, fail)
 	{
-		var descriptor = device.__uuidMap[descriptorUUID];
+		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
 			fail && fail('Descriptor not found: ' + descriptorUUID);

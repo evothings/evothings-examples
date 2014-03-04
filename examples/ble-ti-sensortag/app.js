@@ -116,24 +116,23 @@ app.readServices = function(device)
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startMagnetometerNotification = function(device)
 {
-	// Set mag period to 100 ms.
-	device.writeCharacteristic(
-		'f000aa33-0451-4000-b000-000000000000',
-		new Uint8Array([10]));
-
-	// Set mag conf to ON.
+	// Set magnetometer to ON.
 	device.writeCharacteristic(
 		'f000aa32-0451-4000-b000-000000000000',
 		new Uint8Array([1]));
 
-	// Causes crash on iOS, see this thread:
-	// http://stackoverflow.com/questions/13561136/corebluetooth-writevaluefordescriptor-issue
-	// Set mag notification to ON.
+	// Set update period to 100 ms (10 == 100 ms).
+	device.writeCharacteristic(
+		'f000aa33-0451-4000-b000-000000000000',
+		new Uint8Array([10]));
+
+	// Set magnetometer notification to ON.
 	device.writeDescriptor(
-		'00002902-0000-1000-8000-00805f9b34fb',
+		'f000aa31-0451-4000-b000-000000000000', // Characteristic for magnetometer data
+		'00002902-0000-1000-8000-00805f9b34fb', // Configuration descriptor
 		new Uint8Array([1,0]));
 
-	// Start notification of mag data.
+	// Start notification of magnetometer data.
 	device.enableNotification(
 		'f000aa31-0451-4000-b000-000000000000',
 		function(data)
@@ -202,8 +201,6 @@ app.initialize();
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startAccelerometerNotification = function(device)
 {
-	//app.printObject(device);
-
 	// Set accelerometer configuration to ON.
 	device.writeCharacteristic(
 		'f000aa12-0451-4000-b000-000000000000',
@@ -214,11 +211,10 @@ app.startAccelerometerNotification = function(device)
 		'f000aa13-0451-4000-b000-000000000000',
 		new Uint8Array([10]));
 
-	// Causes crash on iOS, see this thread:
-	// http://stackoverflow.com/questions/13561136/corebluetooth-writevaluefordescriptor-issue
-	// Set mag notification to ON.
+	// Set accelerometer notification to ON.
 	device.writeDescriptor(
-		'00002902-0000-1000-8000-00805f9b34fb',
+		'f000aa11-0451-4000-b000-000000000000', // Characteristic for accelerometer data
+		'00002902-0000-1000-8000-00805f9b34fb', // Configuration descriptor
 		new Uint8Array([1,0]));
 
 	// Start accelerometer notification.
