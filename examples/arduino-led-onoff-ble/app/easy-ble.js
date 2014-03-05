@@ -66,7 +66,7 @@ var easyble = (function()
 		for (var key in internal.connectedDevices)
 		{
 			var device = internal.connectedDevices[key];
-			internal.closeDevice(device);
+			device && device.close();
 			internal.connectedDevices[key] = null;
 		}
 	};
@@ -86,7 +86,7 @@ var easyble = (function()
 		/** Close the device. */
 		device.close = function()
 		{
-			internal.closeDevice(device);
+			device.deviceHandle && evothings.ble.close(device.deviceHandle);
 		};
 
 		/** Read devices RSSI. Device must be connected. */
@@ -169,11 +169,6 @@ var easyble = (function()
 		{
 			fail(errorCode);
 		});
-	};
-
-	internal.closeDevice = function(device)
-	{
-		device && evothings.ble.close(device.deviceHandle);
 	};
 
 	/**
@@ -314,7 +309,7 @@ var easyble = (function()
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail && fail('Characteristic not found: ' + characteristicUUID);
+			fail('Characteristic not found: ' + characteristicUUID);
 			return;
 		}
 
@@ -330,7 +325,7 @@ var easyble = (function()
 		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
-			fail && fail('Descriptor not found: ' + descriptorUUID);
+			fail('Descriptor not found: ' + descriptorUUID);
 			return;
 		}
 
@@ -340,11 +335,11 @@ var easyble = (function()
 			value,
 			function()
 			{
-				win && win();
+				win();
 			},
 			function(errorCode)
 			{
-				fail && fail(errorCode);
+				fail(errorCode);
 			});
 	};
 
@@ -353,7 +348,7 @@ var easyble = (function()
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail && fail('Characteristic not found: ' + characteristicUUID);
+			fail('Characteristic not found: ' + characteristicUUID);
 			return;
 		}
 
@@ -363,11 +358,11 @@ var easyble = (function()
 			value,
 			function()
 			{
-				win && win();
+				win();
 			},
 			function(errorCode)
 			{
-				fail && fail(errorCode);
+				fail(errorCode);
 			});
 	};
 
@@ -376,7 +371,7 @@ var easyble = (function()
 		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
-			fail && fail('Descriptor not found: ' + descriptorUUID);
+			fail('Descriptor not found: ' + descriptorUUID);
 			return;
 		}
 
@@ -386,11 +381,11 @@ var easyble = (function()
 			value,
 			function()
 			{
-				win && win();
+				win();
 			},
 			function(errorCode)
 			{
-				fail && fail(errorCode);
+				fail(errorCode);
 			});
 	};
 
@@ -399,7 +394,7 @@ var easyble = (function()
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail && fail('Characteristic not found: ' + characteristicUUID);
+			fail('Characteristic not found: ' + characteristicUUID);
 			return;
 		}
 
@@ -415,7 +410,7 @@ var easyble = (function()
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail && fail('Characteristic not found: ' + characteristicUUID);
+			fail('Characteristic not found: ' + characteristicUUID);
 			return;
 		}
 

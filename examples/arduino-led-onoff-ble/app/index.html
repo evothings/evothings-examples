@@ -48,16 +48,19 @@ Please note that you must use a BLE shield for this example to work.
 	// Application object.
 	var app = {}
 
+	// Connected device.
+	app.device = null;
+
 	// Turn on LED.
 	app.ledOn = function()
 	{
-		device.writeDataArray(new Uint8Array([1]));
+		app.device && app.device.writeDataArray(new Uint8Array([1]));
 	}
 
 	// Turn off LED.
 	app.ledOff = function()
 	{
-		device.writeDataArray(new Uint8Array([0]));
+		app.device && app.device.writeDataArray(new Uint8Array([0]));
 	}
 
 	app.showMessage = function(info)
@@ -78,6 +81,7 @@ Please note that you must use a BLE shield for this example to work.
 		arduinoble.connect(
 			function(device)
 			{
+				app.device = device;
 				app.showMessage('Connected! Touch buttons to turn LED on/off.');
 			},
 			function(errorCode)

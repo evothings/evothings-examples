@@ -119,18 +119,37 @@ app.startMagnetometerNotification = function(device)
 	// Set magnetometer to ON.
 	device.writeCharacteristic(
 		'f000aa32-0451-4000-b000-000000000000',
-		new Uint8Array([1]));
+		new Uint8Array([1]),
+		function() {},
+		function(errorCode)
+		{
+			console.log('writeCharacteristic error: ' + errorCode);
+		});
 
 	// Set update period to 100 ms (10 == 100 ms).
 	device.writeCharacteristic(
 		'f000aa33-0451-4000-b000-000000000000',
-		new Uint8Array([10]));
+		new Uint8Array([10]),
+		function() {},
+		function(errorCode)
+		{
+			console.log('writeCharacteristic error: ' + errorCode);
+		});
 
 	// Set magnetometer notification to ON.
 	device.writeDescriptor(
 		'f000aa31-0451-4000-b000-000000000000', // Characteristic for magnetometer data
 		'00002902-0000-1000-8000-00805f9b34fb', // Configuration descriptor
-		new Uint8Array([1,0]));
+		new Uint8Array([1,0]),
+		function() {},
+		function(errorCode)
+		{
+			// This error will happen on iOS, since this descriptor is not
+			// listed when requesting descriptors. On iOS you are not allowed
+			// to use the configuration descriptor explicitly. It should be
+			// safe to ignore this error.
+			//console.log('writeDescriptor error: ' + errorCode);
+		});
 
 	// Start notification of magnetometer data.
 	device.enableNotification(
