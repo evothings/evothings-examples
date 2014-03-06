@@ -40,13 +40,18 @@ Example: R5 -> H
 #include <SPI.h>
 #include <Ethernet.h>
 
-// Enter a MAC address and IP address for your controller below.
+// Enter a MAC address for your controller below, usually found on a sticker
+// on the back of your Ethernet shield
+byte mac[] = { 0x90, 0xA2, 0xDA, 0x0E, 0xD0, 0x93 };
+
 // The IP address will be dependent on your local network.
-// gateway and subnet are optional:
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192,168,1, 177);
-IPAddress gateway(192,168,1, 1);
-IPAddress subnet(255, 255, 0, 0);
+// If you have IP network info, uncomment the lines starting
+// with IPAddress and enter relevant data for your network.
+// If you don't know, you probably have dynamically allocated IP adresses, then
+// you don't need to do anything, move along.
+// IPAddress ip(192,168,1, 177);
+// IPAddress gateway(192,168,1, 1);
+// IPAddress subnet(255, 255, 255, 0);
 
 // Create a server listening on the given port.
 EthernetServer server(3300);
@@ -54,7 +59,21 @@ EthernetServer server(3300);
 void setup()
 {
 	// Initialize the Ethernet shield.
-	Ethernet.begin(mac, ip, gateway, subnet);
+	// If you entered fixed ipaddress info, gateway, subnet mask,
+	// then uncommment the next line.
+	// Ethernet.begin(mac, ip, gateway, subnet);
+
+	// If it works to get a dynamic IP from a DHCP server, use this
+	// code to test if you're getting a dynamic adress. If this
+	// does not work, use the above method of specifying an IP-address.
+	// dhcp test starts here
+	if (Ethernet.begin(mac) == 0)
+	{
+		Serial.println("Failed to configure Ethernet using DHCP");
+    	// No point in carrying on, stop here forever.
+    	while(true);
+	}
+	// dhcp test end
 
 	// Start serial communication with the given baud rate.
 	// NOTE: Remember to set the baud rate in the Serial

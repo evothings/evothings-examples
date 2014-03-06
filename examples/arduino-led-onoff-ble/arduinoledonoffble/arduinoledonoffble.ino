@@ -49,23 +49,22 @@ void loop()
 	{
 		// Read input.
 		int c = ble_read();
+                Serial.println("got input");
 		if (c != 0)
 		{
 			// Non-zero input means "turn on LED".
+                        Serial.println("on");
 			Serial.write(c);
 			digitalWrite(LED_PIN, HIGH);
 		}
 		else
 		{
+                        Serial.println("off");
 			// Input value zero means "turn off LED".
 			Serial.write('0');
 			digitalWrite(LED_PIN, LOW);
 		}
 	}
-
-	// Read the analog input pin and send the data over BLE.
-	short i = analogRead(INPUT_PIN);
-	ble_write_bytes((byte*)&i, 2);
 
 	// Process BLE events.
 	ble_do_events();

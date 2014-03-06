@@ -18,6 +18,9 @@ Please note that you must use a BLE shield for this example to work.
 	div {
 		margin: 10px 0px;
 	}
+	button {
+		margin: 5px 0px;
+	}
 	.lead {
 		font-weight: bold;
 	}
@@ -45,6 +48,8 @@ Please note that you must use a BLE shield for this example to work.
 	<script src="easy-ble.js"></script>
 	<script src="arduino-ble.js"></script>
 	<script>
+	if (window.hyper) console.log = window.hyper.log;
+
 	// Application object.
 	var app = {}
 

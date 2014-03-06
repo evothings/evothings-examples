@@ -93,7 +93,10 @@ var arduinoble = (function()
 			device.writeCharacteristic(
 				'713d0003-503e-4c75-ba94-3148f18d941e',
 				uint8array,
-				function() {},
+				function()
+				{
+					console.log('writeCharacteristic success');
+				},
 				function(errorCode)
 				{
 					console.log('writeCharacteristic error: ' + errorCode);

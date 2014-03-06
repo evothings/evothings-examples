@@ -45,9 +45,9 @@ var app =
 
 	// Handles to characteristics and descriptor for reading and
 	// writing data from/to the Arduino using the BLE shield.
-	characteristicRead = null,
-	characteristicWrite = null,
-	descriptorNotification = null,
+	characteristicRead: null,
+	characteristicWrite: null,
+	descriptorNotification: null,
 
 	// Data that is plotted on the canvas.
 	dataPoints: [],
@@ -78,13 +78,14 @@ var app =
 	startScan: function()
 	{
 		console.log('Scanning...');
-		ble.startScan(
+		evothings.ble.startScan(
 			function(deviceInfo)
 			{
 				if (app.knownDevices[deviceInfo.address])
 				{
 					return;
 				}
+				console.log('found device: ' + deviceInfo.name);
 				app.knownDevices[deviceInfo.address] = deviceInfo;
 				if (deviceInfo.name == 'BLE Shield' && !app.connectee)
 				{
@@ -101,9 +102,9 @@ var app =
 
 	connect: function(address)
 	{
-		ble.stopScan();
+		evothings.ble.stopScan();
 		console.log('Connecting...');
-		ble.connect(
+		evothings.ble.connect(
 			address,
 			function(connectInfo)
 			{
@@ -144,7 +145,7 @@ var app =
 		{
 			ble[writeFunc](
 				deviceHandle,
-				uuid,
+				handle,
 				value,
 				function()
 				{
@@ -169,7 +170,7 @@ var app =
 			new Uint8Array([1,0]));
 
 		// Start reading notifications.
-		ble.enableNotification(
+		evothings.ble.enableNotification(
 			deviceHandle,
 			app.characteristicRead,
 			function(data)
@@ -224,7 +225,7 @@ var app =
 	{
 		console.log('Reading services...');
 
-		ble.readAllServiceData(deviceHandle, function(services)
+		evothings.ble.readAllServiceData(deviceHandle, function(services)
 		{
 			// Find handles for characteristics and descriptor needed.
 			for (var si in services)
@@ -246,7 +247,7 @@ var app =
 
 					for (var di in characteristic.descriptors)
 					{
-						var descriptor = c.descriptors[di];
+						var descriptor = characteristic.descriptors[di];
 
 						if (characteristic.uuid == '713d0002-503e-4c75-ba94-3148f18d941e' &&
 							descriptor.uuid == '00002902-0000-1000-8000-00805f9b34fb')

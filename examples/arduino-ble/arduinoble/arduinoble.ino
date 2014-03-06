@@ -15,7 +15,7 @@ void setup() {
 	pinMode(LED_PIN, OUTPUT);
 
 	// Enable serial debug.
-	Serial.begin(57600);
+	Serial.begin(9600);
 	Serial.println("Hello world!");
 
 	// Turn off LED.
