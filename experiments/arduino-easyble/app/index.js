@@ -14,10 +14,8 @@ $(document).ready(function()
 // Adjust the canvas dimensions based on its container dimensions.
 function resizeCanvas()
 {
-	// Get the canvas & context
 	var canvas = $('#canvas');
 	var container = $(canvas).parent();
-
 	canvas.attr('width', $(container).width() ); // Max width
 	canvas.attr('height', $(container).height() ); // Max height
 }
@@ -31,7 +29,6 @@ var app =
 	// Reference to the connected device.
 	device: null,
 
-	// Application Constructor
 	initialize: function()
 	{
 		document.addEventListener('deviceready', app.onDeviceReady, false);

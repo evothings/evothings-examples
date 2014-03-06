@@ -52,11 +52,10 @@ app.startScan = function()
 	easyble.startScan(
 		function(device)
 		{
-			app.showInfo('Device found:' + device.name);
-
 			// Connect if we have found a sensor tag.
 			if (app.deviceIsSensorTag(device))
 			{
+				app.showInfo('Device found: ' + device.name);
 				easyble.stopScan();
 				app.connectToDevice(device);
 			}
@@ -82,6 +81,7 @@ app.connectToDevice = function(device)
 	device.connect(
 		function(device)
 		{
+			app.showInfo('Connected - reading SensorTag services');
 			app.readServices(device);
 		},
 		function(errorCode)
@@ -116,24 +116,32 @@ app.readServices = function(device)
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startMagnetometerNotification = function(device)
 {
+	app.showInfo('Starting notification');
+
 	// Set magnetometer to ON.
 	device.writeCharacteristic(
 		'f000aa32-0451-4000-b000-000000000000',
 		new Uint8Array([1]),
-		function() {},
+		function()
+		{
+			console.log('writeCharacteristic 1 ok');
+		},
 		function(errorCode)
 		{
-			console.log('writeCharacteristic error: ' + errorCode);
+			console.log('writeCharacteristic 1 error: ' + errorCode);
 		});
 
 	// Set update period to 100 ms (10 == 100 ms).
 	device.writeCharacteristic(
 		'f000aa33-0451-4000-b000-000000000000',
 		new Uint8Array([10]),
-		function() {},
+		function()
+		{
+			console.log('writeCharacteristic 2 ok');
+		},
 		function(errorCode)
 		{
-			console.log('writeCharacteristic error: ' + errorCode);
+			console.log('writeCharacteristic 2 error: ' + errorCode);
 		});
 
 	// Set magnetometer notification to ON.
@@ -141,14 +149,17 @@ app.startMagnetometerNotification = function(device)
 		'f000aa31-0451-4000-b000-000000000000', // Characteristic for magnetometer data
 		'00002902-0000-1000-8000-00805f9b34fb', // Configuration descriptor
 		new Uint8Array([1,0]),
-		function() {},
+		function()
+		{
+			console.log('writeDescriptor ok');
+		},
 		function(errorCode)
 		{
 			// This error will happen on iOS, since this descriptor is not
 			// listed when requesting descriptors. On iOS you are not allowed
 			// to use the configuration descriptor explicitly. It should be
 			// safe to ignore this error.
-			//console.log('writeDescriptor error: ' + errorCode);
+			console.log('writeDescriptor error: ' + errorCode);
 		});
 
 	// Start notification of magnetometer data.
@@ -220,6 +231,8 @@ app.initialize();
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startAccelerometerNotification = function(device)
 {
+	app.showInfo('Starting notification');
+
 	// Set accelerometer configuration to ON.
 	device.writeCharacteristic(
 		'f000aa12-0451-4000-b000-000000000000',

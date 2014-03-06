@@ -20,6 +20,9 @@ var easyble = (function()
 	/** Internal properties and functions. */
 	var internal = {};
 
+	/** Internal variable used to track reading of service data. */
+	var readCounter = 0;
+
 	/** Table of discovered devices. */
 	internal.knownDevices = {};
 
@@ -209,8 +212,6 @@ var easyble = (function()
 	 */
 	internal.readCharacteristicsForServices = function(device, serviceUUIDs, win, fail)
 	{
-		var readCounter = 0;
-
 		var characteristicsCallbackFun = function(service)
 		{
 			// Array with characteristics for service.
@@ -218,7 +219,7 @@ var easyble = (function()
 
 			return function(characteristics)
 			{
-				--readCounter;
+				--readCounter; // Decrements the count added by services.
 				readCounter += characteristics.length;
 				for (var i = 0; i < characteristics.length; ++i)
 				{
@@ -246,12 +247,12 @@ var easyble = (function()
 
 			return function(descriptors)
 			{
-				--readCounter;
+				--readCounter; // Decrements the count added by characteristics.
 				for (var i = 0; i < descriptors.length; ++i)
 				{
 					var descriptor = descriptors[i];
 					characteristic.__descriptors.push(descriptor);
-					device.__uuidMap[descriptor.uuid + ':' + characteristic.uuid] = descriptor;
+					device.__uuidMap[characteristic.uuid + ':' + descriptor.uuid] = descriptor;
 				}
 				if (0 == readCounter)
 				{
@@ -261,9 +262,13 @@ var easyble = (function()
 			};
 		};
 
+		// Initialize read counter.
+		readCounter = 0;
+
 		if (null != serviceUUIDs)
 		{
 			// Read info for service UUIDs.
+			readCounter = serviceUUIDs.length;
 			for (var i = 0; i < serviceUUIDs.length; ++i)
 			{
 				var uuid = serviceUUIDs[i];
@@ -288,6 +293,7 @@ var easyble = (function()
 		else
 		{
 			// Read info for all services.
+			readCounter = device.__services.length;
 			for (var i = 0; i < device.__services.length; ++i)
 			{
 				// Read characteristics for service. Will also read descriptors.
