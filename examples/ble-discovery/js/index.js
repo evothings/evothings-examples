@@ -8,7 +8,6 @@ $(document).ready( function()
 	$(document).on('pageshow', '#first', function (data)
 	{
 		// Start device discovery.
-		app.resetBLE();
 		// Clear the list of device services
 		$("#serviceList").empty();
 	});
@@ -27,9 +26,6 @@ app.scanInterval = 5000;
 // Track whether scanning is ongoing to avoid multiple intervals.
 app.isScanning = false;
 
-// Track whether reset is ongoing to avoid conflicts with any connections.
-app.isResetting = false;
-
 // Time for last scan event. This is useful for
 // when the device does not support continuous scan.
 app.lastScanEvent = 0;
@@ -38,12 +34,6 @@ app.lastScanEvent = 0;
 app.initialize = function()
 {
 	this.bindEvents();
-
-	// Important to stop scanning when page reloads/closes!
-	window.addEventListener('beforeunload', function(e)
-	{
-		app.stopLeScan();
-	});
 };
 
 // Bind Event Listeners
@@ -65,7 +55,7 @@ app.onDeviceReady = function()
 	ble = evothings.ble;
 
 	app.receivedEvent('deviceready');
-	app.resetBLE();
+	app.startLeScan();
 };
 
 // TODO: Update DOM on a Received Event.
@@ -73,22 +63,6 @@ app.onDeviceReady = function()
 app.receivedEvent = function(id)
 {
 	console.log('Received Event: ' + id);
-};
-
-app.resetBLE = function()
-{
-	console.log("resetting...");
-	ble.stopScan();
-	app.isResetting = true;
-	ble.reset(function()
-	{
-		app.isResetting = false;
-		console.log("reset complete!");
-		app.startLeScan();
-	}, function(err)
-	{
-		console.log("reset error: " + err);
-	});
 };
 
 app.testCharConversion = function()
@@ -129,7 +103,7 @@ app.startLeScan = function()
 	app.stopLeScan();
 	app.isScanning = true;
 	app.lastScanEvent = new Date();
-	app.runScanTimer();
+	//app.runScanTimer();
 
 	ble.startScan(function(r)
 	{
@@ -153,20 +127,11 @@ app.startLeScan = function()
 	}, function(errorCode)
 	{
 		console.log('startScan error: ' + errorCode);
-		app.resetBLE();
 	});
 };
 
 /** Handler for when device in devices list was clicked. */
 app.eventDeviceClicked = function(event) {
-	if (app.isResetting) // Reset process active.
-	{
-		// Avoid navigation to the services ("connected") page.
-		event.preventDefault();
-		alert('BLE reset in progress.\nPlease try again.');
-		// TODO: listen for reset finished event and make the connection.
-		return;
-	}
 	app.connect(event.data.address, event.data.name);
 };
 
@@ -202,61 +167,57 @@ app.connect = function(address, name)
 	document.getElementById('deviceName').innerHTML = address + " " + name;
 	ble.connect(address, function(r)
 	{
-		console.log('connect '+r.device+' state '+r.state);
+		app.deviceHandle = r.deviceHandle;
+		console.log('connect '+r.deviceHandle+' state '+r.state);
 		document.getElementById('deviceState').innerHTML = r.state;
 		if (r.state == 2) // connected
 		{
 			console.log('connected, requesting services...');
-			app.getServices(r.device);
+			app.getServices(r.deviceHandle);
 		}
 	}, function(errorCode)
 	{
 		console.log('connect error: ' + errorCode);
-		app.resetBLE();
 	});
 };
 
-app.getServices = function(device)
+app.getServices = function(deviceHandle)
 {
-	var first = true;
-	var serviceCount;
-	var services = [];
-	var finish = function()
-	{
-		console.log('finish');
+	ble.readAllServiceData(deviceHandle, function(services) {
 		var p = $("#serviceList");
 		p.empty();
 		for (var si in services)
 		{
-			var ss = services[si];
-			var s = ss.s;
-			//console.log('s'+s.handle+': '+s.type+' '+s.uuid+'. '+s.characteristicCount+' chars.');
+			var s = services[si];
+			console.log('s'+s.handle+': '+s.type+' '+s.uuid+'. '+s.characteristics.length+' chars.');
 
 			var $c = $("#serviceList").
 				addCollapsible({template: $('#servicesListTemplate'),
 					title: 's' + s.handle + ': ' + s.type + ' ' +
-					s.uuid + '. ' + s.characteristicCount + ' chars.'});
+					s.uuid + '. ' + s.characteristics.length + ' chars.'});
 
-			if (s.characteristicCount > 0)
+			var $cs;
+			if (s.characteristics.length > 0)
 				$cs = $c.addCollapsibleSet();
 
-			for (var ci in ss.c)
+			for (var ci in s.characteristics)
 			{
-				var cc = ss.c[ci];
-				var c = cc.c;
-				//console.log(' c'+c.handle+': '+c.uuid+'. '+c.descriptorCount+' desc.');
+				var c = s.characteristics[ci];
+				console.log(' c'+c.handle+': '+c.uuid+'. '+c.descriptors.length+' desc.');
+				console.log(formatFlags('  properties', c.properties, ble.property));
+				console.log(formatFlags('  writeType', c.writeType, ble.writeType));
 
 				var $c = $cs.addCollapsible({title: 'c' + c.handle + ': ' +
-					c.uuid + '. ' + c.descriptorCount + ' desc.'});
+					c.uuid + '. ' + c.descriptors.length + ' desc.'});
 
 				var $lv;
-				if (c.descriptorCount > 0)
+				if (c.descriptors.length > 0)
 					$lv = $c.addListView();
 
-				for (var di in cc.d)
+				for (var di in c.descriptors)
 				{
-					var d = cc.d[di];
-					//console.log('  d'+d.handle+': '+d.uuid);
+					var d = c.descriptors[di];
+					console.log('  d'+d.handle+': '+d.uuid);
 
 					var $lvi = $lv.addListViewItem({text: 'd'+d.handle+': '+d.uuid});
 
@@ -264,15 +225,15 @@ app.getServices = function(device)
 					if (d.uuid == "00002901-0000-1000-8000-00805f9b34fb")
 					{
 						var h = d.handle;
-						//console.log("rd "+h);
+						console.log("rd "+h);
 						// need a function here for the closure, so that variables h, ch, dli retain proper values.
 						// without it, all strings would be added to the last descriptor.
 						function f(h, c, lvi)
 						{
-							ble.readDescriptor(device, h, function(data)
+							ble.readDescriptor(deviceHandle, h, function(data)
 							{
 								var s = ble.fromUtf8(data);
-								//console.log("rdw "+h+": "+s);
+								console.log("rdw "+h+": "+s);
 								c.collapsibleTitleElm().prepend(s + ' ');
 							},
 							function(errorCode)
@@ -287,67 +248,9 @@ app.getServices = function(device)
 			}
 		}
 		$('#connected').trigger('create');
-	};
-	ble.services(device, function(s)
-	{
-		serviceCount = s.serviceCount;
-		if (first)
-		{
-			//console.log('s'+s.handle+"/"+serviceCount+" "+s.characteristicCount);
-		}
-		var service = {s:s, c:[]};
-		//msg += 's'+s.handle+': '+s.type+' '+s.uuid+'. '+s.characteristicCount+' chars.'+"\n";
-		if (s.characteristicCount == 0)
-		{
-			services.push(service);
-			if (services.length == serviceCount)
-			{
-				console.log('f1');
-				finish();
-			}
-		}
-		ble.characteristics(device, s.handle, function(c)
-		{
-			//console.log(' c'+c.handle+"/"+s.characteristicCount+" "+c.descriptorCount);
-			var characteristic = {c:c, d:[]};
-			//msg += ' c'+c.handle+': '+c.uuid+'. '+c.descriptorCount+' desc.'+"\n";
-			//dumpFlags('  permissions', c.permissions, ble.permission);
-			formatFlags('  properties', c.properties, ble.property);
-			formatFlags('  writeType', c.writeType, ble.writeType);
-			if (c.descriptorCount == 0)
-			{
-				service.c.push(characteristic);
-				if (service.c.length == s.characteristicCount) services.push(service);
-				if (services.length == serviceCount)
-				{
-					console.log('f2');
-					finish();
-				}
-			}
-			ble.descriptors(device, c.handle, function(d)
-			{
-				//console.log('  d'+d.handle+"/"+c.descriptorCount);
-				characteristic.d.push(d);
-				//msg += '  d'+d.handle+': '+d.uuid+"\n";
-				//dumpFlags('   permissions', d.permissions, ble.permission);
-				if (characteristic.d.length == c.descriptorCount) service.c.push(characteristic);
-				if (service.c.length == s.characteristicCount) services.push(service);
-				if (services.length == serviceCount)
-				{
-					console.log('f3');
-					finish();
-				}
-			}, function(errorCode)
-			{
-				console.log('  descriptors error: ' + errorCode);
-			});
-		}, function(errorCode)
-		{
-			console.log(' characteristics error: ' + errorCode);
-		});
 	}, function(errorCode)
 	{
-		console.log('services error: ' + errorCode);
+		console.log('readAllServiceData error: ' + errorCode);
 	});
 };
 
