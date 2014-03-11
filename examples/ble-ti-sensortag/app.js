@@ -10,16 +10,6 @@ app.dataPoints = [];
 app.initialize = function()
 {
 	document.addEventListener('deviceready', app.onDeviceReady, false);
-
-	// Important close devices or reset BLE when page reloads!
-	window.hyper && window.hyper.onReload(function()
-	{
-		app.onStopButton();
-
-		// Alternatively reset BLE, this takes some
-		// time on Android, but might be needed.
-		//evothings.ble.reset();
-	});
 };
 
 app.onDeviceReady = function()

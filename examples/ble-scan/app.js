@@ -12,12 +12,6 @@ app.ui = {};
 app.initialize = function()
 {
 	document.addEventListener('deviceready', this.onDeviceReady, false);
-
-	// Important to stop scanning when page reloads/closes!
-	window.addEventListener('beforeunload', function(e)
-	{
-		evothings.ble.reset();
-	});
 };
 
 app.onDeviceReady = function()
