@@ -106,7 +106,7 @@ app.readServices = function(device)
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startMagnetometerNotification = function(device)
 {
-	app.showInfo('Starting notification');
+	app.showInfo('Starting magnetometer notification');
 
 	// Set magnetometer to ON.
 	device.writeCharacteristic(
@@ -157,6 +157,7 @@ app.startMagnetometerNotification = function(device)
 		'f000aa31-0451-4000-b000-000000000000',
 		function(data)
 		{
+			app.showInfo('Data stream active - magnetometer');
 			//console.log('byteLength: '+data.byteLength);
 			var dataArray = new Int16Array(data);
 			//console.log('length: '+dataArray.length);
@@ -221,7 +222,7 @@ app.initialize();
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startAccelerometerNotification = function(device)
 {
-	app.showInfo('Starting notification');
+	app.showInfo('Starting accelerometer notification');
 
 	// Set accelerometer configuration to ON.
 	device.writeCharacteristic(
@@ -244,6 +245,7 @@ app.startAccelerometerNotification = function(device)
 		'f000aa11-0451-4000-b000-000000000000',
 		function(data)
 		{
+			app.showInfo('Data stream active - accelerometer');
 			//console.log('byteLength: '+data.byteLength);
 			var dataArray = new Int8Array(data);
 			//console.log('length: '+dataArray.length);
