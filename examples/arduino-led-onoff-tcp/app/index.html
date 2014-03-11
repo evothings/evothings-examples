@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <!--
-This is an app that demonstrates how to control an Arduio board over WiFi:
-http://arduino.cc/
+This is an app that demonstrates how to control an Arduio board
+with TCP over WiFi from the mobile device and a WiFi shield or
+an Ethernet shield.
+
 Please note that you must enter the IP-address of the Arduino
-WiFi shield for this example to work.
+for this example to work.
 -->
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
-	<title>Arduino LED On/Off</title>
+	<title>Arduino LED On/Off TCP</title>
 	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<style>
 	html, body {
@@ -25,7 +27,7 @@ WiFi shield for this example to work.
 	</style>
 </head>
 <body>
-	<h1>Arduino LED On/Off</h1>
+	<h1>Arduino LED On/Off TCP</h1>
 
 	<div class="form-group">
 		<p class="lead">Enter IP-address of the Arduino:</p>

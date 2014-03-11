@@ -1,3 +1,5 @@
+// Arduino code for example Arduino Easy BLE.
+// Evothings AB, 2014
 
 // Include BLE files.
 #include <SPI.h>
@@ -10,13 +12,15 @@
 #define LED_PIN 2
 
 // This function is called only once, at reset.
-void setup() {
+void setup()
+{
 	// Enable output.
 	pinMode(LED_PIN, OUTPUT);
 
 	// Enable serial debug.
 	Serial.begin(9600);
-	Serial.println("Hello world!");
+	Serial.println("Arduino EasyBLE example started");
+	Serial.println("Serial rate set to 9600");
 
 	// Turn off LED.
 	digitalWrite(LED_PIN, LOW);
@@ -38,16 +42,21 @@ void setup() {
 }
 
 // This function is called continuously, after setup() completes.
-void loop() {
+void loop()
+{
 	// If there's any input...
-	while(ble_available()) {
+	while (ble_available())
+	{
 		// Read input.
 		int c = ble_read();
-		if(c != 0) {
+		if (c != 0)
+		{
 			// Non-zero input means "turn on LED".
 			Serial.write(c);
 			digitalWrite(LED_PIN, HIGH);
-		} else {
+		}
+		else
+		{
 			// Input value zero means "turn off LED".
 			Serial.write('0');
 			digitalWrite(LED_PIN, LOW);

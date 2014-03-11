@@ -1,0 +1,43 @@
+
+html, body {height:100%;}
+
+canvas { border: 1px solid black; }
+
+h3 { font-size:1em; }
+
+.buttonsHeader { float:left; width:42%; }
+
+.canvasHeader { float:right; width:58%; }
+
+#controls {
+	position:relative;
+	float:right;
+	width:58%;
+	height:20%;
+	margin-bottom:2%;
+}
+
+/*  Scale and position the buttons relative to the #controls box's dimensions.
+	The purpose is to align the buttons with the contained canvas. */
+#on, #off {
+	display:block;
+	position:absolute;
+	/*  Button width should be 97% of space to left of #controls box. So 97%
+		must be scaled by the ratio of how much bigger/smaller that space is
+		compared to the containing box.
+		97*((100-58)/58) = 70 */
+	width:70%;
+	height:46%;
+	/*  To position the button relative to the containing block, calculate
+		by which percentage of the #controls box's width the button has to
+		be moved in order to be positioned at the far left.
+		Width of #controls box = 58%.
+		Width of space to left of #controls box = 100-58 %.
+		left=100*((100-58)/58)=72.41% (controlsHeaderCol2 width = 58%) */
+	left:-72.41%;
+}
+
+#on { top:0; } /* aligns the button with the top of the canvas */
+#off { bottom:0; } /* aligns the button with the bottom of the canvas */
+
+body > p { clear:both; }
