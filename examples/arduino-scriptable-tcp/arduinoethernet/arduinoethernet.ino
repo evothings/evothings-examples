@@ -70,8 +70,8 @@ void setup()
 	if (Ethernet.begin(mac) == 0)
 	{
 		Serial.println("Failed to configure Ethernet using DHCP");
-    	// No point in carrying on, stop here forever.
-    	while(true);
+		// No point in carrying on, stop here forever.
+		while(true);
 	}
 	// dhcp test end
 
