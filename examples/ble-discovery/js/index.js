@@ -113,7 +113,7 @@ app.startLeScan = function()
 			return;
 		}
 		app.knownDevices[r.address] = r;
-		var res = r.address + " " + r.rssi + " " + r.name;
+		var res = r.rssi + " " + r.name + " " + r.address;
 		console.log('scan result: ' + res);
 		var p = document.getElementById('deviceList');
 		var li = document.createElement('li');
