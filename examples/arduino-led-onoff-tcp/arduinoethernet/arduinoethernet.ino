@@ -2,7 +2,7 @@
 Arduino Ethernet Script Server
 
 Created Mars 4, 2014
-Mikael Kindborg, EvoThings AB
+Mikael Kindborg, Evothings AB
 
 TCP socket server that accept commands for basic scripting
 of the Arduino board.

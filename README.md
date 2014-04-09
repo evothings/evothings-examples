@@ -1,6 +1,6 @@
-# Examples for EvoThings Studio.
+# Examples for Evothings Studio.
 
-Apps in folder 'examples' are included in the EvoThings Studio download.
+Apps in folder 'examples' are included in the Evothings Studio download.
 
 Apps in folder 'experiments' are under development and are not guaranteed to work.
 

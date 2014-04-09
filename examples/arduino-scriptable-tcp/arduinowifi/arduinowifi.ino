@@ -2,7 +2,7 @@
 Arduino WiFi Script Server
 
 Created October 20, 2013
-Mikael Kindborg, EvoThings AB
+Mikael Kindborg, Evothings AB
 
 TCP socket server that accept commands for basic scripting
 of the Arduino board.

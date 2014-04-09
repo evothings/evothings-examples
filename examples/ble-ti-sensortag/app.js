@@ -227,18 +227,46 @@ app.startAccelerometerNotification = function(device)
 	// Set accelerometer configuration to ON.
 	device.writeCharacteristic(
 		'f000aa12-0451-4000-b000-000000000000',
-		new Uint8Array([1]));
+		new Uint8Array([1]),
+		function()
+		{
+			console.log('writeCharacteristic ok');
+		},
+		function(errorCode)
+		{
+			console.log('writeCharacteristic error: ' + errorCode);
+		});
 
 	// Set accelerometer period to 100 ms.
 	device.writeCharacteristic(
 		'f000aa13-0451-4000-b000-000000000000',
-		new Uint8Array([10]));
+		new Uint8Array([10]),
+		function()
+		{
+			console.log('writeCharacteristic ok');
+		},
+		function(errorCode)
+		{
+			console.log('writeCharacteristic error: ' + errorCode);
+		});
 
 	// Set accelerometer notification to ON.
 	device.writeDescriptor(
 		'f000aa11-0451-4000-b000-000000000000', // Characteristic for accelerometer data
 		'00002902-0000-1000-8000-00805f9b34fb', // Configuration descriptor
-		new Uint8Array([1,0]));
+		new Uint8Array([1,0]),
+		function()
+		{
+			console.log('writeDescriptor ok');
+		},
+		function(errorCode)
+		{
+			// This error will happen on iOS, since this descriptor is not
+			// listed when requesting descriptors. On iOS you are not allowed
+			// to use the configuration descriptor explicitly. It should be
+			// safe to ignore this error.
+			console.log('writeDescriptor error: ' + errorCode);
+		});
 
 	// Start accelerometer notification.
 	device.enableNotification(

@@ -29,7 +29,7 @@ Response: "H" (HIGH) or "L" (LOW)
 Example: R5 -> H
 
 Created October 20, 2013
-Mikael Kindborg, EvoThings AB
+Mikael Kindborg, Evothings AB
 */
 
 // Include files.

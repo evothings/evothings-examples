@@ -70,7 +70,7 @@ var app =
 	// Called when device plugin functions are ready for use.
 	onDeviceReady: function()
 	{
-		ble = evothings.ble; // EvoThings BLE plugin
+		ble = evothings.ble; // Evothings BLE plugin
 
 		app.startScan();
 	},

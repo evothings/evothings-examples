@@ -24,6 +24,11 @@ Please note that you must use a BLE shield for this example to work.
 	.lead {
 		font-weight: bold;
 	}
+	.btn-yellow {
+		color: rgb(255,255,255); /* Text color */
+		background-color: rgb(220,220,0);
+		border-color: rgb(200,200,0);
+	}
 	</style>
 </head>
 <body>
@@ -34,7 +39,7 @@ Please note that you must use a BLE shield for this example to work.
 	</div>
 
 	<div class="form-group">
-		<button type="button" class="btn btn-lg btn-warning"
+		<button type="button" class="btn btn-lg btn-yellow"
 			onclick="app.connect()">Connect</button>
 		<button type="button" class="btn btn-lg btn-success"
 			onclick="app.ledOn()">Led On</button>
