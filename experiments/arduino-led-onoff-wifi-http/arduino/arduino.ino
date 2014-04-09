@@ -24,7 +24,7 @@ Created 25 Nov 2012
 by Tom Igoe
 
 Modified October 20, 2013
-by Mikael Kindborg, EvoThings AB
+by Mikael Kindborg, Evothings AB
 */
 
 // Include files.
