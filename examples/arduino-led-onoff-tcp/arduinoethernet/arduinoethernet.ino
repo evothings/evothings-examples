@@ -9,31 +9,45 @@ of the Arduino board.
 
 This example is written for use with an Ethernet shield.
 
-The API consists of the following requests.
+The API consists of the requests listed below.
+
 Requests and responses end with a new line.
 
-n is a pin number ranging from 2 to 9.
+The input parameter n is a pin number ranging from 2 to 9.
+
+The response is always a 4-character string with a
+hex encoded number ranging from 0 to FFFF.
+
+Possible response string values:
+
+H (result from digital read)
+L (result from digital read)
+0 to 1023 - Analog value (result from analog read)
 
 Set pin mode to OUTPUT for pin n: On
-Response: "OK"
-Example: O5 -> OK
-Note: O is upper case letter o, not digit 0.
+Response: None
+Example: O5
+Note: O is upper case letter o, not digit zero (0).
 
 Set pin mode to INPUT for pin n: In
-Response: "OK"
-Example: I5 -> OK
+Response: None
+Example: I5
 
 Write LOW to pin n: Ln
-Response: "OK"
-Example: L5 -> OK
+Response: None
+Example: L5
 
 Write HIGH to pin n: Hn
-Response: "OK"
-Example: H5 -> OK
+Response: None
+Example: H5
 
 READ pin n: Rn
 Response: "H" (HIGH) or "L" (LOW)
 Example: R5 -> H
+
+ANALOG read pin n: An
+Response: int value as string (range "0" to "1023")
+Example: A5 -> 42
 */
 
 // Include files.
@@ -146,30 +160,26 @@ void executeRequest(EthernetClient* client, String* request)
 	if ('O' == command)
 	{
 		pinMode(n, OUTPUT);
-		sendResponse(client, "OK");
 	}
 	else if ('I' == command)
 	{
 		pinMode(n, INPUT);
-		sendResponse(client, "OK");
 	}
 	else if ('L' == command)
 	{
 		digitalWrite(n, LOW);
-		sendResponse(client, "OK");
 	}
 	else if ('H' == command)
 	{
 		digitalWrite(n, HIGH);
-		sendResponse(client, "OK");
 	}
 	else if ('R' == command)
 	{
 		sendResponse(client, String(digitalRead(n)));
 	}
-	else
+	else if ('A' == command)
 	{
-		sendResponse(client, "UNKNOWN COMMAND");
+		sendResponse(client, String(analogRead(n)));
 	}
 }
 

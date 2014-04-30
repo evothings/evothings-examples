@@ -52,6 +52,10 @@ for this example to work.
 			onclick="app.ledOn()">Led On</button>
 		<button type="button" class="btn btn-lg btn-warning"
 			onclick="app.ledOff()">Led Off</button>
+		<button type="button" class="btn btn-lg btn-primary"
+			onclick="app.digitalRead()">Digital Read</button>
+		<button type="button" class="btn btn-lg btn-warning"
+			onclick="app.analogRead()">Analog Read</button>
 	</div>
 
 	<script src="libs/jquery/jquery-2.0.3.js"></script>
@@ -80,6 +84,24 @@ for this example to work.
 	{
 		arduino.pinMode(pin, OUTPUT)
 		arduino.digitalWrite(pin, value)
+	}
+
+	app.digitalRead = function()
+	{
+		arduino.pinMode(5, INPUT)
+		arduino.digitalRead(5, function(data)
+		{
+			$('#ArduinoStatus').val('Digital value of pin 5 is ' + data)
+		})
+	}
+
+	app.analogRead = function()
+	{
+		arduino.ipAddress = $('#ArduinoIpAddress').val()
+		arduino.analogRead(6, function(data)
+		{
+			$('#ArduinoStatus').val('Analog value of pin 6 is ' + data)
+		})
 	}
 
 	app.connect = function()
