@@ -199,7 +199,7 @@ var app =
 
 		function calcY(i)
 		{
-			return ((i * canvas.height) / (magnitude * 2)) + (canvas.height / 2);
+			return (i * canvas.height) / magnitude;
 		}
 
 		function drawLine(offset, color)
