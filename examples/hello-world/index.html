@@ -29,6 +29,31 @@
 	Make some changes and save the file. Voil&agrave;! If everything works,
 	the app automatically reloads!</p>
 
+	<h3 class="box">Canvas</h3>
+	<div class="box">
+		<canvas id="tutorial" width="200" height="200"></canvas>
+	</div>
+
+	<script>
+	// This is a basic example of how to draw on an
+	// HTML5 canvas. Experiment with this program
+	// by changing the colors of the rectangles.
+
+	// Get a reference to the canvas.
+	var canvas = document.getElementById('tutorial');
+
+	// Get a drawing context.
+	var ctx = canvas.getContext('2d');
+
+	// Fill first rectangle.
+	ctx.fillStyle = 'rgb(200, 200, 0)';
+	ctx.fillRect(0, 0, 150, 150);
+
+	// Fill second rectangle.
+	ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+	ctx.fillRect(50, 50, 150, 150);
+	</script>
+
 </body>
 
 </html>

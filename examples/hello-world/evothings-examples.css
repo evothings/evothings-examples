@@ -22,9 +22,16 @@ body::before {
 	line-height: 200%; /* Slighly more than the header's line-height. */
 }
 
+/* Add a bottom margin. */
+body::after {
+	display:block;
+	content: '';
+	height: 8px;
+}
+
 /* The header's height is determined by the contained text's font size. */
 header {
-	box-sizing: border-box; /* width & height excludes padding, border & margin */
+	box-sizing: border-box; /* Width & height excludes padding, border & margin. */
 
 	position: fixed;
 	top: 0;
@@ -85,7 +92,7 @@ button {
 }
 
 canvas {
-	border: 1px solid black;
+	border: 1px solid #000;
 }
 
 h3 {
@@ -94,4 +101,28 @@ h3 {
 
 p {
 	font-size: 120%;
+}
+
+h1.box,h2.box,h3.box,h4.box {
+	margin: 0;
+	padding-left: 1%;
+
+	line-height: 150%;
+	color: #fff;
+	vertical-align: middle;
+
+	background-color: rgb(33,70,92);
+	border-top-left-radius:6px;
+	border-top-right-radius:6px;
+}
+
+div.box {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 1%;
+	border: 1px solid rgb(33,70,92);
+}
+
+div.box canvas {
+	border: none; /* Remove the border, as the box already has one. */
 }
