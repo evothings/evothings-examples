@@ -5,19 +5,35 @@ html, body {
 	padding: 0;
 
 	font-family: sans-serif;
+
 	background: rgb(255,255,255);
 }
 body {
-	margin: 0 8px 0px 8px;
+	margin: 0 8px 0 8px;
+	font-size: 90%;
+	font-size: 2.5vh;
+}
+
+/* Add a top margin to the content corresponding to the height of the header. */
+body::before {
+	display: block;
+	content: '';
+	height: 10%;
 }
 
 header {
 	box-sizing: border-box; /* width & height excludes padding, border & margin */
 
-	position: relative;
+	position: fixed;
+	top: 0;
+
+	width: 100%;
+	height: 8%;
 	
 	margin: 0 -8px 8px -8px;
 	padding: 0 2% 0 12%;
+
+	font-size: 110%;
 
 	background: rgb(33,70,92);
 }
@@ -30,7 +46,6 @@ header button {
 	margin: 0;
 	padding: 0;
 
-	font-size: 200%;
 	color: #000;
 
 	border-radius: 0;
@@ -41,7 +56,6 @@ header h1 {
 	margin: 0;
 	padding: 0;
 
-	font-size: 200%;
 	font-weight: normal;
 	line-height: 140%;
 	text-align: center;
