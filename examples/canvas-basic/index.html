@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
 	<title>Canvas Basic</title>
 	<style>
-	canvas { border: 1px solid black; }
+	@import 'evothings-examples.css';
 	</style>
 </head>
+
 <body>
-	<h1>Canvas Basic</h1>
+
+	<header>
+		<button onclick="history.back()">&#11013;</button>
+		<h1>Canvas Basic</h1>
+	</header>
 
 	<canvas id="tutorial" width="200" height="200"></canvas>
 
@@ -40,5 +46,7 @@
 	ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
 	ctx.fillRect(50, 50, 150, 150);
 	</script>
+
 </body>
+
 </html>

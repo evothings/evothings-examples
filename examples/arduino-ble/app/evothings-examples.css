@@ -1,0 +1,77 @@
+/* Common styles for Evothings examples. */
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-family: sans-serif;
+	background: rgb(255,255,255);
+}
+body {
+	margin: 0 8px 0px 8px;
+}
+
+header {
+	box-sizing: border-box; /* width & height excludes padding, border & margin */
+
+	position: relative;
+	
+	margin: 0 -8px 8px -8px;
+	padding: 0 2% 0 12%;
+
+	background: rgb(33,70,92);
+}
+header button {
+	position: absolute;
+	left: 0;
+
+	width: 10%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-size: 200%;
+	color: #000;
+
+	border-radius: 0;
+	border: none;
+}
+header h1 {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-size: 200%;
+	font-weight: normal;
+	line-height: 140%;
+	text-align: center;
+	vertical-align: middle;
+	color: #eee;
+
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+button {
+	font-family: sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 10px 20px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #000;
+}
+
+canvas {
+	border: 1px solid black;
+}
+
+h3 {
+	font-size: 100%;
+}
+
+p {
+	font-size: 120%;
+}

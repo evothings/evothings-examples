@@ -6,23 +6,21 @@ using BLE (Bluetooth Low Energy).
 Please note that you must use a BLE shield for this example to work.
 -->
 <head>
+
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+
 	<title>Arduino LED On/Off BLE</title>
+
 	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
 	<style>
-	html, body {
-		margin: 10px 10px;
-		background-color: rgb(255,255,255);
-	}
+	@import 'evothings-examples.css';
 	div {
 		margin: 10px 0px;
 	}
 	button {
 		margin: 5px 0px;
-	}
-	.lead {
-		font-weight: bold;
 	}
 	.btn-yellow {
 		color: rgb(255,255,255); /* Text color */
@@ -30,12 +28,18 @@ Please note that you must use a BLE shield for this example to work.
 		border-color: rgb(200,200,0);
 	}
 	</style>
+
 </head>
+
 <body>
-	<h1>Arduino LED On/Off BLE</h1>
+
+	<header>
+		<button onclick="history.back()">&#11013;</button>
+		<h1>Arduino LED On/Off BLE</h1>
+	</header>
 
 	<div>
-		<p id="info" class="lead">Initializing...</p>
+		<p id="info" class="lead"><strong>Initializing...</strong></p>
 	</div>
 
 	<div class="form-group">
@@ -108,5 +112,7 @@ Please note that you must use a BLE shield for this example to work.
 
 	document.addEventListener('deviceready', app.onDeviceReady, false);
 	</script>
+
 </body>
+
 </html>

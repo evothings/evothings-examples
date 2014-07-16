@@ -18,35 +18,47 @@
     under the License.
 -->
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="format-detection" content="telephone=no" />
-		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-		<title>BLE Scan</title>
-		<link rel="stylesheet" href="common.css" />
-		<style>
-		#scan-status {
-			font-size: 150%;
-			margin: 5px 0px;
-		}
-		#found-devices {
-			font-size: 110%;
-		}
-		.device-info {
-			margin: 4px 0px;
-			padding: 2px 2px;
-		}
-		</style>
-		<script>
-		// Redirect console to Evothings Workbench.
-		if (window.hyper) { console.log = hyper.log; }
-		</script>
-		<script src="lib/jquery.js"></script>
-		<script src="cordova.js"></script>
-		<script src="app.js"></script>
-	</head>
-	<body>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+	<title>BLE Scan</title>
+
+	<style>
+	@import 'evothings-examples.css';
+	#scan-status {
+		font-size: 150%;
+		margin: 5px 0px;
+	}
+	#found-devices {
+		font-size: 110%;
+	}
+	.device-info {
+		margin: 4px 0px;
+		padding: 2px 2px;
+	}
+	</style>
+	<script>
+	// Redirect console to Evothings Workbench.
+	if (window.hyper) { console.log = hyper.log; }
+	</script>
+	<script src="lib/jquery.js"></script>
+	<script src="cordova.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body>
+
+	<header>
+		<button onclick="history.back()">&#11013;</button>
 		<h1>BLE Scan</h1>
+	</header>
+
+	<main>
 
 		<button onclick="app.ui.onStartScanButton()">Start Scan</button>
 		<button onclick="app.ui.onStopScanButton()">Stop Scan</button>
@@ -59,5 +71,9 @@
 		</div>
 
 		<p><b>Troubleshooting:</b> There are known problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
-	</body>
+	
+	</main>
+
+</body>
+
 </html>

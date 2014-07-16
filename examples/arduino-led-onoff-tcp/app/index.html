@@ -9,28 +9,31 @@ Please note that you must enter the IP-address of the Arduino
 for this example to work.
 -->
 <head>
+
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+
 	<title>Arduino LED On/Off TCP</title>
+
 	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<style>
-	html, body {
-		margin: 10px 10px;
-		background-color: rgb(255,255,255);
-	}
+	@import 'evothings-examples.css';
 	div {
 		margin: 10px 0px;
 	}
-	.lead {
-		font-weight: bold;
-	}
 	</style>
+
 </head>
+
 <body>
-	<h1>Arduino LED On/Off TCP</h1>
+
+	<header>
+		<button onclick="history.back()">&#11013;</button>
+		<h1>Arduino LED On/Off TCP</h1>
+	</header>
 
 	<div class="form-group">
-		<p class="lead">Enter IP-address of the Arduino:</p>
+		<p class="lead"><strong>Enter IP-address of the Arduino:</strong></p>
 		<input id="ArduinoIpAddress" class="form-control input-lg"
 			value="192.168.0.100" type="url"/>
 	</div>
@@ -103,5 +106,7 @@ for this example to work.
 		$('#ArduinoStatus').val('Disconnected')
 	}
 	</script>
+
 </body>
+
 </html>
