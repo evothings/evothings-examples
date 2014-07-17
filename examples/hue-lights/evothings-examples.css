@@ -18,7 +18,7 @@ body {
 body::before {
 	display: block;
 	content: '\0000a0'; /* Non-breaking space (&nbsp;) */
-	font-size: 200%; /* Same as the header's font size. */
+	font-size: 180%; /* Same as the header's font size. */
 	line-height: 200%; /* Slighly more than the header's line-height. */
 }
 
@@ -39,9 +39,10 @@ header {
 	width: 100%;
 	
 	margin: 0 -8px 8px -8px;
+	/* Left padding should correspond to the back button's width. */
 	padding: 0 2% 0 12%;
 
-	font-size: 200%;
+	font-size: 180%;
 	line-height: 160%;
 
 	background: rgb(33,70,92);
@@ -57,11 +58,14 @@ header button {
 	margin: 0;
 	padding: 0;
 
-	font-size: inherit;
+	/* Font size is percentage of the header's font size. */
+	font-size: 50%;
 	color: #000;
 
 	border-radius: 0;
 	border: none;
+
+	background: gray;
 }
 header h1 {
 	width: 100%;
