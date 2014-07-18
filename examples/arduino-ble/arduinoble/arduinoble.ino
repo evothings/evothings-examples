@@ -30,6 +30,7 @@ void setup() {
 
 	// Initialize BLE library.
 	ble_begin();
+	ble_set_name("arduinoble");
 
 	Serial.println("ble_begin done!");
 
