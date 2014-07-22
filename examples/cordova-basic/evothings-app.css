@@ -1,0 +1,441 @@
+/* Common styles for Evothings examples and client. */
+
+@import 'fonts/ProximaNova.css';
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-family: 'Proxima Nova Regular', sans-serif;
+	font-weight: normal;
+
+	background: rgb(255,255,255);
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+body {
+	margin: 0 6.25% 0 6.25%;
+	font-size: 150%;
+	font-size: 7.5vmin;
+}
+
+/* Add a top margin to the content corresponding to the height of the header. */
+body::before {
+	display: block;
+	width: 100%;
+	height: 11%; /* Should correspond to header's height. */
+	margin-bottom: 6.5%;
+
+	content: '\0000a0'; /* Non-breaking space (&nbsp;) */
+	font-size: 180%; /* Same as the header's font size. */
+	line-height: 200%; /* Slighly more than the header's line-height. */;
+}
+
+/* Add a bottom margin. */
+body::after {
+	display:block;
+	content: '';
+	height: 8px;
+}
+
+/* The header's height is determined by the contained text's font size. */
+header {
+	box-sizing: border-box; /* Width & height includes padding & border. */
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+
+	width: 100%;
+	height: 11%;
+	
+	/* Left and right margins should correspond to body margins. */
+	margin: 0 0 3.45% 0;
+	/* Left padding should correspond to the back button's width. */
+	padding: 1% 2% 1% 2%;
+
+	font-size: 180%;
+	line-height: 100%;
+	text-align: center;
+	vertical-align: middle;
+
+	background: rgb(243,243,243);
+
+	z-index: 1000;
+}
+header button {
+	display: block;
+	position: absolute;
+	top: 50%;
+	height: 70%;
+
+	margin: 0;
+
+	font-size: 50%;
+
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+header button.back {
+	position: absolute;
+	left: 6.25%;
+
+	width: 10%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+
+	/* Font size is percentage of the header's font size. */
+	font-size: 50%;
+	color: #000;
+
+	text-align: left;
+
+	background: none;
+
+	border-radius: 0;
+	border: none;
+
+	box-shadow: none;
+}
+header button.back img {
+	height: 25%;
+}
+header button.menu {
+	position: absolute;
+	right: 6.25%;
+
+	width: 10%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+
+	/* Font size is percentage of the header's font size. */
+	font-size: 50%;
+	color: #000;
+
+	text-align: right;
+
+	background: none;
+
+	border-radius: 0;
+	border: none;
+
+	box-shadow: none;
+}
+header button.menu img {
+	height: 34%;
+}
+header img.logotype {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+
+	margin: 0 auto;
+
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+header h1 {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: normal;
+	text-align: center;
+	vertical-align: middle;
+	color: #eee;
+
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+main {
+	z-index: 0;
+}
+
+main footer {
+	box-sizing: border-box; /* Width & height includes padding & border. */
+	
+	position: fixed;
+	bottom: 0;
+
+	width: 100%;
+
+	margin: 0 -5% 0 -5%;
+	padding: 0 5% 0 5%;
+
+	background-color: #fff;
+
+	box-shadow: inset 0 5px 9px -9px #000;
+
+	z-index: 2;
+}
+
+input[type="text"],input[type="url"] {
+	width: 50%;
+
+	padding: 7px 14px 7px 14px;
+
+	font-family: inherit;
+	font-size: 63%;
+	color: #000;
+
+	border-radius: 4px;
+	border: none;
+
+	background-color: #f3f3f3; /* Default color: "Arctic". */
+}
+
+button.clear {
+	margin-left: 1%;
+	background-color: #e15a64; /* Default color: "Soft Red". */
+}
+
+button {
+	box-sizing: border-box; /* Width & height includes padding & border. */
+
+	font-family: 'Proxima Nova Black';
+	font-size: 63%;
+	line-height: 100%;
+	text-align: center;
+
+	color: #fff;
+
+	margin: 2% 0 2% 0;
+	padding: 9px 13px 8px 13px;
+
+	border-radius: 4px;
+	border: none;
+
+	box-shadow: none;
+
+	background-color: #b9b9b9; /* Default color: "Charcoal" */
+}
+button:active, button.pressed {
+	box-shadow: inset 0 5px 9px -9px #000;
+}
+button:focus {
+	outline: none;
+}
+
+canvas {
+	border: 1px solid #000;
+}
+
+h1 {
+	padding: 0;
+	margin: 0;
+
+	font-family: 'Proxima Nova Black';
+	font-size: 100%;
+	line-height: 1.5;
+
+	vertical-align: middle;
+}
+main h1:first-child, article h1:first-child {
+	margin-top: 0;
+}
+
+h2,h3,h4,h5,h6 {
+	margin: 10px 0 0 0;
+	padding: 0;
+
+	font-family: 'Proxima Nova Bold';
+	font-size: 63%;
+
+	line-height: 1.5;
+
+	vertical-align: middle;
+}
+
+p {
+	margin: 10px 0 10px 0;
+	padding: 0;
+
+	font-size: 63%;
+	line-height: 1.5;
+}
+
+strong {
+	font-family: 'Proxima Nova Bold';
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+
+	font-size: inherit;
+}
+ul li {
+	padding: 4% 4%;
+
+	font-size: 63%;
+
+	border-radius: 4px;
+	border: none;
+
+	box-shadow: inset 0 -7px 12px -12px #000;
+}
+ul li:last-child {
+	box-shadow: none;
+}
+ul.clickable li {
+	padding-right: 15%;
+	background-image: url('gfx/arrow_right_with_margin.svg');
+	background-position: right center;
+	background-size: 10% auto;
+	background-repeat: no-repeat;
+}
+
+h1.box,h2.box,h3.box,h4.box {
+	margin: 0;
+	padding-left: 1%;
+
+	line-height: 150%;
+	color: #fff;
+	vertical-align: middle;
+
+	background-color: rgb(33,70,92);
+	border-top-left-radius:6px;
+	border-top-right-radius:6px;
+}
+
+div.box {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 1%;
+	border: 1px solid rgb(33,70,92);
+}
+
+div.box canvas {
+	border: none; /* Remove the border, as the box already has one. */
+}
+
+article {
+	display: none;
+	z-index: 2;
+
+	font-size: 100%;
+}
+
+
+
+
+/*                   COLORS                 */
+/* ---------------------------------------- */
+
+/* Color: "Soft Red"
+   ----------------- */
+.color_softred { color: #e15a64; }
+.bg_softred, input.softred, button.softred, ul.softred li {
+	background-color: #e15a64;
+}
+button.softred:active, button.softred.pressed {
+	background-color: #cb414b;
+}
+
+/* Color: "Bright Light"
+   --------------------- */
+.color_brightlight { color: #ecd53b; }
+.bg_brightlight, input.brightlight, button.brightlight, ul.brightlight li {
+	background-color: #ecd53b;
+}
+button.brightlight:active, button.brightlight.pressed {
+	background-color: #d9c022;
+}
+
+/* Color: "Wave Green"
+   ------------------- */
+.color_wavegreen { color: #54dfb3; }
+.bg_wavegreen, input.wavegreen, button.wavegreen, ul.wavegreen li {
+	background-color: #54dfb3;
+}
+button.wavegreen:active, button.wavegreen.pressed {
+	background-color: #3aca9c;
+}
+
+/* Color: "Blue Hue"
+   ------------------- */
+.color_bluehue { color: #6bc6ce; }
+.bg_bluehue, input.bluehue, button.bluehue, ul.bluehue li {
+	background-color: #6bc6ce;
+}
+button.bluehue:active, button.bluehue.pressed {
+	background-color: #52afb8;
+}
+
+/* Color: "Indigo"
+   ------------------- */
+.color_indigo { color: #b48b9b; }
+.bg_indigo, input.indigo, button.indigo, ul.indigo li {
+	background-color: #b48b9b;
+}
+button.indigo:active, button.indigo.pressed {
+	background-color: #9c7283;
+}
+
+/* Color: "Arctic"
+   ------------------- */
+.color_arctic { color: #f3f3f3; }
+.bg_arctic, input.arctic, button.arctic, ul.arctic li {
+	background-color: #f3f3f3;
+}
+button.arctic:active, button.arctic.pressed {
+	background-color: #656565;
+}
+
+/* Color: "Aluminium"
+   ------------------- */
+.color_aluminium { color: #e2e2e2; }
+.bg_aluminium, input.aluminium, button.aluminium, ul.aluminium li {
+	background-color: #e2e2e2;
+}
+button.aluminium:active, button.aluminium.pressed {
+	background-color: #c0c0c0;
+}
+
+/* Color: "Charcoal"
+   ------------------- */
+.color_charcoal { color: #b9b9b9; }
+.bg_charcoal, input.charcoal, button.charcoal, ul.charcoal li {
+	background-color: #b9b9b9;
+}
+button.charcoal:active, button.charcoal.pressed {
+	background-color: #9d9d9d;
+}
+
+/* Color: "Stone"
+   ------------------- */
+.color_stone { color: #777777; }
+.bg_stone, input.stone, button.stone, ul.stone li {
+	background-color: #777777;
+}
+button.stone:active, button.stone.pressed {
+	background-color: #656565;
+}
+
+/* Color: "Jet Black"
+   ------------------- */
+.color_jetblack { color: #070707; }
+.bg_jetblack, input.jetblack, button.jetblack, ul.jetblack li {
+	background-color: #070707;
+}
+button.jetblack:active, button.jetblack.pressed {
+	background-color: #000000;
+}

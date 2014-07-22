@@ -9,7 +9,7 @@
 	<title>Hello World</title>
 
 	<style>
-		@import 'evothings-examples.css';
+		@import 'evothings-app.css';
 	</style>
 
 </head>
@@ -17,9 +17,17 @@
 <body>
 
 	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>Hello World</h1>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" height="60%" alt="Evothings"
+			title="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
+
+	<h1>Hello World</h1>
 
 	<p>The purpose of this example is to demonstrate the simple development
 	workflow enabled by Evothings Workbench.</p>
@@ -29,10 +37,9 @@
 	Make some changes and save the file. Voil&agrave;! If everything works,
 	the app automatically reloads!</p>
 
-	<h3 class="box">Canvas</h3>
-	<div class="box">
-		<canvas id="tutorial" width="200" height="200"></canvas>
-	</div>
+	<h2>Canvas</h2>
+
+	<canvas id="tutorial" width="200" height="200"></canvas>
 
 	<script>
 	// This is a basic example of how to draw on an
@@ -46,11 +53,11 @@
 	var ctx = canvas.getContext('2d');
 
 	// Fill first rectangle.
-	ctx.fillStyle = 'rgb(200, 200, 0)';
+	ctx.fillStyle = 'rgb(236, 213, 59)';
 	ctx.fillRect(0, 0, 150, 150);
 
 	// Fill second rectangle.
-	ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+	ctx.fillStyle = 'rgba(225, 90, 100, 0.5)';
 	ctx.fillRect(50, 50, 150, 150);
 	</script>
 

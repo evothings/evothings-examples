@@ -9,16 +9,14 @@
 
 	<title>Cordova Basic</title>
 
-	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<style>
-		@import 'evothings-examples.css';
+		@import 'evothings-app.css';
 	</style>
 	<script>
 	// Redirect console to Evothings Workbench.
 	if (window.hyper) { console.log = hyper.log; }
 	</script>
 	<script src="libs/jquery/jquery-2.0.3.js"></script>
-	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
 	<script src="cordova.js"></script>
 	<script src="app.js"></script>
 
@@ -27,34 +25,35 @@
 <body>
 
 	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>Cordova Basic</h1>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" height="60%" alt="Evothings"
+			title="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
+
+	<h1>Basic Cordova</h1>
 
 	<p>This app demonstrates basic Cordova functionality. For the app to work,
 		you need to run it in the Evothings Client App, or build a native
 		Cordova app yourself.</p>
 
-	<button class="btn btn-lg btn-success"
-		onclick="messagebox('Hello Evothings!')">
+	<button class="bluehue" onclick="messagebox('Hello Evothings!')">
 		Native Dialog
 	</button>
-	<button class="btn btn-lg btn-danger"
-		onclick="navigator.notification.vibrate(1000)">
+
+	<button class="brightlight" onclick="navigator.notification.vibrate(1000)">
 		Vibrate
 	</button>
-	
-	<br /><br />
 
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<h3 class="panel-title">Compass</h3>
-		</div>
-		<div class="panel-body">
-			<p id="compass-heading">[Waiting for compass]</p>
-			<p id="compass-direction"></p>
-		</div>
-	</div>
+	<h2 class="panel-title">Compass</h2>
+
+	<p id="compass-heading">[Waiting for compass]</p>
+
+	<p id="compass-direction"></p>
 
 </body>
 
