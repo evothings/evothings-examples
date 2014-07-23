@@ -9,37 +9,43 @@ WiFi shield for this example to work. See comment below in the code.
 <head>
 
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+	<meta name="viewport" content="target-densitydpi=device-dpi,
+		width=device-width, initial-scale=1.0, minimum-scale=1.0,
+		maximum-scale=1.0, user-scalable=no" />
 
 	<title>Arduino Scriptable</title>
 
-	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<style>
-	@import 'evothings-examples.css';
-	div
-	{
-		margin: 10px 0px;
-	}
+		@import 'evothings-app.css';
 	</style>
+
+	<script src="libs/jquery-2.0.3.js"></script>
+	<script src="cordova.js"></script>
+	<script src="arduino.js"></script>
 
 </head>
 
-<body>
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
 	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>Arduino Scriptable</h1>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
 
-	<div class="form-group">
-		<p class="lead"><strong>Enter IP-address of the Arduino:</strong></p>
-		<input type="text" class="form-control input-lg" id="ArduinoIpAddress"
-			value="192.168.0.x" type="url"/>
-	</div>
+<h1>Arduino Scriptable</h1>
 
-	<div class="form-group">
-		<p class="lead">Script your Arduino using JavaScript!</p>
-		<textarea class="form-control input-lg" id="ArduinoScript" rows="14">
+	<h2>Enter IP-address of the Arduino</h2>
+
+	<input type="text" id="ArduinoIpAddress" value="192.168.0.x" type="url"/>
+
+	<h2>Script your Arduino using JavaScript!</h2>
+
+	<textarea id="ArduinoScript" rows="12">
 // Blinking a LED.
 var pin = 2, delay = 1000
 arduino.port = 3300
@@ -54,18 +60,10 @@ arduino.setTimeout(ledOn, delay)
 }
 ledOn() // Start blinking
 		</textarea>
-	</div>
-	<div class="form-group">
-		<button class="btn btn-lg btn-success" onclick="app.runScript()">
-			Run Script</button>
-		<button class="btn btn-lg btn-danger" onclick="app.reset()">
-			Reset</button>
-	</div>
 
-	<script src="libs/jquery/jquery-2.0.3.js"></script>
-	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
-	<script src="cordova.js"></script>
-	<script src="arduino.js"></script>
+	<button class="blue" onclick="app.runScript()">Run Script</button>
+	<button class="charcoal" onclick="app.reset()">Reset</button>
+
 	<script>
 	var app = {}
 

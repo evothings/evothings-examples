@@ -22,25 +22,16 @@
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="format-detection" content="telephone=no" />
-	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+	<meta name="viewport" content="target-densitydpi=device-dpi,
+		width=device-width, initial-scale=1.0, minimum-scale=1.0,
+		maximum-scale=1.0, user-scalable=no" />
 
 	<title>BLE Scan</title>
 
 	<style>
-	@import 'evothings-examples.css';
-	#scan-status {
-		font-size: 150%;
-		margin: 5px 0px;
-	}
-	#found-devices {
-		font-size: 110%;
-	}
-	.device-info {
-		margin: 4px 0px;
-		padding: 2px 2px;
-	}
+		@import 'evothings-app.css';
 	</style>
+
 	<script>
 	// Redirect console to Evothings Workbench.
 	if (window.hyper) { console.log = hyper.log; }
@@ -54,25 +45,29 @@
 <body>
 
 	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>BLE Scan</h1>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
 
-	<main>
+	<h1>BLE Scan</h1>
 
-		<button onclick="app.ui.onStartScanButton()">Start Scan</button>
-		<button onclick="app.ui.onStopScanButton()">Stop Scan</button>
+	<button onclick="app.ui.onStartScanButton()"
+		class="green">START SCAN</button>
+	<button onclick="app.ui.onStopScanButton()"
+		class="charcoal">STOP SCAN</button>
 
-		<div id="scan-status">
-			Scanning Paused
-		</div>
+	<p id="scan-status">Scanning Paused</p>
 
-		<div id="found-devices">
-		</div>
+	<p id="found-devices"></p>
 
-		<p><b>Troubleshooting:</b> There are known problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
-	
-	</main>
+	<h2>Troubleshooting</h2>
+
+	<p>There are known problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
 
 </body>
 

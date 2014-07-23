@@ -11,56 +11,50 @@ for this example to work.
 <head>
 
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+		<meta name="viewport" content="target-densitydpi=device-dpi,
+		width=device-width, initial-scale=1.0, minimum-scale=1.0,
+		maximum-scale=1.0, user-scalable=no" />
 
 	<title>Arduino LED On/Off TCP</title>
 
-	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<style>
-	@import 'evothings-examples.css';
-	div {
-		margin: 10px 0px;
-	}
+		@import 'evothings-app.css';
 	</style>
+
+	<script src="libs/jquery-2.0.3.js"></script>
+	<script src="cordova.js"></script>
+	<script src="arduino.js"></script>
 
 </head>
 
-<body>
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
 	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>Arduino LED On/Off TCP</h1>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
 
-	<div class="form-group">
-		<p class="lead"><strong>Enter IP-address of the Arduino:</strong></p>
-		<input id="ArduinoIpAddress" class="form-control input-lg"
-			value="192.168.0.100" type="url"/>
-	</div>
+	<h1>Arduino LED On/Off TCP</h1>
 
-	<div class="form-group">
-		<button type="button" class="btn btn-lg btn-success"
-			onclick="app.connect()">Connect</button>
-		<button type="button" class="btn btn-lg btn-danger"
-			onclick="app.disconnect()">Disconnect</button>
-	</div>
+	<h2>Enter IP-address of the Arduino</h2>
 
-	<div class="form-group">
-		<input id="ArduinoStatus" class="form-control input-lg"
-			value="Not connected"/>
-	</div>
+	<input id="ArduinoIpAddress" value="192.168.0.100" type="url" />
 
-	<div class="form-group">
-		<button type="button" class="btn btn-lg btn-primary"
-			onclick="app.ledOn()">Led On</button>
-		<button type="button" class="btn btn-lg btn-warning"
-			onclick="app.ledOff()">Led Off</button>
-	</div>
+	<button class="green" onclick="app.connect()">CONNECT</button>
+	<button class="charcoal" onclick="app.disconnect()">DISCONNECT</button>
 
-	<script src="libs/jquery/jquery-2.0.3.js"></script>
-	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
-	<script src="cordova.js"></script>
-	<script src="arduino.js"></script>
+	<br />
+
+	<p>Status: <span id="ArduinoStatus">Not connected</span></p>
+
+	<button class="green" onclick="app.ledOn()">LED ON</button>
+	<button class="red" onclick="app.ledOff()">LED OFF</button>
+
 	<script>
 	var app = {}
 
