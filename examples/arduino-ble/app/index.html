@@ -32,8 +32,9 @@
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="format-detection" content="telephone=no" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="target-densitydpi=device-dpi,
+		width=device-width, initial-scale=1.0, minimum-scale=1.0,
+		maximum-scale=1.0, user-scalable=no" />
 
 	<title>Arduino BLE</title>
 	
@@ -59,15 +60,14 @@
 
 </head>
 
-<body>
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
 	<header>
 		<button class="back" onclick="history.back()">
 			<img src="gfx/arrow_left.svg" />
 		</button>
 
-		<img class="logotype" src="gfx/logo.svg" height="60%" alt="Evothings"
-			title="Evothings" />
+		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
 
 		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
@@ -78,7 +78,7 @@
 	<button id="off" onclick="app.off();" class="red">LED OFF</button>
 
 	<h2>Variable resistor value</h2>
-	<canvas id="canvas"></canvas>
+	<canvas id="canvas" width="300" height="200"></canvas>
 
 	<h2>Info</h2>
 

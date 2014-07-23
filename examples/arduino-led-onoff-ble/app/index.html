@@ -7,55 +7,47 @@ Please note that you must use a BLE shield for this example to work.
 -->
 <head>
 
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="target-densitydpi=device-dpi,
+		width=device-width, initial-scale=1.0, minimum-scale=1.0,
+		maximum-scale=1.0, user-scalable=no" />
 
 	<title>Arduino LED On/Off BLE</title>
 
-	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-
 	<style>
-	@import 'evothings-examples.css';
-	div {
-		margin: 10px 0px;
-	}
-	button {
-		margin: 5px 0px;
-	}
-	.btn-yellow {
-		color: rgb(255,255,255); /* Text color */
-		background-color: rgb(220,220,0);
-		border-color: rgb(200,200,0);
-	}
+		@import 'evothings-app.css';
 	</style>
 
-</head>
-
-<body>
-
-	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>Arduino LED On/Off BLE</h1>
-	</header>
-
-	<div>
-		<p id="info" class="lead"><strong>Initializing...</strong></p>
-	</div>
-
-	<div class="form-group">
-		<button type="button" class="btn btn-lg btn-yellow"
-			onclick="app.connect()">Connect</button>
-		<button type="button" class="btn btn-lg btn-success"
-			onclick="app.ledOn()">Led On</button>
-		<button type="button" class="btn btn-lg btn-danger"
-			onclick="app.ledOff()">Led Off</button>
-	</div>
-
 	<script src="libs/jquery/jquery-2.0.3.js"></script>
-	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
 	<script src="cordova.js"></script>
 	<script src="easy-ble.js"></script>
 	<script src="arduino-ble.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
+	</header>
+
+	<h1>Arduino LED On/Off BLE</h1>
+
+	<p id="info">Initializing...</p>
+
+	<button class="yellow" onclick="app.connect()">CONNECT</button>
+
+	<br /><br />
+
+	<button class="green" onclick="app.ledOn()">LED ON</button>
+	<button class="red" onclick="app.ledOff()">LED OFF</button>
+
 	<script>
 	if (window.hyper) console.log = window.hyper.log;
 
@@ -85,7 +77,7 @@ Please note that you must use a BLE shield for this example to work.
 	// Called when BLE and other native functions are available.
 	app.onDeviceReady = function()
 	{
-		app.showMessage('Touch Connect button to begin');
+		app.showMessage('Touch the connect button to begin.');
 	};
 
 	app.connect = function()
@@ -100,7 +92,7 @@ Please note that you must use a BLE shield for this example to work.
 			},
 			function(errorCode)
 			{
-				app.showMessage('Connect error: ' + errorCode);
+				app.showMessage('Connect error: ' + errorCode + '.');
 			});
 	};
 

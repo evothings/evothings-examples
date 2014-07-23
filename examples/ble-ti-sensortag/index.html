@@ -32,8 +32,9 @@
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="format-detection" content="telephone=no" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="target-densitydpi=device-dpi,
+		width=device-width, initial-scale=1.0, minimum-scale=1.0,
+		maximum-scale=1.0, user-scalable=no" />
 
 	<title>BLE TI SensorTag</title>
 
@@ -52,15 +53,14 @@
 
 </head>
 
-<body>
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
 	<header>
 		<button class="back" onclick="history.back()">
 			<img src="gfx/arrow_left.svg" />
 		</button>
 
-		<img class="logotype" src="gfx/logo.svg" height="60%" alt="Evothings"
-			title="Evothings" />
+		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
 
 		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>

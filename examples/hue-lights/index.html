@@ -8,8 +8,10 @@ for this example to work. See comment below in the code.
 -->
 <head>
 
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="target-densitydpi=device-dpi,
+		width=device-width, initial-scale=1.0, minimum-scale=1.0,
+		maximum-scale=1.0, user-scalable=no" />
 
 	<title>Philips Hue Demo</title>
 
@@ -29,15 +31,14 @@ for this example to work. See comment below in the code.
 
 </head>
 
-<body>
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
 	<header>
 		<button class="back" onclick="history.back()">
 			<img src="gfx/arrow_left.svg" />
 		</button>
 
-		<img class="logotype" src="gfx/logo.svg" height="60%" alt="Evothings"
-			title="Evothings" />
+		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
 
 		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
@@ -105,9 +106,9 @@ for this example to work. See comment below in the code.
 
 	<h2>On or off</h2>
 
-	<button class="green" onclick="app.lightOn()">Light On</button>
+	<button class="charcoal" onclick="app.lightOn()">Light On</button>
 	
-	<button class="red" onclick="app.lightOff()">Light Off</button>
+	<button class="charcoal" onclick="app.lightOff()">Light Off</button>
 
 </body>
 

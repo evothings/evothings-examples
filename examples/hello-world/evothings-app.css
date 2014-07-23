@@ -141,6 +141,8 @@ header img.logotype {
 	left: 0;
 	right: 0;
 
+	height: 60%;
+
 	margin: 0 auto;
 
 	-webkit-transform: translateY(-50%);
@@ -231,16 +233,18 @@ input.btn-group + label {
 	background-color: #b9b9b9; /* Default color: "Charcoal" */
 }
 button:active, button.pressed,
-input.btn-group:active + label,
+input.btn-group:active + label, input.btn-group + label:active,
 input.btn-group:checked + label {
-	box-shadow: inset 0 5px 9px -9px #000;
+	box-shadow: inset 0 8px 9px -9px #000;
 	background-color: #9d9d9d; /* Default color: "Charcoal" */
 }
 button:focus,
-input.btn-group {
+input.btn-group:focus {
 	outline: none;
 }
 
+/*  Input with class btn-group should be accompanied by a label acting as a
+	button. */
 input.btn-group {
 	display: none;
 }
