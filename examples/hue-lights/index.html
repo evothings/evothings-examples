@@ -13,16 +13,15 @@ for this example to work. See comment below in the code.
 
 	<title>Philips Hue Demo</title>
 
-	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<script>
 	// Redirect console to Evothings Workbench.
-	//if (window.hyper) { console.log = hyper.log; }
+	if (window.hyper) { console.log = hyper.log; }
 	</script>
 	<script src="libs/jquery/jquery-2.0.3.js"></script>
-	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
 	<script src="app.js"></script>
+
 	<style>
-	@import 'evothings-examples.css';
+	@import 'evothings-app.css';
 	button, input, p {
 		margin: 10px 0px 10px 0px;
 	}
@@ -33,59 +32,82 @@ for this example to work. See comment below in the code.
 <body>
 
 	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>Philips Hue Demo</h1>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" height="60%" alt="Evothings"
+			title="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
 
-	<div class="form-group">
-		<p class="lead"><strong>Press the button on the Hue Bridge, then select "Auto Connect". If Auto Connect does not work, enter the IP-address of the Hue Bridge and select "Connect to IP".</strong></p>
-		<button type="button" class="btn btn-lg btn-success"
-			onclick="app.connectAuto()">Auto Connect</button>
-		<button type="button" class="btn btn-lg btn-success"
-			onclick="app.connectToIP()">Connect to IP</button>
-		<input id="HueBridgeIpAddress" class="form-control input-lg"
-			value="192.168.0.x" type="url"/>
-		<p id="status" class="lead">Not Connected</p>
-	</div>
+	<h1>Philips Hue Demo</h1>
 
-	<div class="form-group">
-		<div class="btn-group" data-toggle="buttons">
-			<label id="lightButton1" class="btn btn-lg btn-primary"
-				onclick="app.selectLight(1)">
-				<input type="radio"/>Light 1
-			</label>
-			<label id="lightButton2" class="btn btn-lg btn-primary"
-				onclick="app.selectLight(2)">
-				<input type="radio"/>Light 2
-			</label>
-			<label id="lightButton3" class="btn btn-lg btn-primary"
-				onclick="app.selectLight(3)">
-				<input type="radio"/>Light 3
-			</label>
-		</div>
+	<p>Press the button on the Hue Bridge, then select "Auto Connect".</p>
 
-		<div>
-			<button type="button" class="btn btn-lg btn-success"
-				onclick="app.lightOn()">Light On</button>
-			<button type="button" class="btn btn-lg btn-danger"
-				onclick="app.lightOff()">Light Off</button>
-		</div>
+	<button class="yellow" onclick="app.connectAuto()">AUTO CONNECT</button>
 
-		<div>
-			<button type="button" class="btn btn-lg btn-primary" id="btn_color_1"
-				onclick="app.lightsSetColor1()">Color 1</button>
-			<button type="button" class="btn btn-lg btn-primary" id="btn_color_2"
-				onclick="app.lightsSetColor2()">Color 2</button>
-			<button type="button" class="btn btn-lg btn-primary" id="btn_color_3"
-				onclick="app.lightsSetColor3()">Color 3</button>
-		</div>
-		<div>
-			<button type="button" class="btn btn-lg btn-success"
-				 onclick="app.lightsEffectOn()">Color Loop</button>
-			<button type="button" class="btn btn-lg btn-danger"
-				onclick="app.lightsEffectOff()">Solid Color</button>
-		</div>
-	</div>
+	<h2>Manual connect by IP-address</h2>
+
+	<input id="HueBridgeIpAddress" value="192.168.0.x" type="url"/>
+	<button class="stone" onclick="app.connectToIP()">CONNECT</button>
+
+	<p class="lead">Status: <span id="status">Not Connected</span></p>
+
+	<h2>Light</h2>
+
+	<input type="radio" id="lightButton1" name="lightButton"
+		class="btn-group indigo" />
+	<label for="lightButton1" onclick="app.selectLight(1)">Light 1</label>
+
+	<input type="radio" id="lightButton2" name="lightButton"
+		class="btn-group indigo" />
+	<label for="lightButton2" onclick="app.selectLight(2)">Light 2</label>
+
+	<input type="radio" id="lightButton3" name="lightButton"
+		class="btn-group indigo" />
+	<label for="lightButton3" onclick="app.selectLight(3)">Light 3</label>
+
+	<h2>Effect</h2>
+
+	<input type="radio" id="lightEffect2" name="lightEffect"
+		class="btn-group" checked="checked" />
+	<label for="lightEffect2" onclick="app.lightsEffectOff()">
+		Solid Color
+	</label>
+
+	<input type="radio" id="lightEffect1" name="lightEffect"
+		class="btn-group" />
+	<label for="lightEffect1" onclick="app.lightsEffectOn()">
+		Color Loop
+	</label>
+
+	<h2>Color</h2>
+
+	<input type="radio" id="btnColor1" name="btnColor"
+		class="btn-group red" checked="checked" />
+	<label for="btnColor1" onclick="app.lightsSetColor1()">
+		Color 1
+	</label>
+
+	<input type="radio" id="btnColor2" name="btnColor"
+		class="btn-group yellow">
+	<label for="btnColor2" onclick="app.lightsSetColor2()">
+		Color 2
+	</label>
+
+	<input type="radio" id="btnColor3" name="btnColor"
+		class="btn-group green">
+	<label for="btnColor3" onclick="app.lightsSetColor3()">
+		Color 3
+	</label>
+
+	<h2>On or off</h2>
+
+	<button class="green" onclick="app.lightOn()">Light On</button>
+	
+	<button class="red" onclick="app.lightOff()">Light Off</button>
 
 </body>
 
