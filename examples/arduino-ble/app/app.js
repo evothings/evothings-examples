@@ -26,7 +26,7 @@ function respondCanvas()
 	var canvas = $('#canvas');
 	var container = $(canvas).parent();
 	canvas.attr('width', $(container).width() ); // Max width
-	canvas.attr('height', $(container).height() ); // Max height
+	//canvas.attr('height', $(container).height() ); // Max height
 }
 
 /**

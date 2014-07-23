@@ -34,8 +34,13 @@
 	<meta charset="utf-8" />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 	<title>Arduino BLE</title>
-	<link rel="stylesheet" href="index.css" />
+	
+	<style>
+		@import 'evothings-app.css';
+	</style>
+
 	<script>
 	if (window.hyper) { console.log = hyper.log; }
 
@@ -44,9 +49,10 @@
 		console.log(msg + ": " + url + ":" + line);
 	};
 	</script>
+
 	<script src="libs/jquery-2.0.3.js"></script>
 	<script src="cordova.js"></script>
-	<script src="index.js"></script>
+	<script src="app.js"></script>
 	<script>
 		app.initialize();
 	</script>
@@ -56,29 +62,39 @@
 <body>
 
 	<header>
-		<button onclick="history.back()">Back</button>
-		<h1>Arduino BLE</h1>
+		<button class="back" onclick="history.back()">
+			<img src="gfx/arrow_left.svg" />
+		</button>
+
+		<img class="logotype" src="gfx/logo.svg" height="60%" alt="Evothings"
+			title="Evothings" />
+
+		<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>
 	</header>
 
-	<h3 class="buttonsHeader">LED Control:</h3>
-	<h3 class="canvasHeader">Variable resistor value:</h3>
+	<h1>Arduino BLE</h1>
 
-	<div id="controls">
-		<button id="on" onclick="app.on();">LED ON</button>
-		<button id="off" onclick="app.off();">LED OFF</button>
-		<!-- Let the canvas element remain in the #controls div, as the
-		canvas element may determine the size of the #controls div which
-		in turn affects the position and size of the buttons. -->
-		<canvas id="canvas" />
-	</div>
+	<button id="on" onclick="app.on();" class="green">LED ON</button>
+	<button id="off" onclick="app.off();" class="red">LED OFF</button>
+
+	<h2>Variable resistor value</h2>
+	<canvas id="canvas"></canvas>
+
+	<h2>Info</h2>
 
 	<p>This app shows how to connect to an Arduino BLE shield. Note that you must run this app in the Evothings client app, or build a Cordova app with the plugin com.evothings.ble. Device with support for Bluetooth 4.0 and Android 4.3 or higher required.</p>
 	
-	<p><b>Example circuit:</b><br /><img src="arduino-ble-board-sketch.png" style="max-height:30%;" /></p>
+	<h2>Example circuit</h2>
+
+	<p><img src="arduino-ble-board-sketch.png" style="max-height:30%;" /></p>
+
+	<h2>How it works</h2>
+
+	<p>The ON &amp; OFF buttons controls digital pin 2 on the Arduino which is here connected to an LED. The plot shows the input from analog pin A0 which is here connected to a variable resistor (potentiometer). Please experiment with your own circuits and let us know how cool they are!</p>
 	
-	<p><b>How it works:</b> The ON &amp; OFF buttons controls digital pin 2 on the Arduino which is here connected to an LED. The plot shows the input from analog pin A0 which is here connected to a variable resistor (potentiometer). Please experiment with your own circuits and let us know how cool they are!</p>
-	
-	<p><b>Troubleshooting:</b> There are known problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
+	<h2>Troubleshooting</h2>
+
+	<p>There are known problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
 
 </body>
 
