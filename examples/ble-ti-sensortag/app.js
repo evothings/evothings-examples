@@ -10,11 +10,34 @@ app.dataPoints = [];
 app.initialize = function()
 {
 	document.addEventListener('deviceready', app.onDeviceReady, false);
+
+	/**
+	 * Called when HTML page has been loaded.
+	 */
+	$(document).ready( function()
+	{
+		// Adjust canvas size when browser resizes
+		$(window).resize( app.respondCanvas );
+
+		// Adjust the canvas size when the document has loaded.
+		app.respondCanvas();
+	});
+};
+
+/**
+ * Adjust the canvas dimensions based on its container's dimensions.
+ */
+app.respondCanvas = function()
+{
+	var canvas = $('#canvas')
+	var container = $(canvas).parent()
+	canvas.attr('width', $(container).width() ) // Max width
+	//canvas.attr('height', $(container).height() ) // Max height
 };
 
 app.onDeviceReady = function()
 {
-	app.showInfo('Activate the SensorTag and tap Start');
+	app.showInfo('Activate the SensorTag and tap Start.');
 };
 
 app.showInfo = function(info)
@@ -26,7 +49,7 @@ app.onStartButton = function()
 {
 	app.onStopButton();
 	app.startScan();
-	app.showInfo('Starting');
+	app.showInfo('Status: Starting...');
 };
 
 app.onStopButton = function()
@@ -34,7 +57,7 @@ app.onStopButton = function()
 	// Stop any ongoing scan and close devices.
 	easyble.stopScan();
 	easyble.closeConnectedDevices();
-	app.showInfo('Stopped');
+	app.showInfo('Status: Stopped.');
 };
 
 app.startScan = function()
@@ -45,14 +68,14 @@ app.startScan = function()
 			// Connect if we have found a sensor tag.
 			if (app.deviceIsSensorTag(device))
 			{
-				app.showInfo('Device found: ' + device.name);
+				app.showInfo('Status: Device found: ' + device.name + '.');
 				easyble.stopScan();
 				app.connectToDevice(device);
 			}
 		},
 		function(errorCode)
 		{
-			app.showInfo('startScan error: ' + errorCode);
+			app.showInfo('Error: startScan: ' + errorCode + '.');
 			//app.reset();
 		});
 };
@@ -71,12 +94,12 @@ app.connectToDevice = function(device)
 	device.connect(
 		function(device)
 		{
-			app.showInfo('Connected - reading SensorTag services');
+			app.showInfo('Status: Connected - reading SensorTag services...');
 			app.readServices(device);
 		},
 		function(errorCode)
 		{
-			app.showInfo('Connect error: ' + errorCode);
+			app.showInfo('Error: Connection failed: ' + errorCode + '.');
 			evothings.ble.reset();
 			// This can cause an infinite loop...
 			//app.connectToDevice(device);
@@ -97,7 +120,7 @@ app.readServices = function(device)
 		//app.startAccelerometerNotification,
 		function(errorCode)
 		{
-			console.log('Error reading services: ' + errorCode);
+			console.log('Error: Failed to read services: ' + errorCode + '.');
 		});
 };
 
@@ -106,7 +129,7 @@ app.readServices = function(device)
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startMagnetometerNotification = function(device)
 {
-	app.showInfo('Starting magnetometer notification');
+	app.showInfo('Status: Starting magnetometer notification...');
 
 	// Set magnetometer to ON.
 	device.writeCharacteristic(
@@ -114,11 +137,11 @@ app.startMagnetometerNotification = function(device)
 		new Uint8Array([1]),
 		function()
 		{
-			console.log('writeCharacteristic 1 ok');
+			console.log('Status: writeCharacteristic 1 ok.');
 		},
 		function(errorCode)
 		{
-			console.log('writeCharacteristic 1 error: ' + errorCode);
+			console.log('Error: writeCharacteristic 1 error: ' + errorCode + '.');
 		});
 
 	// Set update period to 100 ms (10 == 100 ms).
@@ -127,11 +150,11 @@ app.startMagnetometerNotification = function(device)
 		new Uint8Array([10]),
 		function()
 		{
-			console.log('writeCharacteristic 2 ok');
+			console.log('Status: writeCharacteristic 2 ok.');
 		},
 		function(errorCode)
 		{
-			console.log('writeCharacteristic 2 error: ' + errorCode);
+			console.log('Error: writeCharacteristic 2 error: ' + errorCode + '.');
 		});
 
 	// Set magnetometer notification to ON.
@@ -141,7 +164,7 @@ app.startMagnetometerNotification = function(device)
 		new Uint8Array([1,0]),
 		function()
 		{
-			console.log('writeDescriptor ok');
+			console.log('Status: writeDescriptor ok.');
 		},
 		function(errorCode)
 		{
@@ -149,7 +172,7 @@ app.startMagnetometerNotification = function(device)
 			// listed when requesting descriptors. On iOS you are not allowed
 			// to use the configuration descriptor explicitly. It should be
 			// safe to ignore this error.
-			console.log('writeDescriptor error: ' + errorCode);
+			console.log('Error: writeDescriptor: ' + errorCode + '.');
 		});
 
 	// Start notification of magnetometer data.
@@ -157,7 +180,7 @@ app.startMagnetometerNotification = function(device)
 		'f000aa31-0451-4000-b000-000000000000',
 		function(data)
 		{
-			app.showInfo('Data stream active - magnetometer');
+			app.showInfo('Status: Data stream active - magnetometer.');
 			//console.log('byteLength: '+data.byteLength);
 			var dataArray = new Int16Array(data);
 			//console.log('length: '+dataArray.length);
@@ -166,7 +189,7 @@ app.startMagnetometerNotification = function(device)
 		},
 		function(errorCode)
 		{
-			console.log('enableNotification error: ' + errorCode);
+			console.log('Error: enableNotification: ' + errorCode + '.');
 		});
 };
 
@@ -222,7 +245,7 @@ app.initialize();
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 app.startAccelerometerNotification = function(device)
 {
-	app.showInfo('Starting accelerometer notification');
+	app.showInfo('Status: Starting accelerometer notification...');
 
 	// Set accelerometer configuration to ON.
 	device.writeCharacteristic(
@@ -230,11 +253,11 @@ app.startAccelerometerNotification = function(device)
 		new Uint8Array([1]),
 		function()
 		{
-			console.log('writeCharacteristic ok');
+			console.log('Status: writeCharacteristic ok.');
 		},
 		function(errorCode)
 		{
-			console.log('writeCharacteristic error: ' + errorCode);
+			console.log('Error: writeCharacteristic: ' + errorCode + '.');
 		});
 
 	// Set accelerometer period to 100 ms.
@@ -243,11 +266,11 @@ app.startAccelerometerNotification = function(device)
 		new Uint8Array([10]),
 		function()
 		{
-			console.log('writeCharacteristic ok');
+			console.log('Status: writeCharacteristic ok.');
 		},
 		function(errorCode)
 		{
-			console.log('writeCharacteristic error: ' + errorCode);
+			console.log('Error: writeCharacteristic: ' + errorCode + '.');
 		});
 
 	// Set accelerometer notification to ON.
@@ -257,7 +280,7 @@ app.startAccelerometerNotification = function(device)
 		new Uint8Array([1,0]),
 		function()
 		{
-			console.log('writeDescriptor ok');
+			console.log('Status: writeDescriptor ok.');
 		},
 		function(errorCode)
 		{
@@ -265,7 +288,7 @@ app.startAccelerometerNotification = function(device)
 			// listed when requesting descriptors. On iOS you are not allowed
 			// to use the configuration descriptor explicitly. It should be
 			// safe to ignore this error.
-			console.log('writeDescriptor error: ' + errorCode);
+			console.log('Error: writeDescriptor: ' + errorCode + '.');
 		});
 
 	// Start accelerometer notification.
@@ -273,7 +296,7 @@ app.startAccelerometerNotification = function(device)
 		'f000aa11-0451-4000-b000-000000000000',
 		function(data)
 		{
-			app.showInfo('Data stream active - accelerometer');
+			app.showInfo('Status: Data stream active - accelerometer.');
 			//console.log('byteLength: '+data.byteLength);
 			var dataArray = new Int8Array(data);
 			//console.log('length: '+dataArray.length);
@@ -282,6 +305,6 @@ app.startAccelerometerNotification = function(device)
 		},
 		function(errorCode)
 		{
-			console.log('enableNotification error: ' + errorCode);
+			console.log('Error: enableNotification: ' + errorCode + '.');
 		});
 };

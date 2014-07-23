@@ -28,7 +28,7 @@ function startWatch()
 function onCompassSuccess(heading)
 {
 	showCompassHeading(
-		'Compass Heading: ' +
+		'Compass heading: ' +
 		Math.round(heading.magneticHeading));
 	showCompassDirection(
 		computeCompassDirection(

@@ -216,6 +216,7 @@ input.btn-group + label {
 	font-size: 63%;
 	line-height: 100%;
 	text-align: center;
+	text-transform: uppercase;
 
 	color: #fff;
 
@@ -245,7 +246,10 @@ input.btn-group {
 }
 
 canvas {
-	border: 1px solid #000;
+	border-radius: 4px;
+	border: none;
+
+	background-color: #f3f3f3; /* Default color: "Arctic" */
 }
 
 h1 {
