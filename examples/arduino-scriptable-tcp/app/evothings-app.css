@@ -269,6 +269,19 @@ input.btn-group:focus {
 	outline: none;
 }
 
+button.wide,
+input.btn-group.wide + label,
+input.btn-group + label.wide {
+	width: 100%;
+}
+
+button.big,
+input.btn-group.big + label,
+input.btn-group + label.big {
+	font-size: 150%;
+	line-height: 3.0;
+}
+
 /*  Input with class btn-group should be accompanied by a label acting as a
 	button. */
 input.btn-group {

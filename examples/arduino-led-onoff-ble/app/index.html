@@ -8,9 +8,7 @@ Please note that you must use a BLE shield for this example to work.
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="viewport" content="target-densitydpi=device-dpi,
-		width=device-width, initial-scale=1.0, minimum-scale=1.0,
-		maximum-scale=1.0, user-scalable=no" />
+	<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 	<title>Arduino LED On/Off BLE</title>
 
@@ -41,12 +39,15 @@ Please note that you must use a BLE shield for this example to work.
 
 	<p id="info">Initializing...</p>
 
-	<button class="yellow" onclick="app.connect()">CONNECT</button>
+	<button class="yellow wide" onclick="app.connect()">CONNECT</button>
 
-	<br /><br />
+	<br />
 
-	<button class="green" onclick="app.ledOn()">LED ON</button>
-	<button class="red" onclick="app.ledOff()">LED OFF</button>
+	<button class="green wide big" onclick="app.ledOn()">LED ON</button>
+
+	<br />
+
+	<button class="red wide big" onclick="app.ledOff()">LED OFF</button>
 
 	<script>
 	if (window.hyper) console.log = window.hyper.log;
