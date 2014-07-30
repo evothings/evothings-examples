@@ -273,5 +273,10 @@ var app =
 			console.log('readAllServiceData error: ' + errorCode);
 		});
 	},
+
+	openBrowser: function(url)
+	{
+		window.open(url, '_system', 'location=yes')
+	}
 };
 // End of app object.
