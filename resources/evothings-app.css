@@ -42,7 +42,7 @@ body::before {
 body::after {
 	display:block;
 	content: '';
-	height: 8px;
+	height: 1em;
 }
 
 /* The header's height is determined by the contained text's font size. */
@@ -297,9 +297,13 @@ canvas {
 	background-color: #f3f3f3; /* Default color: "Arctic" */
 }
 
+figcaption {
+	font-size: 63%;
+}
+
 h1 {
 	padding: 0;
-	margin: 0;
+	margin: 1em 0 0 0;
 
 	font-family: 'Proxima Nova Black';
 	font-size: 100%;
@@ -307,12 +311,12 @@ h1 {
 
 	vertical-align: middle;
 }
-main h1:first-child, article h1:first-child {
+header + h1, main h1:first-child, article h1:first-child {
 	margin-top: 0;
 }
 
 h2,h3,h4,h5,h6 {
-	margin: 10px 0 0 0;
+	margin: 1em 0 0 0;
 	padding: 0;
 
 	font-family: 'Proxima Nova Bold';
@@ -323,8 +327,12 @@ h2,h3,h4,h5,h6 {
 	vertical-align: middle;
 }
 
+a {
+	color: #52afb8; /* Default color: "Blue Hue" (dark variant) */
+}
+
 p {
-	margin: 10px 0 10px 0;
+	margin: 0.4em 0 0.4em 0;
 	padding: 0;
 
 	font-size: 63%;
@@ -335,62 +343,53 @@ strong {
 	font-family: 'Proxima Nova Bold';
 }
 
-ol {
+code {
 	font-size: inherit;
 }
-ol li {
+
+ol,ul {
+	list-style-type: none;
+	list-style-position: inside;
+	counter-reset: item;
+
+	margin: 0.5em 0 0 0;
+	padding: 0;
+	
 	font-size: 63%;
+}
+ol li, ul li {
+	padding: 0.5em 0 0.5em 0;
+	
+	font-size: inherit;
 	line-height: 1.5;
 }
-ul {
+ol li:before {
+	content: counter(item) ". ";
+	counter-increment: item;
+	font-family: 'Proxima Nova Bold';
+}
+ul.clickable {
 	list-style-type: none;
 	padding: 0;
-
-	font-size: inherit;
 }
-ul li {
-	padding: 4% 4%;
-
-	font-size: 63%;
+ul.clickable li {
+	padding: 4% 15% 4% 4%;
 
 	border-radius: 4px;
 	border: none;
 
 	box-shadow: inset 0 -7px 12px -12px #000;
-}
-ul li:last-child {
-	box-shadow: none;
-}
-ul.clickable li {
-	padding-right: 15%;
+
 	background-image: url('gfx/arrow_right_with_margin.svg');
 	background-position: right center;
 	background-size: 10% auto;
 	background-repeat: no-repeat;
 }
-
-h1.box,h2.box,h3.box,h4.box {
-	margin: 0;
-	padding-left: 1%;
-
-	line-height: 150%;
-	color: #fff;
-	vertical-align: middle;
-
-	background-color: rgb(33,70,92);
-	border-top-left-radius:6px;
-	border-top-right-radius:6px;
+ul.clickable li:last-child {
+	box-shadow: none;
 }
-
-div.box {
-	box-sizing: border-box;
-	width: 100%;
-	padding: 1%;
-	border: 1px solid rgb(33,70,92);
-}
-
-div.box canvas {
-	border: none; /* Remove the border, as the box already has one. */
+ul.clickable li a {
+	color: #000;
 }
 
 article {
