@@ -85,7 +85,7 @@ void setup()
 	{
 		Serial.println("Failed to configure Ethernet using DHCP");
 		// No point in carrying on, stop here forever.
-		while(true);
+		while(true) ;
 	}
 	// dhcp test end
 
@@ -151,6 +151,7 @@ String readRequest(EthernetClient* client)
 			request += c;
 		}
 	}
+	return request;
 }
 
 void executeRequest(EthernetClient* client, String* request)
