@@ -87,9 +87,9 @@ var app =
 				}
 				console.log('found device: ' + deviceInfo.name);
 				app.knownDevices[deviceInfo.address] = deviceInfo;
-				if (deviceInfo.name == 'BLE Shield' && !app.connectee)
+				if (deviceInfo.name == 'arduinoble' && !app.connectee)
 				{
-					console.log('Found BLE shield');
+					console.log('Found arduinoble');
 					connectee = deviceInfo;
 					app.connect(deviceInfo.address);
 				}
