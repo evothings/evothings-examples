@@ -2,7 +2,7 @@
 // Include BLE files.
 #include <SPI.h>
 #include <boards.h>
-#include <ble_shield.h>
+#include <RBL_nRF8001.h>
 #include <services.h>
 
 // Define input/output pins
