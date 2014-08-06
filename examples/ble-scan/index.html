@@ -41,7 +41,7 @@
 
 </head>
 
-<body>
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
 	<header>
 		<button class="back" onclick="history.back()">
@@ -65,7 +65,7 @@
 
 	<p id="scan-status">Scanning Paused</p>
 
-	<p id="found-devices"></p>
+	<ul id="found-devices" class="dynamic"></ul>
 
 	<h2>Troubleshooting</h2>
 

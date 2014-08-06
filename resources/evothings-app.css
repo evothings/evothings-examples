@@ -385,11 +385,11 @@ ol li:before {
 	counter-increment: item;
 	font-family: 'Proxima Nova Bold';
 }
-ul.clickable {
+ul.dynamic {
 	list-style-type: none;
 	padding: 0;
 }
-ul.clickable li {
+ul.dynamic li {
 	padding: 4% 15% 4% 4%;
 
 	border-radius: 4px;
@@ -397,15 +397,16 @@ ul.clickable li {
 
 	box-shadow: inset 0 -7px 12px -12px #000;
 
+	background-color: #f3f3f3;
 	background-image: url('gfx/arrow_right_with_margin.svg');
 	background-position: right center;
 	background-size: 10% auto;
 	background-repeat: no-repeat;
 }
-ul.clickable li:last-child {
+ul.dynamic li:last-child {
 	box-shadow: none;
 }
-ul.clickable li a {
+ul.dynamic li a {
 	color: #000;
 }
 

@@ -102,14 +102,13 @@ app.ui.displayDeviceList = function()
 
 		// Create a div tag to display sensor data.
 		var element = $(
-			'<div class="device-info" style="background:' + bgcolor + ';">'
-			//'<div class="device-info" style="background:rgb(200,200,200);">'
-			+	'<b>' + device.name + '</b><br/>'
-			+	device.address + '<br/>'
-			+	device.rssi + '<br/>'
+			'<li>'
+			+	'<strong>' + device.name + '</strong><br />'
+			+	device.address + '<br />'
+			+	device.rssi + '<br />'
 			+ 	'<div style="background:rgb(255,0,0);height:20px;width:'
 			+ 		rssiWidth + '%;"></div>'
-			+ '</div>'
+			+ '</li>'
 		);
 
 		$('#found-devices').append(element);
