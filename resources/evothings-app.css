@@ -346,6 +346,16 @@ p {
 	line-height: 1.5;
 }
 
+table {
+	table-layout: fixed;
+	width: 100%;
+	font-size: 63%;
+	text-align: left;
+}
+thead {
+	font-family: 'Proxima Nova Bold';
+}
+
 strong {
 	font-family: 'Proxima Nova Bold';
 }
