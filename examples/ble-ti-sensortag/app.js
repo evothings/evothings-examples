@@ -201,6 +201,12 @@ app.drawLines = function(dataArray, magnitude)
 	var context = canvas.getContext('2d');
 	var dataPoints = app.dataPoints;
 
+	// Initialize (static) maximum detected Y value.
+	this.magnitude = this.magnitude || 0;
+
+	if (magnitude > this.magnitude)
+		this.magnitude = magnitude;
+
 	// Add recent data.
 	dataPoints.push(dataArray);
 	if (dataPoints.length > canvas.width)
@@ -208,9 +214,12 @@ app.drawLines = function(dataArray, magnitude)
 		dataPoints.splice(0, (dataPoints.length - canvas.width));
 	}
 
+	var drawLines = this; // Reference to app.drawLines instance.
 	function calcY(i)
 	{
-		return ((i * canvas.height) / (magnitude * 2)) + (canvas.height / 2);
+		if (Math.abs(i) > drawLines.magnitude)
+			drawLines.magnitude = Math.abs(i);
+		return ((i * canvas.height) / (drawLines.magnitude * 2)) + (canvas.height / 2);
 	}
 
 	function drawLine(offset, color)
