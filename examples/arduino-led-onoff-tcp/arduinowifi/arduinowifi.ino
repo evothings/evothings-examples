@@ -171,6 +171,7 @@ String readRequest(WiFiClient* client)
 			request += c;
 		}
 	}
+	return request;
 }
 
 void executeRequest(WiFiClient* client, String* request)
