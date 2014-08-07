@@ -1,10 +1,10 @@
-// Arduino code for example Arduino Easy BLE.
+// Arduino code for example Arduino LED On/Off BLE.
 // Evothings AB, 2014
 
 // Include BLE files.
 #include <SPI.h>
 #include <boards.h>
-#include <ble_shield.h>
+#include <RBL_nRF8001.h>
 #include <services.h>
 
 // Define input/output pins
@@ -34,6 +34,9 @@ void setup()
 
 	// Initialize BLE library.
 	ble_begin();
+
+	// Set a custom BLE name.
+	ble_set_name("arduinoble");
 
 	Serial.println("ble_begin done!");
 

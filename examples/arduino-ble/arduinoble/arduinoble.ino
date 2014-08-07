@@ -1,3 +1,5 @@
+// Arduino code for example Arduino Easy BLE.
+// Evothings AB, 2014
 
 // Include BLE files.
 #include <SPI.h>
@@ -30,6 +32,8 @@ void setup() {
 
 	// Initialize BLE library.
 	ble_begin();
+
+	// Set a custom BLE name.
 	ble_set_name("arduinoble");
 
 	Serial.println("ble_begin done!");

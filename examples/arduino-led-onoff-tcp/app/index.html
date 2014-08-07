@@ -84,11 +84,11 @@ for this example to work.
 		{
 			if (success)
 			{
-				$('#ArduinoStatus').val('Connected to the Arduino')
+				$('#ArduinoStatus').html('Connected to the Arduino')
 			}
 			else
 			{
-				$('#ArduinoStatus').val('Connection error')
+				$('#ArduinoStatus').html('Connection error')
 			}
 		})
 	}
@@ -96,7 +96,7 @@ for this example to work.
 	app.disconnect = function()
 	{
 		arduino.disconnect()
-		$('#ArduinoStatus').val('Disconnected')
+		$('#ArduinoStatus').html('Disconnected')
 	}
 	</script>
 

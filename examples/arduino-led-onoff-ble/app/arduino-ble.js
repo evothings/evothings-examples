@@ -45,7 +45,7 @@ var arduinoble = (function()
 		easyble.startScan(
 			function(device)
 			{
-				if (device.name == 'BLE Shield')
+				if (device.name == 'arduinoble')
 				{
 					easyble.stopScan();
 					internal.connectToDevice(device, win, fail);

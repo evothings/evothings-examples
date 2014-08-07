@@ -28,7 +28,7 @@ app.hueColors = [
 $(function()
 {
 	// Display the selected default light.
-	$('#lightButton' + app.lightId).prop('checked', true)
+	$('#lightButton' + app.lightId).prop('checked', true);
 
 	// Initialize the colors of the color setting buttons
 	// to their corresponding light colors.
@@ -125,7 +125,7 @@ app.connectToIP = function()
  */
 app.fetchBridgeIP = function(successFun, failFun)
 {
-	$.getJSON('http://www.meethue.com/api/nupnp', function(data)
+	$.getJSON('https://www.meethue.com/api/nupnp', function(data)
 	{
 		if (data[0] && data[0].hasOwnProperty('internalipaddress'))
 		{
@@ -159,7 +159,7 @@ app.checkConnection = function(successFun, failFun)
  */
 app.connect = function()
 {
-	$('#status').html('Connecting...')
+	$('#status').html('Connecting...');
 	app.registerUser(
 		app.user,
 		function(json)
@@ -167,7 +167,7 @@ app.connect = function()
 			console.log(json[0]);
 			if (json[0].error)
 			{
-				$('#status').html(json[0].error.description)
+				$('#status').html(json[0].error.description);
 			}
 			else if (json[0].success)
 			{
@@ -175,12 +175,12 @@ app.connect = function()
 			}
 			else
 			{
-				$('#status').html('Something went wrong')
+				$('#status').html('Something went wrong');
 			}
 		},
 		function()
 		{
-			$('#status').html('Could not find Hue Bridge')
+			$('#status').html('Could not find Hue Bridge');
 		});
 };
 
