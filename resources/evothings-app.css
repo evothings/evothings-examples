@@ -133,7 +133,7 @@ header img.logotype {
 								MENU
 	---------------------------------------------------------- */
 
-header #menu-button {
+header button#menu-button {
 	position: absolute;
 	right: 0;
 
@@ -156,12 +156,20 @@ header #menu-button {
 
 	box-shadow: none;
 }
-header #menu-button img {
+header button#menu-button img {
 	height: 34%;
 }
-/*header button#menu:hover {
+header button#menu-button:focus {
 	pointer-events: none;
-}*/
+	outline: none;
+}
+header button#menu-button:focus::-moz-focus-inner {
+	border: 0;
+}
+header button#menu-button:focus + menu {
+	opacity: 1;
+	visibility: visible;
+}
 header menu {
 	display: block;
 	position: absolute;
@@ -173,27 +181,17 @@ header menu {
 
 	background: #f3f3f3;
 
-	
 	opacity: 0;
 	visibility: hidden;
 	transition: visibility 0.5s;
 }
-header #menu-button:focus {
-	pointer-events: none;
-}
-header #menu-button:focus + menu { /* For touch devices. */
-	opacity: 1;
-	visibility: visible;
-	
-}
-
 
 header menu menuitem {
 	display: block;
 
 	padding: 0 1em 0 1em;
 
-	font-family: 'Proxima Nova Black';
+	font-family: 'Proxima Nova Bold';
 	font-size: 35%;
 	text-align: right;
 }
