@@ -48,7 +48,7 @@ app.startScan = function(callbackFun)
 // Stop scanning for devices.
 app.stopScan = function()
 {
-	evothings.ble.reset();
+	evothings.ble.stopScan();
 };
 
 // Called when Start Scan button is selected.
