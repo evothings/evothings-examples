@@ -9,6 +9,10 @@ app.devices = {};
 // UI methods.
 app.ui = {};
 
+// Timer that updates the list and removes inactive devices
+// in case no devices are found by scan.
+app.ui.updateTimer = null;
+
 app.initialize = function()
 {
 	document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -34,8 +38,12 @@ app.startScan = function(callbackFun)
 	evothings.ble.startScan(
 		function(device)
 		{
-			// Report success.
-			callbackFun(device, null);
+			// Report success. Sometimes an RSSI of +127 is reported.
+			// We filter out these values here.
+			if (device.rssi <= 0)
+			{
+				callbackFun(device, null);
+			}
 		},
 		function(errorCode)
 		{
@@ -56,6 +64,7 @@ app.ui.onStartScanButton = function()
 {
 	app.startScan(app.ui.deviceFound);
 	app.ui.displayStatus('Scanning...');
+	app.ui.updateTimer = setInterval(app.ui.displayDeviceList, 5000);
 };
 
 // Called when Stop Scan button is selected.
@@ -65,6 +74,7 @@ app.ui.onStopScanButton = function()
 	app.devices = {};
 	app.ui.displayStatus('Scan Paused');
 	app.ui.displayDeviceList();
+	clearInterval(app.ui.updateTimer);
 };
 
 // Called when a device is found.
@@ -72,6 +82,10 @@ app.ui.deviceFound = function(device, errorCode)
 {
 	if (device)
 	{
+		// Set timestamp for device (this is used to remove
+		// inactive devices).
+		device.timeStamp = Date.now();
+
 		// Insert the device into table of found devices.
 		app.devices[device.address] = device;
 
@@ -90,28 +104,34 @@ app.ui.displayDeviceList = function()
 	// Clear device list.
 	$('#found-devices').empty();
 
+	var timeNow = Date.now();
+
 	var i = 1;
 	$.each(app.devices, function(key, device)
 	{
-		// Compute a display percent width value from signal strength.
-		// rssi is a negative value, zero is max signal strength.
-		var rssiWidth = Math.max(0, (100 + device.rssi));
+		// Only show devices that are updated during the last 5 seconds.
+		if (device.timeStamp + 5000 > timeNow)
+		{
+			// Compute a display percent width value from signal strength.
+			// rssi is a negative value, zero is max signal strength.
+			var rssiWidth = Math.max(0, (100 + device.rssi));
 
-		// Set background color for this item.
-		var bgcolor = i++ % 2 ? 'rgb(225,225,225)' : 'rgb(245,245,245)';
+			// Set background color for this item.
+			var bgcolor = i++ % 2 ? 'rgb(225,225,225)' : 'rgb(245,245,245)';
 
-		// Create a div tag to display sensor data.
-		var element = $(
-			'<li>'
-			+	'<strong>' + device.name + '</strong><br />'
-			+	device.address + '<br />'
-			+	device.rssi + '<br />'
-			+ 	'<div style="background:rgb(255,0,0);height:20px;width:'
-			+ 		rssiWidth + '%;"></div>'
-			+ '</li>'
-		);
+			// Create a div tag to display sensor data.
+			var element = $(
+				'<li>'
+				+	'<strong>' + device.name + '</strong><br />'
+				+	device.address + '<br />'
+				+	device.rssi + '<br />'
+				+ 	'<div style="background:rgb(255,0,0);height:20px;width:'
+				+ 		rssiWidth + '%;"></div>'
+				+ '</li>'
+			);
 
-		$('#found-devices').append(element);
+			$('#found-devices').append(element);
+		}
 	});
 };
 
