@@ -45,6 +45,10 @@ body::after {
 	height: 1em;
 }
 
+/*  ----------------------------------------------------------
+								HEADER
+	---------------------------------------------------------- */
+
 /* The header's height is determined by the contained text's font size. */
 header {
 	box-sizing: border-box; /* Width & height includes padding & border. */
@@ -67,7 +71,7 @@ header {
 	text-align: center;
 	vertical-align: middle;
 
-	background: rgb(243,243,243);
+	background: #f3f3f3;
 
 	z-index: 1000;
 }
@@ -110,14 +114,34 @@ header button.back {
 header button.back img {
 	height: 0.5em;
 }
-header button.menu {
+header img.logotype {
 	position: absolute;
-	right: 6.25%;
+	top: 50%;
+	left: 0;
+	right: 0;
+
+	height: 60%;
+
+	margin: 0 auto;
+
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+/*  ----------------------------------------------------------
+								MENU
+	---------------------------------------------------------- */
+
+header button#menu-button {
+	position: absolute;
+	right: 0;
 
 	width: 10%;
 	height: 100%;
+	max-height: 100%;
 	margin: 0;
-	padding: 0;
+	padding: 0 6.25% 0 0;
 
 	/* Font size is percentage of the header's font size. */
 	font-size: 50%;
@@ -132,22 +156,44 @@ header button.menu {
 
 	box-shadow: none;
 }
-header button.menu img {
+header button#menu-button img {
 	height: 34%;
 }
-header img.logotype {
+header button#menu-button:focus {
+	pointer-events: none;
+	outline: none;
+}
+header button#menu-button:focus::-moz-focus-inner {
+	border: 0;
+}
+header button#menu-button:focus + menu {
+	opacity: 1;
+	visibility: visible;
+}
+header menu {
+	display: block;
 	position: absolute;
-	top: 50%;
-	left: 0;
+	top: 100%;
 	right: 0;
 
-	height: 60%;
+	margin: 0;
+	padding: 0;
 
-	margin: 0 auto;
+	background: #f3f3f3;
 
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility 0.5s;
+}
+
+header menu menuitem {
+	display: block;
+
+	padding: 0 1em 0 1em;
+
+	font-family: 'Proxima Nova Bold';
+	font-size: 35%;
+	text-align: right;
 }
 
 header h1 {
@@ -166,6 +212,10 @@ header h1 {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+
+/*  ----------------------------------------------------------
+							MAIN CONTENT
+	---------------------------------------------------------- */
 
 main {
 	z-index: 0;
@@ -420,8 +470,9 @@ article {
 
 
 
-/*                   COLORS                 */
-/* ---------------------------------------- */
+/*  ----------------------------------------------------------
+								COLORS
+	---------------------------------------------------------- */
 
 /*  Color: "Soft Red"
 	Class name: red
