@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<!--
+This is an example app that demonstrates how to control an RFDuino RFD22102 board using BLE (Bluetooth Low Energy).
+Please note that this example require a RFDuino RFD22102 + RFDuino RGB LED Button shield (RFD22122).
+Also an RFDuino USB shield (RFD22121) is needed for programming the RFduino FW from host PC / Mac.
+-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+	<title>RFDuinoLED On/Off</title>
+	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<style>
+	html, body {
+		margin: 10px 10px;
+		background-color: rgb(255,255,255);
+	}
+	div {
+		margin: 10px 0px;
+	}
+	button {
+		margin: 5px 0px;
+	}
+	.lead {
+		font-weight: bold;
+	}
+	</style>
+</head>
+<body>
+	<h1>RFDuino LED On/Off</h1>
+
+	<div>
+		<p id="info" class="lead">Initializing...</p>
+	</div>
+	<style>
+	.btn-blueled {
+		color: rgb(255,255,255);
+		background-color: rgb(0,0,255);
+		border-color: rgb(0,0,255);
+	}
+	</style>
+	<style>
+	.btn-connect {
+		color: rgb(255,255,255);
+		background-color: rgb(0,150,0);
+		border-color: rgb(0,150,0);
+	}
+	</style>
+	<div class="form-group">
+		<button type="button" class="btn btn-lg btn-connect"
+			onclick="app.connect()">Connect</button>
+		<button type="button" class="btn btn-lg btn-blueled"
+			onclick="app.ledOn()">Blue Led On</button>
+		<button type="button" class="btn btn-lg btn-blueled"
+			onclick="app.ledOff()">Blue Led Off</button>
+	</div>
+
+	<p>This example require a RFDuino RFD22102 and an RFDuino RGB LED Button shield (RFD22122). Also an RFduino USB shield is needed for programming.</p>
+	<p><img src="RFduino_Image.png" style="max-height:30%;" /></p>
+
+
+	<script src="libs/jquery/jquery-2.0.3.js"></script>
+	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="easy-ble.js"></script>
+	<script src="rfduino-ble.js"></script>
+	<script>
+	if (window.hyper) console.log = window.hyper.log;
+
+	// Application object.
+	var app = {}
+
+	// Connected device.
+	app.device = null;
+
+	// Turn on LED.
+	app.ledOn = function()
+	{
+		app.device && app.device.writeDataArray(new Uint8Array([1]));
+	}
+
+	// Turn off LED.
+	app.ledOff = function()
+	{
+		app.device && app.device.writeDataArray(new Uint8Array([0]));
+	}
+
+	app.showMessage = function(info)
+	{
+		document.getElementById('info').innerHTML = info
+	};
+
+	// Called when BLE and other native functions are available.
+	app.onDeviceReady = function()
+	{
+		app.showMessage('Touch green button to connect');
+	};
+
+	app.connect = function()
+	{
+		hyper.log("close");
+		rfduinoble.close();
+
+		setTimeout(function()
+		{
+			hyper.log("connect");
+			rfduinoble.connect(
+			function(device)
+			{
+				hyper.log("connected");
+				app.device = device;
+			},
+			function(errorCode)
+			{
+				app.showMessage('Connect error: ' + errorCode);
+			});
+		}, 500);
+	};
+
+	document.addEventListener('deviceready', app.onDeviceReady, false);
+	</script>
+</body>
+</html>
