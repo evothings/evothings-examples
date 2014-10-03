@@ -299,7 +299,7 @@ input.btn-group + label,
 
 	color: #fff;
 
-	margin: 2% 0 2% 0;
+	margin: 0.5em 0 0.5em 0;
 	padding: 9px 13px 8px 13px;
 
 	border-radius: 4px;
@@ -652,4 +652,10 @@ input.btn-group.black:active + label,
 input.btn-group:checked + label.black,
 input.btn-group.black:checked + label {
 	background-color: #000000;
+}
+
+@media	screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio : 2),
+		screen and (orientation: landscape) and (min--moz-device-pixel-ratio: 2),
+		screen and (orientation: landscape) and (min-device-pixel-ratio : 2) {
+	body { font-size: 4.5vw; }
 }
