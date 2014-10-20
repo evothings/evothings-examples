@@ -1,30 +1,13 @@
 /*
 File: rfduino-ble.js
-Author: Mikael Kindborg, modified by Patrik D.
-Description: Functions for communicating with an RFDuino.
-
-TODO: This is a very simple library that has only write capability,
-read and notification functions should be added.
-
-Example of use:
-
-rfduinoble.connect(
-	function(device)
-	{
-		console.log('connected!');
-		device.writeDataArray(new Uint8Array([1]));
-		rfduinoble.close();
-	},
-	function(errorCode)
-	{
-		console.log('Error: ' + errorCode);
-	});
+Author: Patrik D.
+Description: Functions for communicating with an RFduino.
 */
 
 // Object that exposes the RFduino BLE API.
 var rfduinoble = (function()
 {
-	// RFDuino BLE object.
+	// RFduino BLE object.
 	var rfduinoble = {};
 
 	// Internal functions.
@@ -45,11 +28,11 @@ var rfduinoble = (function()
 		easyble.startScan(
 			function(device)
 			{
-				hyper.log("found device "+device.name);
-				if (device.name == 'RFDuino')
+				console.log("found device " + device.name);
+				if (device.name == "RFduino")
 				{
 					easyble.stopScan();
-					hyper.log("connectToDevice");
+					console.log("connectToDevice");
 					internal.connectToDevice(device, win, fail);
 				}
 			},
@@ -93,15 +76,15 @@ var rfduinoble = (function()
 		device.writeDataArray = function(uint8array)
 		{
 			device.writeCharacteristic(
-				'00002222-0000-1000-8000-00805f9b34fb',
+				"00002222-0000-1000-8000-00805f9b34fb",
 				uint8array,
 				function()
 				{
-					console.log('writeCharacteristic success');
+					console.log("writeCharacteristic success");
 				},
 				function(errorCode)
 				{
-					console.log('writeCharacteristic error: ' + errorCode);
+					console.log("writeCharacteristic error: " + errorCode);
 				});
 		};
 	};
