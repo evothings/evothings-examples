@@ -1,2 +1,6 @@
 .DS_Store
 build
+examples/**/ui
+examples/**/libs
+examples/**/arduinowifi
+examples/**/arduinoethernet
