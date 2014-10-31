@@ -280,3 +280,7 @@ var app =
 	}
 };
 // End of app object.
+
+// Initialise app.
+app.initialize();
+

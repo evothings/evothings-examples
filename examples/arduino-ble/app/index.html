@@ -1,23 +1,5 @@
 <!DOCTYPE html>
 <!--
-	Licensed to the Apache Software Foundation (ASF) under one
-	or more contributor license agreements.  See the NOTICE file
-	distributed with this work for additional information
-	regarding copyright ownership.  The ASF licenses this file
-	to you under the Apache License, Version 2.0 (the
-	"License"); you may not use this file except in compliance
-	with the License.  You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the License is distributed on an
-	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	 KIND, either express or implied.  See the License for the
-	specific language governing permissions and limitations
-	under the License.
--->
-<!--
 	Description:
 
 	BLE example application that demonstrates how to communicate
@@ -38,24 +20,16 @@
 	<title>Arduino BLE</title>
 	
 	<style>
-		@import 'evothings-app.css';
+		@import 'ui/evothings-app.css';
 	</style>
 
 	<script>
 	if (window.hyper) { console.log = hyper.log; }
-
-	window.onerror = function(msg, url, line)
-	{
-		console.log(msg + ": " + url + ":" + line);
-	};
 	</script>
 
-	<script src="libs/jquery-2.0.3.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
 	<script src="cordova.js"></script>
 	<script src="app.js"></script>
-	<script>
-		app.initialize();
-	</script>
 
 </head>
 
@@ -63,10 +37,10 @@
 
 	<header>
 		<button class="back" onclick="history.back()">
-			<img src="gfx/arrow_left.svg" />
+			<img src="ui/images/arrow-left.svg" />
 		</button>
 
-		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
 		<!--<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>-->
 	</header>
