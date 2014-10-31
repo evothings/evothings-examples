@@ -91,7 +91,8 @@ header button {
 }
 header button.back {
 	position: absolute;
-	left: 6.25%;
+	/*left: 6.25%;*/
+	left: 0.9em;
 
 	width: 10%;
 	height: 100%;
