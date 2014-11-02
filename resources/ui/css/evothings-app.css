@@ -1,6 +1,6 @@
 /* Common styles for Evothings examples and client. */
 
-@import 'fonts/ProximaNova.css';
+@import '../fonts/ProximaNova.css';
 
 html, body {
 	height: 100%;
