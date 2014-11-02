@@ -52,19 +52,17 @@ void loop()
 	{
 		// Read input.
 		int c = ble_read();
-                Serial.println("got input");
+		Serial.println("Got input:");
 		if (c != 0)
 		{
 			// Non-zero input means "turn on LED".
-                        Serial.println("on");
-			Serial.write(c);
+			Serial.println("  on");
 			digitalWrite(LED_PIN, HIGH);
 		}
 		else
 		{
-                        Serial.println("off");
 			// Input value zero means "turn off LED".
-			Serial.write('0');
+			Serial.println("  off");
 			digitalWrite(LED_PIN, LOW);
 		}
 	}

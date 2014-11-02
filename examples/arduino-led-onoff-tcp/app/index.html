@@ -17,12 +17,12 @@ for this example to work.
 	<title>Arduino LED On/Off TCP</title>
 
 	<style>
-		@import 'evothings-app.css';
+		@import 'ui/css/evothings-app.css';
 	</style>
 
-	<script src="libs/jquery-2.0.3.js"></script>
 	<script src="cordova.js"></script>
-	<script src="arduino.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/arduino-tcp/arduino-tcp.js"></script>
 
 </head>
 
@@ -30,12 +30,12 @@ for this example to work.
 
 	<header>
 		<button class="back" onclick="history.back()">
-			<img src="gfx/arrow_left.svg" />
+			<img src="ui/images/arrow-left.svg" />
 		</button>
 
-		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
-		<!--<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>-->
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
 	<h1>Arduino LED On/Off TCP</h1>
@@ -43,7 +43,7 @@ for this example to work.
 	<h2>Enter IP-address of the Arduino</h2>
 
 	<input id="ArduinoIpAddress" value="192.168.0.100" type="url" />
-
+	<br/>
 	<button class="green" onclick="app.connect()">CONNECT</button>
 	<button class="charcoal" onclick="app.disconnect()">DISCONNECT</button>
 

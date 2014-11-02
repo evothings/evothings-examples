@@ -6,6 +6,9 @@ Description: Functions for communicating with an Arduino BLE shield.
 TODO: This is a very simple library that has only write capability,
 read and notification functions should be added.
 
+TODO: Add functions to set the BLE name used to identify the BLE shield
+and add function to set the write characteristic UUID.
+
 Example of use:
 
      arduinoble.connect(
