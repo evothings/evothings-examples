@@ -97,3 +97,5 @@ var app = {
 		}
 	},
 };
+
+app.initialize();

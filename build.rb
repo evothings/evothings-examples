@@ -84,6 +84,20 @@ def buildHueLights
 	copyJQuery(destPath)
 end
 
+def buildIBeaconScan
+	destPath = 'examples/ibeacon-scan'
+	copyUI(destPath)
+end
+
+def buildRFduinoLEDOnOff
+	destPath = 'examples/rfduino-led-onoff/app'
+	copyUI(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+	copyRFduinoBLE(destPath)
+	copyWhereIsTheArduinoCode(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -106,6 +120,10 @@ end
 
 def copyArduinoTCP(destPath)
 	copyDir('resources/libs/arduino-ble', destPath + '/libs')
+end
+
+def copyRFduinoBLE(destPath)
+	copyDir('resources/libs/rfduino-ble', destPath + '/libs')
 end
 
 def copyWhereIsTheArduinoCode(destPath)
@@ -147,6 +165,8 @@ def build
 	buildCordovaBasic
 	buildHelloWorld
 	buildHueLights
+	buildIBeaconScan
+	buildRFduinoLEDOnOff
 end
 
 build

@@ -10,15 +10,18 @@ RFduino USB shield (RFD22121) is needed for programming the
 RFduino from a PC or Mac.
 -->
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
-	<title>RFduinoLED On/Off</title>
-	<link href="libs/bootstrap-3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>RFduino LED On/Off</title>
+
 	<style>
-	html, body {
-		margin: 10px 10px;
-		background-color: rgb(255,255,255);
-	}
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<style>
 	div {
 		margin: 10px 0px;
 	}
@@ -39,14 +42,28 @@ RFduino from a PC or Mac.
 		border-color: rgb(0,150,0);
 	}
 	</style>
+	
 </head>
+
 <body>
 	<!-- HTML markup for the app -->
 
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+	
 	<h1>RFduino LED On/Off</h1>
+	
 	<div>
 		<p id="info" class="lead">Initializing...</p>
 	</div>
+	
 	<div class="form-group">
 		<button type="button" class="btn btn-lg btn-connect"
 			onclick="app.connect()">Connect</button>
@@ -55,18 +72,22 @@ RFduino from a PC or Mac.
 		<button type="button" class="btn btn-lg btn-blueled"
 			onclick="app.ledOff()">Blue Led Off</button>
 	</div>
+	
 	<p>This example requires a RFduino RFD22102 and an RFduino RGB
 	LED Button shield (RFD22122). You also need an RFduino USB shield
 	for programming the RFduino from a PC/Mac.</p>
+	
+	<!-- TODO: Image is missing.
 	<p><img src="RFduino_Image.png" style="max-height:30%;" /></p>
+	-->
 
 	<!-- JavaScript code for the app -->
 
-	<script src="libs/jquery/jquery-2.0.3.js"></script>
-	<script src="libs/bootstrap-3.0.2/js/bootstrap.min.js"></script>
 	<script src="cordova.js"></script>
-	<script src="easy-ble.js"></script>
-	<script src="rfduino-ble.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/easy-ble/easy-ble.js"></script>
+	<script src="libs/rfduino-ble/rfduino-ble.js"></script>
+
 	<script>
 	// hyper.log is used for debugging with Evothings Workbench.
 	if (window.hyper) { console.log = window.hyper.log; }
