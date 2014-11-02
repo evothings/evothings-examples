@@ -67,9 +67,21 @@ def buildBLETISensorTag
 	copyEasyBLE(destPath)
 end
 
+def buildCordovaBasic
+	destPath = 'examples/cordova-basic'
+	copyUI(destPath)
+	copyJQuery(destPath)
+end
+
 def buildHelloWorld
 	destPath = 'examples/hello-world'
 	copyUI(destPath)
+end
+
+def buildHueLights
+	destPath = 'examples/hue-lights'
+	copyUI(destPath)
+	copyJQuery(destPath)
 end
 
 ###### Copy helpers ######
@@ -132,7 +144,9 @@ def build
 	buildArduinoScriptableTCP
 	buildBLEScan
 	buildBLETISensorTag
+	buildCordovaBasic
 	buildHelloWorld
+	buildHueLights
 end
 
 build

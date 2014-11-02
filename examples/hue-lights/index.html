@@ -18,11 +18,11 @@ for this example to work. See comment below in the code.
 	// Redirect console to Evothings Workbench.
 	if (window.hyper) { console.log = hyper.log; }
 	</script>
-	<script src="libs/jquery-2.0.3.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
 	<script src="app.js"></script>
 
 	<style>
-	@import 'evothings-app.css';
+	@import 'ui/css/evothings-app.css';
 	button, input, p {
 		margin: 10px 0px 10px 0px;
 	}
@@ -34,12 +34,12 @@ for this example to work. See comment below in the code.
 
 	<header>
 		<button class="back" onclick="history.back()">
-			<img src="gfx/arrow_left.svg" />
+			<img src="ui/images/arrow_left.svg" />
 		</button>
 
-		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
-		<!--<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>-->
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
 	<h1>Philips Hue Demo</h1>
