@@ -54,6 +54,19 @@ def buildArduinoScriptableTCP
 	copyArduinoWiFi(destPath)
 end
 
+def buildBLEScan
+	destPath = 'examples/ble-scan'
+	copyUI(destPath)
+	copyJQuery(destPath)
+end
+
+def buildBLETISensorTag
+	destPath = 'examples/ble-ti-sensortag'
+	copyUI(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+end
+
 def buildHelloWorld
 	destPath = 'examples/hello-world'
 	copyUI(destPath)
@@ -117,6 +130,8 @@ def build
 	buildArduinoLEDOnOffBLE
 	buildArduinoLEDOnOffTCP
 	buildArduinoScriptableTCP
+	buildBLEScan
+	buildBLETISensorTag
 	buildHelloWorld
 end
 

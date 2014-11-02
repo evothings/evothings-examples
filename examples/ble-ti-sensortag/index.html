@@ -1,23 +1,5 @@
 <!DOCTYPE html>
 <!--
-	Licensed to the Apache Software Foundation (ASF) under one
-	or more contributor license agreements.  See the NOTICE file
-	distributed with this work for additional information
-	regarding copyright ownership.  The ASF licenses this file
-	to you under the Apache License, Version 2.0 (the
-	"License"); you may not use this file except in compliance
-	with the License.  You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the License is distributed on an
-	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	 KIND, either express or implied.  See the License for the
-	specific language governing permissions and limitations
-	under the License.
--->
-<!--
 	Description:
 
 	BLE example application that demonstrates how to read values
@@ -38,17 +20,17 @@
 	<title>BLE TI SensorTag</title>
 
 	<style>
-		@import 'evothings-app.css';
+		@import 'ui/css/evothings-app.css';
 	</style>
 
 	<script>
 	// Redirect console to Evothings Workbench.
 	if (window.hyper) { console.log = hyper.log; }
 	</script>
-	<script src="libs/jquery-2.0.3.js"></script>
 	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/easy-ble/easy-ble.js"></script>
 	<script src="app.js"></script>
-	<script src="easy-ble.js"></script>
 
 </head>
 
@@ -56,12 +38,12 @@
 
 	<header>
 		<button class="back" onclick="history.back()">
-			<img src="gfx/arrow_left.svg" />
+			<img src="ui/images/arrow-left.svg" />
 		</button>
 
-		<img class="logotype" src="gfx/logo.svg" alt="Evothings" />
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
-		<!--<button class="menu" onclick=""><img src="gfx/menu.svg" /></button>-->
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
 	<h1>BLE TI SensorTag</h1>
@@ -83,7 +65,7 @@
 
 	<h2>Troubleshooting</h2>
 
-	<p>On Android, there are known problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
+	<p>On Android, there are sometimes problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
 
 </body>
 
