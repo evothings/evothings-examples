@@ -87,6 +87,7 @@ end
 def buildIBeaconScan
 	destPath = 'examples/ibeacon-scan'
 	copyUI(destPath)
+	copyJQuery(destPath)
 end
 
 def buildRFduinoLEDOnOff

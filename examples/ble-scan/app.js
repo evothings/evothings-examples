@@ -106,20 +106,16 @@ app.ui.displayDeviceList = function()
 
 	var timeNow = Date.now();
 
-	var i = 1;
 	$.each(app.devices, function(key, device)
 	{
 		// Only show devices that are updated during the last 60 seconds.
 		if (device.timeStamp + 60000 > timeNow)
 		{
 			// Compute a display percent width value from signal strength.
-			// rssi is a negative value, zero is max signal strength.
+			// RSSI is a negative value, zero is max signal strength.
 			var rssiWidth = Math.max(0, 100 + device.rssi);
 
-			// Set background color for this item.
-			var bgcolor = i++ % 2 ? 'rgb(225,225,225)' : 'rgb(245,245,245)';
-
-			// Create a div tag to display sensor data.
+			// Create tag for device data.
 			var element = $(
 				'<li>'
 				+	'<strong>' + device.name + '</strong><br />'

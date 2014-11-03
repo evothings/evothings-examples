@@ -136,13 +136,14 @@ header img.logotype {
 
 header button#menu-button {
 	position: absolute;
-	right: 0;
+	right: 0.9em;
 
 	width: 10%;
 	height: 100%;
 	max-height: 100%;
 	margin: 0;
-	padding: 0 6.25% 0 0;
+	padding: 0;
+	/*padding: 0 6.25% 0 0;*/
 
 	/* Font size is percentage of the header's font size. */
 	font-size: 50%;

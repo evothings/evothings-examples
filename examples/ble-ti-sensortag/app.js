@@ -91,6 +91,7 @@ app.deviceIsSensorTag = function(device)
 // Read services for a device.
 app.connectToDevice = function(device)
 {
+	app.showInfo('Connecting...');
 	device.connect(
 		function(device)
 		{

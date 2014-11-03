@@ -34,20 +34,11 @@
 
 	<h1>iBeacon Scan</h1>
 
-	<table style="font-size: 40%;">
-		<thead><tr>
-			<th>ID</th>
-			<th>RSSI</th>
-			<th>Proximity</th>
-			<th>UUID</th>
-		</tr></thead>
-		<tbody id="beaconListRoot">
-			<!--<tr><td>ID</td><td>RSSI</td><td>Proximity</td><td>UUID</td></tr>-->
-		</tbody>
-	</table>
+	<ul id="found-beacons" class="dynamic"></ul>
 
-	<script type="text/javascript" src="cordova.js"></script>
-	<script type="text/javascript" src="app.js"></script>
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="app.js"></script>
 
 </body>
 

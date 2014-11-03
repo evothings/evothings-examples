@@ -1,101 +1,127 @@
-var beacons = {};
+var app = (function()
+{
+	// Application object.
+	var app = {};
 
-function appendTd(root, value, id) {
-	var text = document.createTextNode(value);
-	var td = document.createElement("td");
-	if(id) {
-		td.id = id;
+	// Add your own beacon UUIDs to this list.
+	var regions =
+	[
+		{uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D'},
+		{uuid:'F7826DA6-4FA2-4E98-8024-BC5B71E0893E'},
+		{uuid:'8DEEFBB9-F738-4297-8040-96668BB44281'},
+		{uuid:'A0B13730-3A9A-11E3-AA6E-0800200C9A66'},
+		{uuid:'A4950001-C5B1-4B44-B512-1370F02D74DE'},
+		{uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D'}
+	];
+
+	// Dictionary of beacons.
+	var beacons = {};
+
+	app.initialize = function()
+	{
+		document.addEventListener('deviceready', onDeviceReady, false);
+	};
+
+	function onDeviceReady()
+	{
+		// Specify a shortcut for the location manager holding the iBeacon functions.
+		window.locationManager = cordova.plugins.locationManager
+
+		// Start tracking beacons!
+		startScan();
 	}
-	td.appendChild(text);
-	root.appendChild(td);
-}
 
-function hex16(i) {
-	var s = i.toString(16);
-	while(s.length < 4) {
-		s = '0'+s;
-	}
-	return s;
-}
-
-var app = {
-	initialize: function() {
-		// Important to stop scanning when page reloads/closes!
-		window.addEventListener('beforeunload', function(e)
+	function startScan()
+	{
+		// The delegate object contains iBeacon callback functions.
+		var delegate = locationManager.delegate.implement(
 		{
-			//iBeacon.stopScan();
-		});
-
-		this.bindEvents();
-	},
-	bindEvents: function() {
-		document.addEventListener('deviceready', this.onDeviceReady, false);
-	},
-	onDeviceReady: function() {
-		//console.log('cordova: ' + JSON.stringify(cordova, null, "\t"));
-		window.LocationManager = cordova.plugins.LocationManager;
-		window.locationManager = cordova.plugins.locationManager;
-		window.Regions = locationManager.Regions;
-
-		window.Region = locationManager.Region;
-		window.Delegate = locationManager.Delegate;
-		window.CircularRegion = locationManager.CircularRegion;
-		window.BeaconRegion = locationManager.BeaconRegion;
-		app.startScan();
-	},
-
-	startScan: function() {
-		var regions = [
-			// Add your own manufacturer UUIDs to this list.
-			{uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D'},
-			{uuid:'F7826DA6-4FA2-4E98-8024-BC5B71E0893E'},
-			{uuid:'8DEEFBB9-F738-4297-8040-96668BB44281'},
-			{uuid:'A0B13730-3A9A-11E3-AA6E-0800200C9A66'},
-		]
-
-		var delegate = locationManager.delegate.implement({
-			didDetermineStateForRegion: function (pluginResult) {
-				console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+			didDetermineStateForRegion: function(pluginResult)
+			{
+				//console.log('didDetermineStateForRegion: ' + JSON.stringify(pluginResult))
 			},
 
-			didStartMonitoringForRegion: function (pluginResult) {
-				console.log('didStartMonitoringForRegion:', pluginResult);
+			didStartMonitoringForRegion: function(pluginResult)
+			{
+				//console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult))
 			},
 
-			didRangeBeaconsInRegion: function (pluginResult) {
-				//console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
-				var root = document.getElementById("beaconListRoot");
-				for(var index in pluginResult.beacons) {
-					var beacon = pluginResult.beacons[index];
-					var key = 'tx'+beacon.uuid.replace(/-/g,'_') + hex16(beacon.major)+"_"+hex16(beacon.minor);
-					if(beacons[key] == null) {
-						beacons[key] = beacon;
-						var tr = document.createElement("tr");
-						appendTd(tr, hex16(beacon.major)+"\u00A0"+hex16(beacon.minor));
-						appendTd(tr, beacon.rssi, key+'rssi');
-						appendTd(tr, beacon.proximity, key+'prox');
-						appendTd(tr, beacon.uuid.replace(/-/g,"\u2011"));
-						root.appendChild(tr);
-					} else {
-						var td = document.getElementById(key+'rssi');
-						td.firstChild.nodeValue = beacon.rssi;
-						var td = document.getElementById(key+'prox');
-						td.firstChild.nodeValue = beacon.proximity;
-					}
+			didRangeBeaconsInRegion: function(pluginResult)
+			{
+				//console.log('didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult))
+				for (var i in pluginResult.beacons)
+				{
+					// Insert beacon into table of found beacons.
+					var beacon = pluginResult.beacons[i];
+					beacon.timeStamp = Date.now();
+					beacons[beacon.uuid] = beacon;
 				}
+
+				displayBeaconList(beacons)
+			}
+		})
+
+		// Set the delegate object to use.
+		locationManager.setDelegate(delegate)
+
+		// Start monitoring and ranging beacons.
+		for (var i in regions)
+		{
+			var beaconRegion = new locationManager.BeaconRegion(
+				i + 1,
+				regions[i].uuid)
+
+			// Start monitoring.
+			locationManager.startMonitoringForRegion(beaconRegion)
+				.fail(console.error)
+				.done()
+
+			// Start ranging.
+			locationManager.startRangingBeaconsInRegion(beaconRegion)
+				.fail(console.error)
+				.done()
+		}
+	}
+
+	function displayBeaconList(beacons)
+	{
+		// Clear beacon list.
+		$('#found-beacons').empty();
+
+		var timeNow = Date.now();
+
+		// Update beacon list.
+		$.each(beacons, function(key, beacon)
+		{
+			// Only show beacons that are updated during the last 60 seconds.
+			if (beacon.timeStamp + 60000 > timeNow)
+			{
+				// Valid RSSI values should less than zero.
+				var rssiWidth = 0;
+				if (beacon.rssi < 0)
+				{
+					rssiWidth = 100 + beacon.rssi;
+				}
+
+				// Create tag to display beacon data.
+				var element = $(
+					'<li>'
+					+	'<strong>UUID: ' + beacon.uuid + '</strong><br />'
+					+	'Major: ' + beacon.major + '<br />'
+					+	'Minor: ' + beacon.minor + '<br />'
+					+	'Proximity: ' + beacon.proximity + '<br />'
+					+	'RSSI: ' + beacon.rssi + '<br />'
+					+ 	'<div style="background:rgb(0,255,0);height:20px;width:'
+					+ 		rssiWidth + '%;"></div>'
+					+ '</li>'
+				);
+
+				$('#found-beacons').append(element);
 			}
 		});
-		locationManager.setDelegate(delegate);
+	}
 
-		for(var i in regions) {
-			var uuid = regions[i].uuid;
-			var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(uuid, uuid, undefined, undefined);
-
-			cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
-				.fail(console.error)
-				.done();
-		}
-	},
-};
+	return app;
+})();
 
 app.initialize();
