@@ -9,8 +9,8 @@ app.devices = {};
 // UI methods.
 app.ui = {};
 
-// Timer that updates the list and removes inactive devices
-// in case no devices are found by scan.
+// Timer that updates the device list and removes inactive
+// devices in case no devices are found by scan.
 app.ui.updateTimer = null;
 
 app.initialize = function()
@@ -64,7 +64,7 @@ app.ui.onStartScanButton = function()
 {
 	app.startScan(app.ui.deviceFound);
 	app.ui.displayStatus('Scanning...');
-	app.ui.updateTimer = setInterval(app.ui.displayDeviceList, 5000);
+	app.ui.updateTimer = setInterval(app.ui.displayDeviceList, 500);
 };
 
 // Called when Stop Scan button is selected.
@@ -88,9 +88,6 @@ app.ui.deviceFound = function(device, errorCode)
 
 		// Insert the device into table of found devices.
 		app.devices[device.address] = device;
-
-		// Display device in UI.
-		app.ui.displayDeviceList();
 	}
 	else if (errorCode)
 	{

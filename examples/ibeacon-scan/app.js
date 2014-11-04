@@ -54,7 +54,8 @@ var app = (function()
 					// Insert beacon into table of found beacons.
 					var beacon = pluginResult.beacons[i];
 					beacon.timeStamp = Date.now();
-					beacons[beacon.uuid] = beacon;
+					var key = beacon.uuid + ':' + beacon.major + ':' + beacon.minor;
+					beacons[key] = beacon;
 				}
 
 				displayBeaconList(beacons)

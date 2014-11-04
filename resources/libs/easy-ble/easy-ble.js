@@ -43,7 +43,7 @@ var easyble = (function()
 	{
 		reportDeviceOnce = reportOnce;
 	};
-	
+
 	/** Start scanning for devices. */
 	easyble.startScan = function(win, fail)
 	{
@@ -57,7 +57,7 @@ var easyble = (function()
 			{
 				// Do not report device again if flag is set.
 				if (reportDeviceOnce) { return; }
-				
+
 				// Flag not set, report device again.
 				existingDevice.rssi = device.rssi;
 				existingDevice.name = device.name;
