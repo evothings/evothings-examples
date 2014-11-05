@@ -25,7 +25,7 @@ var app = (function()
 	function onDeviceReady()
 	{
 		// Specify a shortcut for the location manager holding the iBeacon functions.
-		window.locationManager = cordova.plugins.locationManager
+		window.locationManager = cordova.plugins.locationManager;
 
 		// Start tracking beacons!
 		startScan();
@@ -58,29 +58,33 @@ var app = (function()
 					beacons[key] = beacon;
 				}
 
-				displayBeaconList(beacons)
+				displayBeaconList(beacons);
 			}
 		})
 
 		// Set the delegate object to use.
-		locationManager.setDelegate(delegate)
+		locationManager.setDelegate(delegate);
+
+		// Request permission from user to access location info.
+		// This is needed on iOS 8.
+		locationManager.requestAlwaysAuthorization();
 
 		// Start monitoring and ranging beacons.
 		for (var i in regions)
 		{
 			var beaconRegion = new locationManager.BeaconRegion(
 				i + 1,
-				regions[i].uuid)
+				regions[i].uuid);
 
 			// Start monitoring.
 			locationManager.startMonitoringForRegion(beaconRegion)
 				.fail(console.error)
-				.done()
+				.done();
 
 			// Start ranging.
 			locationManager.startRangingBeaconsInRegion(beaconRegion)
 				.fail(console.error)
-				.done()
+				.done();
 		}
 	}
 
