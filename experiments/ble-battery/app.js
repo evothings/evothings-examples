@@ -1,4 +1,4 @@
-// JavaScript code for the BLE TI SensorTag example app.
+// JavaScript code for the app.
 
 // Object that holds application data and functions.
 var app = {};

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!--
+	Demonstration of the TI SensorTag JavaScript library.
+-->
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>TI SensorTag Sensors</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<style>
+	/*body {
+		background: rgb(25,25,25);
+		color: rgb(255,255,255);
+		font-size: 100%;
+		padding: 0px 20px;
+	}*/
+	.SensorData {
+		font-size: 80%;
+		font-weight: bold;
+	}
+	.SensorData span {
+		font-weight: normal;
+	}
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench if available.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log; }
+	</script>
+	<script src="cordova.js"></script>
+	<script src="libs/easy-ble/easy-ble.js"></script>
+	<script src="libs/ti-sensortag/ti-sensortag.js"></script>
+</head>
+
+<body>
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>TI SensorTag Sensors</h1>
+
+	<div class="SensorData">Status: <span id="StatusData">Ready to connect</span></div>
+	<div class="SensorData">Keypress: <span id="KeypressData">[Waiting for value]</span></div>
+	<div class="SensorData">IRTemperature:<br/><span id="IRTemperatureData">[Waiting for value]</span></div>
+	<div class="SensorData">Accelerometer:<br/><span id="AccelerometerData">[Waiting for value]</span></div>
+	<div class="SensorData">Humidity:<br/><span id="HumidityData">[Waiting for value]</span></div>
+	<div class="SensorData"">Magnetometer:<br/><span id="MagnetometerData">[Waiting for value]</span></div>
+	<div class="SensorData">Barometer:<br/><span id="BarometerData">[Waiting for value]</span></div>
+	<div class="SensorData">Gyroscope:<br/><span id="GyroscopeData">[Waiting for value]</span></div>
+
+	<script>
+	// SensorTag object.
+	var sensorTag = TISensorTag.createInstance()
+
+	function initialiseSensortag()
+	{
+		// Here sensors are set up.
+		// First parameter is the callback function.
+		// Accelerometer, Magnetometer and Gyroscope take a
+		// millisecond update interval as the last parameter.
+		// Gyroscope takes the axes to enable as second parameter:
+		// 1 to enable X axis only, 2 to enable Y axis only, 3 = X and Y,
+		// 4 = Z only, 5 = X and Z, 6 = Y and Z, 7 = X, Y and Z.
+		sensorTag
+			.statusCallback(statusHandler)
+			.errorCallback(errorHandler)
+			.keypressCallback(keypressHandler)
+			.irTemperatureCallback(irTemperatureHandler)
+			.humidityCallback(humidityHandler)
+			.barometerCallback(barometerHandler)
+			.accelerometerCallback(accelerometerHandler, 200)
+			.magnetometerCallback(magnetometerHandler, 200)
+			.gyroscopeCallback(gyroscopeHandler, 7, 200) // 7 = enable all axes.
+			.connectToClosestDevice()
+	}
+
+	function statusHandler(status)
+	{
+		displayValue('StatusData', status)
+	}
+
+	function errorHandler(error)
+	{
+		displayValue('StatusData', 'Error: ' + error)
+		if ('disconnected' == error)
+		{
+			// If disconneted attempt to connect again.
+			setTimeout(
+				function() { sensorTag.connectToClosestDevice() },
+				1000)
+		}
+	}
+
+	function keypressHandler(data)
+	{
+		displayValue('KeypressData', data[0])
+
+		if (data[0] == 1)
+		{
+			document.documentElement.style.background = 'red'
+			document.body.style.background = 'red'
+		}
+		else
+		if (data[0] == 2)
+		{
+			document.documentElement.style.background = 'blue'
+			document.body.style.background = 'blue'
+		}
+	}
+
+	function irTemperatureHandler(data)
+	{
+		displayValue(
+			'IRTemperatureData',
+			data[0] + ',' + data[1] + ',' + data[2] +  ',' + data[3])
+	}
+
+	function accelerometerHandler(data)
+	{
+		//console.log('length: ' + data.length)
+		//console.log('acceldata: ' + data[0] + ' ' + data[1] + ' ' + data[2])
+
+		var x = data[0] / 16
+		var y = data[1] / 16
+		var z = data[2] / 16
+		var g = Math.sqrt((x*x)+(y*y)+(z*z))
+		displayValue(
+			'AccelerometerData',
+			'x = ' + x + '<br/>y = ' + y + '<br/>z = ' + z + '<br/>g = ' + g)
+	}
+
+	function humidityHandler(data)
+	{
+		displayValue(
+			'HumidityData',
+			data[0] + ',' + data[1] + ',' + data[2] + ',' + data[3])
+	}
+
+	function magnetometerHandler(data)
+	{
+		displayValue(
+			'MagnetometerData',
+			data[0] + ',' + data[1] + ',' + data[2])
+	}
+
+	function barometerHandler(data)
+	{
+		displayValue(
+			'BarometerData',
+			data[0] + ',' + data[1] + ',' + data[2] + ',' + data[3])
+	}
+
+	function gyroscopeHandler(data)
+	{
+		displayValue(
+			'GyroscopeData',
+			data[0] + ',' + data[1] + ',' + data[2] + ','
+			+ data[3] + ',' + data[4] + ',' + data[5])
+	}
+
+	function displayValue(elementId, value)
+	{
+		document.getElementById(elementId).innerHTML = value
+	}
+
+	document.addEventListener('deviceready', initialiseSensortag, false)
+	</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-// JavaScript code for the BLE TI SensorTag example app.
+// JavaScript code for the TI SensorTag Demo app.
 
 // Object that holds application data and functions.
 var app = {};
@@ -181,7 +181,7 @@ app.startMagnetometerNotification = function(device)
 		'f000aa31-0451-4000-b000-000000000000',
 		function(data)
 		{
-			app.showInfo('Status: Data stream active - magnetometer.');
+			app.showInfo('Status: Data stream active - magnetometer');
 			//console.log('byteLength: '+data.byteLength);
 			var dataArray = new Int16Array(data);
 			//console.log('length: '+dataArray.length);
@@ -306,7 +306,7 @@ app.startAccelerometerNotification = function(device)
 		'f000aa11-0451-4000-b000-000000000000',
 		function(data)
 		{
-			app.showInfo('Status: Data stream active - accelerometer.');
+			app.showInfo('Status: Data stream active - accelerometer');
 			//console.log('byteLength: '+data.byteLength);
 			var dataArray = new Int8Array(data);
 			//console.log('length: '+dataArray.length);

@@ -33,7 +33,7 @@ def buildArduinoLEDOnOffTCP
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
-	
+
 	# Copy Arduino files.
 	destPath = 'examples/arduino-led-onoff-tcp'
 	copyArduinoEthernet(destPath)
@@ -47,7 +47,7 @@ def buildArduinoScriptableTCP
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
-	
+
 	# Copy Arduino files.
 	destPath = 'examples/arduino-scriptable-tcp'
 	copyArduinoEthernet(destPath)
@@ -60,11 +60,18 @@ def buildBLEScan
 	copyJQuery(destPath)
 end
 
-def buildBLETISensorTag
-	destPath = 'examples/ble-ti-sensortag'
+def buildTISensorTagDemo
+	destPath = 'examples/ti-sensortag-demo'
 	copyUI(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+end
+
+def buildTISensorTagSensors
+	destPath = 'examples/ti-sensortag-sensors'
+	copyUI(destPath)
+	copyEasyBLE(destPath)
+	copyTISensorTag(destPath)
 end
 
 def buildCordovaBasic
@@ -127,9 +134,13 @@ def copyRFduinoBLE(destPath)
 	copyDir('resources/libs/rfduino-ble', destPath + '/libs')
 end
 
+def copyTISensorTag(destPath)
+	copyDir('resources/libs/ti-sensortag', destPath + '/libs')
+end
+
 def copyWhereIsTheArduinoCode(destPath)
 	copyFile(
-		'resources/txt/where-is-the-arduino-code.txt', 
+		'resources/txt/where-is-the-arduino-code.txt',
 		destPath + '/where-is-the-arduino-code.txt')
 end
 
@@ -162,12 +173,13 @@ def build
 	buildArduinoLEDOnOffTCP
 	buildArduinoScriptableTCP
 	buildBLEScan
-	buildBLETISensorTag
 	buildCordovaBasic
 	buildHelloWorld
 	buildHueLights
 	buildIBeaconScan
 	buildRFduinoLEDOnOff
+	buildTISensorTagDemo
+	buildTISensorTagSensors
 end
 
 build
