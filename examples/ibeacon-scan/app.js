@@ -17,6 +17,9 @@ var app = (function()
 	// Dictionary of beacons.
 	var beacons = {};
 
+	// Timer that displays list of beacons.
+	var updateTimer = null;
+
 	app.initialize = function()
 	{
 		document.addEventListener('deviceready', onDeviceReady, false);
@@ -29,6 +32,9 @@ var app = (function()
 
 		// Start tracking beacons!
 		startScan();
+
+		// Display refresh timer.
+		updateTimer = setInterval(displayBeaconList, 500);
 	}
 
 	function startScan()
@@ -57,8 +63,6 @@ var app = (function()
 					var key = beacon.uuid + ':' + beacon.major + ':' + beacon.minor;
 					beacons[key] = beacon;
 				}
-
-				displayBeaconList(beacons);
 			}
 		})
 
@@ -88,7 +92,7 @@ var app = (function()
 		}
 	}
 
-	function displayBeaconList(beacons)
+	function displayBeaconList()
 	{
 		// Clear beacon list.
 		$('#found-beacons').empty();
