@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<!--
+This app demonstrates how to read analog input from the Arduio
+using TCP over WiFi from the mobile device and a WiFi shield or
+an Ethernet shield.
+
+Please note that you must enter the IP-address of the Arduino
+for this example to work.
+
+To use this example, hook up some analog input to your Arduino
+sketch, for example a potentiomenter. In the code below analog
+input pin 5 is used.
+
+A code snippet for reading digital input is provided in function
+app.analogRead, but this function is not used in the app. You can
+modify the code to use it with your hardware sketch.
+-->
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Arduino Input TCP</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/arduino-tcp/arduino-tcp.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>Arduino Input TCP</h1>
+
+	<h2>Enter IP-address of the Arduino</h2>
+
+	<input id="ArduinoIpAddress" value="192.168.0.100" type="url" />
+	<br/>
+	<button class="green" onclick="app.connect()">CONNECT</button>
+	<button class="charcoal" onclick="app.disconnect()">DISCONNECT</button>
+
+	<br />
+
+	<p>Status: <span id="ArduinoStatus">Not connected</span></p>
+
+	<div id="ArduinoAnalogValue" style="background:rgb(0,255,0);height:20px;width:1%"></div>
+
+	<p>Instructions for how to use this example is provided in the source code of file index.html</p>
+
+	<script>
+	// Application object.
+	var app = {}
+
+	// Pin for analog input (modify if needed to suit your sketch).
+	app.analogInputPin = 5
+
+	// Handle analog read.
+	app.analogRead = function()
+	{
+		// Handle analog read.
+		arduino.analogRead(app.analogInputPin, function(data)
+		{
+			// Display value in input field.
+			$('#ArduinoStatus').html('Analog value of pin is: ' + data)
+
+			// Convert analog value to percent value between 1 and 100.
+			var width = parseInt(data) / 10
+			width = Math.max(1, width)
+			width = Math.min(100, width)
+			$('#ArduinoAnalogValue').css('width', width + '%')
+		})
+	}
+
+	// Pin for digital input (modify to suit your sketch).
+	app.digitalInputPin = 2
+
+	// Handle digital read. This function is provided as a reference
+	// and is not active in the app. You need to call this function
+	// somewhere in the app to get a value.
+	app.digitalRead = function()
+	{
+		arduino.pinMode(app.digitalInputPin, INPUT)
+		arduino.digitalRead(app.digitalInputPin, function(data)
+		{
+			$('#ArduinoStatus').html('Digital value of pin is: ' + data)
+		})
+	}
+
+	app.connect = function()
+	{
+		arduino.connect($('#ArduinoIpAddress').val(), 3300, function(success)
+		{
+			if (success)
+			{
+				// Display status message.
+				$('#ArduinoStatus').html('Connected to the Arduino')
+
+				// Start interval timer that reads analog input.
+				// (Do this also for digital input if you wish to test that.)
+				setInterval(app.analogRead, 100)
+			}
+			else
+			{
+				$('#ArduinoStatus').html('Connection error')
+			}
+		})
+	}
+
+	app.disconnect = function()
+	{
+		arduino.disconnect()
+		$('#ArduinoStatus').html('Disconnected')
+	}
+	</script>
+
+</body>
+
+</html>

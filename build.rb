@@ -17,6 +17,20 @@ def buildArduinoBLE
 	copyWhereIsTheArduinoCode(destPath)
 end
 
+def buildArduinoInputTCP
+	# Copy CSS/JS files.
+	destPath = 'examples/arduino-input-tcp/app'
+	copyUI(destPath)
+	copyJQuery(destPath)
+	copyArduinoTCP(destPath)
+	copyWhereIsTheArduinoCode(destPath)
+
+	# Copy Arduino files.
+	destPath = 'examples/arduino-input-tcp'
+	copyArduinoEthernet(destPath)
+	copyArduinoWiFi(destPath)
+end
+
 def buildArduinoLEDOnOffBLE
 	destPath = 'examples/arduino-led-onoff-ble/app'
 	copyUI(destPath)
@@ -127,7 +141,7 @@ def copyArduinoBLE(destPath)
 end
 
 def copyArduinoTCP(destPath)
-	copyDir('resources/libs/arduino-ble', destPath + '/libs')
+	copyDir('resources/libs/arduino-tcp', destPath + '/libs')
 end
 
 def copyRFduinoBLE(destPath)
@@ -169,6 +183,7 @@ end
 
 def build
 	buildArduinoBLE
+	buildArduinoInputTCP
 	buildArduinoLEDOnOffBLE
 	buildArduinoLEDOnOffTCP
 	buildArduinoScriptableTCP
