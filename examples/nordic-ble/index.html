@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<!--
+This is an example app that demonstrates how to control an Nordic nRF518822-EK evaluation kit
+using BLE (Bluetooth Low Energy).
+-->
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Nordic BLE nRF51822-EK LED On/Off</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/easy-ble/easy-ble.js"></script>
+	<script src="libs/nordic-ble/nordic-ble.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>Nordic nRF51822-EK LED On/Off</h1>
+
+	<p><img src="nRF51822EK_Image.jpg" style="max-height:20%;" /></p>
+
+	<p id="info">Initializing...</p>
+
+	<button id="button-connect" class="blue wide" onclick="app.connectOrDisconnect()">CONNECT</button>
+
+	<br />
+
+	<button class="green wide" onclick="app.ledOn()">LED ON</button>
+
+	<br />
+
+	<button class="red wide" onclick="app.ledOff()">LED OFF</button>
+
+	<p id="data">Not connected...</p>
+
+	<script>
+	if (window.hyper) console.log = window.hyper.log;
+	console.log("Hello World!");
+
+	// Application object.
+	var app = {}
+
+	// Connected device.
+	app.device = null;
+
+	// Turn on LED.
+	app.ledOn = function()
+	{
+		app.device && app.device.writeDataArray(new Uint8Array([1]));
+	}
+
+	// Turn off LED.
+	app.ledOff = function()
+	{
+		app.device && app.device.writeDataArray(new Uint8Array([0]));
+	}
+
+	app.showMessage = function(info)
+	{
+		$('#info').html(info);
+	};
+
+	app.showData = function(data)
+	{
+		$('#data').html(data);
+	};
+
+	// Called when BLE and other native functions are available.
+	app.onDeviceReady = function()
+	{
+		app.showMessage('Touch the CONNECT button to begin.');
+	};
+
+	app.connectOrDisconnect = function()
+	{
+		if (app.device == null)
+		{
+			app.connect();
+			$('#button-connect').html('DISCONNECT');
+		}
+		else
+		{
+			nordicble.close();
+			app.device = null;
+			app.showMessage('Disconnected.');
+			$('#button-connect').html('CONNECT');
+		}
+	};
+
+	app.connect = function()
+	{
+		//nordicble.close();
+
+		app.showMessage('Scanning...');
+
+		nordicble.connect(
+			function(device)
+			{
+				app.device = device;
+				app.showMessage('Connected! Press ON/OFF buttons.');
+				app.showData('Press Button 1 on the Nordic Eval Kit to change this text.');
+
+				device.setNotification(function(data)
+				{
+					app.showData('Button state: '+new Uint8Array(data)[0]);
+				});
+			},
+			function(errorCode)
+			{
+				app.showMessage('Connect error: ' + errorCode + '.');
+			});
+	};
+
+	// Important to reset BLE when page reloads!
+	window.hyper && window.hyper.onReload(function()
+	{
+		nordicble.close();
+	});
+
+	document.addEventListener('deviceready', app.onDeviceReady, false);
+	</script>
+
+</body>
+
+</html>

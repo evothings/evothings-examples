@@ -111,6 +111,14 @@ def buildIBeaconScan
 	copyJQuery(destPath)
 end
 
+def buildNordicBLE
+	destPath = 'examples/nordic-ble'
+	copyUI(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+	copyNordicBLE(destPath)
+end
+
 def buildRFduinoLEDOnOff
 	destPath = 'examples/rfduino-led-onoff/app'
 	copyUI(destPath)
@@ -142,6 +150,10 @@ end
 
 def copyArduinoTCP(destPath)
 	copyDir('resources/libs/arduino-tcp', destPath + '/libs')
+end
+
+def copyNordicBLE(destPath)
+	copyDir('resources/libs/nordic-ble', destPath + '/libs')
 end
 
 def copyRFduinoBLE(destPath)
@@ -192,6 +204,7 @@ def build
 	buildHelloWorld
 	buildHueLights
 	buildIBeaconScan
+	buildNordicBLE
 	buildRFduinoLEDOnOff
 	buildTISensorTagDemo
 	buildTISensorTagSensors
