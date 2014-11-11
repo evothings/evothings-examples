@@ -30,7 +30,7 @@ modify the code to use it with your hardware sketch.
 
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
-	<script src="libs/arduino-tcp/arduino-tcp.js"></script>
+	<script src="libs/evothings/arduinotcp/arduinotcp.js"></script>
 
 </head>
 
@@ -64,6 +64,9 @@ modify the code to use it with your hardware sketch.
 	<p>Instructions for how to use this example is provided in the source code of file index.html</p>
 
 	<script>
+	// Short name for Arduino TCP library.
+	var arduino = evothings.arduinotcp
+
 	// Application object.
 	var app = {}
 

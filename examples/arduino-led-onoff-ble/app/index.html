@@ -19,8 +19,8 @@ Please note that you must use a BLE shield for this example to work.
 
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
-	<script src="libs/easy-ble/easy-ble.js"></script>
-	<script src="libs/arduino-ble/arduino-ble.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="libs/evothings/arduinoble/arduinoble.js"></script>
 
 </head>
 
@@ -51,7 +51,7 @@ Please note that you must use a BLE shield for this example to work.
 	<button class="red wide big" onclick="app.ledOff()">LED OFF</button>
 
 	<script>
-	if (window.hyper) console.log = window.hyper.log;
+	if (window.hyper && window.hyper.log) { console.log = window.hyper.log; }
 
 	// Application object.
 	var app = {}
@@ -84,9 +84,10 @@ Please note that you must use a BLE shield for this example to work.
 
 	app.connect = function()
 	{
-		arduinoble.close();
+		evothings.arduinoble.close();
 
-		arduinoble.connect(
+		evothings.arduinoble.connect(
+			'arduinoble', // Name of BLE shield.
 			function(device)
 			{
 				app.device = device;
@@ -101,7 +102,7 @@ Please note that you must use a BLE shield for this example to work.
 	// Important to reset BLE when page reloads!
 	window.hyper && window.hyper.onReload(function()
 	{
-		arduinoble.close();
+		evothings.arduinoble.close();
 	});
 
 	document.addEventListener('deviceready', app.onDeviceReady, false);

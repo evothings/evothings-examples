@@ -11,12 +11,13 @@ and add function to set the write characteristic UUID.
 
 Example of use:
 
-     arduinoble.connect(
+     evothings.arduinoble.connect(
+     	'arduinoble', // Name of BLE shield.
          function(device)
          {
          	console.log('connected!');
          	device.writeDataArray(new Uint8Array([1]));
-         	arduinoble.close();
+         	evothings.arduinoble.close();
          },
          function(errorCode)
          {
@@ -25,7 +26,9 @@ Example of use:
 */
 
 // Object that exposes the Arduino BLE API.
-var arduinoble = (function()
+
+if (!window.evothings) { window.evothings = {} }
+evothings.arduinoble = (function()
 {
 	// Arduino BLE object.
 	var arduinoble = {};
@@ -36,21 +39,21 @@ var arduinoble = (function()
 	// Stops any ongoing scan and disconnects all devices.
 	arduinoble.close = function()
 	{
-		easyble.stopScan();
-		easyble.closeConnectedDevices();
+		evothings.easyble.stopScan();
+		evothings.easyble.closeConnectedDevices();
 	};
 
 	// Connect to a BLE-shield.
 	// Success callback: win(device)
 	// Error callback: fail(errorCode)
-	arduinoble.connect = function(win, fail)
+	arduinoble.connect = function(deviceName, win, fail)
 	{
-		easyble.startScan(
+		evothings.easyble.startScan(
 			function(device)
 			{
-				if (device.name == 'arduinoble')
+				if (device.name == deviceName)
 				{
-					easyble.stopScan();
+					evothings.easyble.stopScan();
 					internal.connectToDevice(device, win, fail);
 				}
 			},

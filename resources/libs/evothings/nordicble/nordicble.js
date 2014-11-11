@@ -8,12 +8,13 @@ read and notification functions should be added.
 
 Example of use:
 
-     nordicble.connect(
+     evothings.nordicble.connect(
+     	'LedButtonDemo', // BLE name
          function(device)
          {
          	console.log('connected!');
          	device.writeDataArray(new Uint8Array([1]));
-         	nordicble.close();
+         	evothings.nordicble.close();
          },
          function(errorCode)
          {
@@ -22,7 +23,8 @@ Example of use:
 */
 
 // Object that exposes the Nordic BLE API.
-var nordicble = (function()
+if (!window.evothings) { window.evothings = {} }
+evothings.nordicble = (function()
 {
 	// Nordic BLE object.
 	var nordicble = {};
@@ -33,22 +35,22 @@ var nordicble = (function()
 	// Stops any ongoing scan and disconnects all devices.
 	nordicble.close = function()
 	{
-		easyble.stopScan();
-		easyble.closeConnectedDevices();
+		evothings.easyble.stopScan();
+		evothings.easyble.closeConnectedDevices();
 	};
 
 	// Connect to a BLE-shield.
 	// Success callback: win(device)
 	// Error callback: fail(errorCode)
-	nordicble.connect = function(win, fail)
+	nordicble.connect = function(deviceName, win, fail)
 	{
-		easyble.startScan(
+		evothings.easyble.startScan(
 			function(device)
 			{
-				console.log('found '+device.name);
-				if (device.name == 'LedButtonDemo')
+				console.log('found device: ' + device.name);
+				if (device.name == deviceName)
 				{
-					easyble.stopScan();
+					evothings.easyble.stopScan();
 					internal.connectToDevice(device, win, fail);
 				}
 			},

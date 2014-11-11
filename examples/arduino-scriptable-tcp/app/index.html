@@ -20,7 +20,7 @@ WiFi shield for this example to work. See comment below in the code.
 
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
-	<script src="libs/arduino-tcp/arduino-tcp.js"></script>
+	<script src="libs/evothings/arduinotcp/arduinotcp.js"></script>
 
 </head>
 
@@ -40,36 +40,65 @@ WiFi shield for this example to work. See comment below in the code.
 
 	<h2>Enter IP-address of the Arduino</h2>
 
-	<input type="text" id="ArduinoIpAddress" value="192.168.0.x" type="url"/>
+	<input type="text" id="ArduinoIpAddress" value="192.168.43.236" type="url"/>
+	<br/>
+	<button class="green" onclick="app.connect()">CONNECT</button>
+	<button class="charcoal" onclick="app.disconnect()">DISCONNECT</button>
+	<br />
+	<p>Status: <span id="ArduinoStatus">Not connected</span></p>
 
 	<h2>Script your Arduino using JavaScript!</h2>
 
 	<textarea id="ArduinoScript" rows="12">
 // Blinking a LED.
-var pin = 2, delay = 1000
+var arduino = evothings.arduinotcp
+var pin = 2
+var delay = 1000
 arduino.port = 3300
 arduino.pinMode(pin, OUTPUT)
 function ledOn() {
-arduino.digitalWrite(pin, HIGH)
-arduino.setTimeout(ledOff, delay)
+    arduino.digitalWrite(pin, HIGH)
+    arduino.setTimeout(ledOff, delay)
 }
 function ledOff() {
-arduino.digitalWrite(pin, LOW)
-arduino.setTimeout(ledOn, delay)
+    arduino.digitalWrite(pin, LOW)
+    arduino.setTimeout(ledOn, delay)
 }
 ledOn() // Start blinking
 		</textarea>
 
 	<button class="blue" onclick="app.runScript()">Run Script</button>
-	<button class="charcoal" onclick="app.reset()">Reset</button>
+	<button class="charcoal" onclick="app.reset()">Reset Script</button>
 
 	<script>
+	var arduino = evothings.arduinotcp
+
 	var app = {}
+
+	app.connect = function()
+	{
+		arduino.connect($('#ArduinoIpAddress').val(), 3300, function(success)
+		{
+			if (success)
+			{
+				$('#ArduinoStatus').html('Connected to the Arduino')
+			}
+			else
+			{
+				$('#ArduinoStatus').html('Connection error')
+			}
+		})
+	}
+
+	app.disconnect = function()
+	{
+		arduino.disconnect()
+		$('#ArduinoStatus').html('Disconnected')
+	}
 
 	app.runScript = function()
 	{
 		arduino.clearAllTimers()
-		arduino.ipAddress = $('#ArduinoIpAddress').val()
 		try
 		{
 			eval($('#ArduinoScript').val())
@@ -83,12 +112,12 @@ ledOn() // Start blinking
 	app.reset = function()
 	{
 		arduino.clearAllTimers()
-		window.location.reload(false)
 	}
 
 /*
 // Alternative script.
 // Blinking a LED.
+var arduino = evothings.arduinotcp
 var pin = 2
 arduino.port = 3300
 arduino.pinMode(pin, OUTPUT)

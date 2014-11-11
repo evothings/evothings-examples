@@ -42,7 +42,7 @@ RFduino from a PC or Mac.
 		border-color: rgb(0,150,0);
 	}
 	</style>
-	
+
 </head>
 
 <body>
@@ -57,13 +57,13 @@ RFduino from a PC or Mac.
 
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
-	
+
 	<h1>RFduino LED On/Off</h1>
-	
+
 	<div>
 		<p id="info" class="lead">Initializing...</p>
 	</div>
-	
+
 	<div class="form-group">
 		<button type="button" class="btn btn-lg btn-connect"
 			onclick="app.connect()">Connect</button>
@@ -72,11 +72,11 @@ RFduino from a PC or Mac.
 		<button type="button" class="btn btn-lg btn-blueled"
 			onclick="app.ledOff()">Blue Led Off</button>
 	</div>
-	
+
 	<p>This example requires a RFduino RFD22102 and an RFduino RGB
 	LED Button shield (RFD22122). You also need an RFduino USB shield
 	for programming the RFduino from a PC/Mac.</p>
-	
+
 	<!-- TODO: Image is missing.
 	<p><img src="RFduino_Image.png" style="max-height:30%;" /></p>
 	-->
@@ -85,12 +85,15 @@ RFduino from a PC or Mac.
 
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
-	<script src="libs/easy-ble/easy-ble.js"></script>
-	<script src="libs/rfduino-ble/rfduino-ble.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="libs/evothings/rfduinoble/rfduinoble.js"></script>
 
 	<script>
 	// hyper.log is used for debugging with Evothings Workbench.
-	if (window.hyper) { console.log = window.hyper.log; }
+	if (window.hyper && window.hyper.log) { console.log = window.hyper.log; }
+
+	// Short name for RFduino BLE library.
+	var rfduinoble = evothings.rfduinoble;
 
 	// Application object.
 	var app = {};
@@ -132,6 +135,7 @@ RFduino from a PC or Mac.
 			console.log("connecting");
 			app.showMessage("Connecting...");
 			rfduinoble.connect(
+				"RFduino",
 				function(device)
 				{
 					console.log("connected");

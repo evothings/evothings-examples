@@ -1,5 +1,8 @@
 // JavaScript code for the TI SensorTag Demo app.
 
+// Short name for EasyBLE library.
+var easyble = evothings.easyble;
+
 // Object that holds application data and functions.
 var app = {};
 

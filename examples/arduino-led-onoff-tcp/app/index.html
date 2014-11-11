@@ -22,7 +22,7 @@ for this example to work.
 
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
-	<script src="libs/arduino-tcp/arduino-tcp.js"></script>
+	<script src="libs/evothings/arduinotcp/arduinotcp.js"></script>
 
 </head>
 
@@ -42,7 +42,7 @@ for this example to work.
 
 	<h2>Enter IP-address of the Arduino</h2>
 
-	<input id="ArduinoIpAddress" value="192.168.0.100" type="url" />
+	<input id="ArduinoIpAddress" value="192.168.43.236" type="url" />
 	<br/>
 	<button class="green" onclick="app.connect()">CONNECT</button>
 	<button class="charcoal" onclick="app.disconnect()">DISCONNECT</button>
@@ -55,6 +55,10 @@ for this example to work.
 	<button class="red" onclick="app.ledOff()">LED OFF</button>
 
 	<script>
+	// Short name for Arduino TCP library.
+	var arduino = evothings.arduinotcp
+
+	// Application object.
 	var app = {}
 
 	// Pin for LED.

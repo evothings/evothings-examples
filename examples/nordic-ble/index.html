@@ -18,8 +18,8 @@ using BLE (Bluetooth Low Energy).
 
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
-	<script src="libs/easy-ble/easy-ble.js"></script>
-	<script src="libs/nordic-ble/nordic-ble.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="libs/evothings/nordicble/nordicble.js"></script>
 
 </head>
 
@@ -54,11 +54,15 @@ using BLE (Bluetooth Low Energy).
 	<p id="data">Not connected...</p>
 
 	<script>
-	if (window.hyper) console.log = window.hyper.log;
-	console.log("Hello World!");
+	if (window.hyper && window.hyper.log) { console.log = window.hyper.log; }
+
+	console.log('Hello World!');
+
+	// Short name for Nordic BLE library.
+	var nordicble = evothings.nordicble;
 
 	// Application object.
-	var app = {}
+	var app = {};
 
 	// Connected device.
 	app.device = null;
@@ -114,6 +118,7 @@ using BLE (Bluetooth Low Energy).
 		app.showMessage('Scanning...');
 
 		nordicble.connect(
+     		'LedButtonDemo', // BLE name
 			function(device)
 			{
 				app.device = device;

@@ -1,11 +1,13 @@
 /*
-File: rfduino-ble.js
+File: rfduinoble.js
 Author: Patrik D.
 Description: Functions for communicating with an RFduino.
 */
 
 // Object that exposes the RFduino BLE API.
-var rfduinoble = (function()
+
+if (!window.evothings) { window.evothings = {} }
+evothings.rfduinoble = (function()
 {
 	// RFduino BLE object.
 	var rfduinoble = {};
@@ -16,22 +18,22 @@ var rfduinoble = (function()
 	// Stops any ongoing scan and disconnects all devices.
 	rfduinoble.close = function()
 	{
-		easyble.stopScan();
-		easyble.closeConnectedDevices();
+		evothings.easyble.stopScan();
+		evothings.easyble.closeConnectedDevices();
 	};
 
 	// Connect to an RFduino.
 	// Success callback: win(device)
 	// Error callback: fail(errorCode)
-	rfduinoble.connect = function(win, fail)
+	rfduinoble.connect = function(deviceName, win, fail)
 	{
-		easyble.startScan(
+		evothings.easyble.startScan(
 			function(device)
 			{
-				console.log("found device " + device.name);
-				if (device.name == "RFduino")
+				console.log("found device: " + device.name);
+				if (device.name == deviceName)
 				{
-					easyble.stopScan();
+					evothings.easyble.stopScan();
 					console.log("connectToDevice");
 					internal.connectToDevice(device, win, fail);
 				}

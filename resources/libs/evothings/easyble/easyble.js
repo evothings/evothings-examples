@@ -11,8 +11,10 @@
  * underscores.
  */
 
+if (!window.evothings) { window.evothings = {} }
+
 // Object that holds BLE data and functions.
-var easyble = (function()
+evothings.easyble = (function()
 {
 	/** Main object in the EasyBLE API. */
 	var easyble = {};
@@ -121,10 +123,15 @@ var easyble = (function()
 			evothings.ble.rssi(device.deviceHandle, win, fail);
 		};
 
-		/** Read all service info for the specified service UUIDs.
-		// If serviceUUIDs is null, info for all services is read
-		// (this can be time-consuming compared to reading a
-		// selected number of services). */
+		/**
+		 * Read all service info for the specified service UUIDs.
+		 * @param serviceUUIDs - array of UUID strings
+		 * @param win - success callback
+		 * @param fail - error callback
+		 * If serviceUUIDs is null, info for all services is read
+		 * (this can be time-consuming compared to reading a
+		 * selected number of services).
+		 */
 		device.readServices = function(serviceUUIDs, win, fail)
 		{
 			internal.readServices(device, serviceUUIDs, win, fail);
