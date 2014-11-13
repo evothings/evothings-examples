@@ -18,13 +18,14 @@
 		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
 	<title>Arduino BLE</title>
-	
+
 	<style>
 		@import 'ui/css/evothings-app.css';
 	</style>
 
 	<script>
-	if (window.hyper) { console.log = hyper.log; }
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
 
 	<script src="libs/jquery/jquery.js"></script>

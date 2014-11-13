@@ -55,16 +55,6 @@ var app =
 	initialize: function()
 	{
 		document.addEventListener('deviceready', app.onDeviceReady, false);
-
-		// Important reset BLE when page reloads/closes!
-		window.hyper && window.hyper.onReload(function()
-		{
-			evothings.ble.stopScan();
-			if (app.deviceHandle)
-			{
-				evothings.ble.close(app.deviceHandle);
-			}
-		});
 	},
 
 	// Called when device plugin functions are ready for use.

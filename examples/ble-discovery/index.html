@@ -26,21 +26,15 @@
 		<link rel="stylesheet" href="css/index.css" />
 		<title>BLE Discovery</title>
 		<script>
-			// Redirect console to Evothings Workbench.
-			if (window.hyper) { console.log = hyper.log; }
-
-			// Redirect errors to the console.
-			window.onerror = function(msg, url, line)
-			{
-				console.log(msg + ": " + url + ":" + line);
-			};
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) { console.log = hyper.log }
 		</script>
 		<script src="js/jquery.js"></script>
 		<script src="js/jquery.mobile-1.4.0-beta.1.js"></script>
 		<script src="cordova.js"></script>
 		<script src="js/index.js"></script>
 		<script>
-			app.initialize();
+		app.initialize();
 		</script>
 	</head>
 	<body>

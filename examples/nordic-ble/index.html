@@ -16,6 +16,11 @@ using BLE (Bluetooth Low Energy).
 		@import 'ui/css/evothings-app.css';
 	</style>
 
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
 	<script src="libs/evothings/easyble/easyble.js"></script>
@@ -54,8 +59,6 @@ using BLE (Bluetooth Low Energy).
 	<p id="data">Not connected...</p>
 
 	<script>
-	if (window.hyper && window.hyper.log) { console.log = window.hyper.log; }
-
 	console.log('Hello World!');
 
 	// Short name for Nordic BLE library.
@@ -135,12 +138,6 @@ using BLE (Bluetooth Low Energy).
 				app.showMessage('Connect error: ' + errorCode + '.');
 			});
 	};
-
-	// Important to reset BLE when page reloads!
-	window.hyper && window.hyper.onReload(function()
-	{
-		nordicble.close();
-	});
 
 	document.addEventListener('deviceready', app.onDeviceReady, false);
 	</script>

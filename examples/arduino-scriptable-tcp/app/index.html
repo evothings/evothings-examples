@@ -18,6 +18,11 @@ WiFi shield for this example to work. See comment below in the code.
 		@import 'ui/css/evothings-app.css';
 	</style>
 
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
 	<script src="libs/evothings/arduinotcp/arduinotcp.js"></script>

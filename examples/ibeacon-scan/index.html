@@ -14,8 +14,8 @@
 	</style>
 
 	<script>
-		// Redirect console to EvoThings Workbench.
-		if (window.hyper) { console.log = hyper.log; }
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
 
 </head>

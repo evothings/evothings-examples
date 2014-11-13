@@ -43,6 +43,11 @@ RFduino from a PC or Mac.
 	}
 	</style>
 
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
 </head>
 
 <body>
@@ -89,9 +94,6 @@ RFduino from a PC or Mac.
 	<script src="libs/evothings/rfduinoble/rfduinoble.js"></script>
 
 	<script>
-	// hyper.log is used for debugging with Evothings Workbench.
-	if (window.hyper && window.hyper.log) { console.log = window.hyper.log; }
-
 	// Short name for RFduino BLE library.
 	var rfduinoble = evothings.rfduinoble;
 

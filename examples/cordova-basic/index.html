@@ -14,9 +14,10 @@
 	</style>
 
 	<script>
-	// Redirect console to Evothings Workbench.
-	if (window.hyper) { console.log = hyper.log; }
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
+
 	<script src="cordova.js"></script>
 	<script src="libs/jquery/jquery.js"></script>
 	<script src="app.js"></script>

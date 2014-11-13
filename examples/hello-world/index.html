@@ -13,6 +13,11 @@
 		@import 'ui/css/evothings-app.css';
 	</style>
 
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
 </head>
 
 <body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
@@ -31,7 +36,7 @@
 
 	<p>The purpose of this example is to demonstrate the simple development
 	workflow enabled by Evothings Workbench.</p>
-	
+
 	<ol>
 		<li>Press the "Code" button in the Workbench window to see the source
 			file of this example app.</li>

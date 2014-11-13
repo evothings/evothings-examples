@@ -33,9 +33,10 @@
 	</style>
 
 	<script>
-	// Redirect console.log to Evothings Workbench if available.
-	if (window.hyper && window.hyper.log) { console.log = hyper.log; }
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
+
 	<script src="cordova.js"></script>
 	<script src="libs/evothings/util/util.js"></script>
 	<script src="libs/evothings/easyble/easyble.js"></script>
@@ -55,16 +56,16 @@
 
 	<p style="font-weight:bold;">
 		This example works with SensorTag firmware version 1.5 and above.
-		Current firmware version is: <span id="FirmwareData">[Waiting for value]</span></p>
+		Current firmware version: <span id="FirmwareData">?</span></p>
 
 	<div class="SensorData">Status: <span id="StatusData">Ready to connect</span></div>
-	<div class="SensorData">Keypress: <br/><span id="KeypressData">[Waiting for value]</span></div>
-	<div class="SensorData">IRTemperature:<br/><span id="IRTemperatureData">[Waiting for value]</span></div>
-	<div class="SensorData">Accelerometer:<br/><span id="AccelerometerData">[Waiting for value]</span></div>
-	<div class="SensorData">Humidity:<br/><span id="HumidityData">[Waiting for value]</span></div>
-	<div class="SensorData"">Magnetometer:<br/><span id="MagnetometerData">[Waiting for value]</span></div>
-	<div class="SensorData">Barometer:<br/><span id="BarometerData">[Waiting for value]</span></div>
-	<div class="SensorData">Gyroscope:<br/><span id="GyroscopeData">[Waiting for value]</span></div>
+	<div class="SensorData">Keypress: <br/><span id="KeypressData">?</span></div>
+	<div class="SensorData">IRTemperature:<br/><span id="IRTemperatureData">?</span></div>
+	<div class="SensorData">Accelerometer:<br/><span id="AccelerometerData">?</span></div>
+	<div class="SensorData">Humidity:<br/><span id="HumidityData">?</span></div>
+	<div class="SensorData"">Magnetometer:<br/><span id="MagnetometerData">?</span></div>
+	<div class="SensorData">Barometer:<br/><span id="BarometerData">?</span></div>
+	<div class="SensorData">Gyroscope:<br/><span id="GyroscopeData">?</span></div>
 
 	<script>
 	// SensorTag object.
@@ -112,6 +113,20 @@
 		console.log('Error: ' + error)
 		if ('disconnected' == error)
 		{
+			// Clear current values.
+			var blank = '?'
+			displayValue('StatusData', 'Scanning...')
+			displayValue('KeypressData', blank)
+			displayValue('IRTemperatureData', blank)
+			displayValue('AccelerometerData', blank)
+			displayValue('HumidityData', blank)
+			displayValue('MagnetometerData', blank)
+			displayValue('BarometerData', blank)
+			displayValue('GyroscopeData', blank)
+
+			// Reset screen color.
+			setBackgroundColor('white')
+
 			// If disconneted attempt to connect again.
 			setTimeout(
 				function() { sensortag.connectToClosestDevice() },
@@ -124,13 +139,6 @@
 
 	function keypressHandler(data)
 	{
-		// Helper function.
-		function setBackgroundColor(color)
-		{
-			document.documentElement.style.background = color
-			document.body.style.background = color
-		}
-
 		// Update background color.
 		switch (data[0])
 		{
@@ -269,6 +277,12 @@
 	function displayValue(elementId, value)
 	{
 		document.getElementById(elementId).innerHTML = value
+	}
+
+	function setBackgroundColor(color)
+	{
+		document.documentElement.style.background = color
+		document.body.style.background = color
 	}
 
 	/**

@@ -14,19 +14,20 @@ for this example to work. See comment below in the code.
 
 	<title>Philips Hue Demo</title>
 
-	<script>
-	// Redirect console to Evothings Workbench.
-	if (window.hyper) { console.log = hyper.log; }
-	</script>
-	<script src="libs/jquery/jquery.js"></script>
-	<script src="app.js"></script>
-
 	<style>
 	@import 'ui/css/evothings-app.css';
 	button, input, p {
 		margin: 10px 0px 10px 0px;
 	}
 	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="app.js"></script>
 
 </head>
 
@@ -107,7 +108,7 @@ for this example to work. See comment below in the code.
 	<h2>On or off</h2>
 
 	<button class="charcoal" onclick="app.lightOn()">Light On</button>
-	
+
 	<button class="charcoal" onclick="app.lightOff()">Light Off</button>
 
 </body>
