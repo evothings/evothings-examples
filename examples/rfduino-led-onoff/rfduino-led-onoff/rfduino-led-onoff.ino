@@ -18,19 +18,18 @@
 //#define BUTTON_A_INPUT_PIN 5
 //#define BUTTON_B_INPUT_PIN 6
 
-
 // This function is called only once, at reset.
 void setup()
 {
-	// Enable outputs.
-	pinMode(RED_LED_PIN, OUTPUT);
-	pinMode(GREEN_LED_PIN, OUTPUT);
-	pinMode(BLUE_LED_PIN, OUTPUT);
-
 	// Enable serial debug.
 	Serial.begin(9600);
 	Serial.println("RFduino example started");
 	Serial.println("Serial rate set to 9600 baud");
+
+	// Enable outputs.
+	pinMode(RED_LED_PIN, OUTPUT);
+	pinMode(GREEN_LED_PIN, OUTPUT);
+	pinMode(BLUE_LED_PIN, OUTPUT);
 
 	// Turn Off all LEDs initially
 	digitalWrite(RED_LED_PIN, LOW);

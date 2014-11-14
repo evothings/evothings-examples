@@ -13,12 +13,12 @@
 
 // This function is called only once, at reset.
 void setup() {
-	// Enable output.
-	pinMode(LED_PIN, OUTPUT);
-
 	// Enable serial debug.
 	Serial.begin(9600);
 	Serial.println("Hello world!");
+
+	// Enable output.
+	pinMode(LED_PIN, OUTPUT);
 
 	// Turn off LED.
 	digitalWrite(LED_PIN, LOW);

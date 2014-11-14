@@ -59,13 +59,13 @@
 		Current firmware version: <span id="FirmwareData">?</span></p>
 
 	<div class="SensorData">Status: <span id="StatusData">Ready to connect</span></div>
-	<div class="SensorData">Keypress: <br/><span id="KeypressData">?</span></div>
-	<div class="SensorData">IRTemperature:<br/><span id="IRTemperatureData">?</span></div>
-	<div class="SensorData">Accelerometer:<br/><span id="AccelerometerData">?</span></div>
-	<div class="SensorData">Humidity:<br/><span id="HumidityData">?</span></div>
-	<div class="SensorData"">Magnetometer:<br/><span id="MagnetometerData">?</span></div>
-	<div class="SensorData">Barometer:<br/><span id="BarometerData">?</span></div>
-	<div class="SensorData">Gyroscope:<br/><span id="GyroscopeData">?</span></div>
+	<div class="SensorData">Keypress: <br/><span id="KeypressData">[Waiting for value]</span></div>
+	<div class="SensorData">IRTemperature:<br/><span id="IRTemperatureData">[Waiting for value]</span></div>
+	<div class="SensorData">Accelerometer:<br/><span id="AccelerometerData">[Waiting for value]</span></div>
+	<div class="SensorData">Humidity:<br/><span id="HumidityData">[Waiting for value]</span></div>
+	<div class="SensorData"">Magnetometer:<br/><span id="MagnetometerData">[Waiting for value]</span></div>
+	<div class="SensorData">Barometer:<br/><span id="BarometerData">[Waiting for value]</span></div>
+	<div class="SensorData">Gyroscope:<br/><span id="GyroscopeData">[Waiting for value]</span></div>
 
 	<script>
 	// SensorTag object.
@@ -114,8 +114,9 @@
 		if ('disconnected' == error)
 		{
 			// Clear current values.
-			var blank = '?'
-			displayValue('StatusData', 'Scanning...')
+			var blank = '[Waiting for value]'
+			displayValue('StatusData', 'Ready to connect')
+			displayValue('FirmwareData', '?')
 			displayValue('KeypressData', blank)
 			displayValue('IRTemperatureData', blank)
 			displayValue('AccelerometerData', blank)

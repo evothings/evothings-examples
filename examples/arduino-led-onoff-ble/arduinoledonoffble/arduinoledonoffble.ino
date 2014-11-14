@@ -14,13 +14,13 @@
 // This function is called only once, at reset.
 void setup()
 {
-	// Enable output.
-	pinMode(LED_PIN, OUTPUT);
-
 	// Enable serial debug.
 	Serial.begin(9600);
 	Serial.println("Arduino EasyBLE example started");
 	Serial.println("Serial rate set to 9600");
+
+	// Enable output.
+	pinMode(LED_PIN, OUTPUT);
 
 	// Turn off LED.
 	digitalWrite(LED_PIN, LOW);

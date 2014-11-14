@@ -72,6 +72,14 @@ EthernetServer server(3300);
 
 void setup()
 {
+	// Start serial communication with the given baud rate.
+	// NOTE: Remember to set the baud rate in the Serial
+	// monitor to the same value.
+	Serial.begin(9600);
+
+	// Wait for serial port to connect. Needed for Leonardo only.
+	while (!Serial) { ; }
+
 	// Initialize the Ethernet shield.
 	// If you entered fixed ipaddress info, gateway, subnet mask,
 	// then uncommment the next line.
@@ -88,14 +96,6 @@ void setup()
 		while(true) ;
 	}
 	// dhcp test end
-
-	// Start serial communication with the given baud rate.
-	// NOTE: Remember to set the baud rate in the Serial
-	// monitor to the same value.
-	Serial.begin(9600);
-
-	// Wait for serial port to connect. Needed for Leonardo only.
-	while (!Serial) { ; }
 
 	// Start the server.
 	server.begin();
