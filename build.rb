@@ -142,6 +142,7 @@ def copyJQuery(destPath)
 end
 
 def copyEasyBLE(destPath)
+	copyUtil(destPath)
 	copyDir('resources/libs/evothings/easyble', destPath + '/libs/evothings')
 end
 

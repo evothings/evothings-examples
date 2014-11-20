@@ -20,6 +20,10 @@ Please note that you must use a BLE shield for this example to work.
 	<script>
 	// Redirect console.log to Evothings Workbench.
 	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	window.onerror = function(msg, url, line)
+	{
+		console.log(msg + ": " + url + ":" + line);
+	};
 	</script>
 
 	<script src="cordova.js"></script>

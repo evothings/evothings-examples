@@ -11,6 +11,28 @@
  * underscores.
  */
 
+function loadScript(url, callback)
+{
+	// Create an unbound script tag.
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = url;
+
+	// Then bind the event to the callback function.
+	// There are several events for cross-browser compatibility.
+	document.onreadystatechange = callback;
+	script.onload = callback;
+
+	// Bind the script tag to the head tag.
+	var head = document.getElementsByTagName('head')[0];
+	head.appendChild(script);
+}
+loadScript("libs/evothings/util/util.js", function() {
+});
+
+var base64 = cordova.require('cordova/base64');
+
+
 if (!window.evothings) { window.evothings = {} }
 
 // Object that holds BLE data and functions.
@@ -25,6 +47,8 @@ evothings.easyble = (function()
 	 */
 	var reportDeviceOnce = false;
 
+	var serviceFilter = false;
+
 	/** Internal properties and functions. */
 	var internal = {};
 
@@ -38,12 +62,23 @@ evothings.easyble = (function()
 	internal.connectedDevices = {};
 
 	/**
-	 * Set to true to report found devices only once,
-	 * set to false to report continuously.
+	 * Set to true to report found devices only once.
+	 * Set to false to report continuously.
+	 * The default is to report continously.
 	 */
 	easyble.reportDeviceOnce = function(reportOnce)
 	{
 		reportDeviceOnce = reportOnce;
+	};
+
+	/**
+	* Set to an Array of UUID strings to enable filtering of devices found by startScan().
+	* Set to false to disable filtering.
+	* The default is to not filter.
+	* An empty array will cause no devices to be reported.
+	*/
+	easyble.filterDevicesByService = function(services) {
+		serviceFilter = services;
 	};
 
 	/** Start scanning for devices. */
@@ -53,6 +88,14 @@ evothings.easyble = (function()
 		internal.knownDevices = {};
 		evothings.ble.startScan(function(device)
 		{
+			// Ensure we have advertisementData.
+			internal.ensureAdvertisementData(device);
+
+			// Check if the device matches the filter, if we have a filter.
+			if(!internal.deviceMatchesServiceFilter(device)) {
+				return;
+			}
+
 			// Check if we already have got the device.
 			var existingDevice = internal.knownDevices[device.address]
 			if (existingDevice)
@@ -63,6 +106,8 @@ evothings.easyble = (function()
 				// Flag not set, report device again.
 				existingDevice.rssi = device.rssi;
 				existingDevice.name = device.name;
+				existingDevice.scanRecord = device.scanRecord;
+				existingDevice.advertisementData = device.advertisementData;
 				win(existingDevice);
 				return;
 			}
@@ -98,6 +143,151 @@ evothings.easyble = (function()
 			internal.connectedDevices[key] = null;
 		}
 	};
+
+	/**
+	* If device has advertisementData, does nothing.
+	* If device instead has scanRecord, creates advertisementData.
+	* See ble.js for AdvertisementData reference.
+	*/
+	internal.ensureAdvertisementData = function(device) {
+		if(device.advertisementData) {
+			//console.log("iOS ad: "+JSON.stringify(device.advertisementData));
+			return;
+		}
+		if(!device.scanRecord) { return; }
+
+		// Here we parse BLE/GAP Scan Response Data.
+		// See the Bluetooth Specification, v4.0, Volume 3, Part C, Section 11,
+		// for details.
+
+		var byteArray = evothings.util.base64DecToArr(device.scanRecord);
+		var pos = 0;
+		var advertisementData = {};
+		var serviceUUIDs;
+		var serviceData;
+		// The scan record is a list of structures.
+		// Each structure has a length byte, a type byte, and (length-1) data bytes.
+		// The format of the data bytes depends on the type.
+		// Malformed scanRecords will likely cause an exception in this function.
+		while(pos < byteArray.length) {
+			var length = byteArray[pos++];
+			if(length == 0) {
+				break;
+			}
+			length -= 1;
+			var type = byteArray[pos++];
+
+			// Parse types we know and care about.
+			// Skip other types.
+
+			var BLUETOOTH_BASE_UUID = '-0000-1000-8000-00805f9b34fb'
+
+			// Convert 16-byte Uint8Array to RFC-4122-formatted UUID.
+			function arrayToUUID(array) {
+				var k=0;
+				var string = '';
+				var UUID_format = [4, 2, 2, 2, 6];
+				for(var l=0; l<UUID_format.length; l++) {
+					if(l != 0) {
+						string += '-';
+					}
+					for(var j=0; j<UUID_format[l]; j++, k++) {
+						string += evothings.util.toHexString(array[k], 1);
+					}
+				}
+				return string;
+			}
+
+			if(type == 0x02 || type == 0x03) {	// 16-bit Service Class UUIDs.
+				var data = new Uint16Array(byteArray.buffer, pos, length);
+				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
+				for(var i=0; i<length; i+=2) {
+					serviceUUIDs.push('0000'+evothings.util.toHexString(
+						evothings.util.littleEndianToUint16(byteArray, pos + i), 2)+BLUETOOTH_BASE_UUID);
+				}
+			}
+			if(type == 0x04 || type == 0x05) {	// 32-bit Service Class UUIDs.
+				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
+				for(var i=0; i<length; i+=4) {
+					serviceUUIDs.push(evothings.util.toHexString(
+						evothings.util.littleEndianToUint32(byteArray, pos + i), 4)+BLUETOOTH_BASE_UUID);
+				}
+			}
+			if(type == 0x06 || type == 0x07) {	// 128-bit Service Class UUIDs.
+				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
+				for(var i=0; i<length; i+=16) {
+					serviceUUIDs.push(arrayToUUID(new Uint8Array(byteArray.buffer, pos + i, 16)));
+				}
+			}
+			if(type == 0x08 || type == 0x09) {	// Local Name.
+				advertisementData.kCBAdvDataLocalName = evothings.ble.fromUtf8(new Uint8Array(byteArray.buffer, pos, length));
+			}
+			if(type == 0x0a) {	// TX Power Level.
+				advertisementData.kCBAdvDataTxPowerLevel = (new Int8Array(byteArray.buffer, pos, 1))[0];
+			}
+			if(type == 0x16) {	// Service Data, 16-bit UUID.
+				serviceData = serviceData ? serviceData : {};
+				var uuid = '0000'+evothings.util.toHexString(evothings.util.littleEndianToUint16(byteArray, pos), 2)+BLUETOOTH_BASE_UUID;
+				var data = new Uint8Array(byteArray.buffer, pos+2, length-2);
+				serviceData[uuid] = base64.fromArrayBuffer(data);
+			}
+			if(type == 0x20) {	// Service Data, 32-bit UUID.
+				serviceData = serviceData ? serviceData : {};
+				var uuid = evothings.util.toHexString(evothings.util.littleEndianToUint32(byteArray, pos), 4)+BLUETOOTH_BASE_UUID;
+				var data = new Uint8Array(byteArray.buffer, pos+4, length-4);
+				serviceData[uuid] = base64.fromArrayBuffer(data);
+			}
+			if(type == 0x21) {	// Service Data, 128-bit UUID.
+				serviceData = serviceData ? serviceData : {};
+				var uuid = arrayToUUID(new Uint8Array(byteArray.buffer, pos, 16));
+				var data = new Uint8Array(byteArray.buffer, pos+16, length-16);
+				serviceData[uuid] = base64.fromArrayBuffer(data);
+			}
+			if(type == 0xff) {	// Manufacturer-specific Data.
+				// Annoying to have to transform base64 back and forth, but it has to be done in order to maintain the API.
+				advertisementData.kCBAdvDataManufacturerData = base64.fromArrayBuffer(new Uint8Array(byteArray.buffer, pos, length));
+			}
+
+			pos += length;
+		}
+		advertisementData.kCBAdvDataServiceUUIDs = serviceUUIDs;
+		advertisementData.kCBAdvDataServiceData = serviceData;
+		device.advertisementData = advertisementData;
+
+		/*
+		// Log raw data for debugging purposes.
+		var srs = ''
+		for(var i=0; i<byteArray.length; i++) {
+			srs += evothings.util.toHexString(byteArray[i], 1);
+		}
+		console.log("scanRecord: "+srs);
+
+		console.log(JSON.stringify(advertisementData));
+		*/
+	}
+
+	/**
+	* Returns true if the device matches the serviceFilter, or if there is no filter.
+	* Returns false otherwise.
+	*/
+	internal.deviceMatchesServiceFilter = function(device) {
+		if(!serviceFilter) {
+			return true;
+		}
+		var ad = device.advertisementData;
+		if(ad) {
+			if(ad.kCBAdvDataServiceUUIDs) {
+				for(var i in ad) {
+					for(var j in serviceFilter) {
+						if(ad[i].toLowerCase() == serviceFilter[j].toLowerCase()) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Add functions to the device object to allow calling them
