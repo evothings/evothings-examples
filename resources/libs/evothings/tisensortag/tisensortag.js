@@ -8,6 +8,8 @@
 // http://processors.wiki.ti.com/index.php/SensorTag_User_Guide
 // http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
 
+evothings.loadScript('libs/evothings/easyble/easyble.js')
+
 if (!window.evothings) { window.evothings = {} }
 evothings.tisensortag = (function()
 {

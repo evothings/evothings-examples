@@ -6,6 +6,8 @@ Apps in folder 'experiments' are under development and are not guaranteed to wor
 
 Note that CSS and library files shared across apps are in folder 'resources'. The Ruby script 'build.rb' copies the relevant files to the example folders. The example apps won't work unless you first run this script. The examples included with Evothings Studio are already pre-built.
 
+To remove files copied by 'build.rb', run 'git clean -fdX'.
+
 Download Evothings Studio at: [http://evothings.com](http://evothings.com)
 
 It is fast and fun to get started!

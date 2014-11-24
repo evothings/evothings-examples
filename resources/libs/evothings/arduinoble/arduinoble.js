@@ -27,6 +27,8 @@ Example of use:
 
 // Object that exposes the Arduino BLE API.
 
+evothings.loadScript('libs/evothings/easyble/easyble.js')
+
 if (!window.evothings) { window.evothings = {} }
 evothings.arduinoble = (function()
 {

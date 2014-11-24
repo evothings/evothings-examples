@@ -6,6 +6,8 @@ Description: Functions for communicating with an RFduino.
 
 // Object that exposes the RFduino BLE API.
 
+evothings.loadScript('libs/evothings/easyble/easyble.js')
+
 if (!window.evothings) { window.evothings = {} }
 evothings.rfduinoble = (function()
 {

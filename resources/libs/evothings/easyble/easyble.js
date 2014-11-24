@@ -11,29 +11,11 @@
  * underscores.
  */
 
-function loadScript(url, callback)
-{
-	// Create an unbound script tag.
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.src = url;
-
-	// Then bind the event to the callback function.
-	// There are several events for cross-browser compatibility.
-	document.onreadystatechange = callback;
-	script.onload = callback;
-
-	// Bind the script tag to the head tag.
-	var head = document.getElementsByTagName('head')[0];
-	head.appendChild(script);
-}
-loadScript("libs/evothings/util/util.js", function() {
-});
+evothings.loadScript('libs/evothings/util/util.js');
 
 var base64 = cordova.require('cordova/base64');
 
-
-if (!window.evothings) { window.evothings = {} }
+if (!window.evothings) { window.evothings = {}; }
 
 // Object that holds BLE data and functions.
 evothings.easyble = (function()

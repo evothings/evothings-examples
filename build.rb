@@ -35,7 +35,6 @@ def buildArduinoLEDOnOffBLE
 	destPath = 'examples/arduino-led-onoff-ble/app'
 	copyUI(destPath)
 	copyJQuery(destPath)
-	copyEasyBLE(destPath)
 	copyArduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
 end
@@ -85,7 +84,6 @@ def buildTISensorTagSensors
 	destPath = 'examples/ti-sensortag-sensors'
 	copyUI(destPath)
 	copyUtil(destPath)
-	copyEasyBLE(destPath)
 	copyTISensorTag(destPath)
 end
 
@@ -116,7 +114,6 @@ def buildNordicBLE
 	destPath = 'examples/nordic-ble'
 	copyUI(destPath)
 	copyJQuery(destPath)
-	copyEasyBLE(destPath)
 	copyNordicBLE(destPath)
 end
 
@@ -124,7 +121,6 @@ def buildRFduinoLEDOnOff
 	destPath = 'examples/rfduino-led-onoff/app'
 	copyUI(destPath)
 	copyJQuery(destPath)
-	copyEasyBLE(destPath)
 	copyRFduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
 end
@@ -141,12 +137,18 @@ def copyJQuery(destPath)
 	copyDir('resources/libs/jquery', destPath + '/libs')
 end
 
+def copyEvothings(destPath)
+	copyDir('resources/libs/evothings/evothings.js', destPath + '/libs/evothings')
+end
+
 def copyEasyBLE(destPath)
+	copyEvothings(destPath)
 	copyUtil(destPath)
 	copyDir('resources/libs/evothings/easyble', destPath + '/libs/evothings')
 end
 
 def copyArduinoBLE(destPath)
+	copyEasyBLE(destPath)
 	copyDir('resources/libs/evothings/arduinoble', destPath + '/libs/evothings')
 end
 
@@ -155,14 +157,17 @@ def copyArduinoTCP(destPath)
 end
 
 def copyNordicBLE(destPath)
+	copyEasyBLE(destPath)
 	copyDir('resources/libs/evothings/nordicble', destPath + '/libs/evothings')
 end
 
 def copyRFduinoBLE(destPath)
+	copyEasyBLE(destPath)
 	copyDir('resources/libs/evothings/rfduinoble', destPath + '/libs/evothings')
 end
 
 def copyTISensorTag(destPath)
+	copyEasyBLE(destPath)
 	copyDir('resources/libs/evothings/tisensortag', destPath + '/libs/evothings')
 end
 

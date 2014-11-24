@@ -22,6 +22,8 @@ Example of use:
          });
 */
 
+evothings.loadScript('libs/evothings/easyble/easyble.js')
+
 // Object that exposes the Nordic BLE API.
 if (!window.evothings) { window.evothings = {} }
 evothings.nordicble = (function()
