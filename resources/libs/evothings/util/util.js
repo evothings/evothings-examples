@@ -11,7 +11,7 @@ evothings.util = (function()
 	funs.littleEndianToInt8 = function(data, offset)
 	{
 		var x = funs.littleEndianToUint8(data, offset)
-		if (x & 0x80) x = (~x & 0xff) - 1
+		if (x & 0x80) x = x - 256
 		return x
 	}
 
