@@ -450,11 +450,10 @@ ul.dynamic li {
 	box-shadow: inset 0 -7px 12px -12px #000;
 
 	background-color: #f3f3f3;
-	/* TODO: Image is missing.
-	background-image: url('gfx/arrow_right_with_margin.svg');
-	*/
-	background-position: right center;
-	background-size: 10% auto;
+	background-image: url('../images/arrow-right.svg');
+	background-position: 94% center; /* CSS 2 fallback */
+	background-position: right 5% center; /* requires CSS 3 */
+	background-size: 1em auto;
 	background-repeat: no-repeat;
 }
 ul.dynamic li:last-child {
