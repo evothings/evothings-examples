@@ -92,3 +92,13 @@ var evothings = (function(evothings)
 
 // If for some reason the global evothings variable is already defined we use it.
 })(window.evothings || {});
+
+window.addEventListener('DOMContentLoaded', function(e) {
+	/* Set an absolute base font size in iOS 7 due to that viewport-relative
+	font sizes doesn't work properly caused by the WebKit bug described at
+	https://bugs.webkit.org/show_bug.cgi?id=131863. */
+	if (/iP(hone|ad|od).*OS 7/.test(navigator.userAgent))
+	{
+		document.body.style.fontSize = '20pt'
+	}
+})
