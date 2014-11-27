@@ -165,7 +165,7 @@ evothings.easyble = (function()
 			var BLUETOOTH_BASE_UUID = '-0000-1000-8000-00805f9b34fb'
 
 			// Convert 16-byte Uint8Array to RFC-4122-formatted UUID.
-			function arrayToUUID(array) {
+			function arrayToUUID(array, offset) {
 				var k=0;
 				var string = '';
 				var UUID_format = [4, 2, 2, 2, 6];
@@ -174,14 +174,13 @@ evothings.easyble = (function()
 						string += '-';
 					}
 					for(var j=0; j<UUID_format[l]; j++, k++) {
-						string += evothings.util.toHexString(array[k], 1);
+						string += evothings.util.toHexString(array[offset+k], 1);
 					}
 				}
 				return string;
 			}
 
 			if(type == 0x02 || type == 0x03) {	// 16-bit Service Class UUIDs.
-				var data = new Uint16Array(byteArray.buffer, pos, length);
 				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
 				for(var i=0; i<length; i+=2) {
 					serviceUUIDs.push('0000'+evothings.util.toHexString(
@@ -198,14 +197,14 @@ evothings.easyble = (function()
 			if(type == 0x06 || type == 0x07) {	// 128-bit Service Class UUIDs.
 				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
 				for(var i=0; i<length; i+=16) {
-					serviceUUIDs.push(arrayToUUID(new Uint8Array(byteArray.buffer, pos + i, 16)));
+					serviceUUIDs.push(arrayToUUID(byteArray, pos + i));
 				}
 			}
 			if(type == 0x08 || type == 0x09) {	// Local Name.
 				advertisementData.kCBAdvDataLocalName = evothings.ble.fromUtf8(new Uint8Array(byteArray.buffer, pos, length));
 			}
 			if(type == 0x0a) {	// TX Power Level.
-				advertisementData.kCBAdvDataTxPowerLevel = (new Int8Array(byteArray.buffer, pos, 1))[0];
+				advertisementData.kCBAdvDataTxPowerLevel = evothings.util.littleEndianToInt8(byteArray, pos);
 			}
 			if(type == 0x16) {	// Service Data, 16-bit UUID.
 				serviceData = serviceData ? serviceData : {};
@@ -221,7 +220,7 @@ evothings.easyble = (function()
 			}
 			if(type == 0x21) {	// Service Data, 128-bit UUID.
 				serviceData = serviceData ? serviceData : {};
-				var uuid = arrayToUUID(new Uint8Array(byteArray.buffer, pos, 16));
+				var uuid = arrayToUUID(byteArray, pos);
 				var data = new Uint8Array(byteArray.buffer, pos+16, length-16);
 				serviceData[uuid] = base64.fromArrayBuffer(data);
 			}
