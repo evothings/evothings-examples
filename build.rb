@@ -12,7 +12,7 @@ include FileUtils::Verbose
 
 def buildArduinoBLE
 	destPath = 'examples/arduino-ble/app'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyWhereIsTheArduinoCode(destPath)
 end
@@ -20,7 +20,7 @@ end
 def buildArduinoInputTCP
 	# Copy CSS/JS files.
 	destPath = 'examples/arduino-input-tcp/app'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -33,7 +33,7 @@ end
 
 def buildArduinoLEDOnOffBLE
 	destPath = 'examples/arduino-led-onoff-ble/app'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -42,7 +42,7 @@ end
 def buildArduinoLEDOnOffTCP
 	# Copy CSS/JS files.
 	destPath = 'examples/arduino-led-onoff-tcp/app'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -56,7 +56,7 @@ end
 def buildArduinoScriptableTCP
 	# Copy CSS/JS files.
 	destPath = 'examples/arduino-scriptable-tcp/app'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -69,57 +69,57 @@ end
 
 def buildBLEScan
 	destPath = 'examples/ble-scan'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildTISensorTagDemo
 	destPath = 'examples/ti-sensortag-demo'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 end
 
 def buildTISensorTagSensors
 	destPath = 'examples/ti-sensortag-sensors'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
 end
 
 def buildCordovaBasic
 	destPath = 'examples/cordova-basic'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildHelloWorld
 	destPath = 'examples/hello-world'
-	copyUI(destPath)
+	copyCommon(destPath)
 end
 
 def buildHueLights
 	destPath = 'examples/hue-lights'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildIBeaconScan
 	destPath = 'examples/ibeacon-scan'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildNordicBLE
 	destPath = 'examples/nordic-ble'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyNordicBLE(destPath)
 end
 
 def buildRFduinoLEDOnOff
 	destPath = 'examples/rfduino-led-onoff/app'
-	copyUI(destPath)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyRFduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -128,6 +128,11 @@ end
 ###### Copy helpers ######
 
 ### CSS/JS ###
+
+def copyCommon(destPath)
+	copyUI(destPath)
+	copyEvothings(destPath)
+end
 
 def copyUI(destPath)
 	copyDir('resources/ui', destPath)
@@ -142,7 +147,6 @@ def copyEvothings(destPath)
 end
 
 def copyEasyBLE(destPath)
-	copyEvothings(destPath)
 	copyUtil(destPath)
 	copyDir('resources/libs/evothings/easyble', destPath + '/libs/evothings')
 end
