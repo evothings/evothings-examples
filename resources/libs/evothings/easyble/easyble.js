@@ -15,8 +15,6 @@ evothings.loadScript('libs/evothings/util/util.js');
 
 var base64 = cordova.require('cordova/base64');
 
-if (!window.evothings) { window.evothings = {}; }
-
 // Object that holds BLE data and functions.
 evothings.easyble = (function()
 {
@@ -59,7 +57,8 @@ evothings.easyble = (function()
 	* The default is to not filter.
 	* An empty array will cause no devices to be reported.
 	*/
-	easyble.filterDevicesByService = function(services) {
+	easyble.filterDevicesByService = function(services)
+	{
 		serviceFilter = services;
 	};
 
@@ -131,12 +130,14 @@ evothings.easyble = (function()
 	* If device instead has scanRecord, creates advertisementData.
 	* See ble.js for AdvertisementData reference.
 	*/
-	internal.ensureAdvertisementData = function(device) {
-		if(device.advertisementData) {
-			//console.log("iOS ad: "+JSON.stringify(device.advertisementData));
-			return;
-		}
-		if(!device.scanRecord) { return; }
+	internal.ensureAdvertisementData = function(device)
+	{
+		// If device object already has advertisementData we
+		// do not need to parse the scanRecord.
+		if (device.advertisementData) { return; }
+
+		// Must have scanRecord yo continue.
+		if (!device.scanRecord) { return; }
 
 		// Here we parse BLE/GAP Scan Response Data.
 		// See the Bluetooth Specification, v4.0, Volume 3, Part C, Section 11,
@@ -147,13 +148,16 @@ evothings.easyble = (function()
 		var advertisementData = {};
 		var serviceUUIDs;
 		var serviceData;
+
 		// The scan record is a list of structures.
 		// Each structure has a length byte, a type byte, and (length-1) data bytes.
 		// The format of the data bytes depends on the type.
 		// Malformed scanRecords will likely cause an exception in this function.
-		while(pos < byteArray.length) {
+		while (pos < byteArray.length)
+		{
 			var length = byteArray[pos++];
-			if(length == 0) {
+			if (length == 0)
+			{
 				break;
 			}
 			length -= 1;
@@ -165,68 +169,104 @@ evothings.easyble = (function()
 			var BLUETOOTH_BASE_UUID = '-0000-1000-8000-00805f9b34fb'
 
 			// Convert 16-byte Uint8Array to RFC-4122-formatted UUID.
-			function arrayToUUID(array, offset) {
+			function arrayToUUID(array, offset)
+			{
 				var k=0;
 				var string = '';
 				var UUID_format = [4, 2, 2, 2, 6];
-				for(var l=0; l<UUID_format.length; l++) {
-					if(l != 0) {
+				for (var l=0; l<UUID_format.length; l++)
+				{
+					if (l != 0)
+					{
 						string += '-';
 					}
-					for(var j=0; j<UUID_format[l]; j++, k++) {
+					for (var j=0; j<UUID_format[l]; j++, k++)
+					{
 						string += evothings.util.toHexString(array[offset+k], 1);
 					}
 				}
 				return string;
 			}
 
-			if(type == 0x02 || type == 0x03) {	// 16-bit Service Class UUIDs.
+			if (type == 0x02 || type == 0x03) // 16-bit Service Class UUIDs.
+			{
 				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
-				for(var i=0; i<length; i+=2) {
-					serviceUUIDs.push('0000'+evothings.util.toHexString(
-						evothings.util.littleEndianToUint16(byteArray, pos + i), 2)+BLUETOOTH_BASE_UUID);
+				for(var i=0; i<length; i+=2)
+				{
+					serviceUUIDs.push(
+						'0000' +
+						evothings.util.toHexString(
+							evothings.util.littleEndianToUint16(byteArray, pos + i),
+							2) +
+						BLUETOOTH_BASE_UUID);
 				}
 			}
-			if(type == 0x04 || type == 0x05) {	// 32-bit Service Class UUIDs.
+			if (type == 0x04 || type == 0x05) // 32-bit Service Class UUIDs.
+			{
 				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
-				for(var i=0; i<length; i+=4) {
-					serviceUUIDs.push(evothings.util.toHexString(
-						evothings.util.littleEndianToUint32(byteArray, pos + i), 4)+BLUETOOTH_BASE_UUID);
+				for (var i=0; i<length; i+=4)
+				{
+					serviceUUIDs.push(
+						evothings.util.toHexString(
+							evothings.util.littleEndianToUint32(byteArray, pos + i),
+							4) +
+						BLUETOOTH_BASE_UUID);
 				}
 			}
-			if(type == 0x06 || type == 0x07) {	// 128-bit Service Class UUIDs.
+			if (type == 0x06 || type == 0x07) // 128-bit Service Class UUIDs.
+			{
 				serviceUUIDs = serviceUUIDs ? serviceUUIDs : [];
-				for(var i=0; i<length; i+=16) {
+				for (var i=0; i<length; i+=16)
+				{
 					serviceUUIDs.push(arrayToUUID(byteArray, pos + i));
 				}
 			}
-			if(type == 0x08 || type == 0x09) {	// Local Name.
-				advertisementData.kCBAdvDataLocalName = evothings.ble.fromUtf8(new Uint8Array(byteArray.buffer, pos, length));
+			if (type == 0x08 || type == 0x09) // Local Name.
+			{
+				advertisementData.kCBAdvDataLocalName = evothings.ble.fromUtf8(
+					new Uint8Array(byteArray.buffer, pos, length));
 			}
-			if(type == 0x0a) {	// TX Power Level.
-				advertisementData.kCBAdvDataTxPowerLevel = evothings.util.littleEndianToInt8(byteArray, pos);
+			if (type == 0x0a) // TX Power Level.
+			{
+				advertisementData.kCBAdvDataTxPowerLevel =
+					evothings.util.littleEndianToInt8(byteArray, pos);
 			}
-			if(type == 0x16) {	// Service Data, 16-bit UUID.
+			if (type == 0x16) // Service Data, 16-bit UUID.
+			{
 				serviceData = serviceData ? serviceData : {};
-				var uuid = '0000'+evothings.util.toHexString(evothings.util.littleEndianToUint16(byteArray, pos), 2)+BLUETOOTH_BASE_UUID;
+				var uuid =
+					'0000' +
+					evothings.util.toHexString(
+						evothings.util.littleEndianToUint16(byteArray, pos),
+						2) +
+					BLUETOOTH_BASE_UUID;
 				var data = new Uint8Array(byteArray.buffer, pos+2, length-2);
 				serviceData[uuid] = base64.fromArrayBuffer(data);
 			}
-			if(type == 0x20) {	// Service Data, 32-bit UUID.
+			if (type == 0x20) // Service Data, 32-bit UUID.
+			{
 				serviceData = serviceData ? serviceData : {};
-				var uuid = evothings.util.toHexString(evothings.util.littleEndianToUint32(byteArray, pos), 4)+BLUETOOTH_BASE_UUID;
+				var uuid =
+					evothings.util.toHexString(
+						evothings.util.littleEndianToUint32(byteArray, pos),
+						4) +
+					BLUETOOTH_BASE_UUID;
 				var data = new Uint8Array(byteArray.buffer, pos+4, length-4);
 				serviceData[uuid] = base64.fromArrayBuffer(data);
 			}
-			if(type == 0x21) {	// Service Data, 128-bit UUID.
+			if (type == 0x21) // Service Data, 128-bit UUID.
+			{
 				serviceData = serviceData ? serviceData : {};
 				var uuid = arrayToUUID(byteArray, pos);
 				var data = new Uint8Array(byteArray.buffer, pos+16, length-16);
 				serviceData[uuid] = base64.fromArrayBuffer(data);
 			}
-			if(type == 0xff) {	// Manufacturer-specific Data.
-				// Annoying to have to transform base64 back and forth, but it has to be done in order to maintain the API.
-				advertisementData.kCBAdvDataManufacturerData = base64.fromArrayBuffer(new Uint8Array(byteArray.buffer, pos, length));
+			if (type == 0xff) // Manufacturer-specific Data.
+			{
+				// Annoying to have to transform base64 back and forth,
+				// but it has to be done in order to maintain the API.
+				advertisementData.kCBAdvDataManufacturerData =
+					base64.fromArrayBuffer(new Uint8Array(byteArray.buffer, pos, length));
 			}
 
 			pos += length;
@@ -251,16 +291,22 @@ evothings.easyble = (function()
 	* Returns true if the device matches the serviceFilter, or if there is no filter.
 	* Returns false otherwise.
 	*/
-	internal.deviceMatchesServiceFilter = function(device) {
-		if(!serviceFilter) {
-			return true;
-		}
-		var ad = device.advertisementData;
-		if(ad) {
-			if(ad.kCBAdvDataServiceUUIDs) {
-				for(var i in ad) {
-					for(var j in serviceFilter) {
-						if(ad[i].toLowerCase() == serviceFilter[j].toLowerCase()) {
+	internal.deviceMatchesServiceFilter = function(device)
+	{
+		if (!serviceFilter) { return true; }
+
+		var advertisementData = device.advertisementData;
+		if (advertisementData)
+		{
+			if (advertisementData.kCBAdvDataServiceUUIDs)
+			{
+				for (var i in advertisementData)
+				{
+					for (var j in serviceFilter)
+					{
+						if (advertisementData[i].toLowerCase() ==
+							serviceFilter[j].toLowerCase())
+						{
 							return true;
 						}
 					}
@@ -393,6 +439,7 @@ evothings.easyble = (function()
 				for (var i = 0; i < services.length; ++i)
 				{
 					var service = services[i];
+					service.uuid = service.uuid.toLowerCase();
 					device.__services.push(service);
 					device.__uuidMap[service.uuid] = service;
 				}
@@ -425,6 +472,7 @@ evothings.easyble = (function()
 				for (var i = 0; i < characteristics.length; ++i)
 				{
 					var characteristic = characteristics[i];
+					characteristic.uuid = characteristic.uuid.toLowerCase();
 					service.__characteristics.push(characteristic);
 					device.__uuidMap[characteristic.uuid] = characteristic;
 
@@ -452,6 +500,7 @@ evothings.easyble = (function()
 				for (var i = 0; i < descriptors.length; ++i)
 				{
 					var descriptor = descriptors[i];
+					descriptor.uuid = descriptor.uuid.toLowerCase();
 					characteristic.__descriptors.push(descriptor);
 					device.__uuidMap[characteristic.uuid + ':' + descriptor.uuid] = descriptor;
 				}
@@ -472,7 +521,7 @@ evothings.easyble = (function()
 			readCounter = serviceUUIDs.length;
 			for (var i = 0; i < serviceUUIDs.length; ++i)
 			{
-				var uuid = serviceUUIDs[i];
+				var uuid = serviceUUIDs[i].toLowerCase();
 				var service = device.__uuidMap[uuid];
 				if (!service)
 				{
@@ -513,6 +562,8 @@ evothings.easyble = (function()
 
 	internal.readCharacteristic = function(device, characteristicUUID, win, fail)
 	{
+		characteristicUUID = characteristicUUID.toLowerCase();
+
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
@@ -529,6 +580,9 @@ evothings.easyble = (function()
 
 	internal.readDescriptor = function(device, characteristicUUID, descriptorUUID, win, fail)
 	{
+		characteristicUUID = characteristicUUID.toLowerCase();
+		descriptorUUID = descriptorUUID.toLowerCase();
+
 		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
@@ -552,6 +606,8 @@ evothings.easyble = (function()
 
 	internal.writeCharacteristic = function(device, characteristicUUID, value, win, fail)
 	{
+		characteristicUUID = characteristicUUID.toLowerCase();
+
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
@@ -575,6 +631,9 @@ evothings.easyble = (function()
 
 	internal.writeDescriptor = function(device, characteristicUUID, descriptorUUID, value, win, fail)
 	{
+		characteristicUUID = characteristicUUID.toLowerCase();
+		descriptorUUID = descriptorUUID.toLowerCase();
+
 		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
@@ -598,6 +657,8 @@ evothings.easyble = (function()
 
 	internal.enableNotification = function(device, characteristicUUID, win, fail)
 	{
+		characteristicUUID = characteristicUUID.toLowerCase();
+
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
@@ -614,6 +675,8 @@ evothings.easyble = (function()
 
 	internal.disableNotification = function(device, characteristicUUID, win, fail)
 	{
+		characteristicUUID = characteristicUUID.toLowerCase();
+
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
