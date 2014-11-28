@@ -10,7 +10,6 @@
 
 evothings.loadScript('libs/evothings/easyble/easyble.js')
 
-if (!window.evothings) { window.evothings = {} }
 evothings.tisensortag = (function()
 {
 	var sensortag = {}
