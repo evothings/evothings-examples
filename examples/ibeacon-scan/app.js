@@ -105,12 +105,9 @@ var app = (function()
 			// Only show beacons that are updated during the last 60 seconds.
 			if (beacon.timeStamp + 60000 > timeNow)
 			{
-				// Valid RSSI values should less than zero.
-				var rssiWidth = 0;
-				if (beacon.rssi < 0)
-				{
-					rssiWidth = 100 + beacon.rssi;
-				}
+				// Valid RSSI values should be less than zero.
+				var rssiWidth = Math.max(1, 100 + beacon.rssi);
+				var rssiWidth = Math.min(rssiWidth, 100);
 
 				// Create tag to display beacon data.
 				var element = $(
