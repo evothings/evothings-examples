@@ -460,7 +460,8 @@ ul.dynamic li:last-child {
 ul.dynamic li a {
 	color: #000;
 }
-ul.arrows li {
+ul.dynamic.arrow li,
+ul.dynamic li.arrow {
 	background-image: url('../images/arrow-right.svg');
 	background-position: 94% center; /* CSS 2 fallback */
 	background-position: right 5% center; /* requires CSS 3 */
