@@ -451,9 +451,6 @@ ul.dynamic li {
 
 	background-color: #f3f3f3;
 }
-ul.dynamic li.arrow {
-	background-image: url('../images/arrow-right.svg');
-}
 ul.dynamic li:last-child {
 	box-shadow: none;
 }
