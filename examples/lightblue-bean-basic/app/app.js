@@ -13,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// LightBlue Bean - Basic 
-//                                               version: 1.0 - 2014-10-28
+// LightBlue Bean - Basic
+// version: 1.0 - 2014-10-28
 //
-// This implementation makes it possible to connect to a LightBlue Bean 
+// This implementation makes it possible to connect to a LightBlue Bean
 // and control the LED. It also fetches the temperature from the board.
 //
 // The LightBlue Bean needs to run the arduino sketch example named
@@ -25,19 +25,19 @@
 // Route all console logs to Evothings studio log
 if (window.hyper) { console.log = hyper.log; }
 
-document.addEventListener('deviceready',function(){ app.initialize() }, false);
+document.addEventListener('deviceready',function() { app.initialize() }, false);
 
 var app = {};
 
-app.UUID_SCRATCHSERVICE = 'a495ff20-c5b1-4b44-b512-1370f02d74de';   
+app.UUID_SCRATCHSERVICE = 'a495ff20-c5b1-4b44-b512-1370f02d74de';
 
 app.getScratchCharacteristicUUID = function(scratchNumber) {
 
 	return ['a495ff21-c5b1-4b44-b512-1370f02d74de',
-			'a495ff22-c5b1-4b44-b512-1370f02d74de',
-			'a495ff23-c5b1-4b44-b512-1370f02d74de',
-			'a495ff24-c5b1-4b44-b512-1370f02d74de',
-			'a495ff25-c5b1-4b44-b512-1370f02d74de'][scratchNumber - 1]; 
+		'a495ff22-c5b1-4b44-b512-1370f02d74de',
+		'a495ff23-c5b1-4b44-b512-1370f02d74de',
+		'a495ff24-c5b1-4b44-b512-1370f02d74de',
+		'a495ff25-c5b1-4b44-b512-1370f02d74de'][scratchNumber - 1];
 };
 
 app.initialize = function() {
@@ -52,7 +52,7 @@ app.deviceIsLightBlueBeanWithBleId = function(device, bleId) {
 
 app.connect = function(user)
 {
-	var BLEId = document.getElementById('BLEId').value 
+	var BLEId = document.getElementById('BLEId').value
 	app.showInfo('Trying to connect to "' + BLEId +'"');
 
 	app.disconnect(user);
@@ -62,7 +62,7 @@ app.connect = function(user)
 		function onConnectSuccess(device) {
 
 			function onServiceSuccess(device) {
-				
+
 				// Update user interface
 				app.showInfo('Connected to <i>' + BLEId + '</i>');
 				document.getElementById('BLEButton').innerHTML = 'Disconnect';
@@ -74,10 +74,10 @@ app.connect = function(user)
 				app.connected = true;
 				app.device = device;
 
-				// Fetch current LED values. 
+				// Fetch current LED values.
 				app.synchronizeLeds();
 
-				// Create an interval timer to periocally read temperature. 
+				// Create an interval timer to periocally read temperature.
 				app.interval = setInterval(function() { app.readTemperature(); }, 500);
 			};
 
@@ -101,7 +101,7 @@ app.connect = function(user)
 
 		// Connect if we have found a LightBlue Bean with the name from input (BLEId)
 		if (app.deviceIsLightBlueBeanWithBleId(device, document.getElementById('BLEId').value)) {
-			
+
 			// Update user interface
 			app.showInfo('Found "' + device.name + '"');
 
@@ -125,16 +125,16 @@ app.connect = function(user)
 	app.showInfo('Scanning...');
 
 	// Start scanning for devices
-	easyble.startScan(onScanSuccess, onScanFailure); 
+	easyble.startScan(onScanSuccess, onScanFailure);
 };
 
 app.disconnect = function(user) {
 
-	// If timer configured, clear. 
+	// If timer configured, clear.
 	if (app.interval) {
 
 		clearInterval(app.interval);
-	} 
+	}
 
 	app.connected = false;
 	app.device = null;
@@ -156,14 +156,14 @@ app.disconnect = function(user) {
 app.readTemperature = function() {
 
 	function onDataReadSuccess(data) {
-	
+
 		var temperatureData = new Uint8Array(data);
 		var temperature = temperatureData[0];
 		console.log('Temperature read: ' + temperature + ' C');
 		document.getElementById('temperature').innerHTML = temperature
 	}
 
-	function onDataReadFailure(errorCode){
+	function onDataReadFailure(errorCode) {
 
 		console.log('Failed to read temperature with error: ' + errorCode);
 		app.disconnect();
@@ -173,11 +173,11 @@ app.readTemperature = function() {
 };
 
 app.synchronizeLeds = function() {
-	
+
 	function onDataReadSuccess(data) {
-	
+
 		var ledData = new Uint8Array(data);
-	
+
 		document.getElementById('redLed').value = ledData[0];
 		document.getElementById('greenLed').value = ledData[1];
 		document.getElementById('blueLed').value = ledData[2];
@@ -185,7 +185,7 @@ app.synchronizeLeds = function() {
 		console.log('Led synchronized.');
 	};
 
-	function onDataReadFailure(errorCode){
+	function onDataReadFailure(errorCode) {
 
 		console.log('Failed to synchronize leds with error: ' + errorCode);
 		app.disconnect();
@@ -204,18 +204,18 @@ app.sendLedUpdate = function() {
 		blueLed = document.getElementById('blueLed').value
 
 		// Print out fetched LED values
-		console.log('redLed: ' + redLed + ', greenLed: ' + greenLed + ', blueLed: ' + blueLed); 
+		console.log('redLed: ' + redLed + ', greenLed: ' + greenLed + ', blueLed: ' + blueLed);
 
 		// Create packet to send
 		data = new Uint8Array([redLed, greenLed, blueLed]);
 
-		// Callbacks 
+		// Callbacks
 		function onDataWriteSuccess() {
-		
+
 			console.log('Succeded to write data.');
 		}
 
-		function onDataWriteFailure(errorCode){
+		function onDataWriteFailure(errorCode) {
 
 			console.log('Failed to write data with error: ' + errorCode);
 			app.disconnect();
@@ -224,12 +224,12 @@ app.sendLedUpdate = function() {
 		app.writeDataToScratch(1, data, onDataWriteSuccess, onDataWriteFailure);
 	}
 	else {
-		
+
 		redLed = document.getElementById('redLed').value = 0
 		greenLed = document.getElementById('greenLed').value = 0
-		blueLed = document.getElementById('blueLed').value = 0 
+		blueLed = document.getElementById('blueLed').value = 0
 	};
-	
+
 };
 
 app.writeDataToScratch = function(scratchNumber, data, succesCallback, failCallback) {
