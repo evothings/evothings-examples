@@ -125,6 +125,12 @@ def buildRFduinoLEDOnOff
 	copyWhereIsTheArduinoCode(destPath)
 end
 
+def buildLightblueBeanBasic
+	destPath = 'examples/lightblue-bean-basic/app'
+	copyCommon(destPath)
+	copyEasyBLE(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -223,6 +229,7 @@ def build
 	buildRFduinoLEDOnOff
 	buildTISensorTagDemo
 	buildTISensorTagSensors
+	buildLightblueBeanBasic
 end
 
 build
