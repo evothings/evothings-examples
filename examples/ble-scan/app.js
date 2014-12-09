@@ -117,7 +117,9 @@ app.ui.displayDeviceList = function()
 			var element = $(
 				'<li>'
 				+	'<strong>' + device.name + '</strong><br />'
-				+	device.address + '<br />'
+				// Do not show address on iOS since it can be confused
+				// with an iBeacon UUID.
+				+	(evothings.os.isIOS() ? '' : device.address + '<br />')
 				+	device.rssi + '<br />'
 				+ 	'<div style="background:rgb(255,0,0);height:20px;width:'
 				+ 		rssiWidth + '%;"></div>'

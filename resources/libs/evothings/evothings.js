@@ -5,6 +5,8 @@
 
 var evothings = (function(evothings)
 {
+	/* ------------------ Script loading ------------------ */
+
 	var scriptLoadingCounter = 0;
 	var loadedScripts = {};
 	var scriptsLoadedCallbacks = [];
@@ -88,6 +90,30 @@ var evothings = (function(evothings)
 		}
 	};
 
+	/* ------------------ Platform check ------------------ */
+
+	evothings.os = {};
+
+	evothings.os.isIOS = function()
+	{
+		return /iP(hone|ad|od)/.test(navigator.userAgent);
+	};
+
+	evothings.os.isIOS7 = function()
+	{
+		return /iP(hone|ad|od).*OS 7/.test(navigator.userAgent);
+	};
+
+	evothings.os.isAndroid = function()
+	{
+		return /Android|android/.test(navigator.userAgent);
+	};
+
+	evothings.os.isWP = function()
+	{
+		return /Windows Phone/.test(navigator.userAgent);
+	};
+
 	return evothings;
 
 // If for some reason the global evothings variable is already defined we use it.
@@ -97,7 +123,7 @@ window.addEventListener('DOMContentLoaded', function(e) {
 	/* Set an absolute base font size in iOS 7 due to that viewport-relative
 	font sizes doesn't work properly caused by the WebKit bug described at
 	https://bugs.webkit.org/show_bug.cgi?id=131863. */
-	if (/iP(hone|ad|od).*OS 7/.test(navigator.userAgent))
+	if (evothings.os.isIOS7())
 	{
 		document.body.style.fontSize = '20pt'
 	}
