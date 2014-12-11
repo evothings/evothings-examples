@@ -108,10 +108,10 @@ app.ui.displayDeviceList = function()
 		// Only show devices that are updated during the last 60 seconds.
 		if (device.timeStamp + 60000 > timeNow)
 		{
-			// Compute a display percent width value from signal strength.
-			// RSSI is a negative value, zero is max signal strength.
-			var rssiWidth = Math.max(1, 100 + device.rssi);
-			rssiWidth = Math.min(rssiWidth, 100);
+			// Map the RSSI value to a width in percent for the indicator.
+			var rssiWidth = 1; // Used when RSSI is zero or greater.
+			if (device.rssi < -100) { rssiWidth = 100; }
+			else if (device.rssi < 0) { rssiWidth = 100 + device.rssi; }
 
 			// Create tag for device data.
 			var element = $(
@@ -121,7 +121,7 @@ app.ui.displayDeviceList = function()
 				// with an iBeacon UUID.
 				+	(evothings.os.isIOS() ? '' : device.address + '<br />')
 				+	device.rssi + '<br />'
-				+ 	'<div style="background:rgb(255,0,0);height:20px;width:'
+				+ 	'<div style="background:rgb(225,0,0);height:20px;width:'
 				+ 		rssiWidth + '%;"></div>'
 				+ '</li>'
 			);
