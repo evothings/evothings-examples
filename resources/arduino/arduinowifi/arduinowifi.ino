@@ -214,8 +214,11 @@ char readCommand(String* request)
 // Read the parameter from the request string.
 int readParam(String* request)
 {
-	String value = request->substring(1, 2);
-	return value.toInt();
+	// This handles a hex digit 0 to F (0 to 15).
+	char buffer[2];
+	buffer[0] = request->charAt(1);
+	buffer[1] = 0;
+	return (int) strtol(buffer, NULL, 16);
 }
 
 void sendResponse(WiFiClient* client, String response)

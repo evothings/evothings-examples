@@ -55,7 +55,7 @@ Example: A5 -> 42
 #include <Ethernet.h>
 
 // Enter a MAC address for your controller below, usually found on a sticker
-// on the back of your Ethernet shield
+// on the back of your Ethernet shield.
 byte mac[] = { 0x90, 0xA2, 0xDA, 0x0E, 0xD0, 0x93 };
 
 // The IP address will be dependent on your local network.
@@ -194,8 +194,11 @@ char readCommand(String* request)
 // Read the parameter from the request string.
 int readParam(String* request)
 {
-	String value = request->substring(1, 2);
-	return value.toInt();
+	// This handles a hex digit 0 to F (0 to 15).
+	char buffer[2];
+	buffer[0] = request->charAt(1);
+	buffer[1] = 0;
+	return (int) strtol(buffer, NULL, 16);
 }
 
 void sendResponse(EthernetClient* client, String response)
