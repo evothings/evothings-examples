@@ -9,6 +9,9 @@ var app = {};
 // Data that is plotted on the canvas.
 app.dataPoints = [];
 
+// Timeout (ms) after which an error is shown if the SensorTag wasn't found.
+var CONNECT_TIMEOUT = 3000
+
 // Initialise the application.
 app.initialize = function()
 {
@@ -53,15 +56,35 @@ app.onStartButton = function()
 	app.onStopButton();
 	app.startScan();
 	app.showInfo('Status: Starting...');
+	app.startConnectTimer();
 };
 
 app.onStopButton = function()
 {
 	// Stop any ongoing scan and close devices.
+	app.stopConnectTimer();
 	easyble.stopScan();
 	easyble.closeConnectedDevices();
 	app.showInfo('Status: Stopped.');
 };
+
+app.startConnectTimer = function()
+{
+	// If connection is not made within the timeout
+	// period, an error message is shown.
+	app.connectTimer = setTimeout(function()
+		{
+			easyble.stopScan();
+			easyble.closeConnectedDevices();
+			app.showInfo('Error: couldn\'t connect to SensorTag.');
+		},
+		CONNECT_TIMEOUT)
+}
+
+app.stopConnectTimer = function()
+{
+	clearTimeout(app.connectTimer)
+}
 
 app.startScan = function()
 {
@@ -74,6 +97,7 @@ app.startScan = function()
 				app.showInfo('Status: Device found: ' + device.name + '.');
 				easyble.stopScan();
 				app.connectToDevice(device);
+				app.stopConnectTimer()
 			}
 		},
 		function(errorCode)
