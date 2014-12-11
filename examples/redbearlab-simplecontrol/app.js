@@ -28,15 +28,14 @@ app.RBL_CHAR_TX_UUID = '713d0002-503e-4c75-ba94-3148f18d941e';
 app.RBL_CHAR_RX_UUID = '713d0003-503e-4c75-ba94-3148f18d941e';
 app.RBL_TX_UUID_DESCRIPTOR = '00002902-0000-1000-8000-00805f9b34fb';
 
-app.initialize = function() {
-
+app.initialize = function()
+{
 	app.connected = false;
-	
 	analog_enabled = false;
-		
 };
 
-app.startScan = function() {
+app.startScan = function()
+{
 
 	app.disconnect();
 
@@ -47,17 +46,18 @@ app.startScan = function() {
 	var htmlString = '<img src="img/loader_small.gif" style="display:inline; vertical-align:middle">' +
 					'<p style="display:inline">   Scanning...</p>';
 
-	$( "#scanResultView" ).append( $( htmlString ) );
+	$("#scanResultView").append($(htmlString));
 
-	$( "#scanResultView" ).show();
+	$("#scanResultView").show();
 
-	function onScanSuccess(device) {
-
-		if(device.name != null) {
-
+	function onScanSuccess(device)
+	{
+		if (device.name != null)
+		{
 			app.devices[device.address] = device; 
 
-			console.log('Found: ' + device.name + ', ' + device.address + ', ' + device.rssi);
+			console.log('Found: ' + device.name + ', ' + device.address +
+				', ' + device.rssi);
 
 			var htmlString = '<div class="deviceContainer" onclick="app.connectTo(\'' + device.address + '\')">' +
 								'<p class="deviceName">' + device.name + '</p>' +
@@ -69,7 +69,6 @@ app.startScan = function() {
 	};
 
 	function onScanFailure(errorCode) {
-		
 		// Show an error message to the user
 		app.disconnect('Failed to scan for devices.');
 
@@ -83,13 +82,14 @@ app.startScan = function() {
 	$( "#startView" ).hide();
 };
 
-app.setLoadingLabel = function(message) {
-	
+app.setLoadingLabel = function(message)
+{
 	console.log(message);
 	$( '#loadingStatus').text(message);
 }
 
-app.connectTo = function(address) {
+app.connectTo = function(address)
+{
 
 	device = app.devices[address];
 
@@ -97,17 +97,18 @@ app.connectTo = function(address) {
 
 	app.setLoadingLabel('Trying to connect to ' + device.name);
 
-	function onConnectSuccess(device) {
+	function onConnectSuccess(device)
+	{
 
-		function onServiceSuccess(device) {
+		function onServiceSuccess(device)
+		{
+			// Application is now connected
+			app.connected = true;
+			app.device = device;
 
-				// Application is now connected
-				app.connected = true;
-				app.device = device;
+			console.log('Connected to ' + device.name);
 
-				console.log('Connected to ' + device.name);
-
-				device.writeDescriptor(
+			device.writeDescriptor(
 				app.RBL_CHAR_TX_UUID, 
 				app.RBL_TX_UUID_DESCRIPTOR,
 				new Uint8Array([1,0]),
@@ -126,38 +127,50 @@ app.connectTo = function(address) {
 
 					// Write debug information to console.
 					console.log('Error: writeDescriptor: ' + errorCode + '.');
-				});
+				}
+			);
 
-				function failedToEnableNotification(erroCode) {
+			function failedToEnableNotification(erroCode) {
+				console.log('BLE enableNotification error: ' + errorCode);
+			};
+
+			device.enableNotification(
+				app.RBL_CHAR_TX_UUID,
+				app.receivedData,
+				function(errorcode)
+				{
 					console.log('BLE enableNotification error: ' + errorCode);
-				};
+				}
+			);
 
-				device.enableNotification(app.RBL_CHAR_TX_UUID, app.receivedData, function(errorcode){console.log('BLE enableNotification error: ' + errorCode);});
+		};
 
-			};
+		function onServiceFailure(errorCode)
+		{
+			// Disconnect and show an error message to the user.
+			app.disconnect('Device is not from RedBearLab');
 
-			function onServiceFailure(errorCode) {
+			// Write debug information to console.
+			console.log('Error reading services: ' + errorCode);
+		};
 
-				// Disconnect and show an error message to the user.
-				app.disconnect('Device is not from RedBearLab');
+		app.setLoadingLabel('Identifying services...');
 
-				// Write debug information to console.
-				console.log('Error reading services: ' + errorCode);
-			};
-
-			app.setLoadingLabel('Identifying services...');
-
-			// Connect to the appropriate BLE service
-			device.readServices([app.RBL_SERVICE_UUID], onServiceSuccess, onServiceFailure);
+		// Connect to the appropriate BLE service
+		device.readServices(
+			[app.RBL_SERVICE_UUID],
+			onServiceSuccess,
+			onServiceFailure
+		);
 	};
 
-	function onConnectFailure(errorCode) {
+	function onConnectFailure(errorCode)
+	{
+		// Disconnect and show an error message to the user.
+		app.disconnect('Disconnected from device');
 
-			// Disconnect and show an error message to the user.
-			app.disconnect('Disconnected from device');
-
-			// Write debug information to console
-			console.log('Error ' + errorCode);
+		// Write debug information to console
+		console.log('Error ' + errorCode);
 	};
 
 	// Stop scanning
@@ -168,27 +181,33 @@ app.connectTo = function(address) {
 	device.connect(onConnectSuccess, onConnectFailure);
 };
 
-app.sendData = function(data) {
+app.sendData = function(data)
+{
+	if (app.connected)
+	{
 
-	if(app.connected) {
-
-		function onMessageSendSucces() {
-		
+		function onMessageSendSucces()
+		{
 			console.log('Succeded to send message.');
 		}
 
-		function onMessageSendFailure(errorCode){
-
+		function onMessageSendFailure(errorCode)
+		{
 			console.log('Failed to send data with error: ' + errorCode);
 			app.disconnect('Failed to send data');
 		};
 
 		data = new Uint8Array(data);
 
-		app.device.writeCharacteristic(app.RBL_CHAR_RX_UUID, data, onMessageSendSucces, onMessageSendFailure);
+		app.device.writeCharacteristic(
+			app.RBL_CHAR_RX_UUID,
+			data,
+			onMessageSendSucces,
+			onMessageSendFailure
+		);
 	}
-	else {
-
+	else
+	{
 		// Disconnect and show an error message to the user.
 		app.disconnect('Disconnected');
 
@@ -197,18 +216,20 @@ app.sendData = function(data) {
 	}
 };
 
-app.receivedData = function(data) {
-
-	if(app.connected) {	
+app.receivedData = function(data)
+{
+	if (app.connected)
+	{
 		var data = new Uint8Array(data);
 
-		if(data[0] === 0x0A) {
-			
+		if (data[0] === 0x0A)
+		{
 			$( '#digitalInputResult').text(data[1] ? 'High' : 'Low');
 		}
-		else if (data[0] === 0x0B) {
-
-			if (analog_enabled) {
+		else if (data[0] === 0x0B)
+		{
+			if (analog_enabled)
+			{
 				var number = (data[1] << 8) | data[2];
 				$( '#analogDigitalResult').text(number);
 			}
@@ -216,21 +237,20 @@ app.receivedData = function(data) {
 
 		console.log('Data received: [' + data[0] +', ' + data[1] + ', ' + data[2] + ']');
 	}
-	else {
+	else
+	{
+		// Disconnect and show an error message to the user.
+		app.disconnect('Disconnected');
 
-	// Disconnect and show an error message to the user.
-	app.disconnect('Disconnected');
-
-	// Write debug information to console
-	console.log('Error - No device connected.');
+		// Write debug information to console
+		console.log('Error - No device connected.');
 	}
-
 };
 
-app.disconnect = function(errorMessage) {
-
-	if(errorMessage) {
-
+app.disconnect = function(errorMessage)
+{
+	if (errorMessage)
+	{
 		navigator.notification.alert(errorMessage,function alertDismissed() {});
 	}
 
@@ -250,16 +270,18 @@ app.disconnect = function(errorMessage) {
 	$( "#startView" ).show();
 };
 
-app.toggelAnalog =  function() {
-
-	if (analog_enabled) {
+app.toggelAnalog =  function()
+{
+	if (analog_enabled)
+	{
 		analog_enabled = false;
 		app.sendData([0xA0,0x00,0x00]);
 		$( '#analogDigitalResult').text('-');
 		$( '#analogToggleButton').text('Enable Analog');
 		$( '#analogToggleButton').removeClass('blue wide').addClass('green wide');
 	}
-	else {
+	else
+	{
 		analog_enabled = true;
 		app.sendData([0xA0,0x01,0x00]);
 		$( '#analogToggleButton').text('Disable Analog');
