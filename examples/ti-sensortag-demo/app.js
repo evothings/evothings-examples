@@ -117,11 +117,11 @@ app.readServices = function(device)
 		'f000aa10-0451-4000-b000-000000000000', // Accelerometer service UUID.
 		'f000aa30-0451-4000-b000-000000000000'  // Magnetometer service UUID.
 		],
-		// Function that monitors magnetometer data.
-		app.startMagnetometerNotification,
-		// Use this function to monitor accelerometer data
+		// Function that monitors accelerometer data.
+		app.startAccelerometerNotification,
+		// Use this function to monitor magnetometer data
 		// (comment out the above line if you try this).
-		//app.startAccelerometerNotification,
+		//app.startMagnetometerNotification,
 		function(errorCode)
 		{
 			console.log('Error: Failed to read services: ' + errorCode + '.');
