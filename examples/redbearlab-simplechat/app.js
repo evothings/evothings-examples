@@ -17,7 +17,7 @@
 // version: 0.5 - 2014-12-11
 //
 
-document.addEventListener('deviceready',function(){ app.initialize() }, false);
+document.addEventListener('deviceready', function(){ app.initialize() }, false);
 
 var app = {};
 
@@ -26,22 +26,22 @@ app.RBL_CHAR_TX_UUID = '713d0002-503e-4c75-ba94-3148f18d941e';
 app.RBL_CHAR_RX_UUID = '713d0003-503e-4c75-ba94-3148f18d941e';
 app.RBL_TX_UUID_DESCRIPTOR = '00002902-0000-1000-8000-00805f9b34fb';
 
-app.initialize = function() {
-
+app.initialize = function()
+{
 	app.connected = false;
 };
 
-app.sendMessage = function() {
-
-	if(app.connected) {
-
-		function onMessageSendSucces() {
-		
+app.sendMessage = function()
+{
+	if (app.connected)
+	{
+		function onMessageSendSucces()
+		{
 			console.log('Succeded to send message.');
 		}
 
-		function onMessageSendFailure(errorCode){
-
+		function onMessageSendFailure(errorCode)
+		{
 			// Disconnect and show an error message to the user.
 			app.disconnect('Disconnected');
 
@@ -58,15 +58,20 @@ app.sendMessage = function() {
 		// Convert message
 		var data = new Uint8Array(message.length);
 
-		for (var i=0, messageLength=message.length; i<messageLength; i++) {
+		for (var i=0, messageLength=message.length; i<messageLength; i++)
+		{
 			data[i] = message.charCodeAt(i);
 		}
 
-		app.device.writeCharacteristic(app.RBL_CHAR_RX_UUID, data, onMessageSendSucces, onMessageSendFailure);
-
+		app.device.writeCharacteristic(
+			app.RBL_CHAR_RX_UUID,
+			data,
+			onMessageSendSucces,
+			onMessageSendFailure
+		);
 	}
-	else {
-
+	else
+	{
 		// Disconnect and show an error message to the user.
 		app.disconnect('Disconnected');
 
@@ -75,38 +80,37 @@ app.sendMessage = function() {
 	}
 };
 
-app.setLoadingLabel = function(message) {
-	
+app.setLoadingLabel = function(message)
+{
 	console.log(message);
 	$( '#loadingStatus').text(message);
 }
 
-app.connectTo = function(address) {
-
+app.connectTo = function(address)
+{
 	device = app.devices[address];
 
 	$( "#loadingView" ).css('display', 'table');
 
 	app.setLoadingLabel('Trying to connect to ' + device.name);
 
-	function onConnectSuccess(device) {
+	function onConnectSuccess(device)
+	{
 
-		function onServiceSuccess(device) {
+		function onServiceSuccess(device)
+		{
+			// Application is now connected
+			app.connected = true;
+			app.device = device;
 
-				// Application is now connected
-				app.connected = true;
-				app.device = device;
+			console.log('Connected to ' + device.name);
 
-				console.log('Connected to ' + device.name);
-
-
-				device.writeDescriptor(
+			device.writeDescriptor(
 				app.RBL_CHAR_TX_UUID, // Characteristic for accelerometer data
 				app.RBL_TX_UUID_DESCRIPTOR, // Configuration descriptor
 				new Uint8Array([1,0]),
 				function()
 				{
-
 					console.log('Status: writeDescriptor ok.');
 
 					$( "#loadingView" ).hide();
@@ -115,48 +119,58 @@ app.connectTo = function(address) {
 				},
 				function(errorCode)
 				{
-
 					// Disconnect and give user feedback. 
 					app.disconnect('Failed to set descriptor.');
 
 					// Write debug information to console.
 					console.log('Error: writeDescriptor: ' + errorCode + '.');
-				});
+				}
+			);
 
-				function failedToEnableNotification(erroCode) {
+			function failedToEnableNotification(erroCode)
+			{
+				console.log('BLE enableNotification error: ' + errorCode);
+			};
+
+			device.enableNotification(
+				app.RBL_CHAR_TX_UUID,
+				app.receivedMessage,
+				function(errorcode)
+				{
 					console.log('BLE enableNotification error: ' + errorCode);
-				};
+				}
+			);
 
-				device.enableNotification(app.RBL_CHAR_TX_UUID, app.receivedMessage, function(errorcode){console.log('BLE enableNotification error: ' + errorCode);});
+			$( "#scanResultView" ).hide();
+			$( "#conversationView" ).show();
+		};
 
-				$( "#scanResultView" ).hide();
-				$( "#conversationView" ).show();
-			};
+		function onServiceFailure(errorCode)
+		{
+			// Disconnect and show an error message to the user.
+			app.disconnect('Device is not from RedBearLab');
 
-			function onServiceFailure(errorCode) {
+			// Write debug information to console.
+			console.log('Error reading services: ' + errorCode);
+		};
 
-				// Disconnect and show an error message to the user.
-				app.disconnect('Device is not from RedBearLab');
+		app.setLoadingLabel('Identifying services...');
 
-				// Write debug information to console.
-				console.log('Error reading services: ' + errorCode);
-			};
-
-			app.setLoadingLabel('Identifying services...');
-
-
-			// Connect to the appropriate BLE service
-			device.readServices([app.RBL_SERVICE_UUID], onServiceSuccess, onServiceFailure);
+		// Connect to the appropriate BLE service
+		device.readServices(
+			[app.RBL_SERVICE_UUID],
+			onServiceSuccess,
+			onServiceFailure
+		);
 	};
 
-	function onConnectFailure(errorCode) {
+	function onConnectFailure(errorCode)
+	{
+		app.disconnect('Disconnected from device');
 
-			app.disconnect('Disconnected from device');
-
-			// Show an error message to the user
-			console.log('Error ' + errorCode);
+		// Show an error message to the user
+		console.log('Error ' + errorCode);
 	};
-
 
 	// Stop scanning
 	evothings.easyble.stopScan();
@@ -166,7 +180,8 @@ app.connectTo = function(address) {
 	device.connect(onConnectSuccess, onConnectFailure);
 };
 
-app.startScan = function() {
+app.startScan = function()
+{
 
 	app.disconnect();
 
@@ -177,14 +192,14 @@ app.startScan = function() {
 	var htmlString = '<img src="img/loader_small.gif" style="display:inline; vertical-align:middle">' +
 					'<p style="display:inline">   Scanning...</p>';
 
-	$( "#scanResultView" ).append( $( htmlString ) );
+	$("#scanResultView").append($(htmlString));
 
-	$( "#scanResultView" ).show();
+	$("#scanResultView").show();
 		
-	function onScanSuccess(device) {
-
-		if(device.name != null) {
-
+	function onScanSuccess(device)
+	{
+		if (device.name != null)
+		{
 			app.devices[device.address] = device; 
 
 			console.log('Found: ' + device.name + ', ' + device.address + ', ' + device.rssi);
@@ -194,13 +209,12 @@ app.startScan = function() {
 								'<p class="deviceAddress">' + device.address + '</p>' +
 							'</div>';
 
-			$( "#scanResultView" ).append( $( htmlString ) );
+			$( "#scanResultView" ).append($(htmlString));
 		}
-
 	};
 
-	function onScanFailure(errorCode) {
-		
+	function onScanFailure(errorCode)
+	{
 		// Show an error message to the user
 		app.disconnect('Failed to scan for devices.');
 
@@ -214,10 +228,10 @@ app.startScan = function() {
 	$( "#startView" ).hide();
 };
 
-app.receivedMessage = function(data) {
-
-	if(app.connected) {
-
+app.receivedMessage = function(data)
+{
+	if (app.connected)
+	{
 		// Convert data to String
 		var message = String.fromCharCode.apply(null, new Uint8Array(data));
 
@@ -226,8 +240,8 @@ app.receivedMessage = function(data) {
 
 		console.log('Message received: ' + message);
 	}
-	else {
-
+	else
+	{
 		// Disconnect and show an error message to the user.
 		app.disconnect('Disconnected');
 
@@ -236,8 +250,8 @@ app.receivedMessage = function(data) {
 	}
 };
 
-app.updateConversation = function(message, isRemoteMessage) {
-
+app.updateConversation = function(message, isRemoteMessage)
+{
 	// Insert message into DOM model. 
 	var timeStamp = new Date().toLocaleString();
 
@@ -253,17 +267,20 @@ app.updateConversation = function(message, isRemoteMessage) {
 						'</div>' +
 					'</div>';
 	
-	$( "#conversation" ).append( $( htmlString ) );
+	$("#conversation").append($(htmlString));
 
-	$('html,body').animate({
-        scrollTop: $("#disconnectButton").offset().top},
-        'slow');
+	$('html,body').animate(
+		{
+			scrollTop: $("#disconnectButton").offset().top
+		},
+		'slow'
+	);
 };
 
-app.disconnect = function(errorMessage) {
-
-	if(errorMessage) {
-
+app.disconnect = function(errorMessage)
+{
+	if (errorMessage)
+	{
 		navigator.notification.alert(errorMessage,function alertDismissed() {});
 	}
 
@@ -276,11 +293,11 @@ app.disconnect = function(errorMessage) {
 
 	console.log('Disconnected');
 
-	$( "#loadingView" ).hide();	
-	$( "#scanResultView" ).hide();
-	$( "#scanResultView" ).empty();
-	$( "#conversation" ).empty();
-	$( "#conversationView" ).hide();
+	$("#loadingView").hide();
+	$("#scanResultView").hide();
+	$("#scanResultView").empty();
+	$("#conversation").empty();
+	$("#conversationView").hide();
 
-	$( "#startView" ).show();
+	$("#startView").show();
 };

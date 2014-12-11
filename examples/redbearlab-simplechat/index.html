@@ -11,91 +11,7 @@
 
 	<style>
 		@import 'ui/css/evothings-app.css';
-
-		img.messageIcon {
-			height: 100%;
-		}
-
-		div.messageContainer {
-			border-radius: 10px;
-			border: 1px solid;
-			border-color: #CCCCCC;
-			overflow: hidden;
-			margin: 10px 0px;
-		}
-
-		div.messageIcon {
-			height: 50px;
-    		float: left;
-		}
-
-		div {
-			border: 0px solid;
-		}
-
-		div.messageTimestamp {
-			margin: 5px 0px 0px 5px;
-		}
-
-		p.messageTimestamp {
-			margin: 0px 0px 0px 0px;
-			font-size: xx-small;
-			font-weight: bold;
-		}
-
-		p.message {
-			margin: 0px 0px 0px 5px;
-		}
-
-		.center {
-			display: block;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		p.deviceAddress {
-			margin: 5px 0px 10px 10px;
-			font-size: xx-small;
-			font-weight:bold;
-		}
-
-		p.deviceName {
-			margin: 5px 0px 0px 10px;
-			font-weight: bold
-		}
-
-		div.deviceContainer {
-			border-radius: 10px;
-			border: 1px solid;
-			border-color: #CCCCCC;
-			overflow: hidden;
-			margin: 10px 0px;
-		}
-
-		#messageField {
-			width: 100%;
-			box-sizing: border-box;
-		}
-
-		#loadingView {
-		 	position: absolute;
-		 	left: 0px;
-		 	top: 0px;
-		    width: 100%;
-		    height: 100%;
-		    z-index: 1;
-		    display: table;
-		    text-align: center;
-		}
-
-		#loadingIndicator {
-			 width:20%;
-			 display: table-cell;
-  			 vertical-align: middle;
-  			 border: solid 1px;
-  			 background-color: #ffffff;
-		}
-
+		@import 'app.css';
 	</style>
 
 	<script>
@@ -125,38 +41,43 @@
 
 	<h1>Simple Chat</h1>
 
-<div id="startView">	
+	<div id="startView">	
 
-	<img class="center" src="img/RedBearLab.jpg">
-	<button class="red wide" onclick="app.startScan()"> Scan </button>
+		<img class="center" src="img/RedBearLab.jpg">
+		<button class="red wide" onclick="app.startScan()">Scan</button>
 
-</div>
-
-<div id="scanResultView" style="display:none">
-</div>
-
-<div id="conversationView" style="display:none">
-
-	<div id="conversation">
 	</div>
 
-	<div id="conversationControl" style="width:100%">
+	<div id="scanResultView" style="display:none"></div>
+
+	<div id="conversationView" style="display:none">
+
+		<div id="conversation"></div>
+
+		<div id="conversationControl" style="width:100%">
+			
+			<input id="messageField" value="Hello World!" type="text"
+				onchange="app.sendMessage()">
+
+			<button id="sendButton" class="green wide"
+				onclick="app.sendMessage()">Send</button>
+
+			<button id="disconnectButton" class="red wide"
+				onclick="app.disconnect()">Disconnect</button>
+
+		</div>
+
+	</div>
+
+	<div id="loadingView" style="display:none">
+
+		<div id="loadingIndicator">
+			<img src="img/loader.gif" />
+			<p id="loadingStatus"></p>
+		</div>
 		
-		<input id="messageField" value="Hello World!" type="text" onchange="app.sendMessage()">
-		<button id="sendButton" class="green wide" onclick="app.sendMessage()">Send</button>
-		<button id="disconnectButton" class="red wide" onclick="app.disconnect()">Disconnect</button>
-
 	</div>
-</div>
-
-<div id="loadingView" style="display:none">
-
-	<div id="loadingIndicator">
-		<img src="img/loader.gif">
-		<p id="loadingStatus"></p>
-	</div>
-	
-</div>
 
 </body>
+
 </html>
