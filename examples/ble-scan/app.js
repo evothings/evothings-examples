@@ -111,7 +111,7 @@ app.ui.displayDeviceList = function()
 			// Compute a display percent width value from signal strength.
 			// RSSI is a negative value, zero is max signal strength.
 			var rssiWidth = Math.max(1, 100 + device.rssi);
-			var rssiWidth = Math.min(rssiWidth, 100);
+			rssiWidth = Math.min(rssiWidth, 100);
 
 			// Create tag for device data.
 			var element = $(
