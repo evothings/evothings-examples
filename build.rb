@@ -131,6 +131,20 @@ def buildLightblueBeanBasic
 	copyEasyBLE(destPath)
 end
 
+def buildRedBearLabSimpleControl
+	destPath = 'examples/redbearlab-simplecontrol'
+	copyCommon(destPath)
+	copyEasyBLE(destPath)
+	copyJQuery(destPath)
+end
+
+def buildRedBearLabSimpleChat
+	destPath = 'examples/redbearlab-simplechat'
+	copyCommon(destPath)
+	copyEasyBLE(destPath)
+	copyJQuery(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -230,6 +244,8 @@ def build
 	buildTISensorTagDemo
 	buildTISensorTagSensors
 	buildLightblueBeanBasic
+	buildRedBearLabSimpleControl
+	buildRedBearLabSimpleChat
 end
 
 build
