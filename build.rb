@@ -110,6 +110,12 @@ def buildIBeaconScan
 	copyJQuery(destPath)
 end
 
+def buildEstimoteScan
+	destPath = 'examples/estimote-scan'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+end
+
 def buildNordicBLE
 	destPath = 'examples/nordic-ble'
 	copyCommon(destPath)
@@ -236,16 +242,17 @@ def build
 	buildArduinoScriptableTCP
 	buildBLEScan
 	buildCordovaBasic
+	buildEstimoteScan
 	buildHelloWorld
 	buildHueLights
 	buildIBeaconScan
+	buildLightblueBeanBasic
 	buildNordicBLE
+	buildRedBearLabSimpleControl
+	buildRedBearLabSimpleChat
 	buildRFduinoLEDOnOff
 	buildTISensorTagDemo
 	buildTISensorTagSensors
-	buildLightblueBeanBasic
-	buildRedBearLabSimpleControl
-	buildRedBearLabSimpleChat
 end
 
 build
