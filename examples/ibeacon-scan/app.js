@@ -39,32 +39,37 @@ var app = (function()
 
 	function startScan()
 	{
-		// The delegate object contains iBeacon callback functions.
-		var delegate = locationManager.delegate.implement(
+		// The delegate object holds the iBeacon callback functions
+		// specified below.
+		var delegate = new locationManager.Delegate();
+
+		// Called continuously when ranging beacons.
+		delegate.didRangeBeaconsInRegion = function(pluginResult)
 		{
-			didDetermineStateForRegion: function(pluginResult)
+			//console.log('didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult))
+			for (var i in pluginResult.beacons)
 			{
-				//console.log('didDetermineStateForRegion: ' + JSON.stringify(pluginResult))
-			},
-
-			didStartMonitoringForRegion: function(pluginResult)
-			{
-				//console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult))
-			},
-
-			didRangeBeaconsInRegion: function(pluginResult)
-			{
-				//console.log('didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult))
-				for (var i in pluginResult.beacons)
-				{
-					// Insert beacon into table of found beacons.
-					var beacon = pluginResult.beacons[i];
-					beacon.timeStamp = Date.now();
-					var key = beacon.uuid + ':' + beacon.major + ':' + beacon.minor;
-					beacons[key] = beacon;
-				}
+				// Insert beacon into table of found beacons.
+				var beacon = pluginResult.beacons[i];
+				beacon.timeStamp = Date.now();
+				var key = beacon.uuid + ':' + beacon.major + ':' + beacon.minor;
+				beacons[key] = beacon;
 			}
-		})
+		};
+
+		// Called when starting to monitor a region.
+		// (Not used in this example, included as a reference.)
+		delegate.didStartMonitoringForRegion = function(pluginResult)
+		{
+			//console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult))
+		};
+
+		// Called when monitoring and the state of a region changes.
+		// (Not used in this example, included as a reference.)
+		delegate.didDetermineStateForRegion = function(pluginResult)
+		{
+			//console.log('didDetermineStateForRegion: ' + JSON.stringify(pluginResult))
+		};
 
 		// Set the delegate object to use.
 		locationManager.setDelegate(delegate);
@@ -80,13 +85,14 @@ var app = (function()
 				i + 1,
 				regions[i].uuid);
 
-			// Start monitoring.
-			locationManager.startMonitoringForRegion(beaconRegion)
+			// Start ranging.
+			locationManager.startRangingBeaconsInRegion(beaconRegion)
 				.fail(console.error)
 				.done();
 
-			// Start ranging.
-			locationManager.startRangingBeaconsInRegion(beaconRegion)
+			// Start monitoring.
+			// (Not used in this example, included as a reference.)
+			locationManager.startMonitoringForRegion(beaconRegion)
 				.fail(console.error)
 				.done();
 		}
@@ -105,9 +111,10 @@ var app = (function()
 			// Only show beacons that are updated during the last 60 seconds.
 			if (beacon.timeStamp + 60000 > timeNow)
 			{
-				// Valid RSSI values should be less than zero.
-				var rssiWidth = Math.max(1, 100 + beacon.rssi);
-				var rssiWidth = Math.min(rssiWidth, 100);
+				// Map the RSSI value to a width in percent for the indicator.
+				var rssiWidth = 1; // Used when RSSI is zero or greater.
+				if (beacon.rssi < -100) { rssiWidth = 100; }
+				else if (beacon.rssi < 0) { rssiWidth = 100 + beacon.rssi; }
 
 				// Create tag to display beacon data.
 				var element = $(
@@ -117,7 +124,7 @@ var app = (function()
 					+	'Minor: ' + beacon.minor + '<br />'
 					+	'Proximity: ' + beacon.proximity + '<br />'
 					+	'RSSI: ' + beacon.rssi + '<br />'
-					+ 	'<div style="background:rgb(0,255,0);height:20px;width:'
+					+ 	'<div style="background:rgb(255,128,64);height:20px;width:'
 					+ 		rssiWidth + '%;"></div>'
 					+ '</li>'
 				);
