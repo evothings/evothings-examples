@@ -74,13 +74,13 @@ using BLE (Bluetooth Low Energy).
 	app.ledOn = function()
 	{
 		app.device && app.device.writeDataArray(new Uint8Array([1]));
-	}
+	};
 
 	// Turn off LED.
 	app.ledOff = function()
 	{
 		app.device && app.device.writeDataArray(new Uint8Array([0]));
-	}
+	};
 
 	app.showMessage = function(info)
 	{
