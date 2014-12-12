@@ -1,7 +1,7 @@
 //
 // Copyright 2014, Evothings AB
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License');
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// RedBearLab - Simple Control 
+// RedBearLab - Simple Control
 // version: 0.4 - 2014-12-11
 //
 
-document.addEventListener('deviceready',function(){ app.initialize() }, false);
+document.addEventListener('deviceready', function() { app.initialize() }, false);
 
 var app = {};
 
@@ -36,64 +36,66 @@ app.initialize = function()
 
 app.startScan = function()
 {
-
 	app.disconnect();
 
 	console.log('Scanning started...');
 
 	app.devices = {};
 
-	var htmlString = '<img src="img/loader_small.gif" style="display:inline; vertical-align:middle">' +
-					'<p style="display:inline">   Scanning...</p>';
+	var htmlString =
+		'<img src="img/loader_small.gif" style="display:inline; vertical-align:middle">' +
+		'<p style="display:inline">   Scanning...</p>';
 
-	$("#scanResultView").append($(htmlString));
+	$('#scanResultView').append($(htmlString));
 
-	$("#scanResultView").show();
+	$('#scanResultView').show();
 
 	function onScanSuccess(device)
 	{
 		if (device.name != null)
 		{
-			app.devices[device.address] = device; 
+			app.devices[device.address] = device;
 
-			console.log('Found: ' + device.name + ', ' + device.address +
-				', ' + device.rssi);
+			console.log('Found: ' + device.name + ', ' +
+				device.address + ', ' + device.rssi);
 
-			var htmlString = '<div class="deviceContainer" onclick="app.connectTo(\'' + device.address + '\')">' +
-								'<p class="deviceName">' + device.name + '</p>' +
-								'<p class="deviceAddress">' + device.address + '</p>' +
-							'</div>';
+			var htmlString =
+				'<div class="deviceContainer" onclick="app.connectTo(\'' +
+					device.address + '\')">' +
+				'<p class="deviceName">' + device.name + '</p>' +
+				'<p class="deviceAddress">' + device.address + '</p>' +
+				'</div>';
 
-			$( "#scanResultView" ).append( $( htmlString ) );
+			$('#scanResultView').append( $( htmlString ) );
 		}
-	};
+	}
 
-	function onScanFailure(errorCode) {
+	function onScanFailure(errorCode)
+	{
 		// Show an error message to the user
 		app.disconnect('Failed to scan for devices.');
 
 		// Write debug information to console.
 		console.log('Error ' + errorCode);
-	};
+	}
 
 	evothings.easyble.reportDeviceOnce(true);
-	evothings.easyble.startScan(onScanSuccess, onScanFailure); 
+	evothings.easyble.startScan(onScanSuccess, onScanFailure);
 
-	$( "#startView" ).hide();
+	$('#startView').hide();
 };
 
 app.setLoadingLabel = function(message)
 {
 	console.log(message);
-	$( '#loadingStatus').text(message);
+	$('#loadingStatus').text(message);
 }
 
 app.connectTo = function(address)
 {
-
 	device = app.devices[address];
 
-	$( "#loadingView" ).css('display', 'table');
+	$('#loadingView').css('display', 'table');
 
 	app.setLoadingLabel('Trying to connect to ' + device.name);
 
@@ -109,20 +111,20 @@ app.connectTo = function(address)
 			console.log('Connected to ' + device.name);
 
 			device.writeDescriptor(
-				app.RBL_CHAR_TX_UUID, 
+				app.RBL_CHAR_TX_UUID,
 				app.RBL_TX_UUID_DESCRIPTOR,
 				new Uint8Array([1,0]),
 				function()
 				{
 					console.log('Status: writeDescriptor ok.');
 
-					$( "#loadingView" ).hide();
-					$( "#scanResultView" ).hide();
-					$( "#controlView" ).show();
+					$('#loadingView').hide();
+					$('#scanResultView').hide();
+					$('#controlView').show();
 				},
 				function(errorCode)
 				{
-					// Disconnect and give user feedback. 
+					// Disconnect and give user feedback.
 					app.disconnect('Failed to set descriptor.');
 
 					// Write debug information to console.
@@ -130,9 +132,10 @@ app.connectTo = function(address)
 				}
 			);
 
-			function failedToEnableNotification(erroCode) {
+			function failedToEnableNotification(erroCode)
+			{
 				console.log('BLE enableNotification error: ' + errorCode);
-			};
+			}
 
 			device.enableNotification(
 				app.RBL_CHAR_TX_UUID,
@@ -185,7 +188,6 @@ app.sendData = function(data)
 {
 	if (app.connected)
 	{
-
 		function onMessageSendSucces()
 		{
 			console.log('Succeded to send message.');
@@ -195,7 +197,7 @@ app.sendData = function(data)
 		{
 			console.log('Failed to send data with error: ' + errorCode);
 			app.disconnect('Failed to send data');
-		};
+		}
 
 		data = new Uint8Array(data);
 
@@ -224,16 +226,16 @@ app.receivedData = function(data)
 
 		if (data[0] === 0x0A)
 		{
-			$( '#digitalInputResult').text(data[1] ? 'High' : 'Low');
+			$('#digitalInputResult').text(data[1] ? 'High' : 'Low');
 		}
 		else if (data[0] === 0x0B)
 		{
 			if (analog_enabled)
 			{
 				var number = (data[1] << 8) | data[2];
-				$( '#analogDigitalResult').text(number);
+				$('#analogDigitalResult').text(number);
 			}
-		};
+		}
 
 		console.log('Data received: [' + data[0] +', ' + data[1] + ', ' + data[2] + ']');
 	}
@@ -251,7 +253,7 @@ app.disconnect = function(errorMessage)
 {
 	if (errorMessage)
 	{
-		navigator.notification.alert(errorMessage,function alertDismissed() {});
+		navigator.notification.alert(errorMessage, function() {});
 	}
 
 	app.connected = false;
@@ -263,28 +265,28 @@ app.disconnect = function(errorMessage)
 
 	console.log('Disconnected');
 
-	$( "#loadingView" ).hide();
-	$( "#scanResultView" ).hide();
-	$( "#scanResultView" ).empty();
-	$( "#controlView" ).hide();
-	$( "#startView" ).show();
+	$('#loadingView').hide();
+	$('#scanResultView').hide();
+	$('#scanResultView').empty();
+	$('#controlView').hide();
+	$('#startView').show();
 };
 
-app.toggelAnalog =  function()
+app.toggelAnalog = function()
 {
 	if (analog_enabled)
 	{
 		analog_enabled = false;
 		app.sendData([0xA0,0x00,0x00]);
-		$( '#analogDigitalResult').text('-');
-		$( '#analogToggleButton').text('Enable Analog');
-		$( '#analogToggleButton').removeClass('blue wide').addClass('green wide');
+		$('#analogDigitalResult').text('-');
+		$('#analogToggleButton').text('Enable Analog');
+		$('#analogToggleButton').removeClass('blue wide').addClass('green wide');
 	}
 	else
 	{
 		analog_enabled = true;
 		app.sendData([0xA0,0x01,0x00]);
-		$( '#analogToggleButton').text('Disable Analog');
-		$( '#analogToggleButton').removeClass('green wide').addClass('blue wide');
+		$('#analogToggleButton').text('Disable Analog');
+		$('#analogToggleButton').removeClass('green wide').addClass('blue wide');
 	}
 };
