@@ -50,16 +50,11 @@
 		p.topic {
 			font-weight: bold;
 		}
-
 	</style>
 
 	<script>
 	// Redirect console.log to Evothings Workbench.
 	if (window.hyper && window.hyper.log) { console.log = hyper.log }
-	window.onerror = function(msg, url, line)
-	{
-		console.log(msg + ": " + url + ":" + line);
-	};
 	</script>
 
 	<script src="cordova.js"></script>

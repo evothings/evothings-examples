@@ -22,17 +22,14 @@
 // The LightBlue Bean needs to run the arduino sketch example named
 // LightBlue Bean - Basic
 
-// Route all console logs to Evothings studio log
-if (window.hyper) { console.log = hyper.log; }
-
-document.addEventListener('deviceready',function() { app.initialize() }, false);
+document.addEventListener('deviceready', function() { app.initialize() }, false);
 
 var app = {};
 
 app.UUID_SCRATCHSERVICE = 'a495ff20-c5b1-4b44-b512-1370f02d74de';
 
-app.getScratchCharacteristicUUID = function(scratchNumber) {
-
+app.getScratchCharacteristicUUID = function(scratchNumber)
+{
 	return ['a495ff21-c5b1-4b44-b512-1370f02d74de',
 		'a495ff22-c5b1-4b44-b512-1370f02d74de',
 		'a495ff23-c5b1-4b44-b512-1370f02d74de',
@@ -40,29 +37,30 @@ app.getScratchCharacteristicUUID = function(scratchNumber) {
 		'a495ff25-c5b1-4b44-b512-1370f02d74de'][scratchNumber - 1];
 };
 
-app.initialize = function() {
-
+app.initialize = function()
+{
 	app.connected = false;
-}
+};
 
-app.deviceIsLightBlueBeanWithBleId = function(device, bleId) {
-
+app.deviceIsLightBlueBeanWithBleId = function(device, bleId)
+{
 	return ((device != null) && (device.name != null) && (device.name == bleId));
 };
 
 app.connect = function(user)
 {
-	var BLEId = document.getElementById('BLEId').value
-	app.showInfo('Trying to connect to "' + BLEId +'"');
+	var BLEId = document.getElementById('BLEId').value;
+
+	app.showInfo('Trying to connect to "' + BLEId + '"');
 
 	app.disconnect(user);
 
-	function onScanSuccess(device) {
-
-		function onConnectSuccess(device) {
-
-			function onServiceSuccess(device) {
-
+	function onScanSuccess(device)
+	{
+		function onConnectSuccess(device)
+		{
+			function onServiceSuccess(device)
+			{
 				// Update user interface
 				app.showInfo('Connected to <i>' + BLEId + '</i>');
 				document.getElementById('BLEButton').innerHTML = 'Disconnect';
@@ -79,60 +77,66 @@ app.connect = function(user)
 
 				// Create an interval timer to periocally read temperature.
 				app.interval = setInterval(function() { app.readTemperature(); }, 500);
-			};
+			}
 
-			function onServiceFailure(errorCode) {
-
+			function onServiceFailure(errorCode)
+			{
 				// Show an error message to the user
 				app.showInfo('Error reading services: ' + errorCode);
-			};
+			}
 
 			// Connect to the appropriate BLE service
-			device.readServices([app.UUID_SCRATCHSERVICE], onServiceSuccess, onServiceFailure);
+			device.readServices(
+				[app.UUID_SCRATCHSERVICE],
+				onServiceSuccess,
+				onServiceFailure);
 		};
 
-		function onConnectFailure(errorCode) {
-
+		function onConnectFailure(errorCode)
+		{
 			// Show an error message to the user
 			app.showInfo('Error ' + errorCode);
-		};
+		}
 
-		console.log('device.name =' + device.name);
+		console.log('Found device: ' + device.name);
 
 		// Connect if we have found a LightBlue Bean with the name from input (BLEId)
-		if (app.deviceIsLightBlueBeanWithBleId(device, document.getElementById('BLEId').value)) {
-
+		var found= app.deviceIsLightBlueBeanWithBleId(
+			device,
+			document.getElementById('BLEId').value);
+		if (found)
+		{
 			// Update user interface
 			app.showInfo('Found "' + device.name + '"');
 
 			// Stop scanning
-			easyble.stopScan();
+			evothings.easyble.stopScan();
 
 			// Connect to our device
 			app.showInfo('Identifying service for communication');
 			device.connect(onConnectSuccess, onConnectFailure);
-		};
-	};
+		}
+	}
 
-	function onScanFailure(errorCode) {
-
+	function onScanFailure(errorCode)
+	{
 		// Show an error message to the user
 		app.showInfo('Error: ' + errorCode);
-		easyble.stopScan();
-	};
+		evothings.easyble.stopScan();
+	}
 
 	// Update the user interface
 	app.showInfo('Scanning...');
 
 	// Start scanning for devices
-	easyble.startScan(onScanSuccess, onScanFailure);
+	evothings.easyble.startScan(onScanSuccess, onScanFailure);
 };
 
-app.disconnect = function(user) {
-
+app.disconnect = function(user)
+{
 	// If timer configured, clear.
-	if (app.interval) {
-
+	if (app.interval)
+	{
 		clearInterval(app.interval);
 	}
 
@@ -144,8 +148,8 @@ app.disconnect = function(user) {
 	document.getElementById('temperatureDisplay').style.display = 'none';
 
 	// Stop any ongoing scan and close devices.
-	easyble.stopScan();
-	easyble.closeConnectedDevices();
+	evothings.easyble.stopScan();
+	evothings.easyble.closeConnectedDevices();
 
 	// Update user interface
 	app.showInfo('Not connected');
@@ -153,29 +157,29 @@ app.disconnect = function(user) {
 	document.getElementById('BLEButton').onclick = new Function('app.connect()');
 };
 
-app.readTemperature = function() {
-
-	function onDataReadSuccess(data) {
-
+app.readTemperature = function()
+{
+	function onDataReadSuccess(data)
+	{
 		var temperatureData = new Uint8Array(data);
 		var temperature = temperatureData[0];
 		console.log('Temperature read: ' + temperature + ' C');
-		document.getElementById('temperature').innerHTML = temperature
+		document.getElementById('temperature').innerHTML = temperature;
 	}
 
-	function onDataReadFailure(errorCode) {
-
+	function onDataReadFailure(errorCode)
+	{
 		console.log('Failed to read temperature with error: ' + errorCode);
 		app.disconnect();
-	};
+	}
 
 	app.readDataFromScratch(2, onDataReadSuccess, onDataReadFailure);
 };
 
-app.synchronizeLeds = function() {
-
-	function onDataReadSuccess(data) {
-
+app.synchronizeLeds = function()
+{
+	function onDataReadSuccess(data)
+	{
 		var ledData = new Uint8Array(data);
 
 		document.getElementById('redLed').value = ledData[0];
@@ -183,25 +187,25 @@ app.synchronizeLeds = function() {
 		document.getElementById('blueLed').value = ledData[2];
 
 		console.log('Led synchronized.');
-	};
+	}
 
-	function onDataReadFailure(errorCode) {
-
+	function onDataReadFailure(errorCode)
+	{
 		console.log('Failed to synchronize leds with error: ' + errorCode);
 		app.disconnect();
-	};
+	}
 
 	app.readDataFromScratch(1, onDataReadSuccess, onDataReadFailure);
 };
 
-app.sendLedUpdate = function() {
-
-	if (app.connected) {
-
+app.sendLedUpdate = function()
+{
+	if (app.connected)
+	{
 		// Fetch LED values from UI
-		redLed = document.getElementById('redLed').value
-		greenLed = document.getElementById('greenLed').value
-		blueLed = document.getElementById('blueLed').value
+		redLed = document.getElementById('redLed').value;
+		greenLed = document.getElementById('greenLed').value;
+		blueLed = document.getElementById('blueLed').value;
 
 		// Print out fetched LED values
 		console.log('redLed: ' + redLed + ', greenLed: ' + greenLed + ', blueLed: ' + blueLed);
@@ -210,56 +214,62 @@ app.sendLedUpdate = function() {
 		data = new Uint8Array([redLed, greenLed, blueLed]);
 
 		// Callbacks
-		function onDataWriteSuccess() {
-
+		function onDataWriteSuccess()
+		{
 			console.log('Succeded to write data.');
 		}
 
-		function onDataWriteFailure(errorCode) {
-
+		function onDataWriteFailure(errorCode)
+		{
 			console.log('Failed to write data with error: ' + errorCode);
 			app.disconnect();
 		};
 
 		app.writeDataToScratch(1, data, onDataWriteSuccess, onDataWriteFailure);
 	}
-	else {
-
-		redLed = document.getElementById('redLed').value = 0
-		greenLed = document.getElementById('greenLed').value = 0
-		blueLed = document.getElementById('blueLed').value = 0
-	};
-
+	else
+	{
+		redLed = document.getElementById('redLed').value = 0;
+		greenLed = document.getElementById('greenLed').value = 0;
+		blueLed = document.getElementById('blueLed').value = 0;
+	}
 };
 
-app.writeDataToScratch = function(scratchNumber, data, succesCallback, failCallback) {
-
-	if(app.connected) {
-
+app.writeDataToScratch = function(scratchNumber, data, succesCallback, failCallback)
+{
+	if (app.connected)
+	{
 		console.log('Trying to write data to scratch ' + scratchNumber);
-		app.device.writeCharacteristic(app.getScratchCharacteristicUUID(scratchNumber), data, succesCallback, failCallback);
+		app.device.writeCharacteristic(
+			app.getScratchCharacteristicUUID(scratchNumber),
+			data,
+			succesCallback,
+			failCallback);
 	}
-	else {
-
+	else
+	{
 		console.log('Not connected to device, cant write data to scratch.');
-	};
-};
-
-app.readDataFromScratch = function(scratchNumber, successCallback, failCallback) {
-
-	if(app.connected) {
-
-		console.log('Trying to read data from scratch ' + scratchNumber);
-		app.device.readCharacteristic(app.getScratchCharacteristicUUID(scratchNumber), successCallback, failCallback);
 	}
-	else {
-
-		console.log('Not connected to device, cant read data from scratch.');
-	};
 };
 
-app.showInfo = function(info) {
+app.readDataFromScratch = function(scratchNumber, successCallback, failCallback)
+{
+	if (app.connected)
+	{
+		console.log('Trying to read data from scratch ' + scratchNumber);
+		app.device.readCharacteristic(
+			app.getScratchCharacteristicUUID(scratchNumber),
+			successCallback,
+			failCallback);
+	}
+	else
+	{
+		console.log('Not connected to device, cant read data from scratch.');
+	}
+};
 
-	console.log(info)
+app.showInfo = function(info)
+{
+	console.log(info);
 	document.getElementById('BLEStatus').innerHTML = info;
 };
