@@ -220,7 +220,7 @@ app.disconnect = function(errorMessage)
 {
 	if (errorMessage)
 	{
-		navigator.notification.alert(errorMessage, function alertDismissed() {});
+		navigator.notification.alert(errorMessage, function() {});
 	}
 
 	app.connected = false;
