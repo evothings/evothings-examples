@@ -70,7 +70,7 @@ app.startScan = function()
 
 			$('#scanResultView').append($(htmlString));
 		}
-	};
+	}
 
 	function onScanFailure(errorCode)
 	{
@@ -79,7 +79,7 @@ app.startScan = function()
 
 		// Write debug information to console.
 		console.log('Error ' + errorCode);
-	};
+	}
 
 	evothings.easyble.reportDeviceOnce(true);
 	evothings.easyble.startScan(onScanSuccess, onScanFailure);
@@ -121,7 +121,7 @@ app.connectTo = function(address)
 				function(errorcode) {
 					console.log('BLE enableNotification error: ' + errorCode);
 				});
-		};
+		}
 
 		function onServiceFailure(errorCode)
 		{
@@ -130,13 +130,13 @@ app.connectTo = function(address)
 
 			// Write debug information to console.
 			console.log('Error reading services: ' + errorCode);
-		};
+		}
 
 		app.setLoadingLabel('Identifying services...');
 
 		// Connect to the appropriate BLE service
 		device.readServices([app.DFRBLU_SERVICE_UUID], onServiceSuccess, onServiceFailure);
-	};
+	}
 
 	function onConnectFailure(errorCode)
 	{
@@ -145,7 +145,7 @@ app.connectTo = function(address)
 
 		// Write debug information to console
 		console.log('Error ' + errorCode);
-	};
+	}
 
 	// Stop scanning
 	evothings.easyble.stopScan();
@@ -168,7 +168,7 @@ app.sendData = function(data)
 		{
 			console.log('Failed to send data with error: ' + errorCode);
 			app.disconnect('Failed to send data');
-		};
+		}
 
 		data = new Uint8Array(data);
 
@@ -204,7 +204,7 @@ app.receivedData = function(data)
 			console.log(value);
 
 			$('#analogDigitalResult').text(value);
-		};
+		}
 	}
 	else
 	{
