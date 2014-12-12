@@ -4,16 +4,14 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady()
 {
-	/** Start watching/monitoring device sensors: */
+	// Start watching/monitoring device sensors
 	startWatch();
 }
 
 function messagebox(message)
 {
-	/** Show a native alert box: */
-	navigator.notification.alert(
-		message,
-		function alertDismissed() {});
+	// Show a native alert box
+	navigator.notification.alert(message, function() {});
 }
 
 function startWatch()
@@ -24,7 +22,7 @@ function startWatch()
 		{ frequency: 500 });
 }
 
-/** Called by Cordova native when compass heading data is available: */
+/** Called by Cordova native when compass heading data is available */
 function onCompassSuccess(heading)
 {
 	showCompassHeading(
@@ -35,7 +33,7 @@ function onCompassSuccess(heading)
 			Math.round(heading.magneticHeading)));
 }
 
-/** Translates the approximate compass heading to a text: */
+/** Translates the approximate compass heading to a text */
 function computeCompassDirection(heading)
 {
 	var offset = 45 / 2;
@@ -59,12 +57,12 @@ function onCompassError(compassError)
 
 function showCompassHeading(data)
 {
-	/** Changes the contents of the HTML-element with id 'compass-heading': */
+	// Changes the contents of the HTML-element with id 'compass-heading'
 	document.getElementById('compass-heading').innerHTML = data;
 }
 
 function showCompassDirection(data)
 {
-	/** Changes the contents of the HTML-element with id 'compass-direction': */
+	// Changes the contents of the HTML-element with id 'compass-direction'
 	document.getElementById('compass-direction').innerHTML = data;
 }
