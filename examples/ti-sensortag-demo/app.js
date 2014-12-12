@@ -9,6 +9,9 @@ var app = {};
 // Data that is plotted on the canvas.
 app.dataPoints = [];
 
+// Timeout (ms) after which a message is shown if the SensorTag wasn't found.
+var CONNECT_TIMEOUT = 3000
+
 // Initialise the application.
 app.initialize = function()
 {
@@ -52,16 +55,35 @@ app.onStartButton = function()
 {
 	app.onStopButton();
 	app.startScan();
-	app.showInfo('Status: Starting...');
+	app.showInfo('Status: Scanning...');
+	app.startConnectTimer();
 };
 
 app.onStopButton = function()
 {
 	// Stop any ongoing scan and close devices.
+	app.stopConnectTimer();
 	easyble.stopScan();
 	easyble.closeConnectedDevices();
 	app.showInfo('Status: Stopped.');
 };
+
+app.startConnectTimer = function()
+{
+	// If connection is not made within the timeout
+	// period, an error message is shown.
+	app.connectTimer = setTimeout(function()
+		{
+			app.showInfo('Status: Scanning... Please press the activate ' +
+				'button on the tag.');
+		},
+		CONNECT_TIMEOUT)
+}
+
+app.stopConnectTimer = function()
+{
+	clearTimeout(app.connectTimer)
+}
 
 app.startScan = function()
 {
@@ -74,6 +96,7 @@ app.startScan = function()
 				app.showInfo('Status: Device found: ' + device.name + '.');
 				easyble.stopScan();
 				app.connectToDevice(device);
+				app.stopConnectTimer()
 			}
 		},
 		function(errorCode)
@@ -117,11 +140,11 @@ app.readServices = function(device)
 		'f000aa10-0451-4000-b000-000000000000', // Accelerometer service UUID.
 		'f000aa30-0451-4000-b000-000000000000'  // Magnetometer service UUID.
 		],
-		// Function that monitors magnetometer data.
-		app.startMagnetometerNotification,
-		// Use this function to monitor accelerometer data
+		// Function that monitors accelerometer data.
+		app.startAccelerometerNotification,
+		// Use this function to monitor magnetometer data
 		// (comment out the above line if you try this).
-		//app.startAccelerometerNotification,
+		//app.startMagnetometerNotification,
 		function(errorCode)
 		{
 			console.log('Error: Failed to read services: ' + errorCode + '.');
