@@ -151,6 +151,13 @@ def buildRedBearLabSimpleChat
 	copyJQuery(destPath)
 end
 
+def buildBlunoHelloWorld
+	destPath = 'examples/bluno-helloworld/app'
+	copyCommon(destPath)
+	copyEasyBLE(destPath)
+	copyJQuery(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -241,6 +248,7 @@ def build
 	buildArduinoLEDOnOffTCP
 	buildArduinoScriptableTCP
 	buildBLEScan
+	buildBlunoHelloWorld
 	buildCordovaBasic
 	buildEstimoteScan
 	buildHelloWorld
@@ -248,8 +256,8 @@ def build
 	buildIBeaconScan
 	buildLightblueBeanBasic
 	buildNordicBLE
-	buildRedBearLabSimpleControl
 	buildRedBearLabSimpleChat
+	buildRedBearLabSimpleControl
 	buildRFduinoLEDOnOff
 	buildTISensorTagDemo
 	buildTISensorTagSensors
