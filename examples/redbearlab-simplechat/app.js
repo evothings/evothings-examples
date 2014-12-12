@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// RedBearLab - Simple Chat 
+// RedBearLab - Simple Chat
 // version: 0.5 - 2014-12-11
 //
 
-document.addEventListener('deviceready', function(){ app.initialize() }, false);
+document.addEventListener('deviceready', function() { app.initialize() }, false);
 
 var app = {};
 
@@ -58,7 +58,9 @@ app.sendMessage = function()
 		// Convert message
 		var data = new Uint8Array(message.length);
 
-		for (var i=0, messageLength=message.length; i<messageLength; i++)
+		for (var i = 0, messageLength = message.length;
+			i < messageLength;
+			i++)
 		{
 			data[i] = message.charCodeAt(i);
 		}
@@ -83,14 +85,14 @@ app.sendMessage = function()
 app.setLoadingLabel = function(message)
 {
 	console.log(message);
-	$( '#loadingStatus').text(message);
-}
+	$('#loadingStatus').text(message);
+};
 
 app.connectTo = function(address)
 {
 	device = app.devices[address];
 
-	$( "#loadingView" ).css('display', 'table');
+	$('#loadingView').css('display', 'table');
 
 	app.setLoadingLabel('Trying to connect to ' + device.name);
 
@@ -113,13 +115,13 @@ app.connectTo = function(address)
 				{
 					console.log('Status: writeDescriptor ok.');
 
-					$( "#loadingView" ).hide();
-					$( "#scanResultView" ).hide();
-					$( "#conversationView" ).show();
+					$('#loadingView').hide();
+					$('#scanResultView').hide();
+					$('#conversationView').show();
 				},
 				function(errorCode)
 				{
-					// Disconnect and give user feedback. 
+					// Disconnect and give user feedback.
 					app.disconnect('Failed to set descriptor.');
 
 					// Write debug information to console.
@@ -141,9 +143,9 @@ app.connectTo = function(address)
 				}
 			);
 
-			$( "#scanResultView" ).hide();
-			$( "#conversationView" ).show();
-		};
+			$('#scanResultView').hide();
+			$('#conversationView').show();
+		}
 
 		function onServiceFailure(errorCode)
 		{
@@ -152,7 +154,7 @@ app.connectTo = function(address)
 
 			// Write debug information to console.
 			console.log('Error reading services: ' + errorCode);
-		};
+		}
 
 		app.setLoadingLabel('Identifying services...');
 
@@ -162,7 +164,7 @@ app.connectTo = function(address)
 			onServiceSuccess,
 			onServiceFailure
 		);
-	};
+	}
 
 	function onConnectFailure(errorCode)
 	{
@@ -170,7 +172,7 @@ app.connectTo = function(address)
 
 		// Show an error message to the user
 		console.log('Error ' + errorCode);
-	};
+	}
 
 	// Stop scanning
 	evothings.easyble.stopScan();
@@ -182,34 +184,36 @@ app.connectTo = function(address)
 
 app.startScan = function()
 {
-
 	app.disconnect();
 
 	console.log('Scanning started...');
 
 	app.devices = {};
 
-	var htmlString = '<img src="img/loader_small.gif" style="display:inline; vertical-align:middle">' +
-					'<p style="display:inline">   Scanning...</p>';
+	var htmlString =
+		'<img src="img/loader_small.gif" style="display:inline; vertical-align:middle">' +
+		'<p style="display:inline">   Scanning...</p>';
 
-	$("#scanResultView").append($(htmlString));
+	$('#scanResultView').append($(htmlString));
 
-	$("#scanResultView").show();
-		
+	$('#scanResultView').show();
+
 	function onScanSuccess(device)
 	{
 		if (device.name != null)
 		{
-			app.devices[device.address] = device; 
+			app.devices[device.address] = device;
 
 			console.log('Found: ' + device.name + ', ' + device.address + ', ' + device.rssi);
 
-			var htmlString = '<div class="deviceContainer" onclick="app.connectTo(\'' + device.address + '\')">' +
-								'<p class="deviceName">' + device.name + '</p>' +
-								'<p class="deviceAddress">' + device.address + '</p>' +
-							'</div>';
+			var htmlString =
+				'<div class="deviceContainer" onclick="app.connectTo(\'' +
+					device.address + '\')">' +
+				'<p class="deviceName">' + device.name + '</p>' +
+				'<p class="deviceAddress">' + device.address + '</p>' +
+				'</div>';
 
-			$( "#scanResultView" ).append($(htmlString));
+			$('#scanResultView').append($(htmlString));
 		}
 	};
 
@@ -223,9 +227,9 @@ app.startScan = function()
 	};
 
 	evothings.easyble.reportDeviceOnce(true);
-	evothings.easyble.startScan(onScanSuccess, onScanFailure); 
+	evothings.easyble.startScan(onScanSuccess, onScanFailure);
 
-	$( "#startView" ).hide();
+	$('#startView').hide();
 };
 
 app.receivedMessage = function(data)
@@ -252,26 +256,28 @@ app.receivedMessage = function(data)
 
 app.updateConversation = function(message, isRemoteMessage)
 {
-	// Insert message into DOM model. 
+	// Insert message into DOM model.
 	var timeStamp = new Date().toLocaleString();
 
-	var htmlString = '<div class="messageContainer">' +
-						'<div class="messageTimestamp">' +
-							'<p class="messageTimestamp">' + timeStamp + '</p>' +
-						'</div>' +
-						'<div class="messageIcon">' +
-							'<img class="messageIcon" src="img/' + (isRemoteMessage == true ? 'arduino.png' : 'apple.png') + '">' +
-						'</div>' + 
-						'<div class="message">' +
-							'<p class="message">' + message +'</p>'+
-						'</div>' +
-					'</div>';
-	
-	$("#conversation").append($(htmlString));
+	var htmlString =
+		'<div class="messageContainer">' +
+			'<div class="messageTimestamp">' +
+				'<p class="messageTimestamp">' + timeStamp + '</p>' +
+			'</div>' +
+			'<div class="messageIcon">' +
+				'<img class="messageIcon" src="img/' +
+					(isRemoteMessage == true ? 'arduino.png' : 'apple.png') + '">' +
+			'</div>' +
+			'<div class="message">' +
+				'<p class="message">' + message +'</p>'+
+			'</div>' +
+		'</div>';
+
+	$('#conversation').append($(htmlString));
 
 	$('html,body').animate(
 		{
-			scrollTop: $("#disconnectButton").offset().top
+			scrollTop: $('#disconnectButton').offset().top
 		},
 		'slow'
 	);
@@ -281,7 +287,7 @@ app.disconnect = function(errorMessage)
 {
 	if (errorMessage)
 	{
-		navigator.notification.alert(errorMessage,function alertDismissed() {});
+		navigator.notification.alert(errorMessage, function() {});
 	}
 
 	app.connected = false;
@@ -293,11 +299,11 @@ app.disconnect = function(errorMessage)
 
 	console.log('Disconnected');
 
-	$("#loadingView").hide();
-	$("#scanResultView").hide();
-	$("#scanResultView").empty();
-	$("#conversation").empty();
-	$("#conversationView").hide();
+	$('#loadingView').hide();
+	$('#scanResultView').hide();
+	$('#scanResultView').empty();
+	$('#conversation').empty();
+	$('#conversationView').hide();
 
-	$("#startView").show();
+	$('#startView').show();
 };
