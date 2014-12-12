@@ -317,7 +317,10 @@
 		return hex
 	}
 
-	document.addEventListener('deviceready', initialiseSensorTag, false)
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(initialiseSensorTag) },
+		false)
 	</script>
 </body>
 </html>

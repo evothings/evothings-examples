@@ -10,12 +10,15 @@ var app = {};
 app.dataPoints = [];
 
 // Timeout (ms) after which a message is shown if the SensorTag wasn't found.
-var CONNECT_TIMEOUT = 3000
+app.CONNECT_TIMEOUT = 3000;
 
 // Initialise the application.
 app.initialize = function()
 {
-	document.addEventListener('deviceready', app.onDeviceReady, false);
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
 
 	/**
 	 * Called when HTML page has been loaded.
@@ -77,7 +80,7 @@ app.startConnectTimer = function()
 			app.showInfo('Status: Scanning... Please press the activate ' +
 				'button on the tag.');
 		},
-		CONNECT_TIMEOUT)
+		app.CONNECT_TIMEOUT)
 }
 
 app.stopConnectTimer = function()
