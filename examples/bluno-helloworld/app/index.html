@@ -67,17 +67,17 @@
 
 <body ontouchstart="">
 
-	<header>
+<header>
 
-		<button class="back" onclick="history.back()">
-			<img src="ui/images/arrow-left.svg" />
-		</button>
+	<button class="back" onclick="history.back()">
+		<img src="ui/images/arrow-left.svg" />
+	</button>
 
-		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+	<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
-	</header>
+</header>
 
-	<h1>Bluno - Hello World</h1>
+<h1>Bluno - Hello World</h1>
 
 <div id="startView">
 
@@ -92,16 +92,17 @@
 
 <div id="controlView" style="display:none">
 
-	<h1>Led</h1>
+	<h2>Led</h2>
 
-		<button class="green wide" onclick="app.sendData([0x01])">On</button>
-		<button class="red wide" onclick="app.sendData([0x00])">Off</button>
+	<button class="green wide" onclick="app.sendData([0x01])">On</button>
+	<button class="red wide" onclick="app.sendData([0x00])">Off</button>
 
-	<h1>Analog In</h1>
+	<h2>Analog In</h2>
 
-		<button id="analogDigitalResult" class="aluminum wide">-</button>
+	<button id="analogDigitalResult" class="aluminum wide">-</button>
 
 	<hr>
+
 	<button id="disconnectButton" class="red wide" onclick="app.disconnect()">Disconnect</button>
 
 </div>

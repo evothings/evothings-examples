@@ -26,7 +26,7 @@
 // to the scratch data area 2.
 //
 
-String beanName = "LightBlueBean2";
+String beanName = "LightBlueBean";
 const uint8_t ledScratch = 1;
 const uint8_t temperatureScratch = 2;
 

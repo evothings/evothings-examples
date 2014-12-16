@@ -28,20 +28,20 @@
 </head>
 
 <body ontouchstart="">
-	
-	<header>
 
-		<button class="back" onclick="history.back()">
-			<img src="ui/images/arrow-left.svg" />
-		</button>
+<header>
 
-		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+	<button class="back" onclick="history.back()">
+		<img src="ui/images/arrow-left.svg" />
+	</button>
 
-	</header>
+	<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
-	<h1>Simple Control</h1>
+</header>
 
-<div id="startView">	
+<h1>Simple Control</h1>
+
+<div id="startView">
 
 	<img class="center" src="img/RedBearLab.jpg">
 	<button class="red wide" onclick="app.startScan()"> Scan </button>
@@ -54,7 +54,7 @@
 
 <div id="controlView" style="display:none">
 
-	<h1>Digital Out - Pin 2</h1> 
+	<h2>Digital Out - Pin 2</h2>
 
 	<button class="green wide" onclick="app.sendData([0x01,0x01,0x00])">
 		High
@@ -64,21 +64,21 @@
 		Low
 	</button>
 
-	<h1>Digital In - Pin A4</h1>
+	<h2>Digital In - Pin A4</h2>
 
 	<button id="digitalInputResult" class="aluminum wide">-</button>
 
-	<h1>PWM - Pin 3</h1>
+	<h2>PWM - Pin 3</h2>
 
 	<input type="range" min="0" max="255" step="1" value="0"
 		onchange="app.sendData([0x02,this.value,0x00])">
 
-	<h1>Servo - Pin 5</h1>
+	<h2>Servo - Pin 5</h2>
 
 	<input type="range" min="0" max="179" step="1" value="0"
 		onchange="app.sendData([0x03,this.value,0x00])">
 
-	<h1>Analog In - Pin A5</h1>
+	<h2>Analog In - Pin A5</h2>
 
 	<button id="analogDigitalResult" class="aluminum wide">-</button>
 
@@ -101,7 +101,7 @@
 		<img src="img/loader.gif">
 		<p id="loadingStatus"></p>
 	</div>
-	
+
 </div>
 
 </body>
