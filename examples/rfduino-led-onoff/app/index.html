@@ -31,16 +31,6 @@ RFduino from a PC or Mac.
 	.lead {
 		font-weight: bold;
 	}
-	.btn-blueled {
-		color: rgb(255,255,255);
-		background-color: rgb(0,0,255);
-		border-color: rgb(0,0,255);
-	}
-	.btn-connect {
-		color: rgb(255,255,255);
-		background-color: rgb(0,150,0);
-		border-color: rgb(0,150,0);
-	}
 	</style>
 
 	<script>
@@ -56,7 +46,6 @@ RFduino from a PC or Mac.
 </head>
 
 <body>
-	<!-- HTML markup for the app -->
 
 	<header>
 		<button class="back" onclick="history.back()">
@@ -70,19 +59,23 @@ RFduino from a PC or Mac.
 
 	<h1>RFduino LED On/Off</h1>
 
-	<div>
-		<p id="info" class="lead">Initializing...</p>
-	</div>
+	<p id="info" class="lead">Initializing...</p>
 
-	<div class="form-group">
-		<button type="button" class="btn btn-lg btn-connect"
-			onclick="app.connect()">Connect</button>
-		<button type="button" class="btn btn-lg btn-blueled"
-			onclick="app.ledOn()">Blue Led On</button>
-		<button type="button" class="btn btn-lg btn-blueled"
-			onclick="app.ledOff()">Blue Led Off</button>
-	</div>
+	<button type="button" class="yellow" onclick="app.connect()">
+		Connect
+	</button>
 
+	<br />
+
+	<button type="button" class="blue" onclick="app.ledOn()">
+		Blue Led On
+	</button>
+
+	<button type="button" class="charcoal" onclick="app.ledOff()">
+		Blue Led Off
+	</button>
+
+	<h2>Instructions</h2>
 	<p>This example requires a RFduino RFD22102 and an RFduino RGB
 	LED Button shield (RFD22122). You also need an RFduino USB shield
 	for programming the RFduino from a PC/Mac.</p>
@@ -123,7 +116,7 @@ RFduino from a PC or Mac.
 	// Called when BLE and other native functions are available.
 	app.onDeviceReady = function()
 	{
-		app.showMessage("Touch green button to connect");
+		app.showMessage('Press the yellow button to connect');
 	};
 
 	app.connect = function()
