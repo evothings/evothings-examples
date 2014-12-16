@@ -72,8 +72,8 @@ var evothings = (function(evothings)
 
 	/**
 	 * Add a callback that will be called when all scripts are loaded.
-	 * @param callback - optional parameterless function that will
-	 * be called when all scripts have loaded.
+	 * @param callback - parameterless function that will
+	 * be called when all scripts have finished loading.
 	 */
 	evothings.scriptsLoaded = function(callback)
 	{
