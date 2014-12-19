@@ -29,39 +29,7 @@ $(function()
 {
 	// Display the selected default light.
 	$('#lightButton' + app.lightId).prop('checked', true);
-
-	// Initialize the colors of the color setting buttons
-	// to their corresponding light colors.
-	app.changeButtonColors();
 });
-
-/**
- * Convert HSB to HSL as a CSS color value
- * TODO: correct conversion algorithm.
- * See issue: https://github.com/evothings/EvoThingsExamples/issues/17
- */
-app.getCSSHSL = function(hsl)
-{
-	return 'hsl(' + (360 * hsl.hue / 65535) + ',' +
-			Math.round(100 * hsl.sat / 255) + '%,' +
-			Math.round(100 * hsl.bri / 255) + '%)';
-};
-
-/**
- * Set the background color of each color setting buttons
- * to the corresponding light color.
- */
-app.changeButtonColors = function()
-{
-	for (var i in app.hueColors)
-	{
-		// Do not change the buttons background color, to keep a consistent
-		// style and corporate identity. Preview light color in some other way.
-		/*$('#btn_color_' + (parseInt(i)+1))
-			.css('background', app.getCSSHSL(app.hueColors[i]))
-			.css('borderColor', app.getCSSHSL(app.hueColors[i]));*/
-	}
-};
 
 /**
  * You can manually lookup the ip-address of the Hue Bridge
