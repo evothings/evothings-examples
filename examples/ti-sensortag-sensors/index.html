@@ -3,6 +3,7 @@
 	Demonstration of the TI SensorTag JavaScript library.
 -->
 <html>
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="format-detection" content="telephone=no" />
@@ -13,23 +14,6 @@
 
 	<style>
 		@import 'ui/css/evothings-app.css';
-	</style>
-
-	<style>
-	/*body {
-		background: rgb(25,25,25);
-		color: rgb(255,255,255);
-		font-size: 100%;
-		padding: 0px 20px;
-	}*/
-	.SensorData {
-		font-size: 60%;
-		font-weight: bold;
-	}
-	.SensorData span {
-		font-weight: normal;
-		font-family: "Lucida Console", Monaco, monospace;
-	}
 	</style>
 
 	<script>
@@ -43,6 +27,7 @@
 </head>
 
 <body>
+
 	<header>
 		<button class="back" onclick="history.back()">
 			<img src="ui/images/arrow-left.svg" />
@@ -53,18 +38,49 @@
 
 	<h1>TI SensorTag Sensors</h1>
 
-	<p style="font-weight:bold;">
+	<p>
 		This example works with SensorTag firmware version 1.5 and above.
-		Current firmware version: <span id="FirmwareData">?</span></p>
+		Current firmware version: <span id="FirmwareData">?</span>
+	</p>
 
-	<div class="SensorData">Status: <span id="StatusData">Ready to connect</span></div>
-	<div class="SensorData">Keypress: <br/><span id="KeypressData">[Waiting for value]</span></div>
-	<div class="SensorData">IRTemperature:<br/><span id="IRTemperatureData">[Waiting for value]</span></div>
-	<div class="SensorData">Accelerometer:<br/><span id="AccelerometerData">[Waiting for value]</span></div>
-	<div class="SensorData">Humidity:<br/><span id="HumidityData">[Waiting for value]</span></div>
-	<div class="SensorData">Magnetometer:<br/><span id="MagnetometerData">[Waiting for value]</span></div>
-	<div class="SensorData">Barometer:<br/><span id="BarometerData">[Waiting for value]</span></div>
-	<div class="SensorData">Gyroscope:<br/><span id="GyroscopeData">[Waiting for value]</span></div>
+	<p>
+		<strong>Status:</strong> <span id="StatusData">Ready to connect</span>
+	</p>
+	
+	<h2>Keypress:</h2>
+	<p>
+		<span id="KeypressData">[Waiting for value]</span>
+	</p>
+	
+	<h2>IRTemperature:</h2>
+	<p>
+		<span id="IRTemperatureData">[Waiting for value]</span>
+	</p>
+	
+	<h2>Accelerometer:</h2>
+	<p>
+		<span id="AccelerometerData">[Waiting for value]</span>
+	</p>
+
+	<h2>Humidity:</h2>
+	<p>
+		<span id="HumidityData">[Waiting for value]</span>
+	</p>
+	
+	<h2>Magnetometer:</h2>
+	<p>
+		<span id="MagnetometerData">[Waiting for value]</span>
+	</p>
+	
+	<h2>Barometer:</h2>
+	<p>
+		<span id="BarometerData">[Waiting for value]</span>
+	</p>
+	
+	<h2>Gyroscope:</h2>
+	<p>
+		<span id="GyroscopeData">[Waiting for value]</span>
+	</p>
 
 	<script>
 	// SensorTag object.
@@ -322,5 +338,7 @@
 		function() { evothings.scriptsLoaded(initialiseSensorTag) },
 		false)
 	</script>
+
 </body>
+
 </html>
