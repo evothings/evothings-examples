@@ -34,7 +34,17 @@
 
 		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
-		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem onclick="location.hash=''">Home</menuitem>
+
+			<menuitem onclick="location.hash='troubleshooting'">
+				Troubleshooting
+			</menuitem>
+		</menu>
 	</header>
 
 	<h1>BLE Scan</h1>
@@ -51,9 +61,13 @@
 
 	<ul id="found-devices" class="dynamic"></ul>
 
-	<h2>Troubleshooting</h2>
+	<section id='troubleshooting'>
 
-	<p>Sometimes BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
+		<h2>Troubleshooting</h2>
+
+		<p>Sometimes BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
+
+	</section>
 
 </body>
 
