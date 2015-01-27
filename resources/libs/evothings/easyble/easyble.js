@@ -694,35 +694,8 @@ evothings.easyble = (function()
 			fail);
 	};
 
-	// For debugging. printFun defaults to console.log.
-	// Example calls:
-	// evothings.easyble.printObject(device);
-	// evothings.easyble.printObject(device, console.log);
-	easyble.printObject = function(obj, printFun)
-	{
-		printFun = printFun || console.log;
-		function print(obj, level)
-		{
-			var indent = new Array(level + 1).join('  ');
-			for (var prop in obj)
-			{
-				if (obj.hasOwnProperty(prop))
-				{
-					var value = obj[prop];
-					if (typeof value == 'object')
-					{
-						printFun(indent + prop + ':');
-						print(value, level + 1);
-					}
-					else
-					{
-						printFun(indent + prop + ': ' + value);
-					}
-				}
-			}
-		}
-		print(obj, 0);
-	};
+	// Deprecated. Defined here for backwards compatibility.
+	easyble.printObject = evothings.printObject;
 
 	easyble.reset = function()
 	{

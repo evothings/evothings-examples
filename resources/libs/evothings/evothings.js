@@ -90,6 +90,46 @@ var evothings = (function(evothings)
 		}
 	};
 
+	/* ------------------ Debugging ------------------ */
+
+	/**
+	 * Print a JavaScript object (dictionary).
+	 *
+	 * @param obj - Object to print.
+	 * @param printFun - print function (optional - defaults to
+	 * console.log if not given).
+	 *
+	 * Example calls:
+	 *   var obj = { company: 'Evothings', field: 'IoT' };
+	 *   evothings.easyble.printObject(obj);
+	 *   evothings.easyble.printObject(obj, console.log);
+	 */
+	evothings.printObject = function(obj, printFun)
+	{
+		printFun = printFun || console.log;
+		function print(obj, level)
+		{
+			var indent = new Array(level + 1).join('  ');
+			for (var prop in obj)
+			{
+				if (obj.hasOwnProperty(prop))
+				{
+					var value = obj[prop];
+					if (typeof value == 'object')
+					{
+						printFun(indent + prop + ':');
+						print(value, level + 1);
+					}
+					else
+					{
+						printFun(indent + prop + ': ' + value);
+					}
+				}
+			}
+		}
+		print(obj, 0);
+	};
+
 	/* ------------------ Platform check ------------------ */
 
 	evothings.os = {};
