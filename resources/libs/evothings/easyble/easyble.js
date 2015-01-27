@@ -11,13 +11,16 @@
  * underscores.
  */
 
-evothings.loadScript('libs/evothings/util/util.js');
+// We assume the "evothings" library was loaded first.
 
-var base64 = cordova.require('cordova/base64');
+// Load dependent script.
+evothings.loadScript('libs/evothings/util/util.js');
 
 // Object that holds BLE data and functions.
 evothings.easyble = (function()
 {
+	var base64 = cordova.require('cordova/base64');
+
 	/** Main object in the EasyBLE API. */
 	var easyble = {};
 
@@ -691,10 +694,13 @@ evothings.easyble = (function()
 			fail);
 	};
 
-	// For debugging. Example call:
-	// easyble.printObject(device, console.log);
+	// For debugging. printFun defaults to console.log.
+	// Example calls:
+	// evothings.easyble.printObject(device);
+	// evothings.easyble.printObject(device, console.log);
 	easyble.printObject = function(obj, printFun)
 	{
+		printFun = printFun || console.log;
 		function print(obj, level)
 		{
 			var indent = new Array(level + 1).join('  ');
