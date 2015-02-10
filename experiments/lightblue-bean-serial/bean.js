@@ -124,9 +124,8 @@ evothings.bean = (function() {
 	}
 
 	/**
-	* @param {object} data - May be a TypedArray or an ArrayBuffer. In any case, its byteLength may not exceed 13.
-	* TODO: allow arbitrarily long buffers.
-	* Caveat: even if this is done, the Bean protocol limits message size to 64 bytes. Longer messages will be split.
+	* @param {object} data - May be a TypedArray or an ArrayBuffer.
+	* Caveat: The Bean protocol limits message size to 64 bytes. Longer messages will be split.
 	* Workaround: handle reconstitution on the Arduino side.
 	*
 	* Test with Serial Loopback sketch shows that messages up to 63 bytes work. 64 bytes or longer causes the Bean to become unresponsive.

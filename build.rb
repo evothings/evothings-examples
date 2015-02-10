@@ -158,6 +158,12 @@ def buildBlunoHelloWorld
 	copyJQuery(destPath)
 end
 
+def buildLightblueBeanSerial
+	destPath = 'experiments/lightblue-bean-serial'
+	copyCommon(destPath)
+	copyUtil(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -255,6 +261,7 @@ def build
 	buildHueLights
 	buildIBeaconScan
 	buildLightblueBeanBasic
+	buildLightblueBeanSerial
 	buildNordicBLE
 	buildRedBearLabSimpleChat
 	buildRedBearLabSimpleControl
