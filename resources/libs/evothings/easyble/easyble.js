@@ -280,11 +280,8 @@ evothings.easyble = (function()
 
 		/*
 		// Log raw data for debugging purposes.
-		var srs = ''
-		for(var i=0; i<byteArray.length; i++) {
-			srs += evothings.util.toHexString(byteArray[i], 1);
-		}
-		console.log("scanRecord: "+srs);
+
+		console.log("scanRecord: "+evothings.util.typedArrayToHexString(byteArray));
 
 		console.log(JSON.stringify(advertisementData));
 		*/
