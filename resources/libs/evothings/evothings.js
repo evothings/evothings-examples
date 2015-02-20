@@ -3,7 +3,11 @@
 // to notify when scripts are loaded (by using a script loading
 // counter to track progress).
 
-var evothings = (function(evothings)
+/**
+* @namespace
+*/
+evothings = window.evothings || {};
+(function()
 {
 	/* ------------------ Script loading ------------------ */
 
@@ -13,9 +17,9 @@ var evothings = (function(evothings)
 
 	/**
 	 * Load a script.
-	 * @param url - URL or path to the script. Relative paths are
+	 * @param {String} url - URL or path to the script. Relative paths are
 	 * relative to the HTML file that initiated script loading.
-	 * @param callback - optional parameterless function that will
+	 * @param {function} callback - optional parameterless function that will
 	 * be called when the script has loaded.
 	 */
 	evothings.loadScript = function(url, callback)
@@ -95,11 +99,11 @@ var evothings = (function(evothings)
 	/**
 	 * Print a JavaScript object (dictionary).
 	 *
-	 * @param obj - Object to print.
-	 * @param printFun - print function (optional - defaults to
+	 * @param {Object} obj - Object to print.
+	 * @param {function} printFun - print function (optional - defaults to
 	 * console.log if not given).
 	 *
-	 * Example calls:
+	 * @example
 	 *   var obj = { company: 'Evothings', field: 'IoT' };
 	 *   evothings.easyble.printObject(obj);
 	 *   evothings.easyble.printObject(obj, console.log);
@@ -157,7 +161,7 @@ var evothings = (function(evothings)
 	return evothings;
 
 // If for some reason the global evothings variable is already defined we use it.
-})(window.evothings || {});
+})();
 
 window.addEventListener('DOMContentLoaded', function(e) {
 	/* Set an absolute base font size in iOS 7 due to that viewport-relative
