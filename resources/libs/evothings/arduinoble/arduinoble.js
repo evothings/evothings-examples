@@ -1,54 +1,51 @@
-/*
-File: arduino-ble.js
-Author: Mikael Kindborg
-Description: Functions for communicating with an Arduino BLE shield.
-
-TODO: This is a very simple library that has only write capability,
-read and notification functions should be added.
-
-TODO: Add functions to set the BLE name used to identify the BLE shield
-and add function to set the write characteristic UUID.
-
-Example of use:
-
-     evothings.arduinoble.connect(
-     	'arduinoble', // Name of BLE shield.
-         function(device)
-         {
-         	console.log('connected!');
-         	device.writeDataArray(new Uint8Array([1]));
-         	evothings.arduinoble.close();
-         },
-         function(errorCode)
-         {
-         	console.log('Error: ' + errorCode);
-         });
-*/
-
-// Object that exposes the Arduino BLE API.
+// File: arduinoble.js
 
 evothings.loadScript('libs/evothings/easyble/easyble.js')
 
-if (!window.evothings) { window.evothings = {} }
-evothings.arduinoble = (function()
-{
-	// Arduino BLE object.
-	var arduinoble = {};
+/** @namespace
+* @author Mikael Kindborg
+* @description Functions for communicating with an Arduino BLE shield.
+*
+* @todo This is a very simple library that has only write capability,
+* read and notification functions should be added.
+*
+* @todo Add functions to set the BLE name used to identify the BLE shield
+* and add function to set the write characteristic UUID.
+*
+* @example
+evothings.arduinoble.connect(
+	'arduinoble', // Name of BLE shield.
+	function(device)
+	{
+		console.log('connected!');
+		device.writeDataArray(new Uint8Array([1]));
+		evothings.arduinoble.close();
+	},
+	function(errorCode)
+	{
+		console.log('Error: ' + errorCode);
+	});
+*/
 
+// Object that exposes the Arduino BLE API.
+evothings.arduinoble = {};
+(function()
+{
 	// Internal functions.
 	var internal = {};
 
-	// Stops any ongoing scan and disconnects all devices.
-	arduinoble.close = function()
+	/** Stop any ongoing scan and disconnect all devices. */
+	evothings.arduinoble.close = function()
 	{
 		evothings.easyble.stopScan();
 		evothings.easyble.closeConnectedDevices();
 	};
 
-	// Connect to a BLE-shield.
-	// Success callback: win(device)
-	// Error callback: fail(errorCode)
-	arduinoble.connect = function(deviceName, win, fail)
+	/** Connect to a BLE-shield.
+	* @param {evothings.arduinoble.win} win - Success callback: win(device)
+	* @param {function} fail - Error callback: fail(errorCode)
+	*/
+	evothings.arduinoble.connect = function(deviceName, win, fail)
 	{
 		evothings.easyble.startScan(
 			function(device)
@@ -64,6 +61,21 @@ evothings.arduinoble = (function()
 				fail(errorCode);
 			});
 	};
+
+	/** Called when you've connected to an Arduino BLE shield.
+	* @callback evothings.arduinoble.win
+	* @param {evothings.arduinoble.device} device - The connected BLE shield.
+	*/
+
+	/** Info about an Arduino BLE shield.
+	* @typedef {Object} evothings.arduinoble.device
+	* @property {evothings.arduinoble.writeDataArray} writeDataArray
+	*/
+
+	/** Write data to an Arduino BLE shield.
+	* @callback evothings.arduinoble.writeDataArray
+	* @param {Uint8Array} uint8array - The data to be written.
+	*/
 
 	internal.connectToDevice = function(device, win, fail)
 	{
@@ -111,6 +123,4 @@ evothings.arduinoble = (function()
 				});
 		};
 	};
-
-	return arduinoble;
 })();

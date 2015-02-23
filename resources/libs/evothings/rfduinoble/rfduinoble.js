@@ -1,24 +1,20 @@
-/*
-File: rfduinoble.js
-Author: Patrik D.
-Description: Functions for communicating with an RFduino.
-*/
-
-// Object that exposes the RFduino BLE API.
+// File: rfduinoble.js
 
 evothings.loadScript('libs/evothings/easyble/easyble.js')
 
-if (!window.evothings) { window.evothings = {} }
-evothings.rfduinoble = (function()
+/** @namespace
+* @author Patrik D.
+* @description Functions for communicating with an RFduino.
+*/
+// Object that exposes the RFduino BLE API.
+evothings.rfduinoble = {};
+(function()
 {
-	// RFduino BLE object.
-	var rfduinoble = {};
-
 	// Internal functions.
 	var internal = {};
 
 	// Stops any ongoing scan and disconnects all devices.
-	rfduinoble.close = function()
+	evothings.rfduinoble.close = function()
 	{
 		evothings.easyble.stopScan();
 		evothings.easyble.closeConnectedDevices();
@@ -27,7 +23,7 @@ evothings.rfduinoble = (function()
 	// Connect to an RFduino.
 	// Success callback: win(device)
 	// Error callback: fail(errorCode)
-	rfduinoble.connect = function(deviceName, win, fail)
+	evothings.rfduinoble.connect = function(deviceName, win, fail)
 	{
 		evothings.easyble.startScan(
 			function(device)
@@ -92,6 +88,4 @@ evothings.rfduinoble = (function()
 				});
 		};
 	};
-
-	return rfduinoble;
 })();

@@ -2,9 +2,9 @@
 // Author: Mikael Kindborg
 // Functions for scripting the Arduino board from JavaScript.
 
-if (!window.evothings) { window.evothings = {} }
+evothings = window.evothings || {};
 
-/**
+/*
  * Readable names for parameter values. (Having these as
  * globals is a bit ugly but makes for shorter names in
  * the application code.)
@@ -14,31 +14,28 @@ var INPUT = 2
 var HIGH = true
 var LOW = false
 
-evothings.arduinotcp = (function()
+/** @namespace */
+evothings.arduinotcp = {};
+(function()
 {
-	/**
-	 * Library object.
-	 */
-	var arduino = {}
-
 	/**
 	 * Holder of internal library functions.
 	 */
-	arduino.internal = {}
+	var internal = {}
 
 	/**
 	 * Internal arrays for timer intervals and timeouts.
 	 */
-	arduino.internal.timerTimeouts = []
-	arduino.internal.timerIntervals = []
+	internal.timerTimeouts = []
+	internal.timerIntervals = []
 
 	/**
 	 * Start timeout timer. This function makes it easier to
 	 * use timeouts in Arduino scripts.
 	 */
-	arduino.setTimeout = function(fun, ms)
+	evothings.arduinotcp.setTimeout = function(fun, ms)
 	{
-		arduino.internal.timerTimeouts.push(
+		internal.timerTimeouts.push(
 			setTimeout(fun, ms))
 	}
 
@@ -46,42 +43,42 @@ evothings.arduinotcp = (function()
 	 * Start interval timer. This function makes it easier to
 	 * use timer intervals in Arduino scripts.
 	 */
-	arduino.setInterval = function(fun, ms)
+	evothings.arduinotcp.setInterval = function(fun, ms)
 	{
-		arduino.internal.timerIntervals.push(
+		internal.timerIntervals.push(
 			setInterval(fun, ms))
 	}
 
 	/**
 	 * Clear all timers.
 	 */
-	arduino.clearAllTimers = function()
+	evothings.arduinotcp.clearAllTimers = function()
 	{
-		for (var i = 0; i < arduino.internal.timerTimeouts.length; ++i)
+		for (var i = 0; i < internal.timerTimeouts.length; ++i)
 		{
-			clearTimeout(arduino.internal.timerTimeouts[i])
+			clearTimeout(internal.timerTimeouts[i])
 		}
-		for (var i = 0; i < arduino.internal.timerIntervals.length; ++i)
+		for (var i = 0; i < internal.timerIntervals.length; ++i)
 		{
-			clearInterval(arduino.internal.timerIntervals[i])
+			clearInterval(internal.timerIntervals[i])
 		}
-		arduino.internal.timerTimeouts = []
-		arduino.internal.timerIntervals = []
+		internal.timerTimeouts = []
+		internal.timerIntervals = []
 	}
 
 	/**
 	 * The IP address of the Arduino board.
 	 */
-	arduino.ipAddress = ''
+	evothings.arduinotcp.ipAddress = ''
 
 	/**
 	 * The port number used by the Arduino server.
 	 */
-	arduino.port = 0
+	evothings.arduinotcp.port = 0
 
-	arduino.getIpAddress = function()
+	evothings.arduinotcp.getIpAddress = function()
 	{
-		return arduino.ipAddress
+		return evothings.arduinotcp.ipAddress
 	}
 
 	/**
@@ -89,15 +86,15 @@ evothings.arduinotcp = (function()
 	 * @param pinNumber - pin number to read
 	 * @param value - HIGH or LOW
 	 */
-	arduino.digitalWrite = function(pinNumber, value)
+	evothings.arduinotcp.digitalWrite = function(pinNumber, value)
 	{
 		if (value == HIGH)
 		{
-			arduino.internal.sendRequest('H' + pinNumber, arduino.internal.callbackFun)
+			internal.sendRequest('H' + pinNumber, internal.callbackFun)
 		}
 		else if (value == LOW)
 		{
-			arduino.internal.sendRequest('L' + pinNumber, arduino.internal.callbackFun)
+			internal.sendRequest('L' + pinNumber, internal.callbackFun)
 		}
 	}
 
@@ -106,15 +103,15 @@ evothings.arduinotcp = (function()
 	 * @param pinNumber - pin number to read
 	 * @param mode - OUTPUT or INPUT
 	 */
-	arduino.pinMode = function(pinNumber, mode)
+	evothings.arduinotcp.pinMode = function(pinNumber, mode)
 	{
 		if (mode == OUTPUT)
 		{
-			arduino.internal.sendRequest('O' + pinNumber, arduino.internal.callbackFun)
+			internal.sendRequest('O' + pinNumber, internal.callbackFun)
 		}
 		else if (mode == INPUT)
 		{
-			arduino.internal.sendRequest('I' + pinNumber, arduino.internal.callbackFun)
+			internal.sendRequest('I' + pinNumber, internal.callbackFun)
 		}
 	}
 
@@ -126,15 +123,15 @@ evothings.arduinotcp = (function()
 	 * @param callback - format callback(value) where value is 'H' or 'L',
 	 * or null on error.
 	 */
-	arduino.digitalRead = function(pinNumber, callback)
+	evothings.arduinotcp.digitalRead = function(pinNumber, callback)
 	{
-		arduino.internal.sendRequest(
+		internal.sendRequest(
 			'R' + pinNumber,
 			function(result)
 			{
 				if (result)
 				{
-					arduino.internal.readServerResult(function(data)
+					internal.readServerResult(function(data)
 					{
 						callback(data)
 					})
@@ -151,15 +148,15 @@ evothings.arduinotcp = (function()
 	 * Read an analog input value, callback is called with the value of
 	 * the Arduino function analogRead().
 	 */
-	arduino.analogRead = function(pinNumber, callback)
+	evothings.arduinotcp.analogRead = function(pinNumber, callback)
 	{
-		arduino.internal.sendRequest(
+		internal.sendRequest(
 			'A' + pinNumber,
 			function(result)
 			{
 				if (result)
 				{
-					arduino.internal.readServerResult(function(data)
+					internal.readServerResult(function(data)
 					{
 						callback(data)
 					})
@@ -176,51 +173,51 @@ evothings.arduinotcp = (function()
 	 * Connect to a server.
 	 * Format: callback(successFlag)
 	 */
-	arduino.connect = function(hostname, port, callback)
+	evothings.arduinotcp.connect = function(hostname, port, callback)
 	{
-		arduino.disconnect()
+		evothings.arduinotcp.disconnect()
 
 		chrome.socket.create('tcp', {}, function(createInfo)
 		{
-			arduino.internal.socketId = createInfo.socketId
+			internal.socketId = createInfo.socketId
 			chrome.socket.connect(
 				createInfo.socketId,
 				hostname,
 				port,
 				function(resultCode)
 				{
-					arduino.internal.connected = (0 === resultCode)
-					callback(arduino.internal.connected)
+					internal.connected = (0 === resultCode)
+					callback(internal.connected)
 				}
 			)
 		})
 	}
 
-	arduino.disconnect = function()
+	evothings.arduinotcp.disconnect = function()
 	{
-		if (arduino.internal.connected)
+		if (internal.connected)
 		{
-			chrome.socket.disconnect(arduino.internal.socketId)
-			arduino.internal.connected = false
+			chrome.socket.disconnect(internal.socketId)
+			internal.connected = false
 		}
 	}
 
 	/**
 	 * Internal connected flag.
 	 */
-	arduino.internal.connected = false
+	internal.connected = false
 
 	/**
 	 * Send a request to the Arduino.
 	 * @param command - the command string
 	 * @callback - function on the format: callback(successFlag)
 	 */
-	arduino.internal.sendRequest = function(command, callback)
+	internal.sendRequest = function(command, callback)
 	{
-		if (arduino.internal.connected)
+		if (internal.connected)
 		{
-			arduino.internal.write(
-				arduino.internal.socketId,
+			internal.write(
+				internal.socketId,
 				command + '\n', // Here a newline is added to the end of the request.
 				function(bytesWritten)
 				{
@@ -235,11 +232,11 @@ evothings.arduinotcp = (function()
 	 * Write data.
 	 * Format: callback(bytesWritten)
 	 */
-	arduino.internal.write = function(socketId, string, callback)
+	internal.write = function(socketId, string, callback)
 	{
 		chrome.socket.write(
 			socketId,
-			arduino.internal.stringToBuffer(string),
+			internal.stringToBuffer(string),
 			function(writeInfo)
 			{
 				callback(writeInfo.bytesWritten)
@@ -250,29 +247,29 @@ evothings.arduinotcp = (function()
 	/**
 	 * Array for the callback queue.
 	 */
-	arduino.internal.resultCallbackQueue = []
+	internal.resultCallbackQueue = []
 
 	/**
 	 * Data being read from the server.
 	 */
-	arduino.internal.resultData = ''
+	internal.resultData = ''
 
 	/**
 	 * Read result from server, calling the callback function
 	 * with the result.
 	 * Format: callback(data) where data is a string
 	 */
-	arduino.internal.readServerResult = function(callback)
+	internal.readServerResult = function(callback)
 	{
 		// Add callback to queue.
-		arduino.internal.resultCallbackQueue.push(callback)
+		internal.resultCallbackQueue.push(callback)
 
 		// If this is the only callback there is no read operation
 		// in progress, so start reading.
-		if (arduino.internal.resultCallbackQueue.length == 1)
+		if (internal.resultCallbackQueue.length == 1)
 		{
-			arduino.internal.resultData = ''
-			arduino.internal.readNext()
+			internal.resultData = ''
+			internal.readNext()
 		}
 	}
 
@@ -280,51 +277,51 @@ evothings.arduinotcp = (function()
 	 * Read data from server, when a result is read (reading up to next
 	 * newline char) the first function in the callback queue is called.
 	 */
-	arduino.internal.readNext = function()
+	internal.readNext = function()
 	{
-		console.log('arduino.internal.readNext: ' + arduino.internal.resultData)
+		console.log('internal.readNext: ' + internal.resultData)
 		chrome.socket.read(
-			arduino.internal.socketId,
+			internal.socketId,
 			1,
 			function(readInfo)
 			{
 				if (1 == readInfo.resultCode)
 				{
-					var data = arduino.internal.bufferToString(readInfo.data)
+					var data = internal.bufferToString(readInfo.data)
 					if (data == '\n')
 					{
 						console.log('  end of data: ' + data)
 						// We have read all data, call next result callback with result.
-						var callback = arduino.internal.resultCallbackQueue.shift()
-						callback(arduino.internal.resultData)
+						var callback = internal.resultCallbackQueue.shift()
+						callback(internal.resultData)
 
 						// If there are callbacks waiting, continue reading
 						// the next result.
-						if (arduino.internal.resultCallbackQueue.length > 0)
+						if (internal.resultCallbackQueue.length > 0)
 						{
-							arduino.internal.resultData = ''
-							arduino.internal.readNext()
+							internal.resultData = ''
+							internal.readNext()
 						}
 					}
 					else
 					{
 						console.log('  got data: ' + data)
 						// We got more data, continue to read.
-						arduino.internal.resultData += data
-						arduino.internal.readNext()
+						internal.resultData += data
+						internal.readNext()
 					}
 				}
 				else
 				{
 					console.log('  no data')
 					// We did not get any data, read again.
-					arduino.internal.readNext()
+					internal.readNext()
 				}
 			}
 		)
 	}
 
-	arduino.internal.callbackFun = function(result)
+	internal.callbackFun = function(result)
 	{
 		if (result == false)
 		{
@@ -332,12 +329,12 @@ evothings.arduinotcp = (function()
 		}
 	}
 
-	arduino.internal.bufferToString = function(buffer)
+	internal.bufferToString = function(buffer)
 	{
 		return String.fromCharCode.apply(null, new Uint8Array(buffer))
 	}
 
-	arduino.internal.stringToBuffer = function(string)
+	internal.stringToBuffer = function(string)
 	{
 		var buffer = new ArrayBuffer(string.length)
 		var bufferView = new Uint8Array(buffer);
@@ -347,31 +344,4 @@ evothings.arduinotcp = (function()
 		}
 		return buffer
 	}
-
-	/**
-	 * For debugging.
-	 */
-	arduino.printObject = function (obj, level)
-	{
-		if (!level) { level = '' }
-		for (prop in obj)
-		{
-			if (obj.hasOwnProperty(prop))
-			{
-				var value = obj[prop]
-				if (typeof value === 'object')
-				{
-					console.log(level + prop + ':')
-					arduino.printObject(value, level + '  ')
-				}
-				else
-				{
-					console.log(level + prop + ': ' +value)
-				}
-			}
-		}
-	}
-
-	// Return arduino object.
-	return arduino
 })()

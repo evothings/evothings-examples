@@ -1,15 +1,4 @@
-/**
- * File: easyble.js
- * Description: Library for making BLE programming easier.
- * Author: Miki
- *
- * Note: The object type called "device" below, is the "DeviceInfo"
- * object obtained by calling evothings.ble.startScan, enhanced with
- * additional properties and functions to allow easy access to
- * object methods. Properties are also added to the Characteristic
- * and Descriptor object. Added properties are prefixed with two
- * underscores.
- */
+// File: easyble.js
 
 // We assume the "evothings" library was loaded first.
 
@@ -17,12 +6,21 @@
 evothings.loadScript('libs/evothings/util/util.js');
 
 // Object that holds BLE data and functions.
-evothings.easyble = (function()
+/** @namespace
+* @author Mikael Kindborg
+* @description <p>Library for making BLE programming easier.
+*
+* <p>The object type called "device" below, is the "DeviceInfo"
+* object obtained by calling evothings.ble.startScan, enhanced with
+* additional properties and functions to allow easy access to
+* object methods. Properties are also added to the Characteristic
+* and Descriptor object. Added properties are prefixed with two
+* underscores.
+*/
+evothings.easyble = {};
+(function()
 {
 	var base64 = cordova.require('cordova/base64');
-
-	/** Main object in the EasyBLE API. */
-	var easyble = {};
 
 	/**
 	 * Set to true to report found devices only once,
@@ -49,7 +47,7 @@ evothings.easyble = (function()
 	 * Set to false to report continuously.
 	 * The default is to report continously.
 	 */
-	easyble.reportDeviceOnce = function(reportOnce)
+	evothings.easyble.reportDeviceOnce = function(reportOnce)
 	{
 		reportDeviceOnce = reportOnce;
 	};
@@ -60,15 +58,15 @@ evothings.easyble = (function()
 	* The default is to not filter.
 	* An empty array will cause no devices to be reported.
 	*/
-	easyble.filterDevicesByService = function(services)
+	evothings.easyble.filterDevicesByService = function(services)
 	{
 		serviceFilter = services;
 	};
 
 	/** Start scanning for devices. */
-	easyble.startScan = function(win, fail)
+	evothings.easyble.startScan = function(win, fail)
 	{
-		easyble.stopScan();
+		evothings.easyble.stopScan();
 		internal.knownDevices = {};
 		evothings.ble.startScan(function(device)
 		{
@@ -112,13 +110,13 @@ evothings.easyble = (function()
 	};
 
 	/** Stop scanning for devices. */
-	easyble.stopScan = function()
+	evothings.easyble.stopScan = function()
 	{
 		evothings.ble.stopScan();
 	};
 
 	/** Close all connected devices. */
-	easyble.closeConnectedDevices = function()
+	evothings.easyble.closeConnectedDevices = function()
 	{
 		for (var key in internal.connectedDevices)
 		{
@@ -692,12 +690,10 @@ evothings.easyble = (function()
 	};
 
 	// Deprecated. Defined here for backwards compatibility.
-	easyble.printObject = evothings.printObject;
+	evothings.easyble.printObject = evothings.printObject;
 
-	easyble.reset = function()
+	evothings.easyble.reset = function()
 	{
 		evothings.ble.reset();
 	};
-
-	return easyble;
 })();

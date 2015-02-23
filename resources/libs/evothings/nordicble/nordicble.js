@@ -1,50 +1,45 @@
-/*
-File: nordic-ble.js
-Author: Mikael Kindborg
-Description: Functions for communicating with a Nordic BLE device.
-
-TODO: This is a very simple library that has only write capability,
-read and notification functions should be added.
-
-Example of use:
-
-     evothings.nordicble.connect(
-     	'LedButtonDemo', // BLE name
-         function(device)
-         {
-         	console.log('connected!');
-         	device.writeDataArray(new Uint8Array([1]));
-         	evothings.nordicble.close();
-         },
-         function(errorCode)
-         {
-         	console.log('Error: ' + errorCode);
-         });
-*/
+// File: nordic-ble.js
 
 evothings.loadScript('libs/evothings/easyble/easyble.js')
 
-// Object that exposes the Nordic BLE API.
-if (!window.evothings) { window.evothings = {} }
-evothings.nordicble = (function()
-{
-	// Nordic BLE object.
-	var nordicble = {};
+/** @namespace
+* @author Mikael Kindborg
+* @description Functions for communicating with a Nordic BLE device.
+*
+* @example
+evothings.nordicble.connect(
+	'LedButtonDemo', // BLE name
+	function(device)
+	{
+		console.log('connected!');
+		device.writeDataArray(new Uint8Array([1]));
+		evothings.nordicble.close();
+	},
+	function(errorCode)
+	{
+		console.log('Error: ' + errorCode);
+	});
+*/
 
+// Object that exposes the Nordic BLE API.
+evothings.nordicble = {};
+(function()
+{
 	// Internal functions.
 	var internal = {};
 
-	// Stops any ongoing scan and disconnects all devices.
-	nordicble.close = function()
+	/** Stops any ongoing scan and disconnects all devices. */
+	evothings.nordicble.close = function()
 	{
 		evothings.easyble.stopScan();
 		evothings.easyble.closeConnectedDevices();
 	};
 
-	// Connect to a BLE-shield.
-	// Success callback: win(device)
-	// Error callback: fail(errorCode)
-	nordicble.connect = function(deviceName, win, fail)
+	/** Connect to a BLE-shield.
+	* @param win - Success callback: win(device)
+	* @param fail - Error callback: fail(errorCode)
+	*/
+	evothings.nordicble.connect = function(deviceName, win, fail)
 	{
 		evothings.easyble.startScan(
 			function(device)
@@ -133,6 +128,4 @@ evothings.nordicble = (function()
 				});
 		};
 	};
-
-	return nordicble;
 })();

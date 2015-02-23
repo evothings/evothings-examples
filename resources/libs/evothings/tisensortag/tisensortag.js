@@ -1,8 +1,4 @@
-/**
- * File: tisensortag.js
- * Description: JavaScript library for the TI SensorTag.
- * Author: Miki
- */
+// File: tisensortag.js
 
 // Documentation for the TI SensorTag:
 // http://processors.wiki.ti.com/index.php/SensorTag_User_Guide
@@ -10,8 +6,14 @@
 
 evothings.loadScript('libs/evothings/easyble/easyble.js')
 
-evothings.tisensortag = (function()
+evothings.tisensortag = {}
+(function()
 {
+	/** @namespace
+	* @author Mikael Kindborg
+	* @description JavaScript library for the TI SensorTag.
+	* @alias evothings.tisensortag
+	*/
 	var sensortag = {}
 
 	sensortag.DEVICEINFO_SERVICE = '0000180a-0000-1000-8000-00805f9b34fb'
@@ -104,8 +106,9 @@ evothings.tisensortag = (function()
 	 */
 	sensortag.createInstance = function()
 	{
-		/**
-		 * Internal. Variable holding the sensor tag instance object.
+		/** @namespace
+		 * @alias evothings.tisensortag.SensorTagInstance
+		 * @description Internal. Variable holding the sensor tag instance object.
 		 */
 		var instance = {}
 
@@ -775,9 +778,6 @@ evothings.tisensortag = (function()
 		return instance
 	}
 
-	// Return the SensorTag 'class' object.
-	return sensortag
+	// make the static functions available
+	evothings.tisensortag = sensortag
 })()
-
-
-
