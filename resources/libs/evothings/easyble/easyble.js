@@ -5,18 +5,10 @@
 // Load dependent script.
 evothings.loadScript('libs/evothings/util/util.js');
 
-// Object that holds BLE data and functions.
 /**
  * @namespace
  * @author Mikael Kindborg
- * @description <p>Library for making BLE programming easier.</p>
- *
- * <p>The object type called "device" below, is the "DeviceInfo"
- * object obtained by calling evothings.ble.startScan, enhanced with
- * additional properties and functions to allow easy access to
- * object methods. Properties are also added to the Characteristic
- * and Descriptor object. Added properties are prefixed with two
- * underscores.</p>
+ * @description Library for making BLE programming easier.
  */
 evothings.easyble = {};
 (function()
@@ -88,8 +80,9 @@ evothings.easyble = {};
 	/**
 	 * Start scanning for devices.
 	 * @param win - Success function called when a device is found.
-	 * Format: win(device)
-	 * @param fail - Error function. Format: fail(errorMessage)
+	 * Format: win(device) - device is of type {@link evothings.easyble.DeviceInstance}
+	 * @param fail - Error function.
+	 * Format: fail(errorMessage) - errorMessage is of type string
 	 * @public
 	 */
 	evothings.easyble.startScan = function(win, fail)
@@ -357,6 +350,11 @@ evothings.easyble = {};
 	internal.addMethodsToDeviceObject = function(deviceObject)
 	{
 		/**
+		 * This object is the DeviceInfo object obtained by calling
+		 * evothings.ble.startScan, with additional properties and
+		 * functions added. Internal properties are prefixed with two
+		 * underscores. Properties are also added to the Characteristic
+		 * and Descriptor objects.
 		 * @namespace
 		 * @alias evothings.easyble.DeviceInstance
 		 */
@@ -394,12 +392,15 @@ evothings.easyble = {};
 
 		/**
 		 * Read all service info for the specified service UUIDs.
-		 * @param serviceUUIDs - array of UUID strings
-		 * @param win - success callback
-		 * @param fail - error callback
-		 * If serviceUUIDs is null, info for all services is read
-		 * (this can be time-consuming compared to reading a
-		 * selected number of services).
+		 * Services must be read be able to access characteristics and
+		 * descriptors. Call this function before reading and writing
+		 * characteristics/descriptors.
+		 * @param serviceUUIDs - array of UUID strings, if null all
+		 * services are read (this can be time-consuming compared to
+		 * reading selected services)
+		 * @param win - success callback function called when
+		 * services are read, format win()
+		 * @param fail - error callback, format error(errorMessage)
 		 * @public
 		 * @instance
 		 */
