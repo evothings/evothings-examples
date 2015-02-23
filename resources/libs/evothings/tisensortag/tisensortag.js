@@ -62,6 +62,7 @@ evothings.tisensortag = {}
 
 	/**
 	 * Internal. Override if needed.
+	 * @private
 	 */
 	sensortag.deviceIsSensorTag = function(device)
 	{
@@ -73,6 +74,7 @@ evothings.tisensortag = {}
 
 	/**
 	 * For debugging.
+	 * @public
 	 */
 	sensortag.logServices = function(device)
 	{
@@ -102,23 +104,30 @@ evothings.tisensortag = {}
 	}
 
 	/**
-	 * Public. Create tag instance.
+	 * Public. Create a SensorTag instance.
+	 * @returns {@link evothings.tisensortag.SensorTagInstance}
+	 * @public
 	 */
 	sensortag.createInstance = function()
 	{
 		/** @namespace
 		 * @alias evothings.tisensortag.SensorTagInstance
 		 * @description Internal. Variable holding the sensor tag instance object.
+		 * @public
 		 */
 		var instance = {}
 
 		/**
 		 * Internal. Services used by the application.
+		 * @instance
+		 * @private
 		 */
 		instance.requiredServices = []
 
 		/**
 		 * Internal. Default error handler function.
+		 * @instance
+		 * @private
 		 */
 		instance.errorFun = function(error)
 		{
@@ -127,6 +136,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Internal. Default status handler function.
+		 * @instance
+		 * @private
 		 */
 		instance.statusFun = function(status)
 		{
@@ -137,6 +148,8 @@ evothings.tisensortag = {}
 		 * Public. Set the IR temperature notification callback.
 		 * @param fun - success callback called repeatedly: fun(data)
 		 * @param interval - update rate in milliseconds (min 300ms)
+		 * @instance
+		 * @public
 		 */
 		instance.irTemperatureCallback = function(fun, interval)
 		{
@@ -152,6 +165,8 @@ evothings.tisensortag = {}
 		 * Public. Set the accelerometer notification callback.
 		 * @param fun - success callback called repeatedly: fun(data)
 		 * @param interval - accelerometer rate in milliseconds.
+		 * @instance
+		 * @public
 		 */
 		instance.accelerometerCallback = function(fun, interval)
 		{
@@ -167,6 +182,8 @@ evothings.tisensortag = {}
 		 * Public. Set the humidity notification callback.
 		 * @param fun - success callback called repeatedly: fun(data)
 		 * @param interval - accelerometer rate in milliseconds.
+		 * @instance
+		 * @public
 		 */
 		instance.humidityCallback = function(fun)
 		{
@@ -181,6 +198,8 @@ evothings.tisensortag = {}
 		 * Public. Set the magnetometer notification callback.
 		 * @param fun - success callback called repeatedly: fun(data)
 		 * @param interval - magnetometer rate in milliseconds.
+		 * @instance
+		 * @public
 		 */
 		instance.magnetometerCallback = function(fun, interval)
 		{
@@ -196,6 +215,8 @@ evothings.tisensortag = {}
 		 * Public. Set the barometer notification callback.
 		 * @param fun - success callback called repeatedly: fun(data)
 		 * @param interval - barometer rate in milliseconds.
+		 * @instance
+		 * @public
 		 */
 		instance.barometerCallback = function(fun, interval)
 		{
@@ -217,6 +238,8 @@ evothings.tisensortag = {}
 		 * 3 = X and Y, 4 = Z only,
 		 * 5 = X and Z, 6 = Y and Z,
 		 * 7 = X, Y and Z.
+		 * @instance
+		 * @public
 		 */
 		instance.gyroscopeCallback = function(fun, interval, axes)
 		{
@@ -231,6 +254,8 @@ evothings.tisensortag = {}
 		/**
 		 * Public. Set the keypress notification callback.
 		 * @param fun - success callback called when a key is pressed: fun(data)
+		 * @instance
+		 * @public
 		 */
 		instance.keypressCallback = function(fun)
 		{
@@ -243,6 +268,8 @@ evothings.tisensortag = {}
 		/**
 		 * Public. Set the error handler function.
 		 * @param fun - error callback: fun(error)
+		 * @instance
+		 * @public
 		 */
 		instance.errorCallback = function(fun)
 		{
@@ -254,6 +281,8 @@ evothings.tisensortag = {}
 		/**
 		 * Public. Set the status handler function.
 		 * @param fun - callback: fun(status)
+		 * @instance
+		 * @public
 		 */
 		instance.statusCallback = function(fun)
 		{
@@ -264,6 +293,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Connect to the closest physical SensorTag device.
+		 * @instance
+		 * @public
 		 */
 		instance.connectToClosestDevice = function()
 		{
@@ -307,6 +338,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Internal.
+		 * @instance
+		 * @private
 		 */
 		instance.connectToDevice = function()
 		{
@@ -324,6 +357,8 @@ evothings.tisensortag = {}
 		 * Internal. When connected we read device info. This can be
 		 * used to support different firmware versions etc.
 		 * For now we just read the firmware version.
+		 * @instance
+		 * @private
 		 */
 		instance.readDeviceInfo = function()
 		{
@@ -359,6 +394,7 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Get firmware string.
+		 * @instance
 		 */
 		instance.getFirmwareString = function()
 		{
@@ -366,7 +402,9 @@ evothings.tisensortag = {}
 		}
 
 		/**
-		 * Public/Internal. Disconnect from the physical device.
+		 * Public. Disconnect from the physical device.
+		 * @instance
+		 * @public
 		 */
 		instance.disconnectDevice = function()
 		{
@@ -381,6 +419,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Internal.
+		 * @instance
+		 * @private
 		 */
 		instance.activateSensors = function()
 		{
@@ -401,6 +441,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on IR temperature notification.
+		 * @instance
+		 * @public
 		 */
 		instance.irTemperatureOn = function()
 		{
@@ -419,6 +461,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off IR temperature notification.
+		 * @instance
+		 * @public
 		 */
 		instance.irTemperatureOff = function()
 		{
@@ -429,6 +473,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on accelerometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.accelerometerOn = function()
 		{
@@ -447,6 +493,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off accelerometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.accelerometerOff = function()
 		{
@@ -457,6 +505,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on humidity notification.
+		 * @instance
+		 * @public
 		 */
 		instance.humidityOn = function()
 		{
@@ -475,6 +525,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off humidity notification.
+		 * @instance
+		 * @public
 		 */
 		instance.humidityOff = function()
 		{
@@ -485,6 +537,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on magnetometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.magnetometerOn = function()
 		{
@@ -503,6 +557,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off magnetometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.magnetometerOff = function()
 		{
@@ -513,6 +569,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on barometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.barometerOn = function()
 		{
@@ -531,6 +589,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off barometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.barometerOff = function()
 		{
@@ -541,6 +601,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on gyroscope notification.
+		 * @instance
+		 * @public
 		 */
 		instance.gyroscopeOn = function()
 		{
@@ -559,6 +621,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off gyroscope notification.
+		 * @instance
+		 * @public
 		 */
 		instance.gyroscopeOff = function()
 		{
@@ -569,6 +633,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on keypress notification.
+		 * @instance
+		 * @public
 		 */
 		instance.keypressOn = function()
 		{
@@ -587,6 +653,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off keypress notification.
+		 * @instance
+		 * @public
 		 */
 		instance.keypressOff = function()
 		{
@@ -596,9 +664,12 @@ evothings.tisensortag = {}
 		}
 
 		/**
-		 * Private/public. Helper function for turning on sensor notification.
-		 * You can call this function from the application to enables sensors
-		 * using custom parameters (advanced use).
+		 * Public. Used internally as a helper function for turning on
+		 * sensor notification. You can call this function from the
+		 * application to enable sensors using custom parameters.
+		 * For advanced use.
+		 * @instance
+		 * @public
 		 */
 		instance.sensorOn = function(
 			configUUID,
@@ -645,6 +716,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Helper function for turning off sensor notification.
+		 * @instance
+		 * @public
 		 */
 		instance.sensorOff = function(dataUUID)
 		{
@@ -667,6 +740,8 @@ evothings.tisensortag = {}
 		 * Calculate IR temperature values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: ambientTemperature, targetTemperature.
+		 * @instance
+		 * @public
 		 */
 		instance.getIRTemperatureValues = function(data)
 		{
@@ -698,6 +773,8 @@ evothings.tisensortag = {}
 		 * Calculate accelerometer values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
 		 */
 		instance.getAccelerometerValues = function(data)
 		{
@@ -714,6 +791,8 @@ evothings.tisensortag = {}
 		 * Calculate humidity values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: humidityTemperature, relativeHumidity.
+		 * @instance
+		 * @public
 		 */
 		instance.getHumidityValues = function(data)
 		{
@@ -731,6 +810,8 @@ evothings.tisensortag = {}
 		 * Calculate magnetometer values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
 		 */
 		instance.getMagnetometerValues = function(data)
 		{
@@ -745,7 +826,9 @@ evothings.tisensortag = {}
 
 		/**
 		 * Calculate barometer values from raw data.
-		 * TODO: Implement (not implemented).
+		 * @todo Implement (not implemented).
+		 * @instance
+		 * @public
 		 */
 		instance.getBarometerValues = function(data)
 		{
@@ -757,6 +840,8 @@ evothings.tisensortag = {}
 		 * Calculate gyroscope values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
 		 */
 		instance.getGyroscopeValues = function(data)
 		{
@@ -769,6 +854,13 @@ evothings.tisensortag = {}
 			return { x: gx, y: gy, z: gz }
 		}
 
+		/**
+		 * Convert Celsius to Fahrenheit.
+		 * @param celsius Temperature in Celsius.
+		 * @returns Temperature converted to Fahrenheit.
+		 * @instance
+		 * @public
+		 */
 		instance.celsiusToFahrenheit = function(celsius)
 		{
 			return (celsius * 9 / 5) + 32
