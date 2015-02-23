@@ -6,46 +6,67 @@
 evothings.loadScript('libs/evothings/util/util.js');
 
 // Object that holds BLE data and functions.
-/** @namespace
-* @author Mikael Kindborg
-* @description <p>Library for making BLE programming easier.
-*
-* <p>The object type called "device" below, is the "DeviceInfo"
-* object obtained by calling evothings.ble.startScan, enhanced with
-* additional properties and functions to allow easy access to
-* object methods. Properties are also added to the Characteristic
-* and Descriptor object. Added properties are prefixed with two
-* underscores.
-*/
+/**
+ * @namespace
+ * @author Mikael Kindborg
+ * @description <p>Library for making BLE programming easier.</p>
+ *
+ * <p>The object type called "device" below, is the "DeviceInfo"
+ * object obtained by calling evothings.ble.startScan, enhanced with
+ * additional properties and functions to allow easy access to
+ * object methods. Properties are also added to the Characteristic
+ * and Descriptor object. Added properties are prefixed with two
+ * underscores.</p>
+ */
 evothings.easyble = {};
 (function()
 {
+	/**
+	 * @private
+	 */
 	var base64 = cordova.require('cordova/base64');
 
 	/**
 	 * Set to true to report found devices only once,
 	 * set to false to report continuously.
+	 * @private
 	 */
 	var reportDeviceOnce = false;
 
+	/**
+	 * @private
+	 */
 	var serviceFilter = false;
 
-	/** Internal properties and functions. */
+	/**
+	 * Internal properties and functions.
+	 * @private
+	 */
 	var internal = {};
 
-	/** Internal variable used to track reading of service data. */
+	/**
+	 * Internal variable used to track reading of service data.
+	 * @private
+	 */
 	var readCounter = 0;
 
-	/** Table of discovered devices. */
+	/**
+	 * Table of discovered devices.
+	 * @private
+	 */
 	internal.knownDevices = {};
 
-	/** Table of connected devices. */
+	/**
+	 * Table of connected devices.
+	 * @private
+	 */
 	internal.connectedDevices = {};
 
 	/**
 	 * Set to true to report found devices only once.
 	 * Set to false to report continuously.
 	 * The default is to report continously.
+	 * @public
 	 */
 	evothings.easyble.reportDeviceOnce = function(reportOnce)
 	{
@@ -53,17 +74,24 @@ evothings.easyble = {};
 	};
 
 	/**
-	* Set to an Array of UUID strings to enable filtering of devices found by startScan().
-	* Set to false to disable filtering.
-	* The default is to not filter.
-	* An empty array will cause no devices to be reported.
-	*/
+	 * Set to an Array of UUID strings to enable filtering of devices
+	 * found by startScan().
+	 * @param services - Array of UUID strings. Set to false to disable filtering.
+	 * The default is no filtering. An empty array will cause no devices to be reported.
+	 * @public
+	 */
 	evothings.easyble.filterDevicesByService = function(services)
 	{
 		serviceFilter = services;
 	};
 
-	/** Start scanning for devices. */
+	/**
+	 * Start scanning for devices.
+	 * @param win - Success function called when a device is found.
+	 * Format: win(device)
+	 * @param fail - Error function. Format: fail(errorMessage)
+	 * @public
+	 */
 	evothings.easyble.startScan = function(win, fail)
 	{
 		evothings.easyble.stopScan();
@@ -109,13 +137,17 @@ evothings.easyble = {};
 		});
 	};
 
-	/** Stop scanning for devices. */
+	/**
+	 * Stop scanning for devices.
+	 */
 	evothings.easyble.stopScan = function()
 	{
 		evothings.ble.stopScan();
 	};
 
-	/** Close all connected devices. */
+	/**
+	 * Close all connected devices.
+	 */
 	evothings.easyble.closeConnectedDevices = function()
 	{
 		for (var key in internal.connectedDevices)
@@ -127,9 +159,11 @@ evothings.easyble = {};
 	};
 
 	/**
-	* If device has advertisementData, does nothing.
-	* If device instead has scanRecord, creates advertisementData.
-	* See ble.js for AdvertisementData reference.
+	 * If device already has advertisementData, does nothing.
+	 * If device instead has scanRecord, creates advertisementData.
+	 * See ble.js for AdvertisementData reference.
+	 * @param device - Device object.
+	 * @private
 	*/
 	internal.ensureAdvertisementData = function(device)
 	{
@@ -286,9 +320,10 @@ evothings.easyble = {};
 	}
 
 	/**
-	* Returns true if the device matches the serviceFilter, or if there is no filter.
-	* Returns false otherwise.
-	*/
+	 * Returns true if the device matches the serviceFilter, or if there is no filter.
+	 * Returns false otherwise.
+	 * @private
+	 */
 	internal.deviceMatchesServiceFilter = function(device)
 	{
 		if (!serviceFilter) { return true; }
@@ -317,22 +352,41 @@ evothings.easyble = {};
 	/**
 	 * Add functions to the device object to allow calling them
 	 * in an object-oriented style.
+	 * @private
 	 */
-	internal.addMethodsToDeviceObject = function(device)
+	internal.addMethodsToDeviceObject = function(deviceObject)
 	{
-		/** Connect to the device. */
+		/**
+		 * @namespace
+		 * @alias evothings.easyble.DeviceInstance
+		 */
+		var device = deviceObject;
+
+		/**
+		 * Connect to the device.
+		 * @public
+		 * @instance
+		 */
 		device.connect = function(win, fail)
 		{
 			internal.connectToDevice(device, win, fail);
 		};
 
-		/** Close the device. */
+		/**
+		 * Close the device.
+		 * @public
+		 * @instance
+		 */
 		device.close = function()
 		{
 			device.deviceHandle && evothings.ble.close(device.deviceHandle);
 		};
 
-		/** Read devices RSSI. Device must be connected. */
+		/**
+		 * Read devices RSSI. Device must be connected.
+		 * @public
+		 * @instance
+		 */
 		device.readRSSI = function(win, fail)
 		{
 			evothings.ble.rssi(device.deviceHandle, win, fail);
@@ -346,50 +400,80 @@ evothings.easyble = {};
 		 * If serviceUUIDs is null, info for all services is read
 		 * (this can be time-consuming compared to reading a
 		 * selected number of services).
+		 * @public
+		 * @instance
 		 */
 		device.readServices = function(serviceUUIDs, win, fail)
 		{
 			internal.readServices(device, serviceUUIDs, win, fail);
 		};
 
-		/** Read value of characteristic. */
+		/**
+		 * Read value of characteristic.
+		 * @public
+		 * @instance
+		 */
 		device.readCharacteristic = function(characteristicUUID, win, fail)
 		{
 			internal.readCharacteristic(device, characteristicUUID, win, fail);
 		};
 
-		/** Read value of descriptor. */
+		/**
+		 * Read value of descriptor.
+		 * @public
+		 * @instance
+		 */
 		device.readDescriptor = function(characteristicUUID, descriptorUUID, win, fail)
 		{
 			internal.readDescriptor(device, characteristicUUID, descriptorUUID, win, fail);
 		};
 
-		/** Write value of characteristic. */
+		/**
+		 * Write value of characteristic.
+		 * @public
+		 * @instance
+		 */
 		device.writeCharacteristic = function(characteristicUUID, value, win, fail)
 		{
 			internal.writeCharacteristic(device, characteristicUUID, value, win, fail);
 		};
 
-		/** Write value of descriptor. */
+		/**
+		 * Write value of descriptor.
+		 * @public
+		 * @instance
+		 */
 		device.writeDescriptor = function(characteristicUUID, descriptorUUID, value, win, fail)
 		{
 			internal.writeDescriptor(device, characteristicUUID, descriptorUUID, value, win, fail);
 		};
 
-		/** Subscribe to characteristic value updates. */
+		/**
+		 * Subscribe to characteristic value updates.
+		 * @public
+		 * @instance
+		 */
 		device.enableNotification = function(characteristicUUID, win, fail)
 		{
 			internal.enableNotification(device, characteristicUUID, win, fail);
 		};
 
-		/** Unsubscribe from characteristic updates. */
+		/**
+		 * Unsubscribe from characteristic updates.
+		 * @public
+		 * @instance
+		 */
 		device.disableNotification = function(characteristicUUID, win, fail)
 		{
 			internal.disableNotification(device, characteristicUUID, win, fail);
 		};
 	};
 
-	/** Connect to a device. */
+	/**
+	 * Connect to a device.
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
+	 */
 	internal.connectToDevice = function(device, win, fail)
 	{
 		evothings.ble.connect(device.address, function(connectInfo)
@@ -423,6 +507,8 @@ evothings.easyble = {};
 	 * Obtain device services, them read characteristics and descriptors
 	 * for the services with the given uuid(s).
 	 * If serviceUUIDs is null, info is read for all services.
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
 	 */
 	internal.readServices = function(device, serviceUUIDs, win, fail)
 	{
@@ -455,6 +541,8 @@ evothings.easyble = {};
 	 * Read characteristics and descriptors for the services with the given uuid(s).
 	 * If serviceUUIDs is null, info for all services are read.
 	 * Internal function.
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
 	 */
 	internal.readCharacteristicsForServices = function(device, serviceUUIDs, win, fail)
 	{
@@ -487,6 +575,9 @@ evothings.easyble = {};
 			};
 		};
 
+ 		/**
+	 	 * @private
+	 	 */
 		var descriptorsCallbackFun = function(characteristic)
 		{
 			// Array with descriptors for characteristic.
@@ -558,6 +649,10 @@ evothings.easyble = {};
 		}
 	};
 
+ 	/**
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
+	 */
 	internal.readCharacteristic = function(device, characteristicUUID, win, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
@@ -576,6 +671,10 @@ evothings.easyble = {};
 			fail);
 	};
 
+ 	/**
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
+	 */
 	internal.readDescriptor = function(device, characteristicUUID, descriptorUUID, win, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
@@ -602,6 +701,10 @@ evothings.easyble = {};
 			});
 	};
 
+ 	/**
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
+	 */
 	internal.writeCharacteristic = function(device, characteristicUUID, value, win, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
@@ -627,7 +730,12 @@ evothings.easyble = {};
 			});
 	};
 
-	internal.writeDescriptor = function(device, characteristicUUID, descriptorUUID, value, win, fail)
+ 	/**
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
+	 */
+	internal.writeDescriptor = function(
+		device, characteristicUUID, descriptorUUID, value, win, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
 		descriptorUUID = descriptorUUID.toLowerCase();
@@ -653,6 +761,10 @@ evothings.easyble = {};
 			});
 	};
 
+ 	/**
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
+	 */
 	internal.enableNotification = function(device, characteristicUUID, win, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
@@ -671,6 +783,10 @@ evothings.easyble = {};
 			fail);
 	};
 
+ 	/**
+ 	 * Called from evothings.easyble.DeviceObject.
+	 * @private
+	 */
 	internal.disableNotification = function(device, characteristicUUID, win, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
@@ -689,9 +805,16 @@ evothings.easyble = {};
 			fail);
 	};
 
-	// Deprecated. Defined here for backwards compatibility.
+	/**
+	 * @deprecated. Defined here for backwards compatibility.
+	 * Use evothings.printObject().
+	 * @public
+	 */
 	evothings.easyble.printObject = evothings.printObject;
 
+ 	/**
+	 * @public
+	 */
 	evothings.easyble.reset = function()
 	{
 		evothings.ble.reset();
