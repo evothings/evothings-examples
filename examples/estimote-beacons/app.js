@@ -16,14 +16,11 @@ var app = (function()
 
 	function onDeviceReady()
 	{
-		// Specify a shortcut for the location manager holding the iBeacon functions.
-		window.estimote = EstimoteBeacons;
-
 		// Start tracking beacons!
 		startScan();
 
 		// Display refresh timer.
-		updateTimer = setInterval(displayBeaconList, 500);
+		updateTimer = setInterval(displayBeaconList, 1000);
 	}
 
 	function startScan()
@@ -34,10 +31,14 @@ var app = (function()
 			for (var i in beaconInfo.beacons)
 			{
 				// Insert beacon into table of found beacons.
+				// Filter out beacons with invalid RSSI values.
 				var beacon = beaconInfo.beacons[i];
-				beacon.timeStamp = Date.now();
-				var key = beacon.uuid + ':' + beacon.major + ':' + beacon.minor;
-				beacons[key] = beacon;
+				if (beacon.rssi < 0)
+				{
+					beacon.timeStamp = Date.now();
+					var key = beacon.uuid + ':' + beacon.major + ':' + beacon.minor;
+					beacons[key] = beacon;
+				}
 			}
 		}
 
@@ -48,10 +49,10 @@ var app = (function()
 
 		// Request permission from user to access location info.
 		// This is needed on iOS 8.
-		estimote.requestAlwaysAuthorization();
+		estimote.beacons.requestAlwaysAuthorization();
 
 		// Start ranging beacons.
-		estimote.startRangingBeaconsInRegion(
+		estimote.beacons.startRangingBeaconsInRegion(
 			{}, // Empty region matches all beacons
 			    // with the Estimote factory set UUID.
 			onBeaconsRanged,

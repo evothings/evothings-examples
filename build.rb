@@ -110,8 +110,14 @@ def buildIBeaconScan
 	copyJQuery(destPath)
 end
 
-def buildEstimoteScan
-	destPath = 'examples/estimote-scan'
+def buildEstimoteBeacons
+	destPath = 'examples/estimote-beacons'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+end
+
+def buildEstimoteNearables
+	destPath = 'examples/estimote-nearables'
 	copyCommon(destPath)
 	copyJQuery(destPath)
 end
@@ -256,7 +262,8 @@ def build
 	buildBLEScan
 	buildBlunoHelloWorld
 	buildCordovaBasic
-	buildEstimoteScan
+	buildEstimoteBeacons
+	buildEstimoteNearables
 	buildHelloWorld
 	buildHueLights
 	buildIBeaconScan
