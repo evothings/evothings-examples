@@ -82,6 +82,11 @@
 		<span id="GyroscopeData">[Waiting for value]</span>
 	</p>
 
+	<h2>Luxometer:</h2>
+	<p>
+		<span id="LuxometerData">[Waiting for value]</span>
+	</p>
+
 	<script>
 	// SensorTag object.
 	var sensortag = evothings.tisensortag.createInstance()
@@ -111,6 +116,7 @@
 			.accelerometerCallback(accelerometerHandler, 200)
 			.magnetometerCallback(magnetometerHandler, 200)
 			.gyroscopeCallback(gyroscopeHandler, 200, 7) // 7 = enable all axes.
+			.luxometerCallback(luxometerHandler, 200)
 			.connectToClosestDevice()
 	}
 
@@ -208,7 +214,7 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: 0x' + bufferToHexStr(data, 0, 3) + '<br/>'
+			'raw: 0x' + bufferToHexStr(data, 0, 6) + '<br/>'
 			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>'
 			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>'
 			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'
@@ -288,6 +294,18 @@
 
 		// Update the value displayed.
 		displayValue('GyroscopeData', string)
+	}
+
+	function luxometerHandler(data)
+	{
+		// Prepare the information to display.
+		string =
+			'raw: 0x' + bufferToHexStr(data, 0, 2) + '<br/>'
+
+		// Update the value displayed.
+		displayValue('LuxometerData', string)
+
+		// Calculated values not implemented yet.
 	}
 
 	function displayValue(elementId, value)
