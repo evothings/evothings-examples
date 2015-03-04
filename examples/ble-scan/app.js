@@ -105,8 +105,8 @@ app.ui.displayDeviceList = function()
 
 	$.each(app.devices, function(key, device)
 	{
-		// Only show devices that are updated during the last 60 seconds.
-		if (device.timeStamp + 60000 > timeNow)
+		// Only show devices that are updated during the last 10 seconds.
+		if (device.timeStamp + 10000 > timeNow)
 		{
 			// Map the RSSI value to a width in percent for the indicator.
 			var rssiWidth = 1; // Used when RSSI is zero or greater.
