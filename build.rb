@@ -170,6 +170,12 @@ def buildLightblueBeanSerial
 	copyUtil(destPath)
 end
 
+def buildMediaTekLinkIt
+	destPath = 'examples/mediatek-linkit/app'
+	copyUI(destPath)
+	copyJQuery(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -275,6 +281,7 @@ def build
 	buildRFduinoLEDOnOff
 	buildTISensorTagDemo
 	buildTISensorTagSensors
+	buildMediaTekLinkIt
 end
 
 build

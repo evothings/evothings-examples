@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>LinkIt ONE - Position</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+		@import 'app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="libs/jquery/jquery.js"></script>
+
+	 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=INSERT_YOUR_GOOGLE_MAPS_API_KEY_HERE"></script>
+
+	 <script src="app.js"></script>
+
+	 <script>
+		google.maps.event.addDomListener(window, 'load', app.initializeMap)
+	 </script>
+
+</head>
+
+<body ontouchstart="">
+
+	<header>
+
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+	</header>
+
+	<h1>LinkIt ONE - Position</h1>
+
+	<div id="startView">
+
+		<img class="center" style="width:100%" src="img/mediatek-linkitone.jpg">
+
+		<h2>Enter IP-address of the LinkIt ONE</h2>
+
+		<input id="IPAdress" value="192.168.0.1" type="url">
+
+		<button class="green wide" onclick="app.connect()"> Connect </button>
+
+	</div>
+
+	<div id="connectingView" style="display:none">
+
+		<div id="connectingIndicator">
+
+			<img src="img/loader.gif">
+			<p id="connectingStatus"></p>
+
+		</div>
+	</div>
+
+	<div id="mapView" style="display:none">
+
+	  <div id="map-canvas"></div>
+
+	<div>
+
+	<button class="red wide" onclick="app.disconnect()"> Disconnect </button>
+
+</div>
+
+</div>
+</body>
+
+</html>
