@@ -1040,15 +1040,15 @@ evothings.tisensortag = {}
 		instance.getAccelerometerValues = function(data)
 		{
 			// Set divisor based on firmware version.
-			var divisor = 16.0
+			var divisors = {x: 16.0, y: 16.0, z: 16.0}
 			/*if (instance.getDeviceModel() < 2.0 &&
 				parseFloat(instance.getFirmwareString()) < 1.5)
-				divisor = 4.0*/
+				divisors = {x: 64.0, y: 64.0, z: 64.0}*/
 
 			// Calculate accelerometer values.
-			var ax = evothings.util.littleEndianToInt8(data, 0) / divisor
-			var ay = evothings.util.littleEndianToInt8(data, 1) / divisor
-			var az = evothings.util.littleEndianToInt8(data, 2) / divisor * -1.0
+			var ax = evothings.util.littleEndianToInt8(data, 0) / divisors.x
+			var ay = evothings.util.littleEndianToInt8(data, 1) / divisors.y
+			var az = evothings.util.littleEndianToInt8(data, 2) / divisors.z
 
 			// Return result.
 			return { x: ax, y: ay, z: az }
@@ -1158,17 +1158,29 @@ evothings.tisensortag = {}
 		/**
 		 * Calculate luxometer values from raw data.
 		 * @param data - an Uint8Array.
-		 * @return Object with fields: luxometerData.
+		 * @return Light level in lux units.
 		 * @instance
 		 * @public
 		 */
-		instance.getLuxometerValues = function(data)
+		instance.getLuxometerValue = function(data)
 		{
 			// Calculate the light level.
-			var lux = evothings.util.littleEndianToInt16(data, 0)
+			var value = evothings.util.littleEndianToInt16(data, 0)
+
+			/* Extraction of luxometer value, based on sfloatExp2ToDouble from
+			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
+			 * source code.
+			 */
+			var mantissa = value & 0x0FFF
+			var exponent = value >> 12;
+
+			magnitude = Math.pow(2, exponent)
+			output = (mantissa * magnitude)
+
+			var lux = output / 100.0
 
 			// Return result.
-			return { luxometerData: lux }
+			return lux
 		}
 
 		/**

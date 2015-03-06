@@ -298,14 +298,15 @@
 
 	function luxometerHandler(data)
 	{
+		var value = sensortag.getLuxometerValue(data)
+
 		// Prepare the information to display.
 		string =
 			'raw: 0x' + bufferToHexStr(data, 0, 2) + '<br/>'
+			+ 'light level = ' + value.toPrecision(5) + ' lux<br/>'
 
 		// Update the value displayed.
 		displayValue('LuxometerData', string)
-
-		// Calculated values not implemented yet.
 	}
 
 	function displayValue(elementId, value)
