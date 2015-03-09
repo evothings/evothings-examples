@@ -16,11 +16,15 @@ var app = (function()
 
 	function onDeviceReady()
 	{
-		// Start tracking nearables!
-		startScan();
+		// Only start scanning for Nearables on iOS.
+		if (evothings.os.isIOS())
+		{
+			// Start tracking nearables!
+			startScan();
 
-		// Display refresh timer.
-		updateTimer = setInterval(displayNearableList, 1000);
+			// Display refresh timer.
+			updateTimer = setInterval(displayNearableList, 1000);
+		}
 	}
 
 	function startScan()
