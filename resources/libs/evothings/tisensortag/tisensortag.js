@@ -7,7 +7,8 @@
 evothings.loadScript('libs/evothings/easyble/easyble.js')
 
 evothings.tisensortag = {}
-(function()
+
+;(function()
 {
 	/** @namespace
 	* @author Mikael Kindborg
