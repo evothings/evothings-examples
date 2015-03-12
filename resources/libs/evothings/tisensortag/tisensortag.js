@@ -1149,9 +1149,9 @@ evothings.tisensortag = {}
 		instance.getModelTwoGyroscopeValues = function(data)
 		{
 			// Calculate gyroscope values.
-			var gx = evothings.util.littleEndianToInt16(data, 0) * 500.0 / 65536.0
-			var gy = evothings.util.littleEndianToInt16(data, 2) * 500.0 / 65536.0
-			var gz =  evothings.util.littleEndianToInt16(data, 4) * 500.0 / 65536.0
+			var gx = evothings.util.littleEndianToInt16(data, 0) * 255.0 / 32768.0
+			var gy = evothings.util.littleEndianToInt16(data, 2) * 255.0 / 32768.0
+			var gz =  evothings.util.littleEndianToInt16(data, 4) * 255.0 / 32768.0
 
 			// Return result.
 			return { x: gx, y: gy, z: gz }
