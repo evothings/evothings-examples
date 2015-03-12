@@ -1040,7 +1040,7 @@ evothings.tisensortag = {}
 		instance.getAccelerometerValues = function(data)
 		{
 			// Set divisor based on firmware version.
-			var divisors = {x: 16.0, y: 16.0, z: 16.0}
+			var divisors = {x: 16.0, y: -16.0, z: 16.0}
 			/*if (instance.getDeviceModel() < 2.0 &&
 				parseFloat(instance.getFirmwareString()) < 1.5)
 				divisors = {x: 64.0, y: 64.0, z: 64.0}*/
@@ -1061,10 +1061,12 @@ evothings.tisensortag = {}
 		 */
 		instance.getModelTwoAccelerometerValues = function(data)
 		{
+			var divisors = {x: -16384.0, y: 16384.0, z: -16384.0}
+
 			// Calculate accelerometer values.
-			var ax = evothings.util.littleEndianToInt16(data, 6) / 16.0
-			var ay = evothings.util.littleEndianToInt16(data, 8) / 16.0
-			var az = evothings.util.littleEndianToInt16(data, 10) / 16.0 * -1.0
+			var ax = evothings.util.littleEndianToInt16(data, 6) / divisors.x
+			var ay = evothings.util.littleEndianToInt16(data, 8) / divisors.y
+			var az = evothings.util.littleEndianToInt16(data, 10) / divisors.z
 
 			// Return result.
 			return { x: ax, y: ay, z: az }
@@ -1146,9 +1148,9 @@ evothings.tisensortag = {}
 		 */
 		instance.getModelTwoGyroscopeValues = function(data)
 		{
-			// Calculate gyroscope values. NB: x,y,z has a weird order.
-			var gy = -evothings.util.littleEndianToInt16(data, 0) * 500.0 / 65536.0
-			var gx =  evothings.util.littleEndianToInt16(data, 2) * 500.0 / 65536.0
+			// Calculate gyroscope values.
+			var gx = evothings.util.littleEndianToInt16(data, 0) * 500.0 / 65536.0
+			var gy = evothings.util.littleEndianToInt16(data, 2) * 500.0 / 65536.0
 			var gz =  evothings.util.littleEndianToInt16(data, 4) * 500.0 / 65536.0
 
 			// Return result.
