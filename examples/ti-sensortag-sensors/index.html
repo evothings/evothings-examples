@@ -194,7 +194,8 @@
 
 		// Prepare the information to display.
 		var string =
-			'raw: 0x' + bufferToHexStr(data, 0, 4) + '<br/>'
+			'raw: <span style="font-family: monospace;">0x' +
+				bufferToHexStr(data, 0, 4) + '</span><br/>'
 			+ (tc >= 0 ? '+' : '') + tc.toFixed(2) + '&deg; C '
 			+ '(' + (tf >= 0 ? '+' : '') + tf.toFixed(2) + '&deg; F)' + '<br/>'
 			+ (ac >= 0 ? '+' : '') + ac.toFixed(2) + '&deg; C '
@@ -212,9 +213,13 @@
 		var y = values.y
 		var z = values.z
 
+		var model = sensortag.getDeviceModel()
+		var dataOffset = (model == 2 ? 6 : 0)
+
 		// Prepare the information to display.
 		string =
-			'raw: 0x' + bufferToHexStr(data, 0, 6) + '<br/>'
+			'raw: <span style="font-family: monospace;">0x' +
+				bufferToHexStr(data, dataOffset, 6) + '</span><br/>'
 			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>'
 			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>'
 			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'
@@ -237,7 +242,8 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: 0x' + bufferToHexStr(data, 0, 4) + '<br/>'
+			'raw: <span style="font-family: monospace;">0x' +
+				bufferToHexStr(data, 0, 4) + '</span><br/>'
 			+ (tc >= 0 ? '+' : '') + tc.toFixed(2) + '&deg; C '
 			+ '(' + (tf >= 0 ? '+' : '') + tf.toFixed(2) + '&deg; F)' + '<br/>'
 			+ (h >= 0 ? '+' : '') + h.toFixed(2) + '% RH' + '<br/>'
@@ -256,7 +262,8 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: 0x' + bufferToHexStr(data, 0, 6) + '<br/>'
+			'raw: <span style="font-family: monospace;">0x' +
+				bufferToHexStr(data, 0, 6) + '</span><br/>'
 			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '&micro;T <br/>'
 			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '&micro;T <br/>'
 			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '&micro;T <br/>'
@@ -269,7 +276,8 @@
 	{
 		// Prepare the information to display.
 		string =
-			'raw: 0x' + bufferToHexStr(data, 0, 4) + '<br/>'
+			'raw: <span style="font-family: monospace;">0x' +
+				bufferToHexStr(data, 0, 4) + '</span><br/>'
 
 		// Update the value displayed.
 		displayValue('BarometerData', string)
@@ -287,7 +295,8 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: 0x' + bufferToHexStr(data, 0, 6) + '<br/>'
+			'raw: <span style="font-family: monospace;">0x' +
+				bufferToHexStr(data, 0, 6) + '</span><br/>'
 			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '<br/>'
 			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '<br/>'
 			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '<br/>'
@@ -302,7 +311,8 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: 0x' + bufferToHexStr(data, 0, 2) + '<br/>'
+			'raw: <span style="font-family: monospace;">0x' +
+				bufferToHexStr(data, 0, 2) + '</span><br/>'
 			+ 'light level = ' + value.toPrecision(5) + ' lux<br/>'
 
 		// Update the value displayed.
