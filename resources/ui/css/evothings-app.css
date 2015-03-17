@@ -96,13 +96,11 @@ header button {
 }
 header button.back {
 	position: absolute;
-	/*left: 6.25%;*/
-	left: 0.9em;
+	left: 0;
 
-	width: 10%;
 	height: 100%;
 	margin: 0;
-	padding: 0;
+	padding: 0 0.9em;
 
 	/* Font size is percentage of the header's font size. */
 	font-size: 50%;
@@ -144,14 +142,12 @@ header img.logotype {
 
 header button#menu-button {
 	position: absolute;
-	right: 0.9em;
+	right: 0;
 
-	width: 10%;
 	height: 100%;
 	max-height: 100%;
 	margin: 0;
-	padding: 0;
-	/*padding: 0 6.25% 0 0;*/
+	padding: 0 0.9em;
 
 	/* Font size is percentage of the header's font size. */
 	font-size: 50%;
