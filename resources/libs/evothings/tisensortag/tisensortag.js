@@ -198,10 +198,11 @@ evothings.tisensortag = {}
 				}
  			
  			/* Set the config that turns on the needed sensors.
- 			 * 3-axis accelerometer on: 56 (0111000)
- 			 * 3-axis accelerometer + 3-axis gyro on: 63 (0111111)
+ 			 * 3-axis acc. on: 56 (0111000)
+ 			 * 3-axis acc. + 3-axis gyro on: 63 (0111111)
+ 			 * 3-axis acc. + 3-axis gyro + magnetometer on: 127 (1111111)
  			 */
-			instance.movementConfig = [63, 0] // accel + gyro on
+			instance.movementConfig = [127, 0] // acc. + gyro + magnetometer on
 			instance.movementInterval = interval
 			instance.requiredServices.push(sensortag.MOVEMENT_SERVICE)
 			
@@ -453,7 +454,19 @@ evothings.tisensortag = {}
 				instance.requiredServices.splice(magnetometerServiceIndex, 1)
 
 				// Replace On-function for compatibility with SensorTag 2.
-				instance.magnetometerOn = function() {}
+				instance.magnetometerOn = instance.movementOn
+
+				/* Replace magnetometer value getter function for
+				 * compatibility with SensorTag 2.
+				 */
+				instance.getMagnetometerValues =
+					instance.getModelTwoMagnetometerValues
+
+				// Enable the movement service callback for accelerometer.
+				instance.movementCallback(
+					instance.magnetometerFun,
+					instance.magnetometerInterval
+				)
 			}
 
 			if (instance.getDeviceModel() == 2.0 &&
@@ -588,6 +601,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Get device model number.
+		 * @instance
+		 * @public
 		 */
 		instance.getDeviceModel = function()
 		{
@@ -597,6 +612,7 @@ evothings.tisensortag = {}
 		/**
 		 * Public. Get firmware string.
 		 * @instance
+		 * @public
 		 */
 		instance.getFirmwareString = function()
 		{
@@ -677,6 +693,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn on movement notification (SensorTag 2).
+		 * @instance
+		 * @public
 		 */
 		instance.movementOn = function()
 		{
@@ -695,6 +713,8 @@ evothings.tisensortag = {}
 
 		/**
 		 * Public. Turn off movement notification (SensorTag 2).
+		 * @instance
+		 * @public
 		 */
 		instance.movementOff = function()
 		{
@@ -1104,6 +1124,25 @@ evothings.tisensortag = {}
 			var mx = evothings.util.littleEndianToInt16(data, 0) * (2000.0 / 65536.0) * -1
 			var my = evothings.util.littleEndianToInt16(data, 2) * (2000.0 / 65536.0) * -1
 			var mz = evothings.util.littleEndianToInt16(data, 4) * (2000.0 / 65536.0)
+
+			// Return result.
+			return { x: mx, y: my, z: mz }
+		}
+
+
+		/**
+		 * Calculate magnetometer values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
+		 */
+		instance.getModelTwoMagnetometerValues = function(data)
+		{
+			// Magnetometer values (Micro Tesla).
+			var mx = evothings.util.littleEndianToInt16(data, 12) * (4912.0 / 32768.0)
+			var my = evothings.util.littleEndianToInt16(data, 14) * (4912.0 / 32768.0)
+			var mz = evothings.util.littleEndianToInt16(data, 16) * (4912.0 / 32768.0)
 
 			// Return result.
 			return { x: mx, y: my, z: mz }

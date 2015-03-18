@@ -38,9 +38,8 @@
 
 	<h1>Texas Instruments SensorTag Sensors</h1>
 
-	<p>
-		This example works with SensorTag firmware version 1.5 and above.
-		Current firmware version: <span id="FirmwareData">?</span>
+	<p id="upgradeNotice" class="hidden">
+		<span class="color_softred">Please upgrade the firmware of your SensorTag.</span>
 	</p>
 
 	<p>
@@ -87,6 +86,11 @@
 		<span id="LuxometerData">[Waiting for value]</span>
 	</p>
 
+	<h2>Device info:</h2>
+	<p>
+		Current firmware version: <span id="FirmwareData">?</span>
+	</p>
+
 	<script>
 	// SensorTag object.
 	var sensortag = evothings.tisensortag.createInstance()
@@ -124,6 +128,16 @@
 	{
 		if ('Device data available' == status)
 		{
+			/* Show a notification about that the FW should be upgraded if the
+			 * connected device is a SensorTag 1 with FW rev less than 1.5,
+			 * due to that the sensortag.js lib doesn't support these old revs.
+			 */
+			if (sensortag.getDeviceModel() < 2.0 &&
+				parseFloat(sensortag.getFirmwareString()) < 1.5)
+				document.getElementById('upgradeNotice').classList.remove('hidden')
+			else
+				document.getElementById('upgradeNotice').classList.add('hidden')
+			
 			displayValue('FirmwareData', sensortag.getFirmwareString())
 		}
 		displayValue('StatusData', status)
