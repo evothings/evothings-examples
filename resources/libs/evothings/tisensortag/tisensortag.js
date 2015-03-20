@@ -229,14 +229,15 @@ evothings.tisensortag = {}
 		/**
 		 * Public. Set the humidity notification callback.
 		 * @param fun - success callback called repeatedly: fun(data)
-		 * @param interval - accelerometer rate in milliseconds.
+		 * @param interval - humidity rate in milliseconds.
 		 * @instance
 		 * @public
 		 */
-		instance.humidityCallback = function(fun)
+		instance.humidityCallback = function(fun, interval)
 		{
 			instance.humidityFun = fun
 			instance.humidityConfig = [1] // on
+			instance.humidityInterval = Math.max(100, interval)
 			instance.requiredServices.push(sensortag.HUMIDITY_SERVICE)
 
 			return instance
@@ -270,7 +271,7 @@ evothings.tisensortag = {}
 		{
 			instance.barometerFun = fun
 			instance.barometerConfig = [1] // on
-  			instance.barometerInterval = interval
+  			instance.barometerInterval = Math.max(100, interval)
 			instance.requiredServices.push(sensortag.BAROMETER_SERVICE)
 
 			return instance
@@ -293,7 +294,7 @@ evothings.tisensortag = {}
 		{
 			instance.gyroscopeFun = fun
 			instance.gyroscopeConfig = [axes]
-			instance.gyroscopeInterval = interval
+			instance.gyroscopeInterval = Math.max(100, interval)
 			instance.requiredServices.push(sensortag.GYROSCOPE_SERVICE)
 
 			return instance
@@ -308,7 +309,7 @@ evothings.tisensortag = {}
 		{
 			instance.luxometerFun = fun
 			instance.luxometerConfig = [1] // on
-			instance.luxometerInterval = interval
+			instance.luxometerInterval = Math.max(1000, interval)
 			instance.requiredServices.push(sensortag.LUXOMETER_SERVICE)
 
 			return instance
@@ -765,8 +766,8 @@ evothings.tisensortag = {}
 			instance.sensorOn(
 				sensortag.HUMIDITY_CONFIG,
 				instance.humidityConfig,
-				null, // Not used.
-				null, // Not used.
+				instance.HUMIDITY_PERIOD,
+				instance.humidityInterval,
 				sensortag.HUMIDITY_DATA,
 				sensortag.HUMIDITY_NOTIFICATION,
 				instance.humidityFun

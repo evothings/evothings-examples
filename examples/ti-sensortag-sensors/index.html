@@ -114,13 +114,13 @@
 			.statusCallback(statusHandler)
 			.errorCallback(errorHandler)
 			.keypressCallback(keypressHandler)
-			.irTemperatureCallback(irTemperatureHandler, 500)
-			.humidityCallback(humidityHandler)
-			.barometerCallback(barometerHandler, 500)
-			.accelerometerCallback(accelerometerHandler, 200)
-			.magnetometerCallback(magnetometerHandler, 200)
-			.gyroscopeCallback(gyroscopeHandler, 200, 7) // 7 = enable all axes.
-			//.luxometerCallback(luxometerHandler, 200)
+			.irTemperatureCallback(irTemperatureHandler, 1000)
+			.humidityCallback(humidityHandler, 1000)
+			.barometerCallback(barometerHandler, 1000)
+			.accelerometerCallback(accelerometerHandler, 1000)
+			.magnetometerCallback(magnetometerHandler, 1000)
+			.gyroscopeCallback(gyroscopeHandler, 1000, 7) // 7 = enable all axes.
+			.luxometerCallback(luxometerHandler, 1000)
 			.connectToClosestDevice()
 	}
 
