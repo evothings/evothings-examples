@@ -239,7 +239,7 @@
 		// Prepare the information to display.
 		string =
 			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, dataOffset, 3) + '</span><br/>'
+				bufferToHexStr(data, dataOffset, 6) + '</span><br/>'
 			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>'
 			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>'
 			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'
@@ -280,10 +280,13 @@
 		var y = values.y
 		var z = values.z
 
+		var model = sensortag.getDeviceModel()
+		var dataOffset = (model == 2 ? 12 : 0)
+
 		// Prepare the information to display.
 		string =
 			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, 0, 6) + '</span><br/>'
+				bufferToHexStr(data, dataOffset, 6) + '</span><br/>'
 			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '&micro;T <br/>'
 			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '&micro;T <br/>'
 			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '&micro;T <br/>'

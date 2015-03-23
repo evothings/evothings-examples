@@ -199,10 +199,12 @@ evothings.tisensortag = {}
 				}
  			
  			/* Set the config that turns on the needed sensors.
- 			 * 3-axis acc. on: 56 (0111000)
- 			 * 3-axis acc. + 3-axis gyro on: 63 (0111111)
- 			 * 3-axis acc. + 3-axis gyro + magnetometer on: 127 (1111111)
- 			 */
+			 * magnetometer on: 64 (1000000) (seems to not work in ST2 FW 0.89)
+			 * 3-axis acc. on: 56 (0111000)
+			 * 3-axis gyro on: 7 (0000111)
+			 * 3-axis acc. + 3-axis gyro on: 63 (0111111)
+			 * 3-axis acc. + 3-axis gyro + magnetometer on: 127 (1111111)
+			 */
 			instance.movementConfig = [127, 0] // acc. + gyro + magnetometer on
 			instance.movementInterval = interval
 			instance.requiredServices.push(sensortag.MOVEMENT_SERVICE)
