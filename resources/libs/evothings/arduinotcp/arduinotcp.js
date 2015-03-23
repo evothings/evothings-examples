@@ -2,36 +2,69 @@
 // Author: Mikael Kindborg
 // Functions for scripting the Arduino board from JavaScript.
 
-evothings = window.evothings || {};
-
 /*
  * Readable names for parameter values. (Having these as
  * globals is a bit ugly but makes for shorter names in
  * the application code.)
  */
+
+/**
+ * Value for setting a pin to output.
+ * @todo Move into namespace
+ */
 var OUTPUT = 1
+
+/**
+ * Value for setting a pin to input.
+ * @todo Move into namespace
+ */
 var INPUT = 2
+
+/**
+ * Value for setting a pin to on.
+ * @todo Move into namespace
+ */
 var HIGH = true
+
+/**
+ * Value for setting a pin to off.
+ * @todo Move into namespace
+ */
 var LOW = false
 
-/** @namespace */
-evothings.arduinotcp = {};
-(function()
+/**
+ * @namespace
+ * @description <p>Functions for communicating with an Arduino
+ * WiFi shield or Ethernet shield.</p>
+ */
+evothings.arduinotcp = {}
+
+;(function()
 {
 	/**
 	 * Holder of internal library functions.
+	 * @private
 	 */
 	var internal = {}
 
 	/**
-	 * Internal arrays for timer intervals and timeouts.
+	 * Internal arrays for timeouts.
+	 * @private
 	 */
 	internal.timerTimeouts = []
+
+	/**
+	 * Internal arrays for timer intervals.
+	 * @private
+	 */
 	internal.timerIntervals = []
 
 	/**
 	 * Start timeout timer. This function makes it easier to
 	 * use timeouts in Arduino scripts.
+	 * @param fun Timer function, takes no parameters.
+	 * @param ms Timer delay in milliseconds.
+	 * @public
 	 */
 	evothings.arduinotcp.setTimeout = function(fun, ms)
 	{
@@ -42,6 +75,9 @@ evothings.arduinotcp = {};
 	/**
 	 * Start interval timer. This function makes it easier to
 	 * use timer intervals in Arduino scripts.
+	 * @param fun Timer function, takes no parameters.
+	 * @param ms Timer interval in milliseconds.
+	 * @public
 	 */
 	evothings.arduinotcp.setInterval = function(fun, ms)
 	{
@@ -68,14 +104,21 @@ evothings.arduinotcp = {};
 
 	/**
 	 * The IP address of the Arduino board.
+	 * @public
 	 */
 	evothings.arduinotcp.ipAddress = ''
 
 	/**
 	 * The port number used by the Arduino server.
+	 * @public
 	 */
 	evothings.arduinotcp.port = 0
 
+	/**
+	 * Returns the current IP address value.
+	 * @return {string} IP address.
+	 * @public
+	 */
 	evothings.arduinotcp.getIpAddress = function()
 	{
 		return evothings.arduinotcp.ipAddress
@@ -83,8 +126,9 @@ evothings.arduinotcp = {};
 
 	/**
 	 * Write a digital output value.
-	 * @param pinNumber - pin number to read
-	 * @param value - HIGH or LOW
+	 * @param {number} pinNumber - pin number to read
+	 * @param {number} value - HIGH or LOW
+	 * @public
 	 */
 	evothings.arduinotcp.digitalWrite = function(pinNumber, value)
 	{
@@ -99,9 +143,10 @@ evothings.arduinotcp = {};
 	}
 
 	/**
-	 * Write a digital output value.
-	 * @param pinNumber - pin number to read
-	 * @param mode - OUTPUT or INPUT
+	 * Set pin to output or input.
+	 * @param {number} pinNumber - pin number to read
+	 * @param {number} mode - OUTPUT or INPUT
+	 * @public
 	 */
 	evothings.arduinotcp.pinMode = function(pinNumber, mode)
 	{
@@ -119,9 +164,11 @@ evothings.arduinotcp = {};
 	 * Read a digital input value, callback is called with the value
 	 * 'H' or 'L' corresponding to the result of the Arduino function
 	 * digitalRead().
-	 * @param pinNumber - pin number to read
-	 * @param callback - format callback(value) where value is 'H' or 'L',
+	 * @param {number} pinNumber - pin number to read
+	 * @param {function} callback - Function called with value of pin.
+	 * Format: callback(value) where value is 'H' or 'L',
 	 * or null on error.
+	 * @public
 	 */
 	evothings.arduinotcp.digitalRead = function(pinNumber, callback)
 	{
@@ -145,8 +192,12 @@ evothings.arduinotcp = {};
 	}
 
 	/**
-	 * Read an analog input value, callback is called with the value of
-	 * the Arduino function analogRead().
+	 * Read an analog input value. The callback function is called
+	 * with the value of the Arduino function analogRead().
+	 * @param {number} pinNumber - pin number to read.
+	 * @param {function} callback - Function called with analog value of pin.
+	 * Format: callback(value) where is a number, or null on error.
+	 * @public
 	 */
 	evothings.arduinotcp.analogRead = function(pinNumber, callback)
 	{
@@ -170,8 +221,13 @@ evothings.arduinotcp = {};
 	}
 
 	/**
-	 * Connect to a server.
-	 * Format: callback(successFlag)
+	 * Connect to a server running on the Arduino.
+	 * @param {string} hostname
+	 * @param {number} port
+	 * @param {number} callback Function called when connect
+	 * operation has completed. Format: callback(successFlag)
+	 * where successFlag is true on success and false on error.
+	 * @public
 	 */
 	evothings.arduinotcp.connect = function(hostname, port, callback)
 	{
@@ -193,6 +249,10 @@ evothings.arduinotcp = {};
 		})
 	}
 
+	/**
+	 * Disconnect from the Arduino.
+	 * @public
+	 */
 	evothings.arduinotcp.disconnect = function()
 	{
 		if (internal.connected)
@@ -204,6 +264,7 @@ evothings.arduinotcp = {};
 
 	/**
 	 * Internal connected flag.
+	 * @private
 	 */
 	internal.connected = false
 
@@ -211,6 +272,7 @@ evothings.arduinotcp = {};
 	 * Send a request to the Arduino.
 	 * @param command - the command string
 	 * @callback - function on the format: callback(successFlag)
+	 * @private
 	 */
 	internal.sendRequest = function(command, callback)
 	{
@@ -231,6 +293,7 @@ evothings.arduinotcp = {};
 	/**
 	 * Write data.
 	 * Format: callback(bytesWritten)
+	 * @private
 	 */
 	internal.write = function(socketId, string, callback)
 	{
@@ -246,11 +309,13 @@ evothings.arduinotcp = {};
 
 	/**
 	 * Array for the callback queue.
+	 * @private
 	 */
 	internal.resultCallbackQueue = []
 
 	/**
 	 * Data being read from the server.
+	 * @private
 	 */
 	internal.resultData = ''
 
@@ -258,6 +323,7 @@ evothings.arduinotcp = {};
 	 * Read result from server, calling the callback function
 	 * with the result.
 	 * Format: callback(data) where data is a string
+	 * @private
 	 */
 	internal.readServerResult = function(callback)
 	{
@@ -276,6 +342,7 @@ evothings.arduinotcp = {};
 	/**
 	 * Read data from server, when a result is read (reading up to next
 	 * newline char) the first function in the callback queue is called.
+	 * @private
 	 */
 	internal.readNext = function()
 	{
@@ -321,6 +388,9 @@ evothings.arduinotcp = {};
 		)
 	}
 
+	/**
+	 * @private
+	 */
 	internal.callbackFun = function(result)
 	{
 		if (result == false)
@@ -329,11 +399,17 @@ evothings.arduinotcp = {};
 		}
 	}
 
+	/**
+	 * @private
+	 */
 	internal.bufferToString = function(buffer)
 	{
 		return String.fromCharCode.apply(null, new Uint8Array(buffer))
 	}
 
+	/**
+	 * @private
+	 */
 	internal.stringToBuffer = function(string)
 	{
 		var buffer = new ArrayBuffer(string.length)
