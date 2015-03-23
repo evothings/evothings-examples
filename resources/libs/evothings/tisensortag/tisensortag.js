@@ -1054,22 +1054,31 @@ evothings.tisensortag = {}
 			// Calculate ambient temperature (Celsius).
 			var ac = evothings.util.littleEndianToUint16(data, 2) / 128.0
 
-			// Calculate target temperature (Celsius, based on ambient).
-			var Vobj2 = evothings.util.littleEndianToInt16(data, 0) * 0.00000015625
-			var Tdie = ac + 273.15
-			var S0 =  6.4E-14	// calibration factor
-			var a1 =  1.750E-3
-			var a2 = -1.678E-5
-			var b0 = -2.940E-5
-			var b1 = -5.700E-7
-			var b2 =  4.630E-9
-			var c2 = 13.4
-			var Tref = 298.15
-			var S = S0 * (1 + a1 * (Tdie - Tref) + a2 * Math.pow((Tdie - Tref), 2))
-			var Vos = b0 + b1 * (Tdie - Tref) + b2 * Math.pow((Tdie - Tref), 2)
-			var fObj = (Vobj2 - Vos) + c2 * Math.pow((Vobj2 - Vos), 2)
-			var tObj = Math.pow(Math.pow(Tdie, 4 ) + (fObj / S), 0.25)
-			var tc = tObj - 273.15
+			if (instance.getDeviceModel() < 2)
+			{
+				// Calculate target temperature (Celsius, based on ambient).
+				var Vobj2 = evothings.util.littleEndianToInt16(data, 0) * 0.00000015625
+				var Tdie = ac + 273.15
+				var S0 =  6.4E-14	// calibration factor
+				var a1 =  1.750E-3
+				var a2 = -1.678E-5
+				var b0 = -2.940E-5
+				var b1 = -5.700E-7
+				var b2 =  4.630E-9
+				var c2 = 13.4
+				var Tref = 298.15
+				var S = S0 * (1 + a1 * (Tdie - Tref) + a2 * Math.pow((Tdie - Tref), 2))
+				var Vos = b0 + b1 * (Tdie - Tref) + b2 * Math.pow((Tdie - Tref), 2)
+				var fObj = (Vobj2 - Vos) + c2 * Math.pow((Vobj2 - Vos), 2)
+				var tObj = Math.pow(Math.pow(Tdie, 4 ) + (fObj / S), 0.25)
+				var tc = tObj - 273.15
+			}
+			else
+			{
+				// Calculate target temperature (Celsius).
+				var tc = evothings.util.littleEndianToInt16(data, 0)
+				tc = (tc >> 2) * 0.03125
+			}
 
 			// Return result.
 			return { ambientTemperature: ac, targetTemperature: tc }
