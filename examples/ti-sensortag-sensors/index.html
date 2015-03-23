@@ -88,7 +88,8 @@
 
 	<h2>Device info:</h2>
 	<p>
-		Current firmware version: <span id="FirmwareData">?</span>
+		Device model: SensorTag <span id="DeviceModel">?</span><br />
+		Firmware version: <span id="FirmwareData">?</span>
 	</p>
 
 	<script>
@@ -119,7 +120,7 @@
 			.barometerCallback(barometerHandler, 1000)
 			.accelerometerCallback(accelerometerHandler, 1000)
 			.magnetometerCallback(magnetometerHandler, 1000)
-			.gyroscopeCallback(gyroscopeHandler, 1000, 7) // 7 = enable all axes.
+			.gyroscopeCallback(gyroscopeHandler, 1000, 7) // 7 = enable all axes
 			.luxometerCallback(luxometerHandler, 1000)
 			.connectToClosestDevice()
 	}
@@ -132,12 +133,15 @@
 			 * connected device is a SensorTag 1 with FW rev less than 1.5,
 			 * due to that the sensortag.js lib doesn't support these old revs.
 			 */
-			if (sensortag.getDeviceModel() < 2.0 &&
+			var upgradeNoticeElm = document.getElementById('upgradeNotice')
+
+			if (sensortag.getDeviceModel() < 2 &&
 				parseFloat(sensortag.getFirmwareString()) < 1.5)
-				document.getElementById('upgradeNotice').classList.remove('hidden')
+				upgradeNoticeElm.classList.remove('hidden')
 			else
-				document.getElementById('upgradeNotice').classList.add('hidden')
-			
+				upgradeNoticeElm.classList.add('hidden')
+
+			displayValue('DeviceModel', sensortag.getDeviceModel())
 			displayValue('FirmwareData', sensortag.getFirmwareString())
 		}
 		displayValue('StatusData', status)
@@ -159,6 +163,7 @@
 			displayValue('MagnetometerData', blank)
 			displayValue('BarometerData', blank)
 			displayValue('GyroscopeData', blank)
+			displayValue('LuxometerData', blank)
 
 			// Reset screen color.
 			setBackgroundColor('white')
@@ -213,7 +218,8 @@
 			+ (tc >= 0 ? '+' : '') + tc.toFixed(2) + '&deg; C '
 			+ '(' + (tf >= 0 ? '+' : '') + tf.toFixed(2) + '&deg; F)' + '<br/>'
 			+ (ac >= 0 ? '+' : '') + ac.toFixed(2) + '&deg; C '
-			+ '(' + (af >= 0 ? '+' : '') + af.toFixed(2) + '&deg; F) [amb]' + '<br/>'
+			+ '(' + (af >= 0 ? '+' : '') + af.toFixed(2) + '&deg; F) [amb]'
+			+ '<br/>'
 
 		// Update the value displayed.
 		displayValue('IRTemperatureData', string)
@@ -233,7 +239,7 @@
 		// Prepare the information to display.
 		string =
 			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, dataOffset, 6) + '</span><br/>'
+				bufferToHexStr(data, dataOffset, 3) + '</span><br/>'
 			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>'
 			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>'
 			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'

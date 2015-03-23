@@ -19,6 +19,7 @@ evothings.tisensortag = {}
 
 	sensortag.DEVICEINFO_SERVICE = '0000180a-0000-1000-8000-00805f9b34fb'
 	sensortag.FIRMWARE_DATA = '00002a26-0000-1000-8000-00805f9b34fb'
+	sensortag.MODELNUMBER_DATA = '00002a24-0000-1000-8000-00805f9b34fb'
 
 	sensortag.IRTEMPERATURE_SERVICE = 'f000aa00-0451-4000-b000-000000000000'
 	sensortag.IRTEMPERATURE_DATA = 'f000aa01-0451-4000-b000-000000000000'
@@ -425,7 +426,7 @@ evothings.tisensortag = {}
 		 */
 		instance.handleSensorTagOne = function()
 		{
-			if (instance.getDeviceModel() < 2.0 &&
+			if (instance.getDeviceModel() < 2 &&
 				-1 != (luxometerServiceIndex =
 					instance.requiredServices.indexOf(
 						sensortag.LUXOMETER_SERVICE)))
@@ -446,7 +447,7 @@ evothings.tisensortag = {}
 		 */
 		instance.handleSensorTagTwo = function()
 		{
-			if (instance.getDeviceModel() == 2.0 &&
+			if (instance.getDeviceModel() == 2 &&
 				-1 != (magnetometerServiceIndex =
 					instance.requiredServices.indexOf(
 						sensortag.MAGNETOMETER_SERVICE)))
@@ -470,7 +471,7 @@ evothings.tisensortag = {}
 				)
 			}
 
-			if (instance.getDeviceModel() == 2.0 &&
+			if (instance.getDeviceModel() == 2 &&
 				-1 != (accelerometerServiceIndex =
 					instance.requiredServices.indexOf(
 						sensortag.ACCELEROMETER_SERVICE)))
@@ -494,7 +495,7 @@ evothings.tisensortag = {}
 				)
 			}
 
-			if (instance.getDeviceModel() == 2.0 &&
+			if (instance.getDeviceModel() == 2 &&
 				-1 != (gyroscopeServiceIndex = 
 					instance.requiredServices.indexOf(
 						sensortag.GYROSCOPE_SERVICE)))
@@ -534,14 +535,19 @@ evothings.tisensortag = {}
 					sensortag.FIRMWARE_DATA,
 					gotFirmwareValue,
 					instance.errorFun)
+
+				// The SensorTag 2 has model number data available.
+				instance.device.readCharacteristic(
+					sensortag.MODELNUMBER_DATA,
+					gotModelNumber,
+					instance.errorFun)
 			}
 
 			function gotFirmwareValue(data)
 			{
-
 				// Set firmware string.
 				var fw = evothings.ble.fromUtf8(data)
-				instance.firmwareString = fw.substr(0,3)
+				instance.firmwareString = fw.match(/\d+\.\d+\S?\b/g)[0] || ''
 				instance.statusFun && instance.statusFun('Device data available')
 
 				// Continue and read services requested by the application.
@@ -565,6 +571,22 @@ evothings.tisensortag = {}
 					instance.errorFun)
 			}
 
+			/* TODO: Use only the model number characteristic to determine the
+			 * device model.
+			 */
+			function gotModelNumber(data)
+			{
+				var modelNumber = evothings.ble.fromUtf8(data)
+				if (-1 !== modelNumber.indexOf('ST2'))
+				{
+					instance.deviceModel = 2
+				}
+				else
+				{
+					instance.deviceModel = 1
+				}
+			}
+
 			function readDeviceInfoService()
 			{
 				// Read device information service.
@@ -576,7 +598,7 @@ evothings.tisensortag = {}
 
 			/* First determine the device model by looking for services unique
 			 * to certain models.
-			 */ 
+			 */
 			instance.device.readServices(
 				null,
 				function()
@@ -591,9 +613,9 @@ evothings.tisensortag = {}
 						-1 == services.indexOf(sensortag.ACCELEROMETER_SERVICE) &&
 						-1 == services.indexOf(sensortag.MAGNETOMETER_SERVICE) &&
 						-1 == services.indexOf(sensortag.GYROSCOPE_SERVICE))
-						instance.deviceModel = 2.0
+						instance.deviceModel = 2
 					else
-						instance.deviceModel = 1.0
+						instance.deviceModel = 1
 
 					readDeviceInfoService()
 				},
@@ -1062,9 +1084,6 @@ evothings.tisensortag = {}
 		{
 			// Set divisor based on firmware version.
 			var divisors = {x: 16.0, y: -16.0, z: 16.0}
-			/*if (instance.getDeviceModel() < 2.0 &&
-				parseFloat(instance.getFirmwareString()) < 1.5)
-				divisors = {x: 64.0, y: 64.0, z: 64.0}*/
 
 			// Calculate accelerometer values.
 			var ax = evothings.util.littleEndianToInt8(data, 0) / divisors.x
