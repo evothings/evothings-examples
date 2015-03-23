@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+Demonstration of the TI SensorTag accelerometer.
+-->
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Texas Instruments SensorTag Accelerometer</title>
+
+	<style>
+	@import 'ui/css/evothings-app.css';
+
+	#sprite
+	{
+		position: absolute;
+		width: 300px;
+		height: auto;
+		top: 0px;
+		left: 0px;
+		z-index: 1000;
+		display: none;
+	}
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+</head>
+
+<body>
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>Texas Instruments SensorTag Accelerometer</h1>
+
+	<p>This example works with the Texas Instruments SensorTag 2.</p>
+	<p>Activate the SensorTag to begin.</p>
+	<p><strong>Status:</strong> <span id="status">Ready</span></p>
+
+	<img id="sprite" src="sprite.svg" />
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/tisensortag/tisensortag.js"></script>
+	<script src="SpriteManager.js"></script>
+
+	<script>
+	// Globals.
+	var sprite
+	var sensorTag
+
+	function initialise()
+	{
+		initialiseSprite()
+		initialiseSensorTag()
+	}
+
+	function initialiseSprite()
+	{
+		sprite = SpriteManager.makeSprite()
+		sprite.setDOMElement(document.getElementById('sprite'))
+	}
+
+	function displaySprite()
+	{
+		sprite.setCenterX(SpriteManager.getPlayfieldWidth() / 2)
+		sprite.setCenterY(SpriteManager.getPlayfieldHeight() / 2)
+		sprite.show()
+	}
+
+	function moveSprite(dx, dy)
+	{
+		var x = sprite.getCenterX() + dx
+		var y = sprite.getCenterY() - dy
+
+		x = Math.min(x, SpriteManager.getPlayfieldWidth())
+		x = Math.max(x, 0)
+
+		y = Math.min(y, SpriteManager.getPlayfieldHeight())
+		y = Math.max(y, 0)
+
+		sprite.setCenterX(x)
+		sprite.setCenterY(y)
+	}
+
+	function initialiseSensorTag()
+	{
+		// Create SensorTag object.
+		sensorTag = evothings.tisensortag.createInstance()
+
+		// Set up callbacks and sensors.
+		sensorTag
+			.statusCallback(statusHandler)
+			.errorCallback(errorHandler)
+			.accelerometerCallback(accelerometerHandler, 100)
+			.connectToClosestDevice()
+	}
+
+	function statusHandler(status)
+	{
+		displayStatus(status)
+
+		if ('Connected' == status)
+		{
+			displaySprite()
+		}
+	}
+
+	function errorHandler(error)
+	{
+		if ('disconnected' == error)
+		{
+			displayStatus('Disconnected')
+
+			sprite.hide()
+
+			// If disconneted attempt to connect again.
+			setTimeout(
+				function() { sensorTag.connectToClosestDevice() },
+				1000)
+		}
+		else
+		{
+			displayStatus('Error: ' + error)
+		}
+	}
+
+	function accelerometerHandler(data)
+	{
+		var values = sensorTag.getAccelerometerValues(data)
+		var dx = values.x * 50
+		var dy = values.y * 50
+		moveSprite(dx, dy)
+	}
+
+	function displayStatus(status)
+	{
+		document.getElementById('status').innerHTML = status
+	}
+
+	function setBackgroundColor(color)
+	{
+		document.documentElement.style.background = color
+		document.body.style.background = color
+	}
+
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(initialise) },
+		false)
+	</script>
+
+</body>
+
+</html>
