@@ -1,7 +1,7 @@
 // File: arduinoble.js
 
 // Load library EasyBLE.
-evothings.loadScript('libs/evothings/easyble/easyble.js')
+evothings.loadScript('libs/evothings/easyble/easyble.js');
 
 /**
  * @namespace
@@ -16,20 +16,6 @@ evothings.loadScript('libs/evothings/easyble/easyble.js')
  *
  * @todo Add function to set the write characteristic UUID to make
  * the code more generic.
- *
- * @example
- *   evothings.arduinoble.connect(
- *     'arduinoble', // Name of BLE shield.
- *     function(device)
- *     {
- *       console.log('connected!');
- *       device.writeDataArray(new Uint8Array([1]));
- *       evothings.arduinoble.close();
- *     },
- *     function(errorCode)
- *     {
- *       console.log('Error: ' + errorCode);
- *     });
  */
 evothings.arduinoble = {};
 
@@ -51,14 +37,29 @@ evothings.arduinoble = {};
 	/**
 	 * Called when you've connected to an Arduino BLE shield.
 	 * @callback evothings.arduinoble.connectsuccess
-	 * @param {evothings.arduinoble.device} device - The connected BLE shield.
+	 * @param {evothings.arduinoble.ArduinoBLEDevice} device -
+	 * The connected BLE shield.
 	 */
 
 	/**
 	 * Connect to a BLE-shield.
 	 * @param deviceName BLE name if the shield.
-	 * @param {evothings.arduinoble.connectsuccess} success - Success callback: success(device)
+	 * @param {evothings.arduinoble.connectsuccess} success -
+	 * Success callback: success(device)
 	 * @param {function} fail - Error callback: fail(errorCode)
+	 * @example
+	 * evothings.arduinoble.connect(
+	 *   'arduinoble', // Name of BLE shield.
+	 *   function(device)
+	 *   {
+	 *     console.log('connected!');
+	 *     device.writeDataArray(new Uint8Array([1]));
+	 *     evothings.arduinoble.close();
+	 *   },
+	 *   function(errorCode)
+	 *   {
+	 *     console.log('Error: ' + errorCode);
+	 *   });
 	 * @public
 	 */
 	evothings.arduinoble.connect = function(deviceName, success, fail)

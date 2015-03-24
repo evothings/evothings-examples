@@ -1,13 +1,11 @@
-// Dynamic script loader that tracks loaded scripts.
-// Can also use an event (similar to 'devireready' in Cordova)
-// to notify when scripts are loaded (by using a script loading
-// counter to track progress).
-
 /**
-* @namespace
-*/
+ * @namespace
+ * @description <p>Functions for loading scripts asynchronously,
+ * detecting platform, and other common application functionality.</p>
+ */
 evothings = window.evothings || {};
-(function()
+
+;(function()
 {
 	/* ------------------ Script loading ------------------ */
 
@@ -17,10 +15,11 @@ evothings = window.evothings || {};
 
 	/**
 	 * Load a script.
-	 * @param {String} url - URL or path to the script. Relative paths are
+	 * @param {string} url - URL or path to the script. Relative paths are
 	 * relative to the HTML file that initiated script loading.
-	 * @param {function} callback - optional parameterless function that will
+	 * @param {function} callback - Optional parameterless function that will
 	 * be called when the script has loaded.
+	 * @public
 	 */
 	evothings.loadScript = function(url, callback)
 	{
@@ -75,9 +74,12 @@ evothings = window.evothings || {};
 	}
 
 	/**
-	 * Add a callback that will be called when all scripts are loaded.
-	 * @param callback - parameterless function that will
+	 * <p>Add a callback that will be called when all scripts are loaded.</p>
+	 * <p><strong>It is good practise to always use this function when
+	 * loading script asynchronously or using a library that does so.</strong></p>
+	 * @param  {function} callback - Parameterless function that will
 	 * be called when all scripts have finished loading.
+	 * @public
 	 */
 	evothings.scriptsLoaded = function(callback)
 	{
@@ -104,9 +106,11 @@ evothings = window.evothings || {};
 	 * console.log if not given).
 	 *
 	 * @example
-	 *   var obj = { company: 'Evothings', field: 'IoT' };
-	 *   evothings.easyble.printObject(obj);
-	 *   evothings.easyble.printObject(obj, console.log);
+	 * var obj = { company: 'Evothings', field: 'IoT' };
+	 * evothings.easyble.printObject(obj);
+	 * evothings.easyble.printObject(obj, console.log);
+	 *
+	 * @public
 	 */
 	evothings.printObject = function(obj, printFun)
 	{
@@ -136,39 +140,60 @@ evothings = window.evothings || {};
 
 	/* ------------------ Platform check ------------------ */
 
+	/**
+	 * @namespace
+	 * @description Namespace for platform check functions.
+	 */
 	evothings.os = {};
 
+	/**
+	 * Returns true if current platform is iOS, false if not.
+	 * @return {boolean} true if platform is iOS, false if not.
+	 * @public
+	 */
 	evothings.os.isIOS = function()
 	{
 		return /iP(hone|ad|od)/.test(navigator.userAgent);
 	};
 
+	/**
+	 * Returns true if current platform is iOS 7, false if not.
+	 * @return {boolean} true if platform is iOS 7, false if not.
+	 * @public
+	 */
 	evothings.os.isIOS7 = function()
 	{
 		return /iP(hone|ad|od).*OS 7/.test(navigator.userAgent);
 	};
 
+	/**
+	 * Returns true if current platform is Android, false if not.
+	 * @return {boolean} true if platform is Android, false if not.
+	 * @public
+	 */
 	evothings.os.isAndroid = function()
 	{
 		return /Android|android/.test(navigator.userAgent);
 	};
 
+	/**
+	 * Returns true if current platform is Windows Phone, false if not.
+	 * @return {boolean} true if platform is Windows Phone, false if not.
+	 * @public
+	 */
 	evothings.os.isWP = function()
 	{
 		return /Windows Phone/.test(navigator.userAgent);
 	};
-
-	return evothings;
-
-// If for some reason the global evothings variable is already defined we use it.
 })();
 
+// This is a special layout hack for iOS 7.
 window.addEventListener('DOMContentLoaded', function(e) {
 	/* Set an absolute base font size in iOS 7 due to that viewport-relative
 	font sizes doesn't work properly caused by the WebKit bug described at
 	https://bugs.webkit.org/show_bug.cgi?id=131863. */
 	if (evothings.os.isIOS7())
 	{
-		document.body.style.fontSize = '20pt'
+		document.body.style.fontSize = '20pt';
 	}
-})
+});

@@ -84,16 +84,55 @@ evothings.easyble = {};
 
 	/**
 	 * @description Called during scanning when a BLE device is found.
-	 * @callback scanCallback
+	 * @callback evothings.easyble.scanCallback
 	 * @param {evothings.easyble.EasyBLEDevice} device - EasyBLE device object
 	 * found during scanning.
 	 */
 
 	/**
+	 * @description This callback indicates that an operation was successful,
+	 * without specifying and additional information.
+	 * @callback evothings.easyble.emptyCallback - Callback that takes no parameters.
+	 */
+
+	/**
+	 * @description This function is called when an operation fails.
+	 * @callback evothings.easyble.failCallback
+	 * @param {string} errorString - A human-readable string that
+	 * describes the error that occurred.
+	 */
+
+	/**
+	 * @description Called when successfully connected to a device.
+	 * @callback evothings.easyble.connectCallback
+	 * @param {evothings.easyble.EasyBLEDevice} device - EasyBLE devices object.
+	 */
+
+	/**
+	 * @description Called when services are successfully read.
+	 * @callback evothings.easyble.servicesCallback
+	 * @param {evothings.easyble.EasyBLEDevice} device - EasyBLE devices object.
+	 */
+
+	/**
+	 * @description Function when data is available.
+	 * @callback evothings.easyble.dataCallback
+	 * @param {ArrayBuffer} data - The data is an array buffer.
+	 * Use an ArrayBufferView to access the data.
+	 */
+
+	/**
+	 * @description Called with RSSI value.
+	 * @callback evothings.easyble.rssiCallback
+	 * @param {number} rssi - A negative integer, the signal strength in decibels.
+	 * This value may be 127 which indicates an unknown value.
+	 */
+
+	/**
 	 * Start scanning for devices.
-	 * @param {scanCallback} - Success function called when a device is found.
+	 * @param {evothings.easyble.scanCallback} - Success function called when a device is found.
 	 * Format: success({@link evothings.easyble.EasyBLEDevice}).
-	 * @param {failCallback} fail - Error callback: fail(error).
+	 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 	 * @public
 	 * @example
 	 *   evothings.easyble.startScan(
@@ -386,49 +425,12 @@ evothings.easyble = {};
 		var device = deviceObject;
 
 		/**
-		 * @description This callback indicates that an operation was successful,
-		 * without specifying and additional information.
-		 * @callback emptyCallback - Callback that takes no parameters.
-		 */
-
-		/**
-		 * @description This function is called when an operation fails.
-		 * @callback failCallback
-		 * @param {string} errorString - A human-readable string that
-		 * describes the error that occurred.
-		 */
-
-		/**
-		 * @description Called when successfully connected to a device.
-		 * @callback connectCallback
-		 * @param {evothings.easyble.EasyBLEDevice} device - EasyBLE devices object.
-		 */
-
-		/**
-		 * @description Called when services are successfully read.
-		 * @callback servicesCallback
-		 * @param {evothings.easyble.EasyBLEDevice} device - EasyBLE devices object.
-		 */
-
-		/**
-		 * @description Function when data is available.
-		 * @callback dataCallback
-		 * @param {ArrayBuffer} data - The data is an array buffer.
-		 * Use an ArrayBufferView to access the data.
-		 */
-
-		/**
-		 * @description Called with RSSI value.
-		 * @callback rssiCallback
-		 * @param {number} rssi - A negative integer, the signal strength in decibels.
-		 * This value may be 127 which indicates an unknown value.
-		 */
-
-		/**
 		 * Connect to the device.
-		 * @param {connectCallback} success - Called when connected: success(device).
-		 * @param {failCallback} fail - Called on error and if a disconnect happens:
-		 * error(errorMessage)
+		 * @param {evothings.easyble.connectCallback} success -
+		 * Called when connected: success(device).
+		 * @param {evothings.easyble.failCallback} fail -
+		 * Called on error and if a disconnect happens.
+		 * Format: error(errorMessage)
 		 * @public
 		 * @instance
 		 * @example
@@ -453,7 +455,7 @@ evothings.easyble = {};
 		 * @public
 		 * @instance
 		 * @example
-		 *   device.close();
+		 * device.close();
 		 */
 		device.close = function()
 		{
@@ -462,8 +464,8 @@ evothings.easyble = {};
 
 		/**
 		 * Read devices RSSI. Device must be connected.
-		 * @param {rssiCallback} success - Called with RSSI value: success(rssi).
-		 * @param {failCallback} fail - Called on error: fail(error).
+		 * @param {evothings.easyble.rssiCallback} success - Called with RSSI value: success(rssi).
+		 * @param {evothings.easyble.failCallback} fail - Called on error: fail(error).
 		 * @public
 		 * @instance
 		 */
@@ -481,8 +483,9 @@ evothings.easyble = {};
 		 * @param serviceUUIDs - array of UUID strings, if null all
 		 * services are read (this can be time-consuming compared to
 		 * reading selected services).
-		 * @param {servicesCallback} success - Called when services are read: success(device).
-		 * @param {failCallback} fail - error callback: error(errorMessage)
+		 * @param {evothings.easyble.servicesCallback} success -
+		 * Called when services are read: success(device).
+		 * @param {evothings.easyble.failCallback} fail - error callback: error(errorMessage)
 		 * @public
 		 * @instance
 		 * @example
@@ -506,8 +509,8 @@ evothings.easyble = {};
 		/**
 		 * Read value of characteristic.
 		 * @param {string} characteristicUUID - UUID of characteristic to read.
-		 * @param {dataCallback} success - Success callback: success(data).
-		 * @param {failCallback} fail - Error callback: fail(error).
+		 * @param {evothings.easyble.dataCallback} success - Success callback: success(data).
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
 		 * @example
@@ -533,8 +536,8 @@ evothings.easyble = {};
 		 * Read value of descriptor.
 		 * @param {string} characteristicUUID - UUID of characteristic for descriptor.
 		 * @param {string} descriptorUUID - UUID of descriptor to read.
-		 * @param {dataCallback} success - Success callback: success(data).
-		 * @param {failCallback} fail - Error callback: fail(error).
+		 * @param {evothings.easyble.dataCallback} success - Success callback: success(data).
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
 		 * @example
@@ -559,8 +562,8 @@ evothings.easyble = {};
 		 * Write value of characteristic.
 		 * @param {string} characteristicUUID - UUID of characteristic to write to.
 		 * @param {ArrayBufferView} value - Value to write.
-		 * @param {emptyCallback} success - Success callback: success().
-		 * @param {failCallback} fail - Error callback: fail(error).
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success().
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
 		 * @example
@@ -586,8 +589,8 @@ evothings.easyble = {};
 		 * @param {string} characteristicUUID - UUID of characteristic for descriptor.
 		 * @param {string} descriptorUUID - UUID of descriptor to write to.
 		 * @param {ArrayBufferView} value - Value to write.
-		 * @param {emptyCallback} success - Success callback: success().
-		 * @param {failCallback} fail - Error callback: fail(error).
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success().
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
 		 * @example
@@ -613,8 +616,8 @@ evothings.easyble = {};
 		 * Subscribe to characteristic value updates. The success function
 		 * will be called repeatedly whenever there is new data available.
 		 * @param {string} characteristicUUID - UUID of characteristic to subscribe to.
-		 * @param {dataCallback} success - Success callback: success(data).
-		 * @param {failCallback} fail - Error callback: fail(error).
+		 * @param {evothings.easyble.dataCallback} success - Success callback: success(data).
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
 		 * @example
@@ -637,8 +640,8 @@ evothings.easyble = {};
 		/**
 		 * Unsubscribe from characteristic updates to stop notifications.
 		 * @param characteristicUUID - UUID of characteristic to unsubscribe from
-		 * @param {emptyCallback} success - Success callback: success()
-		 * @param {failCallback} fail - Error callback: fail(error)
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success()
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error)
 		 * @public
 		 * @instance
 		 * @example

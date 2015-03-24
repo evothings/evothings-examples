@@ -88,6 +88,13 @@ def buildTISensorTagSensors
 	copyTISensorTag(destPath)
 end
 
+def buildTISensorTagAccelerometer
+	destPath = 'examples/ti-sensortag-accelerometer'
+	copyCommon(destPath)
+	copyUtil(destPath)
+	copyTISensorTag(destPath)
+end
+
 def buildCordovaBasic
 	destPath = 'examples/cordova-basic'
 	copyCommon(destPath)
@@ -286,6 +293,7 @@ def build
 	buildRFduinoLEDOnOff
 	buildTISensorTagDemo
 	buildTISensorTagSensors
+	buildTISensorTagAccelerometer
 	buildMediaTekLinkIt
 end
 
