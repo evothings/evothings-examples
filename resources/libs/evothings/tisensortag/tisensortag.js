@@ -19,13 +19,16 @@ evothings.tisensortag = {}
 
 	sensortag.DEVICEINFO_SERVICE = '0000180a-0000-1000-8000-00805f9b34fb'
 	sensortag.FIRMWARE_DATA = '00002a26-0000-1000-8000-00805f9b34fb'
+	sensortag.MODELNUMBER_DATA = '00002a24-0000-1000-8000-00805f9b34fb'
 
 	sensortag.IRTEMPERATURE_SERVICE = 'f000aa00-0451-4000-b000-000000000000'
 	sensortag.IRTEMPERATURE_DATA = 'f000aa01-0451-4000-b000-000000000000'
 	sensortag.IRTEMPERATURE_CONFIG = 'f000aa02-0451-4000-b000-000000000000'
+	// Missing in HW rev. 1.2 (FW rev. 1.5)
 	sensortag.IRTEMPERATURE_PERIOD = 'f000aa03-0451-4000-b000-000000000000'
 	sensortag.IRTEMPERATURE_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
+	// Only in SensorTag 1.
 	sensortag.ACCELEROMETER_SERVICE = 'f000aa10-0451-4000-b000-000000000000'
 	sensortag.ACCELEROMETER_DATA = 'f000aa11-0451-4000-b000-000000000000'
 	sensortag.ACCELEROMETER_CONFIG = 'f000aa12-0451-4000-b000-000000000000'
@@ -38,6 +41,7 @@ evothings.tisensortag = {}
 	sensortag.HUMIDITY_PERIOD = 'f000aa23-0451-4000-b000-000000000000'
 	sensortag.HUMIDITY_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
+	// Only in SensorTag 1.
 	sensortag.MAGNETOMETER_SERVICE = 'f000aa30-0451-4000-b000-000000000000'
 	sensortag.MAGNETOMETER_DATA = 'f000aa31-0451-4000-b000-000000000000'
 	sensortag.MAGNETOMETER_CONFIG = 'f000aa32-0451-4000-b000-000000000000'
@@ -51,11 +55,26 @@ evothings.tisensortag = {}
 	sensortag.BAROMETER_PERIOD = 'f000aa44-0451-4000-b000-000000000000'
 	sensortag.BAROMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
+	// Only in SensorTag 1.
 	sensortag.GYROSCOPE_SERVICE = 'f000aa50-0451-4000-b000-000000000000'
 	sensortag.GYROSCOPE_DATA = 'f000aa51-0451-4000-b000-000000000000'
 	sensortag.GYROSCOPE_CONFIG = 'f000aa52-0451-4000-b000-000000000000'
 	sensortag.GYROSCOPE_PERIOD = 'f000aa53-0451-4000-b000-000000000000'
 	sensortag.GYROSCOPE_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+
+	// Only in SensorTag 2.
+	sensortag.LUXOMETER_SERVICE = 'f000aa70-0451-4000-b000-000000000000'
+	sensortag.LUXOMETER_DATA = 'f000aa71-0451-4000-b000-000000000000'
+	sensortag.LUXOMETER_CONFIG = 'f000aa72-0451-4000-b000-000000000000'
+	sensortag.LUXOMETER_PERIOD = 'f000aa73-0451-4000-b000-000000000000'
+	sensortag.LUXOMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+
+	// Only in SensorTag 2.
+	sensortag.MOVEMENT_SERVICE = 'f000aa80-0451-4000-b000-000000000000'
+	sensortag.MOVEMENT_DATA = 'f000aa81-0451-4000-b000-000000000000'
+	sensortag.MOVEMENT_CONFIG = 'f000aa82-0451-4000-b000-000000000000'
+	sensortag.MOVEMENT_PERIOD = 'f000aa83-0451-4000-b000-000000000000'
+	sensortag.MOVEMENT_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
 	sensortag.KEYPRESS_SERVICE = '0000ffe0-0000-1000-8000-00805f9b34fb'
 	sensortag.KEYPRESS_DATA = '0000ffe1-0000-1000-8000-00805f9b34fb'
@@ -155,10 +174,41 @@ evothings.tisensortag = {}
 		instance.irTemperatureCallback = function(fun, interval)
 		{
 			instance.irTemperatureFun = fun
-			instance.irTemperatureConfig = 1 // on
+			instance.irTemperatureConfig = [1] // on
 			instance.irTemperatureInterval = Math.max(300, interval)
 			instance.requiredServices.push(sensortag.IRTEMPERATURE_SERVICE)
 
+			return instance
+		}
+
+		instance.movementCallback = function(fun, interval)
+		{
+			/* Keep a list of all movement sensor's callbacks, (assume each
+			 * call to this function is for a different sensor)
+			 */
+			instance.movementFunArray = instance.movementFunArray || []
+			instance.movementFunArray.push(fun)
+
+			/* Call all of the movement service's enabled callbacks
+			 * (accelerometer, gyroscope, magnetometer)
+			 */
+			instance.movementFun = function(data)
+				{
+					for (var fun in instance.movementFunArray)
+						instance.movementFunArray[fun](data)
+				}
+ 			
+ 			/* Set the config that turns on the needed sensors.
+			 * magnetometer on: 64 (1000000) (seems to not work in ST2 FW 0.89)
+			 * 3-axis acc. on: 56 (0111000)
+			 * 3-axis gyro on: 7 (0000111)
+			 * 3-axis acc. + 3-axis gyro on: 63 (0111111)
+			 * 3-axis acc. + 3-axis gyro + magnetometer on: 127 (1111111)
+			 */
+			instance.movementConfig = [127, 0] // acc. + gyro + magnetometer on
+			instance.movementInterval = interval
+			instance.requiredServices.push(sensortag.MOVEMENT_SERVICE)
+			
 			return instance
 		}
 
@@ -172,7 +222,7 @@ evothings.tisensortag = {}
 		instance.accelerometerCallback = function(fun, interval)
 		{
 			instance.accelerometerFun = fun
-			instance.accelerometerConfig = 1 // on
+			instance.accelerometerConfig = [1] // on
 			instance.accelerometerInterval = interval
 			instance.requiredServices.push(sensortag.ACCELEROMETER_SERVICE)
 
@@ -182,14 +232,15 @@ evothings.tisensortag = {}
 		/**
 		 * Public. Set the humidity notification callback.
 		 * @param fun - success callback called repeatedly: fun(data)
-		 * @param interval - accelerometer rate in milliseconds.
+		 * @param interval - humidity rate in milliseconds.
 		 * @instance
 		 * @public
 		 */
-		instance.humidityCallback = function(fun)
+		instance.humidityCallback = function(fun, interval)
 		{
 			instance.humidityFun = fun
-			instance.humidityConfig = 1 // on
+			instance.humidityConfig = [1] // on
+			instance.humidityInterval = Math.max(100, interval)
 			instance.requiredServices.push(sensortag.HUMIDITY_SERVICE)
 
 			return instance
@@ -205,7 +256,7 @@ evothings.tisensortag = {}
 		instance.magnetometerCallback = function(fun, interval)
 		{
 			instance.magnetometerFun = fun
-			instance.magnetometerConfig = 1 // on
+			instance.magnetometerConfig = [1] // on
 			instance.magnetometerInterval = interval
 			instance.requiredServices.push(sensortag.MAGNETOMETER_SERVICE)
 
@@ -222,8 +273,8 @@ evothings.tisensortag = {}
 		instance.barometerCallback = function(fun, interval)
 		{
 			instance.barometerFun = fun
-			instance.barometerConfig = 1 // on
-  			instance.barometerInterval = interval
+			instance.barometerConfig = [1] // on
+  			instance.barometerInterval = Math.max(100, interval)
 			instance.requiredServices.push(sensortag.BAROMETER_SERVICE)
 
 			return instance
@@ -245,9 +296,24 @@ evothings.tisensortag = {}
 		instance.gyroscopeCallback = function(fun, interval, axes)
 		{
 			instance.gyroscopeFun = fun
-			instance.gyroscopeConfig = axes
-			instance.gyroscopeInterval = interval
+			instance.gyroscopeConfig = [axes]
+			instance.gyroscopeInterval = Math.max(100, interval)
 			instance.requiredServices.push(sensortag.GYROSCOPE_SERVICE)
+
+			return instance
+		}
+
+		/**
+		 * Public. Set the luxometer notification callback.
+		 * @param fun - success callback called repeatedly: fun(data)
+		 * @param interval - luxometer rate in milliseconds.
+		 */
+		instance.luxometerCallback = function(fun, interval)
+		{
+			instance.luxometerFun = fun
+			instance.luxometerConfig = [1] // on
+			instance.luxometerInterval = Math.max(1000, interval)
+			instance.requiredServices.push(sensortag.LUXOMETER_SERVICE)
 
 			return instance
 		}
@@ -320,13 +386,13 @@ evothings.tisensortag = {}
 							strongestRSSI = device.rssi
 						}
 
-						if (Date.now() >= stopScanTime)
-						{
+						//if (Date.now() >= stopScanTime)
+						//{
 							instance.statusFun && instance.statusFun('SensorTag found')
 							evothings.easyble.stopScan()
 							instance.device = closestDevice
 							instance.connectToDevice()
-						}
+						//}
 					}
 				},
 				function(errorCode)
@@ -355,6 +421,108 @@ evothings.tisensortag = {}
 		}
 
 		/**
+		 * In the SensorTag 1, the luxometer service is missing. Remove this
+		 * from the list of required services.
+		 * TODO: remove the requiredServices approach and only use existing
+		 * services.
+		 */
+		instance.handleSensorTagOne = function()
+		{
+			if (instance.getDeviceModel() < 2 &&
+				-1 != (luxometerServiceIndex =
+					instance.requiredServices.indexOf(
+						sensortag.LUXOMETER_SERVICE)))
+			{
+				// Remove dependency of service non-existent in SensorTag 1.
+				instance.requiredServices.splice(luxometerServiceIndex, 1)
+
+				// Replace On-function for compatibility with SensorTag 1.
+				instance.luxometerOn = function() {}
+			}
+		}
+
+		/**
+		 * In the SensorTag 2, the accelerometer, magnetometer and gyroscope
+		 * services are replaced with the movement service. To preserve
+		 * individual callbacks for these, re-route them through the movement
+		 * callback.
+		 */
+		instance.handleSensorTagTwo = function()
+		{
+			if (instance.getDeviceModel() == 2 &&
+				-1 != (magnetometerServiceIndex =
+					instance.requiredServices.indexOf(
+						sensortag.MAGNETOMETER_SERVICE)))
+			{
+				// Remove dependency of service non-existent in SensorTag 2.
+				instance.requiredServices.splice(magnetometerServiceIndex, 1)
+
+				// Replace On-function for compatibility with SensorTag 2.
+				instance.magnetometerOn = instance.movementOn
+
+				/* Replace magnetometer value getter function for
+				 * compatibility with SensorTag 2.
+				 */
+				instance.getMagnetometerValues =
+					instance.getModelTwoMagnetometerValues
+
+				// Enable the movement service callback for accelerometer.
+				instance.movementCallback(
+					instance.magnetometerFun,
+					instance.magnetometerInterval
+				)
+			}
+
+			if (instance.getDeviceModel() == 2 &&
+				-1 != (accelerometerServiceIndex =
+					instance.requiredServices.indexOf(
+						sensortag.ACCELEROMETER_SERVICE)))
+			{
+				// Remove dependency of service non-existent in SensorTag 2.
+				instance.requiredServices.splice(accelerometerServiceIndex, 1)
+
+				// Replace On-function for compatibility with SensorTag 2.
+				instance.accelerometerOn = instance.movementOn
+				
+				/* Replace accelerometer value getter function for
+				 * compatibility with SensorTag 2.
+				 */
+				instance.getAccelerometerValues =
+					instance.getModelTwoAccelerometerValues
+
+				// Enable the movement service callback for accelerometer.
+				instance.movementCallback(
+					instance.accelerometerFun,
+					instance.accelerometerInterval
+				)
+			}
+
+			if (instance.getDeviceModel() == 2 &&
+				-1 != (gyroscopeServiceIndex = 
+					instance.requiredServices.indexOf(
+						sensortag.GYROSCOPE_SERVICE)))
+			{
+				// Remove dependency of service non-existent in SensorTag 2.
+				instance.requiredServices.splice(gyroscopeServiceIndex, 1)
+
+				// Replace On-function for compatibility with SensorTag 2.
+				instance.gyroscopeOn = instance.movementOn
+				
+				/* Replace accelerometer value getter function for
+				 * compatibility with SensorTag 2.
+				 */
+				instance.getGyroscopeValues =
+					instance.getModelTwoGyroscopeValues
+
+				// Enable the movement service callback for accelerometer.
+				instance.movementCallback(
+					instance.gyroscopeFun,
+					instance.gyroscopeInterval
+				)
+			}
+		}
+
+		/**
 		 * Internal. When connected we read device info. This can be
 		 * used to support different firmware versions etc.
 		 * For now we just read the firmware version.
@@ -369,33 +537,107 @@ evothings.tisensortag = {}
 					sensortag.FIRMWARE_DATA,
 					gotFirmwareValue,
 					instance.errorFun)
+
+				// The SensorTag 2 has model number data available.
+				instance.device.readCharacteristic(
+					sensortag.MODELNUMBER_DATA,
+					gotModelNumber,
+					instance.errorFun)
 			}
 
 			function gotFirmwareValue(data)
 			{
 				// Set firmware string.
 				var fw = evothings.ble.fromUtf8(data)
-				instance.firmwareString = fw.substr(0,3)
+				instance.firmwareString = fw.match(/\d+\.\d+\S?\b/g)[0] || ''
 				instance.statusFun && instance.statusFun('Device data available')
 
 				// Continue and read services requested by the application.
 				instance.statusFun && instance.statusFun('Reading services...')
+
+				/* For the SensorTag 1, remove the non-existent luxometer and
+				 * movement services.
+				 * TODO: remove the requiredServices approach and only use existing
+				 * services.
+				 */
+				instance.handleSensorTagOne()
+
+				/* Replace use of any accelerometer, gyroscope and magnetometer
+				 * services with the movement service when having SensorTag 2.
+				 */
+				instance.handleSensorTagTwo()
+
 				instance.device.readServices(
 					instance.requiredServices,
 					instance.activateSensors,
 					instance.errorFun)
 			}
 
-			// Read device information service.
+			/* TODO: Use only the model number characteristic to determine the
+			 * device model.
+			 */
+			function gotModelNumber(data)
+			{
+				var modelNumber = evothings.ble.fromUtf8(data)
+				if (-1 !== modelNumber.indexOf('ST2'))
+				{
+					instance.deviceModel = 2
+				}
+				else
+				{
+					instance.deviceModel = 1
+				}
+			}
+
+			function readDeviceInfoService()
+			{
+				// Read device information service.
+				instance.device.readServices(
+					[sensortag.DEVICEINFO_SERVICE],
+					gotDeviceInfoService,
+					instance.errorFun)
+			}
+
+			/* First determine the device model by looking for services unique
+			 * to certain models.
+			 */
 			instance.device.readServices(
-				[sensortag.DEVICEINFO_SERVICE],
-				gotDeviceInfoService,
+				null,
+				function()
+				{
+					// Get an array of service UUIDs available.
+					var services = instance.device.__services.map(
+						function(elm) { return elm.uuid; })
+
+					// Look for services unique to the SensorTag 2.
+					if (-1 != services.indexOf(sensortag.LUXOMETER_SERVICE)  &&
+						-1 != services.indexOf(sensortag.MOVEMENT_SERVICE) &&
+						-1 == services.indexOf(sensortag.ACCELEROMETER_SERVICE) &&
+						-1 == services.indexOf(sensortag.MAGNETOMETER_SERVICE) &&
+						-1 == services.indexOf(sensortag.GYROSCOPE_SERVICE))
+						instance.deviceModel = 2
+					else
+						instance.deviceModel = 1
+
+					readDeviceInfoService()
+				},
 				instance.errorFun)
+		}
+
+		/**
+		 * Public. Get device model number.
+		 * @instance
+		 * @public
+		 */
+		instance.getDeviceModel = function()
+		{
+			return instance.deviceModel
 		}
 
 		/**
 		 * Public. Get firmware string.
 		 * @instance
+		 * @public
 		 */
 		instance.getFirmwareString = function()
 		{
@@ -437,6 +679,7 @@ evothings.tisensortag = {}
 			instance.magnetometerOn()
 			instance.barometerOn()
 			instance.gyroscopeOn()
+			instance.luxometerOn()
 			instance.keypressOn()
 		}
 
@@ -472,8 +715,41 @@ evothings.tisensortag = {}
 			return instance
 		}
 
+
 		/**
-		 * Public. Turn on accelerometer notification.
+		 * Public. Turn on movement notification (SensorTag 2).
+		 * @instance
+		 * @public
+		 */
+		instance.movementOn = function()
+		{
+			instance.sensorOn(
+				sensortag.MOVEMENT_CONFIG,
+				instance.movementConfig,
+				sensortag.MOVEMENT_PERIOD,
+				instance.movementInterval,
+				sensortag.MOVEMENT_DATA,
+				sensortag.MOVEMENT_NOTIFICATION,
+				instance.movementFun
+			)
+
+			return instance
+		}
+
+		/**
+		 * Public. Turn off movement notification (SensorTag 2).
+		 * @instance
+		 * @public
+		 */
+		instance.movementOff = function()
+		{
+			instance.sensorOff(sensortag.MOVEMENT_DATA)
+
+			return instance
+		}
+
+		/**
+		 * Public. Turn on accelerometer notification (SensorTag 1).
 		 * @instance
 		 * @public
 		 */
@@ -493,7 +769,7 @@ evothings.tisensortag = {}
 		}
 
 		/**
-		 * Public. Turn off accelerometer notification.
+		 * Public. Turn off accelerometer notification (SensorTag 1).
 		 * @instance
 		 * @public
 		 */
@@ -514,8 +790,8 @@ evothings.tisensortag = {}
 			instance.sensorOn(
 				sensortag.HUMIDITY_CONFIG,
 				instance.humidityConfig,
-				null, // Not used.
-				null, // Not used.
+				instance.HUMIDITY_PERIOD,
+				instance.humidityInterval,
 				sensortag.HUMIDITY_DATA,
 				sensortag.HUMIDITY_NOTIFICATION,
 				instance.humidityFun
@@ -557,7 +833,7 @@ evothings.tisensortag = {}
 		}
 
 		/**
-		 * Public. Turn off magnetometer notification.
+		 * Public. Turn off magnetometer notification (SensorTag 1).
 		 * @instance
 		 * @public
 		 */
@@ -601,7 +877,7 @@ evothings.tisensortag = {}
 		}
 
 		/**
-		 * Public. Turn on gyroscope notification.
+		 * Public. Turn on gyroscope notification (SensorTag 1).
 		 * @instance
 		 * @public
 		 */
@@ -621,13 +897,42 @@ evothings.tisensortag = {}
 		}
 
 		/**
-		 * Public. Turn off gyroscope notification.
+		 * Public. Turn off gyroscope notification (SensorTag 1).
 		 * @instance
 		 * @public
 		 */
 		instance.gyroscopeOff = function()
 		{
 			instance.sensorOff(sensortag.GYROSCOPE_DATA)
+
+			return instance
+		}
+
+
+		/**
+		 * Public. Turn on luxometer notification.
+		 */
+		instance.luxometerOn = function()
+		{
+			instance.sensorOn(
+				sensortag.LUXOMETER_CONFIG,
+				instance.luxometerConfig,
+				sensortag.LUXOMETER_PERIOD,
+				instance.luxometerInterval,
+				sensortag.LUXOMETER_DATA,
+				sensortag.LUXOMETER_NOTIFICATION,
+				instance.luxometerFun
+			)
+
+			return instance
+		}
+
+		/**
+		 * Public. Turn off luxometer notification.
+		 */
+		instance.luxometerOff = function()
+		{
+			instance.sensorOff(sensortag.LUXOMETER_DATA)
 
 			return instance
 		}
@@ -687,7 +992,7 @@ evothings.tisensortag = {}
 			// Set sensor configuration to ON.
 			configUUID && instance.device.writeCharacteristic(
 				configUUID,
-				new Uint8Array([configValue]),
+				new Uint8Array(configValue),
 				function() {},
 				instance.errorFun)
 
@@ -749,22 +1054,31 @@ evothings.tisensortag = {}
 			// Calculate ambient temperature (Celsius).
 			var ac = evothings.util.littleEndianToUint16(data, 2) / 128.0
 
-			// Calculate target temperature (Celsius, based on ambient).
-			var Vobj2 = evothings.util.littleEndianToInt16(data, 0) * 0.00000015625
-			var Tdie = ac + 273.15
-			var S0 =  6.4E-14	// calibration factor
-			var a1 =  1.750E-3
-			var a2 = -1.678E-5
-			var b0 = -2.940E-5
-			var b1 = -5.700E-7
-			var b2 =  4.630E-9
-			var c2 = 13.4
-			var Tref = 298.15
-			var S = S0 * (1 + a1 * (Tdie - Tref) + a2 * Math.pow((Tdie - Tref), 2))
-			var Vos = b0 + b1 * (Tdie - Tref) + b2 * Math.pow((Tdie - Tref), 2)
-			var fObj = (Vobj2 - Vos) + c2 * Math.pow((Vobj2 - Vos), 2)
-			var tObj = Math.pow(Math.pow(Tdie, 4 ) + (fObj / S), 0.25)
-			var tc = tObj - 273.15
+			if (instance.getDeviceModel() < 2)
+			{
+				// Calculate target temperature (Celsius, based on ambient).
+				var Vobj2 = evothings.util.littleEndianToInt16(data, 0) * 0.00000015625
+				var Tdie = ac + 273.15
+				var S0 =  6.4E-14	// calibration factor
+				var a1 =  1.750E-3
+				var a2 = -1.678E-5
+				var b0 = -2.940E-5
+				var b1 = -5.700E-7
+				var b2 =  4.630E-9
+				var c2 = 13.4
+				var Tref = 298.15
+				var S = S0 * (1 + a1 * (Tdie - Tref) + a2 * Math.pow((Tdie - Tref), 2))
+				var Vos = b0 + b1 * (Tdie - Tref) + b2 * Math.pow((Tdie - Tref), 2)
+				var fObj = (Vobj2 - Vos) + c2 * Math.pow((Vobj2 - Vos), 2)
+				var tObj = Math.pow(Math.pow(Tdie, 4 ) + (fObj / S), 0.25)
+				var tc = tObj - 273.15
+			}
+			else
+			{
+				// Calculate target temperature (Celsius).
+				var tc = evothings.util.littleEndianToInt16(data, 0)
+				tc = (tc >> 2) * 0.03125
+			}
 
 			// Return result.
 			return { ambientTemperature: ac, targetTemperature: tc }
@@ -779,10 +1093,31 @@ evothings.tisensortag = {}
 		 */
 		instance.getAccelerometerValues = function(data)
 		{
+			// Set divisor based on firmware version.
+			var divisors = {x: 16.0, y: -16.0, z: 16.0}
+
 			// Calculate accelerometer values.
-			var ax = evothings.util.littleEndianToInt8(data, 0) / 16.0
-			var ay = evothings.util.littleEndianToInt8(data, 1) / 16.0
-			var az = evothings.util.littleEndianToInt8(data, 2) / 16.0 * -1.0
+			var ax = evothings.util.littleEndianToInt8(data, 0) / divisors.x
+			var ay = evothings.util.littleEndianToInt8(data, 1) / divisors.y
+			var az = evothings.util.littleEndianToInt8(data, 2) / divisors.z
+
+			// Return result.
+			return { x: ax, y: ay, z: az }
+		}
+
+		/**
+		 * Calculate accelerometer values from raw data for SensorTag 2.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: x, y, z.
+		 */
+		instance.getModelTwoAccelerometerValues = function(data)
+		{
+			var divisors = {x: -16384.0, y: 16384.0, z: -16384.0}
+
+			// Calculate accelerometer values.
+			var ax = evothings.util.littleEndianToInt16(data, 6) / divisors.x
+			var ay = evothings.util.littleEndianToInt16(data, 8) / divisors.y
+			var az = evothings.util.littleEndianToInt16(data, 10) / divisors.z
 
 			// Return result.
 			return { x: ax, y: ay, z: az }
@@ -825,6 +1160,25 @@ evothings.tisensortag = {}
 			return { x: mx, y: my, z: mz }
 		}
 
+
+		/**
+		 * Calculate magnetometer values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
+		 */
+		instance.getModelTwoMagnetometerValues = function(data)
+		{
+			// Magnetometer values (Micro Tesla).
+			var mx = evothings.util.littleEndianToInt16(data, 12) * (4912.0 / 32768.0)
+			var my = evothings.util.littleEndianToInt16(data, 14) * (4912.0 / 32768.0)
+			var mz = evothings.util.littleEndianToInt16(data, 16) * (4912.0 / 32768.0)
+
+			// Return result.
+			return { x: mx, y: my, z: mz }
+		}
+
 		/**
 		 * Calculate barometer values from raw data.
 		 * @todo Implement (not implemented).
@@ -853,6 +1207,52 @@ evothings.tisensortag = {}
 
 			// Return result.
 			return { x: gx, y: gy, z: gz }
+		}
+
+		/*
+		 * Calculate gyroscope values from raw data for SensorTag 2.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
+		 */
+		instance.getModelTwoGyroscopeValues = function(data)
+		{
+			// Calculate gyroscope values.
+			var gx = evothings.util.littleEndianToInt16(data, 0) * 255.0 / 32768.0
+			var gy = evothings.util.littleEndianToInt16(data, 2) * 255.0 / 32768.0
+			var gz =  evothings.util.littleEndianToInt16(data, 4) * 255.0 / 32768.0
+
+			// Return result.
+			return { x: gx, y: gy, z: gz }
+		}
+
+		/**
+		 * Calculate luxometer values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Light level in lux units.
+		 * @instance
+		 * @public
+		 */
+		instance.getLuxometerValue = function(data)
+		{
+			// Calculate the light level.
+			var value = evothings.util.littleEndianToInt16(data, 0)
+
+			/* Extraction of luxometer value, based on sfloatExp2ToDouble from
+			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
+			 * source code.
+			 */
+			var mantissa = value & 0x0FFF
+			var exponent = value >> 12;
+
+			magnitude = Math.pow(2, exponent)
+			output = (mantissa * magnitude)
+
+			var lux = output / 100.0
+
+			// Return result.
+			return lux
 		}
 
 		/**

@@ -27,7 +27,8 @@ body {
 }
 
 /* Add a top margin to the content corresponding to the height of the header. */
-body::before {
+body::before,
+section::before {
 	display: block;
 	width: 100%;
 	height: 1.1em; /* Should correspond to header's height. */
@@ -39,11 +40,26 @@ body::before {
 }
 
 /* Add a bottom margin. */
-body::after {
+body::after,
+section::after {
 	display:block;
 	content: '';
 	height: 1em;
 }
+
+
+
+
+/*  ----------------------------------------------------------
+								GENERAL
+	---------------------------------------------------------- */
+
+.hidden {
+	display: none;
+}
+
+
+
 
 /*  ----------------------------------------------------------
 								HEADER
@@ -91,13 +107,11 @@ header button {
 }
 header button.back {
 	position: absolute;
-	/*left: 6.25%;*/
-	left: 0.9em;
+	left: 0;
 
-	width: 10%;
 	height: 100%;
 	margin: 0;
-	padding: 0;
+	padding: 0 0.9em;
 
 	/* Font size is percentage of the header's font size. */
 	font-size: 50%;
@@ -130,20 +144,21 @@ header img.logotype {
 	transform: translateY(-50%);
 }
 
+
+
+
 /*  ----------------------------------------------------------
 								MENU
 	---------------------------------------------------------- */
 
 header button#menu-button {
 	position: absolute;
-	right: 0.9em;
+	right: 0;
 
-	width: 10%;
 	height: 100%;
 	max-height: 100%;
 	margin: 0;
-	padding: 0;
-	/*padding: 0 6.25% 0 0;*/
+	padding: 0 0.9em;
 
 	/* Font size is percentage of the header's font size. */
 	font-size: 50%;
@@ -215,8 +230,11 @@ header h1 {
 	text-overflow: ellipsis;
 }
 
+
+
+
 /*  ----------------------------------------------------------
-							MAIN CONTENT
+								SECTIONS
 	---------------------------------------------------------- */
 
 main {
@@ -240,6 +258,38 @@ main footer {
 
 	z-index: 2;
 }
+
+section {
+	display: none;
+
+	box-sizing: border-box; /* Width & height includes padding & border. */
+
+	position: absolute;
+
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	width: 100%;
+
+	padding: 0 0.9em 0 0.9em;
+
+	background-color: #fff;
+
+	z-index: 2;
+
+}
+
+section:target {
+	display: block;
+}
+
+
+
+/*  ----------------------------------------------------------
+							INPUT FIELDS
+	---------------------------------------------------------- */
 
 input {
 	margin: 0;
@@ -281,6 +331,13 @@ textarea {
 
 	background-color: #f3f3f3; /* Default color: "Arctic". */
 }
+
+
+
+
+/*  ----------------------------------------------------------
+								BUTTONS
+	---------------------------------------------------------- */
 
 button.clear {
 	margin-left: 1%;
@@ -346,6 +403,13 @@ input.btn-group + label.big {
 input.btn-group {
 	display: none;
 }
+
+
+
+
+/*  ----------------------------------------------------------
+							VARIOUS ELEMENTS
+	---------------------------------------------------------- */
 
 canvas {
 	padding: 7px;

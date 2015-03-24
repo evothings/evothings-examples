@@ -71,6 +71,7 @@ def buildBLEScan
 	destPath = 'examples/ble-scan'
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	copyFastClick(destPath)
 end
 
 def buildTISensorTagDemo
@@ -191,6 +192,10 @@ end
 
 def copyJQuery(destPath)
 	copyDir('resources/libs/jquery', destPath + '/libs')
+end
+
+def copyFastClick(destPath)
+	copyDir('resources/libs/fastclick.js', destPath + '/libs')
 end
 
 def copyEvothings(destPath)
