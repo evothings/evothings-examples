@@ -30,6 +30,20 @@ SpriteManager.makeSprite = function()
 		sprite.domElement = element
 	}
 
+	sprite.whenLoaded = function(callback)
+	{
+		var image = sprite.domElement
+		if (image.complete)
+		{
+			callback()
+			return
+		}
+		else
+		{
+			image.onload = callback
+		}
+	}
+
 	sprite.setLeft = function(x)
 	{
 		sprite.x = x

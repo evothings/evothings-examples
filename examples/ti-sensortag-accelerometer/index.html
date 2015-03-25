@@ -40,14 +40,17 @@ Demonstration of the TI SensorTag accelerometer.
 		<button class="back" onclick="history.back()">
 			<img src="ui/images/arrow-left.svg" />
 		</button>
-		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<img id="sprite" src="ui/images/logo.svg" />
+
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
 	<h1>Texas Instruments SensorTag Accelerometer</h1>
 
-	<p>This example works with the Texas Instruments SensorTag 2.</p>
-	<p>Activate the SensorTag to begin.</p>
+	<p>This example works with the Texas Instruments SensorTag 2.0</p>
+	<p>Activate the SensorTag to begin. Tilt the SensorTag to move the
+	Evothings Logo.</p>
 	<p><strong>Status:</strong> <span id="status">Ready</span></p>
 
 	<img id="sprite" src="sprite.svg" />
@@ -76,9 +79,12 @@ Demonstration of the TI SensorTag accelerometer.
 
 	function displaySprite()
 	{
-		sprite.setCenterX(SpriteManager.getPlayfieldWidth() / 2)
-		sprite.setCenterY(SpriteManager.getPlayfieldHeight() / 2)
-		sprite.show()
+		sprite.whenLoaded(function()
+		{
+			sprite.show()
+			sprite.setCenterX(SpriteManager.getPlayfieldWidth() / 2)
+			sprite.setCenterY(SpriteManager.getPlayfieldHeight() / 2)
+		})
 	}
 
 	function moveSprite(dx, dy)
