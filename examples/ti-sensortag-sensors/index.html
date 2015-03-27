@@ -298,15 +298,18 @@
 
 	function barometerHandler(data)
 	{
+		// Calculate pressure from raw sensor data.
+		var values = sensortag.getBarometerValues(data)
+		var pressure = values.pressure
+
 		// Prepare the information to display.
 		string =
 			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, 0, 4) + '</span><br/>'
+			bufferToHexStr(data, 0, 4) + '</span><br/>' +
+			'pressure = ' + pressure.toPrecision(5) + ' mbar<br/>'
 
 		// Update the value displayed.
 		displayValue('BarometerData', string)
-
-		// Calculated values not implemented yet.
 	}
 
 	function gyroscopeHandler(data)

@@ -1181,14 +1181,28 @@ evothings.tisensortag = {}
 
 		/**
 		 * Calculate barometer values from raw data.
-		 * @todo Implement (not implemented).
+		 * @todo Implement correct data interpretation.
 		 * @instance
 		 * @public
 		 */
 		instance.getBarometerValues = function(data)
 		{
-			// Not implemented.
-			return {}
+			var p = evothings.util.littleEndianToInt16(data, 2)
+
+			/* Extraction of pressure value, based on sfloatExp2ToDouble from
+			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
+			 * source code.
+			 * TODO: move to util.js
+			 */
+			var mantissa = p & 0x0FFF
+			var exponent = p >> 12;
+
+			magnitude = Math.pow(2, exponent)
+			output = (mantissa * magnitude)
+
+			var pInterpreted = output / 100.0
+
+			return { pressure: pInterpreted }
 		}
 
 		/**
@@ -1242,6 +1256,7 @@ evothings.tisensortag = {}
 			/* Extraction of luxometer value, based on sfloatExp2ToDouble from
 			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
 			 * source code.
+			 * TODO: move to util.js
 			 */
 			var mantissa = value & 0x0FFF
 			var exponent = value >> 12;
