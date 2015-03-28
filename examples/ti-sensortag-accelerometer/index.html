@@ -157,12 +157,6 @@ Demonstration of the TI SensorTag accelerometer.
 		document.getElementById('status').innerHTML = status
 	}
 
-	function setBackgroundColor(color)
-	{
-		document.documentElement.style.background = color
-		document.body.style.background = color
-	}
-
 	document.addEventListener(
 		'deviceready',
 		function() { evothings.scriptsLoaded(initialise) },
