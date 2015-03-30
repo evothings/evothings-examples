@@ -1187,7 +1187,7 @@ evothings.tisensortag = {}
 		 */
 		instance.getBarometerValues = function(data)
 		{
-			var p = evothings.util.littleEndianToInt16(data, 2)
+			var p = evothings.util.littleEndianToUint16(data, 2)
 
 			/* Extraction of pressure value, based on sfloatExp2ToDouble from
 			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
@@ -1195,12 +1195,12 @@ evothings.tisensortag = {}
 			 * TODO: move to util.js
 			 */
 			var mantissa = p & 0x0FFF
-			var exponent = p >> 12;
+			var exponent = p >> 12
 
 			magnitude = Math.pow(2, exponent)
 			output = (mantissa * magnitude)
 
-			var pInterpreted = output / 100.0
+			var pInterpreted = output / 10000.0
 
 			return { pressure: pInterpreted }
 		}
@@ -1251,7 +1251,7 @@ evothings.tisensortag = {}
 		instance.getLuxometerValue = function(data)
 		{
 			// Calculate the light level.
-			var value = evothings.util.littleEndianToInt16(data, 0)
+			var value = evothings.util.littleEndianToUint16(data, 0)
 
 			/* Extraction of luxometer value, based on sfloatExp2ToDouble from
 			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
@@ -1259,7 +1259,7 @@ evothings.tisensortag = {}
 			 * TODO: move to util.js
 			 */
 			var mantissa = value & 0x0FFF
-			var exponent = value >> 12;
+			var exponent = value >> 12
 
 			magnitude = Math.pow(2, exponent)
 			output = (mantissa * magnitude)
