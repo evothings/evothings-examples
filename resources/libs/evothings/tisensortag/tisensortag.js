@@ -1181,12 +1181,20 @@ evothings.tisensortag = {}
 
 		/**
 		 * Calculate barometer values from raw data.
-		 * @todo Implement correct data interpretation.
+		 * @todo Implement SensorTag 1 calibration.
 		 * @instance
 		 * @public
 		 */
 		instance.getBarometerValues = function(data)
 		{
+			/* Due to that the SensorTag 1 barometer requires a calibration
+			 * procedure for correct barometer pressure readings, return 0.
+			 */
+			if (instance.getDeviceModel() == 1)
+			{
+				return { pressure: 0 }
+			}
+
 			var p = evothings.util.littleEndianToUint16(data, 2)
 
 			/* Extraction of pressure value, based on sfloatExp2ToDouble from
