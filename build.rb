@@ -298,10 +298,8 @@ def build
 	buildRedBearLabSimpleChat
 	buildRedBearLabSimpleControl
 	buildRFduinoLEDOnOff
-	buildTISensorTagDemo
 	buildTISensorTagCC2541Demo
 	buildTISensorTagCC2650Demo
-	buildTISensorTagDemo
 	buildTISensorTagSensors
 	buildTISensorTagAccelerometer
 	buildMediaTekLinkIt
