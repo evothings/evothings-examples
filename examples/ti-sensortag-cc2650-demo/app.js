@@ -1,18 +1,34 @@
 // JavaScript code for the TI SensorTag Demo app.
 
-// Short name for EasyBLE library.
-var easyble = evothings.easyble;
-
-// Object that holds application data and functions.
+/**
+ * Object that holds application data and functions.
+ */
 var app = {};
 
-// Data that is plotted on the canvas.
+/**
+ * Data that is plotted on the canvas.
+ */
 app.dataPoints = [];
 
-// Timeout (ms) after which a message is shown if the SensorTag wasn't found.
+/**
+ * Timeout (ms) after which a message is shown if the SensorTag wasn't found.
+ */
 app.CONNECT_TIMEOUT = 3000;
 
-// Initialise the application.
+/**
+ * Object that holds SensorTag UUIDs.
+ */
+app.sensortag = {};
+
+app.sensortag.MOVEMENT_SERVICE = 'f000aa80-0451-4000-b000-000000000000';
+app.sensortag.MOVEMENT_DATA = 'f000aa81-0451-4000-b000-000000000000';
+app.sensortag.MOVEMENT_CONFIG = 'f000aa82-0451-4000-b000-000000000000';
+app.sensortag.MOVEMENT_PERIOD = 'f000aa83-0451-4000-b000-000000000000';
+app.sensortag.MOVEMENT_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb';
+
+/**
+ * Initialise the application.
+ */
 app.initialize = function()
 {
 	document.addEventListener(
@@ -20,13 +36,11 @@ app.initialize = function()
 		function() { evothings.scriptsLoaded(app.onDeviceReady) },
 		false);
 
-	/**
-	 * Called when HTML page has been loaded.
-	 */
+	// Called when HTML page has been loaded.
 	$(document).ready( function()
 	{
 		// Adjust canvas size when browser resizes
-		$(window).resize( app.respondCanvas );
+		$(window).resize(app.respondCanvas);
 
 		// Adjust the canvas size when the document has loaded.
 		app.respondCanvas();
@@ -66,8 +80,8 @@ app.onStopButton = function()
 {
 	// Stop any ongoing scan and close devices.
 	app.stopConnectTimer();
-	easyble.stopScan();
-	easyble.closeConnectedDevices();
+	evothings.easyble.stopScan();
+	evothings.easyble.closeConnectedDevices();
 	app.showInfo('Status: Stopped.');
 };
 
@@ -75,42 +89,43 @@ app.startConnectTimer = function()
 {
 	// If connection is not made within the timeout
 	// period, an error message is shown.
-	app.connectTimer = setTimeout(function()
+	app.connectTimer = setTimeout(
+		function()
 		{
-			app.showInfo('Status: Scanning... Please press the activate ' +
-				'button on the tag.');
+			app.showInfo('Status: Scanning... ' +
+				'Please press the activate button on the tag.');
 		},
 		app.CONNECT_TIMEOUT)
 }
 
 app.stopConnectTimer = function()
 {
-	clearTimeout(app.connectTimer)
+	clearTimeout(app.connectTimer);
 }
 
 app.startScan = function()
 {
-	easyble.startScan(
+	evothings.easyble.startScan(
 		function(device)
 		{
 			// Connect if we have found a sensor tag.
 			if (app.deviceIsSensorTag(device))
 			{
 				app.showInfo('Status: Device found: ' + device.name + '.');
-				easyble.stopScan();
+				evothings.easyble.stopScan();
 				app.connectToDevice(device);
-				app.stopConnectTimer()
+				app.stopConnectTimer();
 			}
 		},
 		function(errorCode)
 		{
 			app.showInfo('Error: startScan: ' + errorCode + '.');
-			//app.reset();
 		});
 };
 
 app.deviceIsSensorTag = function(device)
 {
+console.log('device name: ' + device.name);
 	return (device != null) &&
 		(device.name != null) &&
 		(device.name.indexOf('Sensor Tag') > -1 ||
@@ -140,57 +155,56 @@ app.readServices = function(device)
 {
 	device.readServices(
 		[
-		'f000aa10-0451-4000-b000-000000000000', // Accelerometer service UUID.
-		'f000aa30-0451-4000-b000-000000000000'  // Magnetometer service UUID.
+		app.sensortag.MOVEMENT_SERVICE // Movement service UUID.
 		],
 		// Function that monitors accelerometer data.
 		app.startAccelerometerNotification,
-		// Use this function to monitor magnetometer data
-		// (comment out the above line if you try this).
-		//app.startMagnetometerNotification,
 		function(errorCode)
 		{
 			console.log('Error: Failed to read services: ' + errorCode + '.');
 		});
 };
 
-// Read magnetometer data using a notification.
-// http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Magnetometer
-// http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
-app.startMagnetometerNotification = function(device)
+// Read accelerometer data.
+app.startAccelerometerNotification = function(device)
 {
-	app.showInfo('Status: Starting magnetometer notification...');
+	app.showInfo('Status: Starting accelerometer notification...');
 
-	// Set magnetometer to ON.
+	// Set accelerometer configuration to ON.
+	// magnetometer on: 64 (1000000) (seems to not work in ST2 FW 0.89)
+	// 3-axis acc. on: 56 (0111000)
+	// 3-axis gyro on: 7 (0000111)
+	// 3-axis acc. + 3-axis gyro on: 63 (0111111)
+	// 3-axis acc. + 3-axis gyro + magnetometer on: 127 (1111111)
 	device.writeCharacteristic(
-		'f000aa32-0451-4000-b000-000000000000',
-		new Uint8Array([1]),
+		app.sensortag.MOVEMENT_CONFIG,
+		new Uint8Array([56,0]),
 		function()
 		{
-			console.log('Status: writeCharacteristic 1 ok.');
+			console.log('Status: writeCharacteristic ok.');
 		},
 		function(errorCode)
 		{
-			console.log('Error: writeCharacteristic 1 error: ' + errorCode + '.');
+			console.log('Error: writeCharacteristic: ' + errorCode + '.');
 		});
 
-	// Set update period to 100 ms (10 == 100 ms).
+	// Set accelerometer period to 100 ms.
 	device.writeCharacteristic(
-		'f000aa33-0451-4000-b000-000000000000',
+		app.sensortag.MOVEMENT_PERIOD,
 		new Uint8Array([10]),
 		function()
 		{
-			console.log('Status: writeCharacteristic 2 ok.');
+			console.log('Status: writeCharacteristic ok.');
 		},
 		function(errorCode)
 		{
-			console.log('Error: writeCharacteristic 2 error: ' + errorCode + '.');
+			console.log('Error: writeCharacteristic: ' + errorCode + '.');
 		});
 
-	// Set magnetometer notification to ON.
+	// Set accelerometer notification to ON.
 	device.writeDescriptor(
-		'f000aa31-0451-4000-b000-000000000000', // Characteristic for magnetometer data
-		'00002902-0000-1000-8000-00805f9b34fb', // Configuration descriptor
+		app.sensortag.MOVEMENT_DATA,
+		app.sensortag.MOVEMENT_NOTIFICATION, // Notification descriptor.
 		new Uint8Array([1,0]),
 		function()
 		{
@@ -205,17 +219,16 @@ app.startMagnetometerNotification = function(device)
 			console.log('Error: writeDescriptor: ' + errorCode + '.');
 		});
 
-	// Start notification of magnetometer data.
+	// Start accelerometer notification.
 	device.enableNotification(
-		'f000aa31-0451-4000-b000-000000000000',
+		app.sensortag.MOVEMENT_DATA,
 		function(data)
 		{
-			app.showInfo('Status: Data stream active - magnetometer');
-			//console.log('byteLength: '+data.byteLength);
-			var dataArray = new Int16Array(data);
-			//console.log('length: '+dataArray.length);
-			//console.log('data: '+dataArray[0]+' '+dataArray[1]+' '+dataArray[2]);
-			app.drawLines(dataArray, 3000);
+			app.showInfo('Status: Data stream active - accelerometer');
+			var dataArray = new Int8Array(data);
+			// TODO: These values are undefined with my SensorTag.
+			console.log('data: ' + data[0] + ' ' + data[1] + ' '  + data[2]);
+			//app.drawLines(dataArray, 100);
 		},
 		function(errorCode)
 		{
@@ -278,72 +291,3 @@ app.drawLines = function(dataArray, magnitude)
 
 // Initialize the app.
 app.initialize();
-
-// If you would want to read accelerometer data, here is a function for that.
-// http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Accelerometer_2
-// http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
-app.startAccelerometerNotification = function(device)
-{
-	app.showInfo('Status: Starting accelerometer notification...');
-
-	// Set accelerometer configuration to ON.
-	device.writeCharacteristic(
-		'f000aa12-0451-4000-b000-000000000000',
-		new Uint8Array([1]),
-		function()
-		{
-			console.log('Status: writeCharacteristic ok.');
-		},
-		function(errorCode)
-		{
-			console.log('Error: writeCharacteristic: ' + errorCode + '.');
-		});
-
-	// Set accelerometer period to 100 ms.
-	device.writeCharacteristic(
-		'f000aa13-0451-4000-b000-000000000000',
-		new Uint8Array([10]),
-		function()
-		{
-			console.log('Status: writeCharacteristic ok.');
-		},
-		function(errorCode)
-		{
-			console.log('Error: writeCharacteristic: ' + errorCode + '.');
-		});
-
-	// Set accelerometer notification to ON.
-	device.writeDescriptor(
-		'f000aa11-0451-4000-b000-000000000000', // Characteristic for accelerometer data
-		'00002902-0000-1000-8000-00805f9b34fb', // Configuration descriptor
-		new Uint8Array([1,0]),
-		function()
-		{
-			console.log('Status: writeDescriptor ok.');
-		},
-		function(errorCode)
-		{
-			// This error will happen on iOS, since this descriptor is not
-			// listed when requesting descriptors. On iOS you are not allowed
-			// to use the configuration descriptor explicitly. It should be
-			// safe to ignore this error.
-			console.log('Error: writeDescriptor: ' + errorCode + '.');
-		});
-
-	// Start accelerometer notification.
-	device.enableNotification(
-		'f000aa11-0451-4000-b000-000000000000',
-		function(data)
-		{
-			app.showInfo('Status: Data stream active - accelerometer');
-			//console.log('byteLength: '+data.byteLength);
-			var dataArray = new Int8Array(data);
-			//console.log('length: '+dataArray.length);
-			//console.log('data: '+dataArray[0]+' '+dataArray[1]+' '+dataArray[2]);
-			app.drawLines(dataArray, 100);
-		},
-		function(errorCode)
-		{
-			console.log('Error: enableNotification: ' + errorCode + '.');
-		});
-};

@@ -74,8 +74,15 @@ def buildBLEScan
 	copyFastClick(destPath)
 end
 
-def buildTISensorTagDemo
-	destPath = 'examples/ti-sensortag-demo'
+def buildTISensorTagCC2541Demo
+	destPath = 'examples/ti-sensortag-cc2541-demo'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+end
+
+def buildTISensorTagCC2650Demo
+	destPath = 'examples/ti-sensortag-cc2650-demo'
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
@@ -291,6 +298,9 @@ def build
 	buildRedBearLabSimpleChat
 	buildRedBearLabSimpleControl
 	buildRFduinoLEDOnOff
+	buildTISensorTagDemo
+	buildTISensorTagCC2541Demo
+	buildTISensorTagCC2650Demo
 	buildTISensorTagDemo
 	buildTISensorTagSensors
 	buildTISensorTagAccelerometer
