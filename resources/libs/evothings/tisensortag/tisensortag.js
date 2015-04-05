@@ -439,6 +439,11 @@ evothings.tisensortag = {}
 				// Replace On-function for compatibility with SensorTag 1.
 				instance.luxometerOn = function() {}
 			}
+
+			if (instance.getDeviceModel() < 2)
+			{
+				instance.getBarometerValues = instance.getModelOneBarometerValues
+			}
 		}
 
 		/**
@@ -845,21 +850,68 @@ evothings.tisensortag = {}
 		}
 
 		/**
+		 * Public. Enable barometer calibration mode.
+		 * @instance
+		 * @public
+		 */
+		instance.barometerCalibrate = function(callback)
+		{
+			if (instance.getDeviceModel() < 2)
+			{
+				instance.device.writeCharacteristic(
+					sensortag.BAROMETER_CONFIG,
+					new Uint8Array([2]),
+					function() {
+						instance.device.readCharacteristic(
+							sensortag.BAROMETER_CALIBRATION,
+							function(data)
+							{
+								data = new Uint8Array(data)
+								instance.barometerCalibrationData = [
+									evothings.util.littleEndianToUint16(data, 0),
+									evothings.util.littleEndianToUint16(data, 2),
+									evothings.util.littleEndianToUint16(data, 4),
+									evothings.util.littleEndianToUint16(data, 6),
+									evothings.util.littleEndianToInt16(data, 8),
+									evothings.util.littleEndianToInt16(data, 10),
+									evothings.util.littleEndianToInt16(data, 12),
+									evothings.util.littleEndianToInt16(data, 14)
+								]
+								callback()
+							},
+							function(error) {
+								console.log('Barometer calibration failed: ' + error)
+							})
+					},
+					instance.errorFun)
+			}
+			else
+			{
+				callback()
+			}
+
+			return instance
+		}
+
+		/**
 		 * Public. Turn on barometer notification.
 		 * @instance
 		 * @public
 		 */
 		instance.barometerOn = function()
 		{
-			instance.sensorOn(
-				sensortag.BAROMETER_CONFIG,
-				instance.barometerConfig,
-				sensortag.BAROMETER_PERIOD,
-				instance.barometerInterval,
-				sensortag.BAROMETER_DATA,
-				sensortag.BAROMETER_NOTIFICATION,
-				instance.barometerFun
-			)
+			instance.barometerCalibrate(function()
+			{
+				instance.sensorOn(
+					sensortag.BAROMETER_CONFIG,
+					instance.barometerConfig,
+					sensortag.BAROMETER_PERIOD,
+					instance.barometerInterval,
+					sensortag.BAROMETER_DATA,
+					sensortag.BAROMETER_NOTIFICATION,
+					instance.barometerFun
+				)
+			})
 
 			return instance
 		}
@@ -1185,16 +1237,28 @@ evothings.tisensortag = {}
 		 * @instance
 		 * @public
 		 */
+		instance.getModelOneBarometerValues = function(data)
+		{
+			var t = evothings.util.littleEndianToInt16(data, 0)
+			var p = evothings.util.littleEndianToUint16(data, 2)
+			var c = instance.barometerCalibrationData
+
+			var S = c[2] + ((c[3] * t) / 131072) + ((c[4] * (t * t)) / 17179869184.0)
+			var O = (c[5] * 16384.0) + (((c[6] * t) / 8)) + ((c[7] * (t * t)) / 524288.0)
+			var Pa = (((S * p) + O) / 16384.0)
+			var pInterpreted = Pa / 100.0
+
+			return { pressure: pInterpreted }
+		}
+
+		/**
+		 * Calculate barometer values from raw data.
+		 * @todo Implement SensorTag 1 calibration.
+		 * @instance
+		 * @public
+		 */
 		instance.getBarometerValues = function(data)
 		{
-			/* Due to that the SensorTag 1 barometer requires a calibration
-			 * procedure for correct barometer pressure readings, return 0.
-			 */
-			if (instance.getDeviceModel() == 1)
-			{
-				return { pressure: 0 }
-			}
-
 			var p = evothings.util.littleEndianToUint16(data, 2)
 
 			/* Extraction of pressure value, based on sfloatExp2ToDouble from
