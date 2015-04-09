@@ -385,6 +385,30 @@ input.btn-group:focus {
 	outline: none;
 }
 
+button.half,
+input.btn-group.half + label,
+input.btn-group + label.half {
+	font-size: 75%;
+	line-height: 1.0;
+	width: 47%;
+}
+
+button.third,
+input.btn-group.third + label,
+input.btn-group + label.third {
+	font-size: 75%;
+	line-height: 1.0;
+	width: 30%;
+}
+
+button.quarter,
+input.btn-group.quarter + label,
+input.btn-group + label.quarter {
+	font-size: 75%;
+	line-height: 1.0;
+	width: 22%;
+}
+
 button.wide,
 input.btn-group.wide + label,
 input.btn-group + label.wide {
