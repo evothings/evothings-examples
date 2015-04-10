@@ -20,6 +20,7 @@ app.CONNECT_TIMEOUT = 3000;
  */
 app.sensortag = {};
 
+// UUIDs for movement services and characteristics.
 app.sensortag.MOVEMENT_SERVICE = 'f000aa80-0451-4000-b000-000000000000';
 app.sensortag.MOVEMENT_DATA = 'f000aa81-0451-4000-b000-000000000000';
 app.sensortag.MOVEMENT_CONFIG = 'f000aa82-0451-4000-b000-000000000000';
@@ -55,7 +56,7 @@ app.respondCanvas = function()
 	var canvas = $('#canvas')
 	var container = $(canvas).parent()
 	canvas.attr('width', $(container).width() ) // Max width
-	//canvas.attr('height', $(container).height() ) // Max height
+	// Not used: canvas.attr('height', $(container).height() ) // Max height
 };
 
 app.onDeviceReady = function()
@@ -125,14 +126,16 @@ app.startScan = function()
 
 app.deviceIsSensorTag = function(device)
 {
-console.log('device name: ' + device.name);
+	console.log('device name: ' + device.name);
 	return (device != null) &&
 		(device.name != null) &&
 		(device.name.indexOf('Sensor Tag') > -1 ||
 			device.name.indexOf('SensorTag') > -1);
 };
 
-// Read services for a device.
+/**
+ * Read services for a device.
+ */
 app.connectToDevice = function(device)
 {
 	app.showInfo('Connecting...');
@@ -165,7 +168,9 @@ app.readServices = function(device)
 		});
 };
 
-// Read accelerometer data.
+/**
+ * Read accelerometer data.
+ */
 app.startAccelerometerNotification = function(device)
 {
 	app.showInfo('Status: Starting accelerometer notification...');
@@ -225,10 +230,9 @@ app.startAccelerometerNotification = function(device)
 		function(data)
 		{
 			app.showInfo('Status: Data stream active - accelerometer');
-			var dataArray = new Int8Array(data);
-			// TODO: These values are undefined with my SensorTag.
-			console.log('data: ' + data[0] + ' ' + data[1] + ' '  + data[2]);
-			//app.drawLines(dataArray, 100);
+			var dataArray = new Uint8Array(data);
+			var values = app.getAccelerometerValues(dataArray);
+			app.drawDiagram(values);
 		},
 		function(errorCode)
 		{
@@ -236,44 +240,64 @@ app.startAccelerometerNotification = function(device)
 		});
 };
 
-// The magnitude param controls how sensitive the plotting
-// of data should be.
-app.drawLines = function(dataArray, magnitude)
+/**
+ * Calculate accelerometer values from raw data for SensorTag 2.
+ * @param data - an Uint8Array.
+ * @return Object with fields: x, y, z.
+ */
+app.getAccelerometerValues = function(data)
+{
+	var divisors = { x: -16384.0, y: 16384.0, z: -16384.0 };
+
+	// Calculate accelerometer values.
+	var ax = evothings.util.littleEndianToInt16(data, 6) / divisors.x;
+	var ay = evothings.util.littleEndianToInt16(data, 8) / divisors.y;
+	var az = evothings.util.littleEndianToInt16(data, 10) / divisors.z;
+
+	// Return result.
+	return { x: ax, y: ay, z: az };
+};
+
+/**
+ * Plot diagram of sensor values.
+ * Values plotted are expected to be between -1 and 1
+ * and in the form of objects with fields x, y, z.
+ */
+app.drawDiagram = function(values)
 {
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
-	var dataPoints = app.dataPoints;
 
-	// Initialize (static) maximum detected Y value.
-	this.magnitude = this.magnitude || 0;
+	// Add recent values.
+	app.dataPoints.push(values);
 
-	if (magnitude > this.magnitude)
-		this.magnitude = magnitude;
-
-	// Add recent data.
-	dataPoints.push(dataArray);
-	if (dataPoints.length > canvas.width)
+	// Remove data points that do not fit the canvas.
+	if (app.dataPoints.length > canvas.width)
 	{
-		dataPoints.splice(0, (dataPoints.length - canvas.width));
+		app.dataPoints.splice(0, (app.dataPoints.length - canvas.width));
 	}
 
-	var drawLines = this; // Reference to app.drawLines instance.
-	function calcY(i)
+	// Value is an accelerometer reading between -1 and 1.
+	function calcDiagramY(value)
 	{
-		if (Math.abs(i) > drawLines.magnitude)
-			drawLines.magnitude = Math.abs(i);
-		return ((i * canvas.height) / (drawLines.magnitude * 2)) + (canvas.height / 2);
+		// Return Y coordinate for this value.
+		var diagramY =
+			((value * canvas.height) / 2)
+			+ (canvas.height / 2);
+		return diagramY;
 	}
 
-	function drawLine(offset, color)
+	function drawLine(axis, color)
 	{
 		context.strokeStyle = color;
 		context.beginPath();
-		context.moveTo(0, calcY(dataPoints[dataPoints.length-1][offset]));
+		var lastDiagramY = calcDiagramY(
+			app.dataPoints[app.dataPoints.length-1][axis]);
+		context.moveTo(0, lastDiagramY);
 		var x = 1;
-		for (var i = dataPoints.length-2; i >= 0; i--)
+		for (var i = app.dataPoints.length - 2; i >= 0; i--)
 		{
-			var y = calcY(dataPoints[i][offset]);
+			var y = calcDiagramY(app.dataPoints[i][axis]);
 			context.lineTo(x, y);
 			x++;
 		}
@@ -284,9 +308,9 @@ app.drawLines = function(dataArray, magnitude)
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
 	// Draw lines.
-	drawLine(0, '#f00');
-	drawLine(1, '#0f0');
-	drawLine(2, '#00f');
+	drawLine('x', '#f00');
+	drawLine('y', '#0f0');
+	drawLine('z', '#00f');
 };
 
 // Initialize the app.

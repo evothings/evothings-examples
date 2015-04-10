@@ -61,7 +61,7 @@ app.respondCanvas = function()
 	var canvas = $('#canvas')
 	var container = $(canvas).parent()
 	canvas.attr('width', $(container).width() ) // Max width
-	//canvas.attr('height', $(container).height() ) // Max height
+	// Not used: canvas.attr('height', $(container).height() ) // Max height
 };
 
 app.onDeviceReady = function()
@@ -131,13 +131,16 @@ app.startScan = function()
 
 app.deviceIsSensorTag = function(device)
 {
+	console.log('device name: ' + device.name);
 	return (device != null) &&
 		(device.name != null) &&
 		(device.name.indexOf('Sensor Tag') > -1 ||
 			device.name.indexOf('SensorTag') > -1);
 };
 
-// Read services for a device.
+/**
+ * Read services for a device.
+ */
 app.connectToDevice = function(device)
 {
 	app.showInfo('Connecting...');
@@ -174,9 +177,11 @@ app.readServices = function(device)
 		});
 };
 
-// Read accelerometer data.
-// http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Accelerometer_2
-// http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
+/**
+ * Read accelerometer data.
+ * http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Accelerometer_2
+ * http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
+ */
 app.startAccelerometerNotification = function(device)
 {
 	app.showInfo('Status: Starting accelerometer notification...');
@@ -210,7 +215,7 @@ app.startAccelerometerNotification = function(device)
 	// Set accelerometer notification to ON.
 	device.writeDescriptor(
 		app.sensortag.ACCELEROMETER_DATA,
-		app.sensortag.ACCELEROMETER_NOTIFICATION, // Configuration descriptor
+		app.sensortag.ACCELEROMETER_NOTIFICATION, // Notification descriptor.
 		new Uint8Array([1,0]),
 		function()
 		{
@@ -231,8 +236,9 @@ app.startAccelerometerNotification = function(device)
 		function(data)
 		{
 			app.showInfo('Status: Data stream active - accelerometer');
-			var dataArray = new Int8Array(data);
-			app.drawLines(dataArray, 100);
+			var dataArray = new Uint8Array(data);
+			var values = app.getAccelerometerValues(dataArray);
+			app.drawDiagram(values);
 		},
 		function(errorCode)
 		{
@@ -240,9 +246,30 @@ app.startAccelerometerNotification = function(device)
 		});
 };
 
-// Read magnetometer data.
-// http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Magnetometer
-// http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
+/**
+ * Calculate accelerometer values from raw data for SensorTag 2.
+ * @param data - an Uint8Array.
+ * @return Object with fields: x, y, z.
+ */
+app.getAccelerometerValues = function(data)
+{
+	// TODO: Set divisor based on firmware version.
+	var divisors = {x: 16.0, y: -16.0, z: 16.0}
+
+	// Calculate accelerometer values.
+	var ax = evothings.util.littleEndianToInt8(data, 0) / divisors.x;
+	var ay = evothings.util.littleEndianToInt8(data, 1) / divisors.y;
+	var az = evothings.util.littleEndianToInt8(data, 2) / divisors.z;
+
+	// Return result.
+	return { x: ax, y: ay, z: az };
+};
+
+/**
+ * Read magnetometer data.
+ * http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Magnetometer
+ * http://processors.wiki.ti.com/index.php/File:BLE_SensorTag_GATT_Server.pdf
+ */
 app.startMagnetometerNotification = function(device)
 {
 	app.showInfo('Status: Starting magnetometer notification...');
@@ -297,56 +324,90 @@ app.startMagnetometerNotification = function(device)
 		function(data)
 		{
 			app.showInfo('Status: Data stream active - magnetometer');
-			//console.log('byteLength: '+data.byteLength);
-			var dataArray = new Int16Array(data);
-			//console.log('length: '+dataArray.length);
-			//console.log('data: '+dataArray[0]+' '+dataArray[1]+' '+dataArray[2]);
-			app.drawLines(dataArray, 3000);
+			var dataArray = new Uint8Array(data);
+			var values = app.getMagnetometerValues(dataArray);
+			app.drawDiagram(normalizeMagnetometerValues(values));
 		},
 		function(errorCode)
 		{
 			console.log('Error: enableNotification: ' + errorCode + '.');
 		});
+
+	// Value used to normalize magnetometer values.
+	magnetometerMax = 0;
+
+	function normalizeMagnetometerValues(values)
+	{
+		magnetometerMax = Math.max(Math.abs(values.x), magnetometerMax);
+		magnetometerMax = Math.max(Math.abs(values.y), magnetometerMax);
+		magnetometerMax = Math.max(Math.abs(values.z), magnetometerMax);
+
+		return {
+			x: values.x / magnetometerMax,
+			y: values.y / magnetometerMax,
+			z: values.z / magnetometerMax
+			};
+	}
 };
 
-// The magnitude param controls how sensitive the plotting
-// of data should be.
-app.drawLines = function(dataArray, magnitude)
+/**
+ * Calculate magnetometer values from raw data.
+ * @param data - an Uint8Array.
+ * @return Object with fields: x, y, z.
+ * @instance
+ * @public
+ */
+app.getMagnetometerValues = function(data)
+{
+	// Magnetometer values (Micro Tesla).
+	var mx = evothings.util.littleEndianToInt16(data, 0) * (2000.0 / 65536.0) * -1;
+	var my = evothings.util.littleEndianToInt16(data, 2) * (2000.0 / 65536.0) * -1;
+	var mz = evothings.util.littleEndianToInt16(data, 4) * (2000.0 / 65536.0);
+
+	// Return result.
+	return { x: mx, y: my, z: mz };
+};
+
+/**
+ * Plot diagram of sensor values.
+ * Values plotted are expected to be between -1 and 1
+ * and in the form of objects with fields x, y, z.
+ */
+app.drawDiagram = function(values)
 {
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
-	var dataPoints = app.dataPoints;
 
-	// Initialize (static) maximum detected Y value.
-	this.magnitude = this.magnitude || 0;
+	// Add recent values.
+	app.dataPoints.push(values);
 
-	if (magnitude > this.magnitude)
-		this.magnitude = magnitude;
-
-	// Add recent data.
-	dataPoints.push(dataArray);
-	if (dataPoints.length > canvas.width)
+	// Remove data points that do not fit the canvas.
+	if (app.dataPoints.length > canvas.width)
 	{
-		dataPoints.splice(0, (dataPoints.length - canvas.width));
+		app.dataPoints.splice(0, (app.dataPoints.length - canvas.width));
 	}
 
-	var drawLines = this; // Reference to app.drawLines instance.
-	function calcY(i)
+	// Value is an accelerometer reading between -1 and 1.
+	function calcDiagramY(value)
 	{
-		if (Math.abs(i) > drawLines.magnitude)
-			drawLines.magnitude = Math.abs(i);
-		return ((i * canvas.height) / (drawLines.magnitude * 2)) + (canvas.height / 2);
+		// Return Y coordinate for this value.
+		var diagramY =
+			((value * canvas.height) / 2)
+			+ (canvas.height / 2);
+		return diagramY;
 	}
 
-	function drawLine(offset, color)
+	function drawLine(axis, color)
 	{
 		context.strokeStyle = color;
 		context.beginPath();
-		context.moveTo(0, calcY(dataPoints[dataPoints.length-1][offset]));
+		var lastDiagramY = calcDiagramY(
+			app.dataPoints[app.dataPoints.length-1][axis]);
+		context.moveTo(0, lastDiagramY);
 		var x = 1;
-		for (var i = dataPoints.length-2; i >= 0; i--)
+		for (var i = app.dataPoints.length - 2; i >= 0; i--)
 		{
-			var y = calcY(dataPoints[i][offset]);
+			var y = calcDiagramY(app.dataPoints[i][axis]);
 			context.lineTo(x, y);
 			x++;
 		}
@@ -357,9 +418,9 @@ app.drawLines = function(dataArray, magnitude)
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
 	// Draw lines.
-	drawLine(0, '#f00');
-	drawLine(1, '#0f0');
-	drawLine(2, '#00f');
+	drawLine('x', '#f00');
+	drawLine('y', '#0f0');
+	drawLine('z', '#00f');
 };
 
 // Initialize the app.
