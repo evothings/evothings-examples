@@ -10,6 +10,22 @@ include FileUtils::Verbose
 
 ###### Examples ######
 
+def buildMbedGAP
+	destPath = 'examples/mbed-custom-gap'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+	copyUtil(destPath)
+end
+
+def buildMbedGATT
+	destPath = 'examples/mbed-custom-gatt'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+	copyUtil(destPath)
+end
+
 def buildArduinoBLE
 	destPath = 'examples/arduino-ble/app'
 	copyCommon(destPath)
@@ -279,6 +295,8 @@ end
 ###### Script entry point ######
 
 def build
+	buildMbedGAP
+	buildMbedGATT
 	buildArduinoBLE
 	buildArduinoInputTCP
 	buildArduinoLEDOnOffBLE
