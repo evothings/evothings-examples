@@ -105,7 +105,8 @@ Demonstration of the TI SensorTag accelerometer.
 	function initialiseSensorTag()
 	{
 		// Create SensorTag object.
-		sensorTag = evothings.tisensortag.createInstance()
+		//sensorTag = evothings.tisensortag.createInstance('CC2541 Bluetooth Smart')
+		sensorTag = evothings.tisensortag.createInstance('CC2650 Bluetooth Smart')
 
 		// Set up callbacks and sensors.
 		sensorTag
@@ -119,7 +120,7 @@ Demonstration of the TI SensorTag accelerometer.
 	{
 		displayStatus(status)
 
-		if ('Connected' == status)
+		if (evothings.tisensortag.ble.status.SENSORTAG_ONLINE == status)
 		{
 			displaySprite()
 		}
@@ -135,7 +136,7 @@ Demonstration of the TI SensorTag accelerometer.
 
 			// If disconneted attempt to connect again.
 			setTimeout(
-				function() { sensorTag.connectToClosestDevice() },
+				function() { sensorTag.connectToNearestDevice() },
 				1000)
 		}
 		else
@@ -148,7 +149,7 @@ Demonstration of the TI SensorTag accelerometer.
 	{
 		var values = sensorTag.getAccelerometerValues(data)
 		var dx = values.x * 50
-		var dy = values.y * 50
+		var dy = values.y * 50 * -1
 		moveSprite(dx, dy)
 	}
 

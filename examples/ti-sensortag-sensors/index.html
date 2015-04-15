@@ -45,17 +45,17 @@
 	<p>
 		<strong>Status:</strong> <span id="StatusData">Ready to connect</span>
 	</p>
-	
+
 	<h2>Keypress:</h2>
 	<p>
 		<span id="KeypressData">[Waiting for value]</span>
 	</p>
-	
+
 	<h2>IRTemperature:</h2>
 	<p>
 		<span id="IRTemperatureData">[Waiting for value]</span>
 	</p>
-	
+
 	<h2>Accelerometer:</h2>
 	<p>
 		<span id="AccelerometerData">[Waiting for value]</span>
@@ -65,17 +65,17 @@
 	<p>
 		<span id="HumidityData">[Waiting for value]</span>
 	</p>
-	
+
 	<h2>Magnetometer:</h2>
 	<p>
 		<span id="MagnetometerData">[Waiting for value]</span>
 	</p>
-	
+
 	<h2>Barometer:</h2>
 	<p>
 		<span id="BarometerData">[Waiting for value]</span>
 	</p>
-	
+
 	<h2>Gyroscope:</h2>
 	<p>
 		<span id="GyroscopeData">[Waiting for value]</span>
@@ -94,10 +94,13 @@
 
 	<script>
 	// SensorTag object.
-	var sensortag = evothings.tisensortag.createInstance()
+	var sensortag
 
 	function initialiseSensorTag()
 	{
+		// Create SensorTag instance.
+		sensortag = evothings.tisensortag.createInstance('CC2650 Bluetooth Smart')
+
 		//
 		// Here sensors are set up.
 		//
@@ -208,9 +211,9 @@
 		// Calculate temperature from raw sensor data.
 		var values = sensortag.getIRTemperatureValues(data)
 		var ac = values.ambientTemperature
-		var af = sensortag.celsiusToFahrenheit(ac)
+		var af = evothings.tisensortag.celsiusToFahrenheit(ac)
 		var tc = values.targetTemperature
-		var tf = sensortag.celsiusToFahrenheit(tc)
+		var tf = evothings.tisensortag.celsiusToFahrenheit(tc)
 
 		// Prepare the information to display.
 		var string =
@@ -256,7 +259,7 @@
 
 		// Calculate the humidity temperature (C and F).
 		var tc = values.humidityTemperature
-		var tf = sensortag.celsiusToFahrenheit(tc)
+		var tf = evothings.tisensortag.celsiusToFahrenheit(tc)
 
 		// Calculate the relative humidity.
 		var h = values.relativeHumidity

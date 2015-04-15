@@ -1,0 +1,457 @@
+
+;(function()
+{
+	evothings.tisensortag.ble.CC2650 = {}
+
+	/**
+	 * @namespace
+	 * @description JavaScript library for the TI SensorTag.
+	 * @alias evothings.tisensortag.ble.CC2650
+	 */
+	var sensortag = {}
+
+	evothings.tisensortag.ble.CC2650 = sensortag
+
+	/**
+	 * Public. Create a SensorTag CC2650 instance.
+	 * @returns {@link evothings.tisensortag.SensorTagInstance}
+	 * @public
+	 */
+	sensortag.addInstanceMethods = function(anInstance)
+	{
+console.log('addInstanceMethods CC2650: ' + anInstance)
+		/**
+		 * @namespace
+		 * @alias evothings.tisensortag.SensorTagInstance
+		 * @description Internal. Variable holding the sensor tag instance object.
+		 * @public
+		 */
+		var instance = anInstance
+
+		// Add generic BLE instance methods.
+		evothings.tisensortag.ble.addInstanceMethods(instance)
+
+		/**
+		 * Public. Set the accelerometer notification callback.
+		 * @param fun - success callback called repeatedly: fun(data)
+		 * @param interval - accelerometer rate in milliseconds.
+		 * @instance
+		 * @public
+		 */
+		instance.accelerometerCallback = function(fun, interval)
+		{
+		console.log('acelerometer callback CC2650')
+			instance.accelerometerFun = fun
+
+			// Enable movement callback.
+			instance.setupCatchAllMovementCallback(interval)
+
+			return instance
+		}
+
+		/**
+		 * Public. Set the gyroscope notification callback.
+		 * Enables all axes.
+		 * @param fun - success callback called repeatedly: fun(data)
+		 * @param interval - gyroscope rate in milliseconds.
+		 * @instance
+		 * @public
+		 */
+		instance.gyroscopeCallback = function(fun, interval)
+		{
+			instance.gyroscopeFun = fun
+
+			// Enable movement callback.
+			instance.setupCatchAllMovementCallback(interval)
+
+			return instance
+		}
+
+		/**
+		 * Public. Set the magnetometer notification callback.
+		 * @param fun - success callback called repeatedly: fun(data)
+		 * @param interval - magnetometer rate in milliseconds.
+		 * @instance
+		 * @public
+		 */
+		instance.magnetometerCallback = function(fun, interval)
+		{
+			instance.magnetometerFun = fun
+
+			// Enable movement callback.
+			instance.setupCatchAllMovementCallback(interval)
+
+			return instance
+		}
+
+		/**
+		 * Private. Setup the movement sensor to call accelerometer,
+		 * gyroscope and magnetometer callbacks.
+		 * @param fun - success callback called repeatedly: fun(data)
+		 * @param interval - magnetometer rate in milliseconds.
+		 * @instance
+		 * @private
+		 */
+		instance.setupCatchAllMovementCallback = function(interval)
+		{
+			// Only do this once.
+			if (instance.catchAllMovementCallbackEnabled) { return }
+			instance.catchAllMovementCallbackEnabled = true
+
+			// Call all of the movement service's callbacks
+			// (accelerometer, gyroscope, magnetometer)
+
+ 			// Set the config that turns on the needed sensors.
+			// magnetometer on: 64 (1000000) (seems to not work in ST2 FW 0.89)
+			// 3-axis acc. on: 56 (0111000)
+			// 3-axis gyro on: 7 (0000111)
+			// 3-axis acc. + 3-axis gyro on: 63 (0111111)
+			// 3-axis acc. + 3-axis gyro + magnetometer on: 127 (1111111)
+			instance.movementCallback(
+				function(data)
+				{
+					instance.accelerometerFun && instance.accelerometerFun(data)
+					instance.magnetometerCallback && instance.magnetometerCallback(data)
+					instance.accelerometerFun && instance.accelerometerFun(data)
+				},
+				interval,
+				127)
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Public. Set the movement notification callback.
+		 * Movement callbacks are routed back to accelerometer,
+		 * gyroscope, and magnetometer callbacks.
+		 * @param fun - Success callback called repeatedly: fun(data)
+		 * @param interval - Sensor rate in milliseconds.
+		 * @param sensors - Set the config that turns on the needed sensors:<br/>
+		 * Magnetometer on: 64 (1000000) (seems to not work in ST2 FW 0.89)<br/>
+		 * 3-axis acc. on: 56 (0111000)<br/>
+		 * 3-axis gyro on: 7 (0000111)<br/>
+		 * 3-axis acc. + 3-axis gyro on: 63 (0111111)<br/>
+		 * 3-axis acc. + 3-axis gyro + magnetometer on: 127 (1111111)<br/>
+		 * @instance
+		 * @public
+		 */
+		instance.movementCallback = function(fun, interval, sensors)
+		{
+			// Callback for all movement sensors (accelerometer, gyroscope, magnetometer).
+			instance.movementFun = fun
+
+ 			// Set the config that turns on the needed sensors.
+			instance.movementConfig = [sensors, 0]
+			instance.movementInterval = interval
+			instance.requiredServices.push(instance.MOVEMENT_SERVICE)
+
+		console.log('instance.requiredServices CC2650: ' + instance.requiredServices[0])
+
+			return instance
+		}
+
+		/**
+		 * Public. Set the luxometer notification callback.
+		 * @param fun - success callback called repeatedly: fun(data)
+		 * @param interval - luxometer rate in milliseconds.
+		 */
+		instance.luxometerCallback = function(fun, interval)
+		{
+			instance.luxometerFun = fun
+			instance.luxometerConfig = [1] // on
+			instance.luxometerInterval = Math.max(1000, interval)
+			instance.requiredServices.push(instance.LUXOMETER_SERVICE)
+
+			return instance
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Internal.
+		 * @instance
+		 * @private
+		 */
+		instance.activateSensorsImpl = function()
+		{
+			// Debug logging.
+			//console.log('-------------------- SERVICES --------------------')
+			//sensortag.logServices(instance.device)
+			//console.log('---------------------- END -----------------------')
+
+console.log('activateSensorsImpl CC2650')
+			instance.irTemperatureOn()
+			instance.humidityOn()
+			instance.barometerOn()
+			instance.luxometerOn()
+			instance.movementOn()
+			instance.keypressOn()
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Private. Enable barometer calibration mode.
+		 * @instance
+		 * @private
+		 */
+		instance.barometerCalibrate = function(callback)
+		{
+			// I get the error:
+			// Barometer calibration failed: Characteristic not found: f000aa43-0451-4000-b000-000000000000
+			// Workaround:
+			callback()
+			return
+
+			instance.device.writeCharacteristic(
+				instance.BAROMETER_CONFIG,
+				new Uint8Array([2]),
+				function()
+				{
+					instance.device.readCharacteristic(
+						instance.BAROMETER_CALIBRATION,
+						function(data)
+						{
+							data = new Uint8Array(data)
+							instance.barometerCalibrationData =
+							[
+								evothings.util.littleEndianToUint16(data, 0),
+								evothings.util.littleEndianToUint16(data, 2),
+								evothings.util.littleEndianToUint16(data, 4),
+								evothings.util.littleEndianToUint16(data, 6),
+								evothings.util.littleEndianToInt16(data, 8),
+								evothings.util.littleEndianToInt16(data, 10),
+								evothings.util.littleEndianToInt16(data, 12),
+								evothings.util.littleEndianToInt16(data, 14)
+							]
+							callback()
+						},
+						function(error)
+						{
+							console.log('Barometer calibration failed: ' + error)
+						})
+				},
+				instance.errorFun)
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Public. Turn on barometer notification.
+		 * @instance
+		 * @public
+		 */
+		instance.barometerOn = function()
+		{
+			instance.barometerCalibrate(function()
+			{
+				instance.sensorOn(
+					instance.BAROMETER_CONFIG,
+					instance.barometerConfig,
+					instance.BAROMETER_PERIOD,
+					instance.barometerInterval,
+					instance.BAROMETER_DATA,
+					instance.BAROMETER_NOTIFICATION,
+					instance.barometerFun
+				)
+			})
+
+			return instance
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Public. Turn on movement notification (SensorTag 2).
+		 * @instance
+		 * @public
+		 */
+		instance.movementOn = function()
+		{
+			instance.sensorOn(
+				instance.MOVEMENT_CONFIG,
+				instance.movementConfig,
+				instance.MOVEMENT_PERIOD,
+				instance.movementInterval,
+				instance.MOVEMENT_DATA,
+				instance.MOVEMENT_NOTIFICATION,
+				instance.movementFun
+			)
+
+			return instance
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Public. Turn off movement notification (SensorTag 2).
+		 * @instance
+		 * @public
+		 */
+		instance.movementOff = function()
+		{
+			instance.sensorOff(instance.MOVEMENT_DATA)
+
+			return instance
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Public. Turn on luxometer notification.
+		 */
+		instance.luxometerOn = function()
+		{
+			instance.sensorOn(
+				instance.LUXOMETER_CONFIG,
+				instance.luxometerConfig,
+				instance.LUXOMETER_PERIOD,
+				instance.luxometerInterval,
+				instance.LUXOMETER_DATA,
+				instance.LUXOMETER_NOTIFICATION,
+				instance.luxometerFun
+			)
+
+			return instance
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Public. Turn off luxometer notification.
+		 */
+		instance.luxometerOff = function()
+		{
+			instance.sensorOff(instance.LUXOMETER_DATA)
+
+			return instance
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Calculate IR temperature values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: ambientTemperature, targetTemperature.
+		 * @instance
+		 * @public
+		 */
+		instance.getIRTemperatureValues = function(data)
+		{
+			// Calculate ambient temperature (Celsius).
+			var ac = evothings.util.littleEndianToUint16(data, 2) / 128.0
+
+			// Calculate target temperature (Celsius).
+			var tc = evothings.util.littleEndianToInt16(data, 0)
+			tc = (tc >> 2) * 0.03125
+
+			// Return result.
+			return { ambientTemperature: ac, targetTemperature: tc }
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Calculate accelerometer values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: x, y, z.
+		 */
+		instance.getAccelerometerValues = function(data)
+		{
+			var divisors = {x: -16384.0, y: 16384.0, z: -16384.0}
+
+			// Calculate accelerometer values.
+			var ax = evothings.util.littleEndianToInt16(data, 6) / divisors.x
+			var ay = evothings.util.littleEndianToInt16(data, 8) / divisors.y
+			var az = evothings.util.littleEndianToInt16(data, 10) / divisors.z
+
+			// Return result.
+			return { x: ax, y: ay, z: az }
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Calculate gyroscope values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
+		 */
+		instance.getGyroscopeValues = function(data)
+		{
+			// Calculate gyroscope values.
+			var gx = evothings.util.littleEndianToInt16(data, 0) * 255.0 / 32768.0
+			var gy = evothings.util.littleEndianToInt16(data, 2) * 255.0 / 32768.0
+			var gz =  evothings.util.littleEndianToInt16(data, 4) * 255.0 / 32768.0
+
+			// Return result.
+			return { x: gx, y: gy, z: gz }
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Calculate barometer values from raw data.
+		 * @instance
+		 * @public
+		 */
+		instance.getBarometerValues = function(data)
+		{
+			var p = evothings.util.littleEndianToUint16(data, 2)
+
+			// Extraction of pressure value, based on sfloatExp2ToDouble from
+			// BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
+			// source code.
+			var mantissa = p & 0x0FFF
+			var exponent = p >> 12
+
+			magnitude = Math.pow(2, exponent)
+			output = (mantissa * magnitude)
+
+			var pInterpreted = output / 10000.0
+
+			return { pressure: pInterpreted }
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Calculate magnetometer values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
+		 */
+		instance.getModelTwoMagnetometerValues = function(data)
+		{
+			// Magnetometer values (Micro Tesla).
+			var mx = evothings.util.littleEndianToInt16(data, 12) * (4912.0 / 32768.0)
+			var my = evothings.util.littleEndianToInt16(data, 14) * (4912.0 / 32768.0)
+			var mz = evothings.util.littleEndianToInt16(data, 16) * (4912.0 / 32768.0)
+
+			// Return result.
+			return { x: mx, y: my, z: mz }
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Calculate luxometer values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Light level in lux units.
+		 * @instance
+		 * @public
+		 */
+		instance.getLuxometerValue = function(data)
+		{
+			// Calculate the light level.
+			var value = evothings.util.littleEndianToUint16(data, 0)
+
+			/* Extraction of luxometer value, based on sfloatExp2ToDouble from
+			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
+			 * source code.
+			 * TODO: move to util.js
+			 */
+			var mantissa = value & 0x0FFF
+			var exponent = value >> 12
+
+			magnitude = Math.pow(2, exponent)
+			output = (mantissa * magnitude)
+
+			var lux = output / 100.0
+
+			// Return result.
+			return lux
+		}
+
+		// Finally, return the SensorTag instance object.
+		return instance
+	}
+})()
