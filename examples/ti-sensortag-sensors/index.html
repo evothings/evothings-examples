@@ -88,7 +88,7 @@
 
 	<h2>Device info:</h2>
 	<p>
-		Device model: SensorTag <span id="DeviceModel">?</span><br />
+		SensorTag device model: <span id="DeviceModel">?</span><br />
 		Firmware version: <span id="FirmwareData">?</span>
 	</p>
 
@@ -100,6 +100,7 @@
 	{
 		// Create SensorTag instance.
 		sensortag = evothings.tisensortag.createInstance('CC2650 Bluetooth Smart')
+		//sensortag = evothings.tisensortag.createInstance('CC2541 Bluetooth Smart')
 
 		//
 		// Here sensors are set up.
@@ -110,9 +111,6 @@
 		// First parameter to sensor function is the callback function.
 		// Several of the sensors take a millisecond update interval
 		// as the second parameter.
-		// Gyroscope takes the axes to enable as the third parameter:
-		// 1 to enable X axis only, 2 to enable Y axis only, 3 = X and Y,
-		// 4 = Z only, 5 = X and Z, 6 = Y and Z, 7 = X, Y and Z.
 		//
 		sensortag
 			.statusCallback(statusHandler)
@@ -123,37 +121,49 @@
 			.barometerCallback(barometerHandler, 1000)
 			.accelerometerCallback(accelerometerHandler, 1000)
 			.magnetometerCallback(magnetometerHandler, 1000)
-			.gyroscopeCallback(gyroscopeHandler, 1000, 7) // 7 = enable all axes
+			.gyroscopeCallback(gyroscopeHandler, 1000)
 			.luxometerCallback(luxometerHandler, 1000)
-			.connectToClosestDevice()
+			.connectToNearestDevice()
 	}
 
 	function statusHandler(status)
 	{
-		if ('Device data available' == status)
+		if ('DEVICE_INFO_AVAILABLE' == status)
 		{
-			/* Show a notification about that the FW should be upgraded if the
-			 * connected device is a SensorTag 1 with FW rev less than 1.5,
-			 * due to that the sensortag.js lib doesn't support these old revs.
-			 */
-			var upgradeNoticeElm = document.getElementById('upgradeNotice')
-
-			if (sensortag.getDeviceModel() < 2 &&
+			// Show a notification about that the firmware should be
+			// upgraded if the connected device is a SensorTag CC2541
+			// with firmware revision less than 1.5, since this the
+			// SensorTag library does not support these versions.
+			var upgradeNotice = document.getElementById('upgradeNotice')
+			if ('CC2541' == sensortag.getDeviceModel() &&
 				parseFloat(sensortag.getFirmwareString()) < 1.5)
-				upgradeNoticeElm.classList.remove('hidden')
+			{
+				upgradeNotice.classList.remove('hidden')
+			}
 			else
-				upgradeNoticeElm.classList.add('hidden')
+			{
+				upgradeNotice.classList.add('hidden')
+			}
 
+			// Show device model and firmware version.
 			displayValue('DeviceModel', sensortag.getDeviceModel())
 			displayValue('FirmwareData', sensortag.getFirmwareString())
+
+			// Show which sensors are not supported by the connected SensorTag.
+			if (!sensortag.isLuxometerAvailable())
+			{
+				displayValue('LuxometerData', '[Sensor not present]')
+			}
 		}
+
 		displayValue('StatusData', status)
 	}
 
 	function errorHandler(error)
 	{
 		console.log('Error: ' + error)
-		if ('disconnected' == error)
+
+		if (evothings.easyble.error.DISCONNECTED == error)
 		{
 			// Clear current values.
 			var blank = '[Waiting for value]'
@@ -211,19 +221,19 @@
 		// Calculate temperature from raw sensor data.
 		var values = sensortag.getIRTemperatureValues(data)
 		var ac = values.ambientTemperature
-		var af = evothings.tisensortag.celsiusToFahrenheit(ac)
+		var af = sensortag.celsiusToFahrenheit(ac)
 		var tc = values.targetTemperature
-		var tf = evothings.tisensortag.celsiusToFahrenheit(tc)
+		var tf = sensortag.celsiusToFahrenheit(tc)
 
 		// Prepare the information to display.
 		var string =
-			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, 0, 4) + '</span><br/>'
-			+ (tc >= 0 ? '+' : '') + tc.toFixed(2) + '&deg; C '
-			+ '(' + (tf >= 0 ? '+' : '') + tf.toFixed(2) + '&deg; F)' + '<br/>'
-			+ (ac >= 0 ? '+' : '') + ac.toFixed(2) + '&deg; C '
-			+ '(' + (af >= 0 ? '+' : '') + af.toFixed(2) + '&deg; F) [amb]'
-			+ '<br/>'
+			//'raw: <span style="font-family: monospace;">0x' +
+			//	bufferToHexStr(data, 0, 4) + '</span><br/>' +
+			(tc >= 0 ? '+' : '') + tc.toFixed(2) + '&deg; C ' +
+			'(' + (tf >= 0 ? '+' : '') + tf.toFixed(2) + '&deg; F)' + '<br/>' +
+			(ac >= 0 ? '+' : '') + ac.toFixed(2) + '&deg; C ' +
+			'(' + (af >= 0 ? '+' : '') + af.toFixed(2) + '&deg; F) [amb]' +
+			'<br/>'
 
 		// Update the value displayed.
 		displayValue('IRTemperatureData', string)
@@ -237,16 +247,16 @@
 		var y = values.y
 		var z = values.z
 
-		var model = sensortag.getDeviceModel()
-		var dataOffset = (model == 2 ? 6 : 0)
+		//var model = sensortag.getDeviceModel()
+		//var dataOffset = (model == 2 ? 6 : 0)
 
 		// Prepare the information to display.
 		string =
-			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, dataOffset, 6) + '</span><br/>'
-			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>'
-			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>'
-			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'
+			//'raw: <span style="font-family: monospace;">0x' +
+			//	bufferToHexStr(data, dataOffset, 6) + '</span><br/>' +
+			'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>' +
+			'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>' +
+			'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'
 
 		// Update the value displayed.
 		displayValue('AccelerometerData', string)
@@ -259,18 +269,18 @@
 
 		// Calculate the humidity temperature (C and F).
 		var tc = values.humidityTemperature
-		var tf = evothings.tisensortag.celsiusToFahrenheit(tc)
+		var tf = sensortag.celsiusToFahrenheit(tc)
 
 		// Calculate the relative humidity.
 		var h = values.relativeHumidity
 
 		// Prepare the information to display.
 		string =
-			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, 0, 4) + '</span><br/>'
-			+ (tc >= 0 ? '+' : '') + tc.toFixed(2) + '&deg; C '
-			+ '(' + (tf >= 0 ? '+' : '') + tf.toFixed(2) + '&deg; F)' + '<br/>'
-			+ (h >= 0 ? '+' : '') + h.toFixed(2) + '% RH' + '<br/>'
+			//'raw: <span style="font-family: monospace;">0x' +
+			//	bufferToHexStr(data, 0, 4) + '</span><br/>'
+			(tc >= 0 ? '+' : '') + tc.toFixed(2) + '&deg; C ' +
+			'(' + (tf >= 0 ? '+' : '') + tf.toFixed(2) + '&deg; F)' + '<br/>' +
+			(h >= 0 ? '+' : '') + h.toFixed(2) + '% RH' + '<br/>'
 
 		// Update the value displayed.
 		displayValue('HumidityData', string)
@@ -284,16 +294,16 @@
 		var y = values.y
 		var z = values.z
 
-		var model = sensortag.getDeviceModel()
-		var dataOffset = (model == 2 ? 12 : 0)
+		//var model = sensortag.getDeviceModel()
+		//var dataOffset = (model == 2 ? 12 : 0)
 
 		// Prepare the information to display.
 		string =
-			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, dataOffset, 6) + '</span><br/>'
-			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '&micro;T <br/>'
-			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '&micro;T <br/>'
-			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '&micro;T <br/>'
+			//'raw: <span style="font-family: monospace;">0x' +
+			//	bufferToHexStr(data, dataOffset, 6) + '</span><br/>' +
+			'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '&micro;T <br/>' +
+			'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '&micro;T <br/>' +
+			'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '&micro;T <br/>'
 
 		// Update the value displayed.
 		displayValue('MagnetometerData', string)
@@ -307,9 +317,9 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: <span style="font-family: monospace;">0x' +
-			bufferToHexStr(data, 0, 4) + '</span><br/>' +
-			'pressure = ' + pressure.toPrecision(5) + ' mbar<br/>'
+			//'raw: <span style="font-family: monospace;">0x' +
+			//	bufferToHexStr(data, 0, 4) + '</span><br/>' +
+			'Pressure = ' + pressure.toPrecision(5) + ' mbar<br/>'
 
 		// Update the value displayed.
 		displayValue('BarometerData', string)
@@ -325,11 +335,11 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, 0, 6) + '</span><br/>'
-			+ 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '<br/>'
-			+ 'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '<br/>'
-			+ 'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '<br/>'
+			//'raw: <span style="font-family: monospace;">0x' +
+			//	bufferToHexStr(data, 0, 6) + '</span><br/>' +
+			'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '<br/>' +
+			'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '<br/>' +
+			'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '<br/>'
 
 		// Update the value displayed.
 		displayValue('GyroscopeData', string)
@@ -341,9 +351,9 @@
 
 		// Prepare the information to display.
 		string =
-			'raw: <span style="font-family: monospace;">0x' +
-				bufferToHexStr(data, 0, 2) + '</span><br/>'
-			+ 'light level = ' + value.toPrecision(5) + ' lux<br/>'
+			//'raw: <span style="font-family: monospace;">0x' +
+			//	bufferToHexStr(data, 0, 2) + '</span><br/>' +
+			'Light level = ' + value.toPrecision(5) + ' lux<br/>'
 
 		// Update the value displayed.
 		displayValue('LuxometerData', string)

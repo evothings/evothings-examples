@@ -22,7 +22,6 @@
 	 */
 	sensortag.addInstanceMethods = function(anInstance)
 	{
-console.log('addInstanceMethods cc2541: ' + anInstance)
 		/**
 		 * @namespace
 		 * @alias evothings.tisensortag.SensorTagInstance
@@ -33,6 +32,20 @@ console.log('addInstanceMethods cc2541: ' + anInstance)
 
 		// Add generic BLE instance methods.
 		evothings.tisensortag.ble.addInstanceMethods(instance)
+
+		/**
+		 * Determine if a BLE device is a SensorTag CC2541.
+		 * Checks for the CC2541 using the advertised name.
+		 * @instance
+		 * @public
+		 */
+		instance.deviceIsSensorTag = function(device)
+		{
+			return (device != null) &&
+				(device.advertisementData != null) &&
+				(device.advertisementData.kCBAdvDataLocalName ==
+					'SensorTag')
+		}
 
 		/**
 		 * Public. Set the accelerometer notification callback.
@@ -66,6 +79,10 @@ console.log('addInstanceMethods cc2541: ' + anInstance)
 		 */
 		instance.gyroscopeCallback = function(fun, interval, axes)
 		{
+			if ('undefined' == typeof axes)
+			{
+				axes = 7 // 7 = enable all axes
+			}
 			instance.gyroscopeFun = fun
 			instance.gyroscopeConfig = [axes]
 			instance.gyroscopeInterval = Math.max(100, interval)
@@ -103,7 +120,6 @@ console.log('addInstanceMethods cc2541: ' + anInstance)
 			//sensortag.logServices(instance.device)
 			//console.log('---------------------- END -----------------------')
 
-console.log('activateSensorsImpl')
 			instance.irTemperatureOn()
 			instance.humidityOn()
 			instance.barometerOn()
@@ -121,8 +137,6 @@ console.log('activateSensorsImpl')
 		 */
 		instance.accelerometerOn = function()
 		{
-
-console.log('accelerometerOn ' + instance.accelerometerFun)
 			instance.sensorOn(
 				instance.ACCELEROMETER_CONFIG,
 				instance.accelerometerConfig,
@@ -302,16 +316,42 @@ console.log('accelerometerOn ' + instance.accelerometerFun)
 		 * @instance
 		 * @public
 		 */
-		instance.getBarometerValues = function(data)
+		instance.DOES_THIS_WORK_getBarometerValues = function(data)
 		{
 			var t = evothings.util.littleEndianToInt16(data, 0)
 			var p = evothings.util.littleEndianToUint16(data, 2)
+
+			// TODO: This field is missing. Is this for CC2650??
 			var c = instance.barometerCalibrationData
 
 			var S = c[2] + ((c[3] * t) / 131072) + ((c[4] * (t * t)) / 17179869184.0)
 			var O = (c[5] * 16384.0) + (((c[6] * t) / 8)) + ((c[7] * (t * t)) / 524288.0)
 			var Pa = (((S * p) + O) / 16384.0)
 			var pInterpreted = Pa / 100.0
+
+			return { pressure: pInterpreted }
+		}
+
+		/**
+		 * Calculate barometer values from raw data.
+		 * @instance
+		 * @public
+		 */
+		instance.getBarometerValues = function(data)
+		{
+			var p = evothings.util.littleEndianToUint16(data, 2)
+
+			// Extraction of pressure value, based on sfloatExp2ToDouble from
+			// BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
+			// source code.
+			// TODO: Move to util.js
+			var mantissa = p & 0x0FFF
+			var exponent = p >> 12
+
+			magnitude = Math.pow(2, exponent)
+			output = (mantissa * magnitude)
+
+			var pInterpreted = output / 10000.0
 
 			return { pressure: pInterpreted }
 		}
@@ -347,6 +387,83 @@ console.log('accelerometerOn ' + instance.accelerometerFun)
 
 			// Return result.
 			return { ambientTemperature: ac, targetTemperature: tc }
+		}
+
+		/**
+		 * Public. Checks if the irTemperature sensor is available.
+		 * @preturn true if available, false if not.
+		 * @instance
+		 * @public
+		 */
+		instance.isIrTemperatureAvailable = function()
+		{
+			return true
+		}
+
+		/**
+		 * Public. Checks if the accelerometer sensor is available.
+		 * @preturn true if available, false if not.
+		 * @instance
+		 * @public
+		 */
+		instance.isAccelerometerAvailable = function()
+		{
+			return true
+		}
+
+		/**
+		 * Public. Checks if the humidity sensor is available.
+		 * @preturn true if available, false if not.
+		 * @instance
+		 * @public
+		 */
+		instance.isHumidityAvailable = function()
+		{
+			return true
+		}
+
+		/**
+		 * Public. Checks if the magnetometer sensor is available.
+		 * @preturn true if available, false if not.
+		 * @instance
+		 * @public
+		 */
+		instance.isMagnetometerAvailable = function()
+		{
+			return true
+		}
+
+		/**
+		 * Public. Checks if the barometer sensor is available.
+		 * @preturn true if available, false if not.
+		 * @instance
+		 * @public
+		 */
+		instance.isBarometerAvailable = function()
+		{
+			return true
+		}
+
+		/**
+		 * Public. Checks if the gyroscope sensor is available.
+		 * @preturn true if available, false if not.
+		 * @instance
+		 * @public
+		 */
+		instance.isGyroscopeAvailable = function()
+		{
+			return true
+		}
+
+		/**
+		 * Public. Checks if the keypress sensor is available.
+		 * @preturn true if available, false if not.
+		 * @instance
+		 * @public
+		 */
+		instance.isKeypressAvailable = function()
+		{
+			return true
 		}
 
 		// Finally, return the SensorTag instance object.

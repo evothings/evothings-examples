@@ -15,7 +15,6 @@ evothings.tisensortag = {}
  */
 evothings.tisensortag.createInstance = function(type)
 {
-console.log('createInstance')
 	// TODO: Update this function as new models are added.
 	// WiFi tag might be be identified by 'CC2541 WiFi'
 	// for example. Should we also be specific about BLE?
@@ -49,7 +48,6 @@ console.log('createInstance')
  */
 evothings.tisensortag.createGenericInstance = function()
 {
-console.log('createGenericInstance')
 	/**
 	 * @namespace
 	 * @alias evothings.tisensortag.SensorTagInstance
@@ -142,7 +140,8 @@ console.log('createGenericInstance')
 	 * Public. Set the gyroscope notification callback.
 	 * @param fun - success callback called repeatedly: fun(data)
 	 * @param interval - gyroscope rate in milliseconds.
-	 * @param axes - the axes to enable ((z << 2) | (y << 1) | x)
+	 * @param axes - (optional) the axes to enable ((z << 2) | (y << 1) | x)
+	 * Only available on SensorTag CC2541.
 	 * Axis parameter values are:
 	 * 1 = X only, 2 = Y only,
 	 * 3 = X and Y, 4 = Z only,
@@ -220,7 +219,6 @@ console.log('createGenericInstance')
 	 */
 	instance.callStatusCallback = function(status)
 	{
-	console.log('callStatusCallback: ' + status)
 		instance.statusFun && instance.statusFun(status)
 	}
 
@@ -306,6 +304,18 @@ console.log('createGenericInstance')
 	 * @public
 	 */
 	instance.isGyroscopeAvailable = function()
+	{
+		return false
+	}
+
+	/**
+	 * Public. Checks if movement sensor is available that
+	 * combines accelerometer, gyroscope, and magnetometer.
+	 * @preturn true if available, false if not.
+	 * @instance
+	 * @public
+	 */
+	instance.isMovementAvailable = function()
 	{
 		return false
 	}
@@ -489,38 +499,18 @@ console.log('createGenericInstance')
 		return instance
 	}
 
+	/**
+	 * Convert Celsius to Fahrenheit.
+	 * @param celsius Temperature in Celsius.
+	 * @returns Temperature converted to Fahrenheit.
+	 * @public
+	 */
+	instance.celsiusToFahrenheit = function(celsius)
+	{
+		return (celsius * 9 / 5) + 32
+	}
+
 	return instance
-}
-
-/**
- * Convert Celsius to Fahrenheit.
- * @param celsius Temperature in Celsius.
- * @returns Temperature converted to Fahrenheit.
- * @public
- */
-evothings.tisensortag.celsiusToFahrenheit = function(celsius)
-{
-	return (celsius * 9 / 5) + 32
-}
-
-// Load array of JS libraries.
-// TODO: Move function to evothings.js
-evothings.loadScripts = function(array, loadedCallback)
-{
-	var lib = array.shift()
-console.log('*** loading script: ' + lib)
-	if (!lib)
-	{
-		// Array is empty and all scripts are loaded.
-		loadedCallback && loadedCallback()
-	}
-	else
-	{
-		// Load next script.
-		evothings.loadScript(lib, function() {
-			evothings.loadScripts(array, loadedCallback)
-		})
-	}
 }
 
 // Load TI SensorTag library components.

@@ -1,22 +1,45 @@
 // File: easyble.js
 
-// We assume the "evothings" library was loaded first.
-
-// Load dependent script.
-evothings.loadScript('libs/evothings/util/util.js');
-
-/**
- * @namespace
- * @author Mikael Kindborg
- * @description <p>Library for making BLE programming easier.</p>
- * <p>It is safe practise to call function {@link evothings.scriptsLoaded}
- * to ensure dependent libraries are loaded before calling functions
- * in this library.</p>
- */
-evothings.easyble = {};
-
 ;(function()
 {
+	// Load script used by this file.
+	evothings.loadScript('libs/evothings/util/util.js');
+
+	/**
+	 * @namespace
+	 * @description <p>Library for making BLE programming easier.</p>
+	 * <p>It is safe practise to call function {@link evothings.scriptsLoaded}
+	 * to ensure dependent libraries are loaded before calling functions
+	 * in this library.</p>
+	 */
+	evothings.easyble = {};
+
+	/**
+	 * @namespace
+	 * @description Error string.
+	 */
+	evothings.easyble.error = {};
+
+	/**
+	 * @description BLE device was disconnected.
+	 */
+	evothings.easyble.error.DISCONNECTED = 'EASYBLE_ERROR_DISCONNECTED';
+
+	/**
+	 * @description BLE service was not found.
+	 */
+	evothings.easyble.error.SERVICE_NOT_FOUND = 'EASYBLE_ERROR_SERVICE_NOT_FOUND';
+
+	/**
+	 * @description BLE characteristic was not found.
+	 */
+	evothings.easyble.error.CHARACTERISTIC_NOT_FOUND = 'EASYBLE_ERROR_CHARACTERISTIC_NOT_FOUND';
+
+	/**
+	 * @description BLE descriptor was not found.
+	 */
+	evothings.easyble.error.DESCRIPTOR_NOT_FOUND = 'EASYBLE_ERROR_DESCRIPTOR_NOT_FOUND';
+
 	/**
 	 * @private
 	 */
@@ -682,12 +705,10 @@ evothings.easyble = {};
 			else if (connectInfo.state == 0) // disconnected
 			{
 				internal.connectedDevices[device.address] = null;
-				// TODO: How to signal disconnect?
-				// Call error callback?
-				// Additional callback? (connect, disconnect, fail)
-				// Additional parameter on success callback with connect state?
-				// (Last one is the best option I think).
-				fail && fail('disconnected');
+
+				// TODO: Perhaps this should be redesigned, as disconnect is
+				// more of a status change than an error? What do you think?
+				fail && fail(evothings.easyble.error.DISCONNECTED);
 			}
 		},
 		function(errorCode)
@@ -807,7 +828,7 @@ evothings.easyble = {};
 				var service = device.__uuidMap[uuid];
 				if (!service)
 				{
-					fail('Service not found: ' + uuid);
+					fail(evothings.easyble.error.SERVICE_NOT_FOUND + ' ' + uuid);
 					return;
 				}
 
@@ -853,7 +874,8 @@ evothings.easyble = {};
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail('Characteristic not found: ' + characteristicUUID);
+			fail(evothings.easyble.error.CHARACTERISTIC_NOT_FOUND + ' ' +
+				characteristicUUID);
 			return;
 		}
 
@@ -876,7 +898,7 @@ evothings.easyble = {};
 		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
-			fail('Descriptor not found: ' + descriptorUUID);
+			fail(evothings.easyble.error.DESCRIPTOR_NOT_FOUND + ' ' + descriptorUUID);
 			return;
 		}
 
@@ -905,7 +927,8 @@ evothings.easyble = {};
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail('Characteristic not found: ' + characteristicUUID);
+			fail(evothings.easyble.error.CHARACTERISTIC_NOT_FOUND + ' ' +
+				characteristicUUID);
 			return;
 		}
 
@@ -936,7 +959,7 @@ evothings.easyble = {};
 		var descriptor = device.__uuidMap[characteristicUUID + ':' + descriptorUUID];
 		if (!descriptor)
 		{
-			fail('Descriptor not found: ' + descriptorUUID);
+			fail(evothings.easyble.error.DESCRIPTOR_NOT_FOUND + ' ' + descriptorUUID);
 			return;
 		}
 
@@ -965,7 +988,8 @@ evothings.easyble = {};
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail('Characteristic not found: ' + characteristicUUID);
+			fail(evothings.easyble.error.CHARACTERISTIC_NOT_FOUND + ' ' +
+				characteristicUUID);
 			return;
 		}
 
@@ -987,7 +1011,8 @@ evothings.easyble = {};
 		var characteristic = device.__uuidMap[characteristicUUID];
 		if (!characteristic)
 		{
-			fail('Characteristic not found: ' + characteristicUUID);
+			fail(evothings.easyble.error.CHARACTERISTIC_NOT_FOUND + ' ' +
+				characteristicUUID);
 			return;
 		}
 

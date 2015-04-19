@@ -1,12 +1,12 @@
-/**
- * @namespace
- * @description <p>Functions for loading scripts asynchronously,
- * detecting platform, and other common application functionality.</p>
- */
-evothings = window.evothings || {};
-
 ;(function()
 {
+	/**
+	 * @namespace
+	 * @description <p>Functions for loading scripts asynchronously,
+	 * detecting platform, and other common application functionality.</p>
+	 */
+	evothings = window.evothings || {};
+
 	/* ------------------ Script loading ------------------ */
 
 	var scriptLoadingCounter = 0;
@@ -30,7 +30,7 @@ evothings = window.evothings || {};
 			return;
 		}
 
-		// Add script to dictionaly of loaded scripts.
+		// Add script to dictionary of loaded scripts.
 		loadedScripts[url] = 'loadingstarted';
 		++scriptLoadingCounter;
 
@@ -60,18 +60,58 @@ evothings = window.evothings || {};
 				// Clear callbacks - should we do this???
 				scriptsLoadedCallbacks = [];
 			}
-		}
+		};
 
 		// onerror fires for things like malformed URLs and 404's.
 		// If this function is called, the matching onload will not be called and
 		// scriptsLoaded will not fire.
-		script.onerror = function() {
-			throw "Could not load script '"+url+"'";
+		script.onerror = function()
+		{
+			throw "Could not load script '" + url + "'";
 		};
 
 		// Attaching the script tag to the document starts loading the script.
 		document.head.appendChild(script);
-	}
+	};
+
+	/**
+	 * Load array of scripts.
+	 * @param {array} array - Array of URL or path name stringa.
+	 * Relative paths are relative to the HTML file that initiated
+	 * script loading.
+	 * @param {function} loadedCallback - Optional parameterless
+	 * function called when all scripts in the array has loaded.
+	 * @public
+	 */
+	evothings.loadScripts = function(array, loadedCallback)
+	{
+		var lib = array.shift();
+		if (!lib)
+		{
+			// Array is empty and all scripts are loaded.
+			loadedCallback && loadedCallback();
+		}
+		else
+		{
+			// Load next script.
+			evothings.loadScript(lib, function() {
+				evothings.loadScripts(array, loadedCallback);
+			});
+		}
+	};
+
+	/**
+	 * Experimental.
+	 * Mark a script as loaded. This is useful if a script is designed
+	 * to be included both in HTML and in JavaScript.
+	 * @param {string} pathOrURL - URL or path to the script. Relative paths are
+	 * relative to the HTML file that initiated script loading.
+	 * @public
+	 */
+	evothings.markScriptAsLoaded = function(pathOrURL)
+	{
+		loadedScripts[url] = 'loadingcomplete';
+	};
 
 	/**
 	 * <p>Add a callback that will be called when all scripts are loaded.</p>
@@ -107,8 +147,8 @@ evothings = window.evothings || {};
 	 *
 	 * @example
 	 * var obj = { company: 'Evothings', field: 'IoT' };
-	 * evothings.easyble.printObject(obj);
-	 * evothings.easyble.printObject(obj, console.log);
+	 * evothings.printObject(obj);
+	 * evothings.printObject(obj, console.log);
 	 *
 	 * @public
 	 */

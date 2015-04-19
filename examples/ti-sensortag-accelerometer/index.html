@@ -105,15 +105,15 @@ Demonstration of the TI SensorTag accelerometer.
 	function initialiseSensorTag()
 	{
 		// Create SensorTag object.
-		//sensorTag = evothings.tisensortag.createInstance('CC2541 Bluetooth Smart')
 		sensorTag = evothings.tisensortag.createInstance('CC2650 Bluetooth Smart')
+		//sensorTag = evothings.tisensortag.createInstance('CC2541 Bluetooth Smart')
 
 		// Set up callbacks and sensors.
 		sensorTag
 			.statusCallback(statusHandler)
 			.errorCallback(errorHandler)
 			.accelerometerCallback(accelerometerHandler, 100)
-			.connectToClosestDevice()
+			.connectToNearestDevice()
 	}
 
 	function statusHandler(status)
@@ -128,7 +128,7 @@ Demonstration of the TI SensorTag accelerometer.
 
 	function errorHandler(error)
 	{
-		if ('disconnected' == error)
+		if (evothings.easyble.error.DISCONNECTED == error)
 		{
 			displayStatus('Disconnected')
 

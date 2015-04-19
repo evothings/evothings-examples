@@ -38,25 +38,12 @@
 	sensortag.error.SCAN_FAILED = 'SCAN_FAILED'
 
 	/**
-	 * Internal. Override if needed.
-	 * @private
-	 */
-	sensortag.deviceIsSensorTag = function(device)
-	{
-		return (device != null) &&
-			(device.name != null) &&
-			(device.name.indexOf('Sensor Tag') > -1 ||
-				device.name.indexOf('SensorTag') > -1)
-	}
-
-	/**
 	 * Public. Create a SensorTag instance.
 	 * @returns {@link evothings.tisensortag.SensorTagInstance}
 	 * @public
 	 */
 	sensortag.addInstanceMethods = function(anInstance)
 	{
-console.log('addInstanceMethods ble')
 		/**
 		 * @namespace
 		 * @alias evothings.tisensortag.SensorTagInstance
@@ -80,25 +67,11 @@ console.log('addInstanceMethods ble')
 		instance.IRTEMPERATURE_PERIOD = 'f000aa03-0451-4000-b000-000000000000'
 		instance.IRTEMPERATURE_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
-		// Only in SensorTag CC2541.
-		instance.ACCELEROMETER_SERVICE = 'f000aa10-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_DATA = 'f000aa11-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_CONFIG = 'f000aa12-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_PERIOD = 'f000aa13-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
-
 		instance.HUMIDITY_SERVICE = 'f000aa20-0451-4000-b000-000000000000'
 		instance.HUMIDITY_DATA = 'f000aa21-0451-4000-b000-000000000000'
 		instance.HUMIDITY_CONFIG = 'f000aa22-0451-4000-b000-000000000000'
 		instance.HUMIDITY_PERIOD = 'f000aa23-0451-4000-b000-000000000000'
 		instance.HUMIDITY_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
-
-		// Only in SensorTag CC2541.
-		instance.MAGNETOMETER_SERVICE = 'f000aa30-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_DATA = 'f000aa31-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_CONFIG = 'f000aa32-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_PERIOD = 'f000aa33-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
 		instance.BAROMETER_SERVICE = 'f000aa40-0451-4000-b000-000000000000'
 		instance.BAROMETER_DATA = 'f000aa41-0451-4000-b000-000000000000'
@@ -106,6 +79,20 @@ console.log('addInstanceMethods ble')
 		instance.BAROMETER_CALIBRATION = 'f000aa43-0451-4000-b000-000000000000'
 		instance.BAROMETER_PERIOD = 'f000aa44-0451-4000-b000-000000000000'
 		instance.BAROMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+
+		// Only in SensorTag CC2541.
+		instance.ACCELEROMETER_SERVICE = 'f000aa10-0451-4000-b000-000000000000'
+		instance.ACCELEROMETER_DATA = 'f000aa11-0451-4000-b000-000000000000'
+		instance.ACCELEROMETER_CONFIG = 'f000aa12-0451-4000-b000-000000000000'
+		instance.ACCELEROMETER_PERIOD = 'f000aa13-0451-4000-b000-000000000000'
+		instance.ACCELEROMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+
+		// Only in SensorTag CC2541.
+		instance.MAGNETOMETER_SERVICE = 'f000aa30-0451-4000-b000-000000000000'
+		instance.MAGNETOMETER_DATA = 'f000aa31-0451-4000-b000-000000000000'
+		instance.MAGNETOMETER_CONFIG = 'f000aa32-0451-4000-b000-000000000000'
+		instance.MAGNETOMETER_PERIOD = 'f000aa33-0451-4000-b000-000000000000'
+		instance.MAGNETOMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
 		// Only in SensorTag CC2541.
 		instance.GYROSCOPE_SERVICE = 'f000aa50-0451-4000-b000-000000000000'
@@ -206,6 +193,23 @@ console.log('addInstanceMethods ble')
 		}
 
 		/**
+		 * Determine if a BLE device is a SensorTag.
+		 * This version checks the general case using
+		 * the advertised name.
+		 * Specific versions for CC2541 and CC2650 uses
+		 * advertisement data to determine tag type.
+		 * @instance
+		 * @public
+		 */
+		instance.deviceIsSensorTag = function(device)
+		{
+			return (device != null) &&
+				(device.name != null) &&
+				(device.name.indexOf('Sensor Tag') > -1 ||
+					device.name.indexOf('SensorTag') > -1)
+		}
+
+		/**
 		 * Public. Connect to the nearest physical SensorTag device.
 		 * @instance
 		 * @public
@@ -227,7 +231,6 @@ console.log('addInstanceMethods ble')
 		 */
 		instance.connectToNearestDevice = function(scanTimeMilliseconds)
 		{
-		console.log('value of SCANNING: ' + sensortag.status.SCANNING)
 			instance.callStatusCallback(sensortag.status.SCANNING)
 			instance.disconnectDevice()
 			evothings.easyble.stopScan()
@@ -291,12 +294,14 @@ console.log('addInstanceMethods ble')
 			function deviceFound(device)
 			{
 				// Update the device if it is nearest so far
-				// and the RRSI value is valid.
-				if (sensortag.deviceIsSensorTag(device)
-					&& device.rssi != 127 // Invalid RSSI value
-					)
+				// and the RRSI value is valid. 127 is an invalid
+				// (unknown) RSSI value reported occasionally.
+				// deviceIsSensorTag is implemented in CC2541 and
+				// CC2650 object code.
+				if (device.rssi != 127 && instance.deviceIsSensorTag(device))
 				{
-console.log('deviceFound ' + device.name)
+					//console.log('deviceFound: ' + device.name)
+
 					if (device.rssi > strongestRSSI)
 					{
 						// If this is the first SensorTag found,
@@ -367,9 +372,7 @@ console.log('deviceFound ' + device.name)
 
 			function readModelNumber()
 			{
-				// TODO: Does this generate an error?
 				// Read model number.
-				// The SensorTag CC2650 has model number data available.
 				instance.device.readCharacteristic(
 					instance.MODELNUMBER_DATA,
 					gotModelNumber,
@@ -418,8 +421,6 @@ console.log('deviceFound ' + device.name)
 			{
 				// Notify that status is reading services.
 				instance.callStatusCallback(sensortag.status.READING_SERVICES)
-console.log('instance.requiredServices ' + instance.requiredServices.length)
-console.log('instance.requiredServices 1 ' + instance.requiredServices[0])
 				// Read services requested by the application.
 				instance.device.readServices(
 					instance.requiredServices,
