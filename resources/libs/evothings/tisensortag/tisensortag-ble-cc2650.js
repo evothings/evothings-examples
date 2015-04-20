@@ -31,6 +31,11 @@
 		evothings.tisensortag.ble.addInstanceMethods(instance)
 
 		/**
+		 * The device model.
+		 */
+		instance.deviceModel = 'CC2650'
+
+		/**
 		 * Determine if a BLE device is a SensorTag CC2650.
 		 * Checks for the CC2650 using the advertised name.
 		 * @instance
@@ -197,67 +202,21 @@
 
 		/**
 		 * SensorTag CC2650.
-		 * Private. Enable barometer calibration mode.
-		 * @instance
-		 * @private
-		 */
-		instance.barometerCalibrate = function(callback)
-		{
-			instance.device.writeCharacteristic(
-				instance.BAROMETER_CONFIG,
-				new Uint8Array([2]),
-				function()
-				{
-					instance.device.readCharacteristic(
-						instance.BAROMETER_CALIBRATION,
-						function(data)
-						{
-							data = new Uint8Array(data)
-							instance.barometerCalibrationData =
-							[
-								evothings.util.littleEndianToUint16(data, 0),
-								evothings.util.littleEndianToUint16(data, 2),
-								evothings.util.littleEndianToUint16(data, 4),
-								evothings.util.littleEndianToUint16(data, 6),
-								evothings.util.littleEndianToInt16(data, 8),
-								evothings.util.littleEndianToInt16(data, 10),
-								evothings.util.littleEndianToInt16(data, 12),
-								evothings.util.littleEndianToInt16(data, 14)
-							]
-							callback()
-						},
-						function(error)
-						{
-							console.log('CC2650 Barometer calibration failed: ' + error)
-						})
-				},
-				instance.errorFun)
-
-			return instance
-		}
-
-		/**
-		 * SensorTag CC2650.
 		 * Public. Turn on barometer notification.
 		 * @instance
 		 * @public
 		 */
 		instance.barometerOn = function()
 		{
-			// TODO: Barometer calibration fails because of
-			// missing characteristic.
-			//instance.barometerCalibrate(function()
-			//{
-				instance.sensorOn(
-					instance.BAROMETER_CONFIG,
-					instance.barometerConfig,
-					instance.BAROMETER_PERIOD,
-					instance.barometerInterval,
-					instance.BAROMETER_DATA,
-					instance.BAROMETER_NOTIFICATION,
-					instance.barometerFun
-				)
-			//})
+			instance.sensorOn(
+				instance.BAROMETER_CONFIG,
+				instance.barometerConfig,
+				instance.BAROMETER_PERIOD,
+				instance.barometerInterval,
+				instance.BAROMETER_DATA,
+				instance.BAROMETER_NOTIFICATION,
+				instance.barometerFun
+			)
 
 			return instance
 		}
@@ -443,11 +402,10 @@
 			// Calculate the light level.
 			var value = evothings.util.littleEndianToUint16(data, 0)
 
-			/* Extraction of luxometer value, based on sfloatExp2ToDouble from
-			 * BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
-			 * source code.
-			 * TODO: move to util.js
-			 */
+			// Extraction of luxometer value, based on sfloatExp2ToDouble
+			// from BLEUtility.m in Texas Instruments TI BLE SensorTag
+			// iOS app source code.
+			// TODO: move to util.js
 			var mantissa = value & 0x0FFF
 			var exponent = value >> 12
 

@@ -23,6 +23,7 @@
 	sensortag.status.SENSORTAG_NOT_FOUND = 'SENSORTAG_NOT_FOUND'
 	sensortag.status.CONNECTING = 'CONNECTING'
 	sensortag.status.CONNECTED = 'CONNECTED'
+	sensortag.status.READING_DEVICE_INFO = 'READING_DEVICE_INFO'
 	sensortag.status.DEVICE_INFO_AVAILABLE = 'DEVICE_INFO_AVAILABLE'
 	sensortag.status.READING_SERVICES = 'READING_SERVICES'
 	sensortag.status.SENSORTAG_ONLINE = 'SENSORTAG_ONLINE'
@@ -258,8 +259,7 @@
 							evothings.easyble.stopScan()
 							instance.callStatusCallback(
 								sensortag.status.SENSORTAG_FOUND)
-							instance.device = nearestDevice
-							instance.connectToDevice()
+							instance.connectToDevice(nearestDevice)
 						}
 					},
 					scanTimeMilliseconds)
@@ -333,12 +333,69 @@
 		}
 
 		/**
-		 * Internal.
+		 * Start scanning for physical devices.
+		 * @param foundCallback Function called when a SensorTag
+		 * is found. It has the form foundCallback(device) where
+		 * is a an object representing a BLE device object. You can
+		 * inspect the device fields to determine properties such as
+		 * RSSI, name etc. You can call deviceIsSensorTag(device) to
+		 * determine if this is a  SensorTag of the same type as the
+		 * instance object.
+		 * To connect to a SensorTag call connectToDevice(device).
 		 * @instance
-		 * @private
+		 * @public
 		 */
-		instance.connectToDevice = function()
+		instance.startScanningForDevices = function(foundCallback)
 		{
+			instance.callStatusCallback(sensortag.status.SCANNING)
+			instance.disconnectDevice()
+			evothings.easyble.stopScan()
+			evothings.easyble.reportDeviceOnce(false)
+
+			// Called when a device is found during scanning.
+			function deviceFound(device)
+			{
+				// 127 is an invalid (unknown) RSSI value reported occasionally.
+				if (device.rssi != 127)
+				{
+					foundCallback(device)
+				}
+			}
+
+			function scanError(errorCode)
+			{
+				instance.callErrorCallback(sensortag.error.SCAN_FAILED)
+			}
+
+			// Start scanning.
+			evothings.easyble.startScan(deviceFound, scanError)
+
+			return instance
+		}
+
+		/**
+		 * Stop scanning for physical devices.
+		 * @instance
+		 * @public
+		 */
+		instance.stopScanningForDevices = function()
+		{
+			instance.callStatusCallback(sensortag.status.SENSORTAG_NOT_FOUND)
+
+			evothings.easyble.stopScan()
+
+			return instance
+		}
+
+		/**
+		 * Connect to a SensorTag BLE device.
+		 * @param device A Bluetooth Low Energy device object.
+		 * @instance
+		 * @public
+		 */
+		instance.connectToDevice = function(device)
+		{
+			instance.device = device
 			instance.callStatusCallback(sensortag.status.CONNECTING)
 			instance.device.connect(
 				function(device)
@@ -350,6 +407,22 @@
 		}
 
 		/**
+		 * Public. Disconnect from the physical device.
+		 * @instance
+		 * @public
+		 */
+		instance.disconnectDevice = function()
+		{
+			if (instance.device)
+			{
+				instance.device.close()
+				instance.device = null
+			}
+
+			return instance
+		}
+
+		/**
 		 * Internal. When connected we read device info and services.
 		 * @instance
 		 * @private
@@ -358,6 +431,9 @@
 		{
 			function readDeviceInfoService()
 			{
+				// Notify that status is reading device info.
+				instance.callStatusCallback(sensortag.status.READING_DEVICE_INFO)
+
 				// Read device information service.
 				instance.device.readServices(
 					[instance.DEVICEINFO_SERVICE],
@@ -367,8 +443,19 @@
 
 			function gotDeviceInfoService(device)
 			{
-				readModelNumber()
+				// Reading of model is disabled. See comment below.
+				//readModelNumber()
+				readFirmwareVersion()
 			}
+
+			/*
+			Commented out unused code.
+
+			The value we get from the MODELNUMBER_DATA charaterictic
+			does not seem to be consistent.
+
+			We instead set model number in tisensortag-ble-cc2541.js
+			and tisensortag-ble-cc2650.js
 
 			function readModelNumber()
 			{
@@ -383,7 +470,8 @@
 			{
 				// Set model number.
 				var modelNumber = evothings.ble.fromUtf8(data)
-				if (-1 !== modelNumber.indexOf('ST2'))
+				console.log('devicemodel: ' + modelNumber)
+				if (-1 !== modelNumber.indexOf('CC2650'))
 				{
 					instance.deviceModel = 'CC2650'
 				}
@@ -395,6 +483,7 @@
 				// Next read firmware version.
 				readFirmwareVersion()
 			}
+			*/
 
 			function readFirmwareVersion()
 			{
@@ -421,6 +510,7 @@
 			{
 				// Notify that status is reading services.
 				instance.callStatusCallback(sensortag.status.READING_SERVICES)
+
 				// Read services requested by the application.
 				instance.device.readServices(
 					instance.requiredServices,
@@ -431,22 +521,6 @@
 			// Start by reading model number. Then read other
 			// data successively.
 			readDeviceInfoService()
-		}
-
-		/**
-		 * Public. Disconnect from the physical device.
-		 * @instance
-		 * @public
-		 */
-		instance.disconnectDevice = function()
-		{
-			if (instance.device)
-			{
-				instance.device.close()
-				instance.device = null
-			}
-
-			return instance
 		}
 
 		/**

@@ -7,8 +7,20 @@
 evothings.tisensortag = {}
 
 /**
+ * Constant identifying the CC2650 Bluetooth Smart SensorTag.
+ */
+evothings.tisensortag.CC2650_BLUETOOTH_SMART = 'CC2650 Bluetooth Smart'
+
+/**
+ * Constant identifying the CC2541 Bluetooth Smart SensorTag.
+ */
+evothings.tisensortag.CC2541_BLUETOOTH_SMART = 'CC2541 Bluetooth Smart'
+
+/**
  * Public. Create a SensorTag instance.
- * @param {string} type String with type of tag ('CC2541' or 'CC2650').
+ * @param {string} type String with type of tag. Use constants
+ * evothings.tisensortag.CC2650_BLUETOOTH_SMART and
+ * evothings.tisensortag.CC2541_BLUETOOTH_SMART.
  * @returns {@link evothings.tisensortag.SensorTagInstance} or null
  * if an object of the requested type cannot be created.
  * @public
@@ -16,16 +28,13 @@ evothings.tisensortag = {}
 evothings.tisensortag.createInstance = function(type)
 {
 	// TODO: Update this function as new models are added.
-	// WiFi tag might be be identified by 'CC2541 WiFi'
-	// for example. Should we also be specific about BLE?
-	// 'CC2541 Bluetooth Smart' and 'CC2650 Bluetooth Smart'?
 
 	// Get a factory object that will add in specific methods.
-	if ('CC2541 Bluetooth Smart' == type)
+	if (evothings.tisensortag.CC2541_BLUETOOTH_SMART == type)
 	{
 		var factory = evothings.tisensortag.ble.CC2541
 	}
-	else if ('CC2650 Bluetooth Smart' == type)
+	else if (evothings.tisensortag.CC2650_BLUETOOTH_SMART == type)
 	{
 		var factory = evothings.tisensortag.ble.CC2650
 	}

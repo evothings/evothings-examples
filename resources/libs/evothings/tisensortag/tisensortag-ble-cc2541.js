@@ -34,6 +34,11 @@
 		evothings.tisensortag.ble.addInstanceMethods(instance)
 
 		/**
+		 * The device model.
+		 */
+		instance.deviceModel = 'CC2541'
+
+		/**
 		 * Determine if a BLE device is a SensorTag CC2541.
 		 * Checks for the CC2541 using the advertised name.
 		 * @instance
@@ -229,22 +234,68 @@
 		}
 
 		/**
+		 * SensorTag CC2541.
 		 * Public. Turn on barometer notification.
-		 * @todo Add calibration.
 		 * @instance
 		 * @public
 		 */
 		instance.barometerOn = function()
 		{
-			instance.sensorOn(
+			// First fetch barometer calibration data,
+			// then enable the barometer.
+			instance.barometerCalibrate(function()
+			{
+				instance.sensorOn(
+					instance.BAROMETER_CONFIG,
+					instance.barometerConfig,
+					instance.BAROMETER_PERIOD,
+					instance.barometerInterval,
+					instance.BAROMETER_DATA,
+					instance.BAROMETER_NOTIFICATION,
+					instance.barometerFun
+				)
+			})
+
+			return instance
+		}
+
+		/**
+		 * SensorTag CC2650.
+		 * Private. Enable barometer calibration mode.
+		 * @instance
+		 * @private
+		 */
+		instance.barometerCalibrate = function(callback)
+		{
+			instance.device.writeCharacteristic(
 				instance.BAROMETER_CONFIG,
-				instance.barometerConfig,
-				instance.BAROMETER_PERIOD,
-				instance.barometerInterval,
-				instance.BAROMETER_DATA,
-				instance.BAROMETER_NOTIFICATION,
-				instance.barometerFun
-			)
+				new Uint8Array([2]),
+				function()
+				{
+					instance.device.readCharacteristic(
+						instance.BAROMETER_CALIBRATION,
+						function(data)
+						{
+							data = new Uint8Array(data)
+							instance.barometerCalibrationData =
+							[
+								evothings.util.littleEndianToUint16(data, 0),
+								evothings.util.littleEndianToUint16(data, 2),
+								evothings.util.littleEndianToUint16(data, 4),
+								evothings.util.littleEndianToUint16(data, 6),
+								evothings.util.littleEndianToInt16(data, 8),
+								evothings.util.littleEndianToInt16(data, 10),
+								evothings.util.littleEndianToInt16(data, 12),
+								evothings.util.littleEndianToInt16(data, 14)
+							]
+							callback()
+						},
+						function(error)
+						{
+							console.log('CC2650 Barometer calibration failed: ' + error)
+						})
+				},
+				instance.errorFun)
 
 			return instance
 		}
@@ -312,46 +363,19 @@
 		/**
 		 * SensorTag CC2541.
 		 * Calculate barometer values from raw data.
-		 * @todo Implement SensorTag CC2541 calibration.
 		 * @instance
 		 * @public
 		 */
-		instance.DOES_THIS_WORK_getBarometerValues = function(data)
+		instance.getBarometerValues = function(data)
 		{
 			var t = evothings.util.littleEndianToInt16(data, 0)
 			var p = evothings.util.littleEndianToUint16(data, 2)
-
-			// TODO: This field is missing. Is this for CC2650??
 			var c = instance.barometerCalibrationData
 
 			var S = c[2] + ((c[3] * t) / 131072) + ((c[4] * (t * t)) / 17179869184.0)
 			var O = (c[5] * 16384.0) + (((c[6] * t) / 8)) + ((c[7] * (t * t)) / 524288.0)
 			var Pa = (((S * p) + O) / 16384.0)
 			var pInterpreted = Pa / 100.0
-
-			return { pressure: pInterpreted }
-		}
-
-		/**
-		 * Calculate barometer values from raw data.
-		 * @instance
-		 * @public
-		 */
-		instance.getBarometerValues = function(data)
-		{
-			var p = evothings.util.littleEndianToUint16(data, 2)
-
-			// Extraction of pressure value, based on sfloatExp2ToDouble from
-			// BLEUtility.m in Texas Instruments TI BLE SensorTag iOS app
-			// source code.
-			// TODO: Move to util.js
-			var mantissa = p & 0x0FFF
-			var exponent = p >> 12
-
-			magnitude = Math.pow(2, exponent)
-			output = (mantissa * magnitude)
-
-			var pInterpreted = output / 10000.0
 
 			return { pressure: pInterpreted }
 		}

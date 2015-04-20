@@ -10,7 +10,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no
 		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-	<title>Texas Instruments SensorTag Sensors</title>
+	<title>TI SensorTag Sensors</title>
 
 	<style>
 		@import 'ui/css/evothings-app.css';
@@ -36,14 +36,29 @@
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
-	<h1>Texas Instruments SensorTag Sensors</h1>
+	<h1>TI SensorTag Sensors</h1>
+
+	<img src="TISensorTagCC2650.png"
+		style="float:right;width:120px;height:auto;"/>
+
+	<p>
+		This example works with the <strong>TI SensorTag CC2650</strong>. It also works with the TI SensorTag CC2541 if you modify file index.html. Activate the SensorTag and press Connect to begin.
+	</p>
 
 	<p id="upgradeNotice" class="hidden">
 		<span class="color_softred">Please upgrade the firmware of your SensorTag.</span>
 	</p>
 
+	<button onclick="connect()" class="green">
+		Connect
+	</button>
+
+	<button onclick="disconnect()" class="charcoal">
+		Disconnect
+	</button>
+
 	<p>
-		<strong>Status:</strong> <span id="StatusData">Ready to connect</span>
+		<strong>Status:</strong> <span id="StatusData">Press Connect to find the nearest SensorTag</span>
 	</p>
 
 	<h2>Keypress:</h2>
@@ -81,10 +96,12 @@
 		<span id="GyroscopeData">[Waiting for value]</span>
 	</p>
 
-	<h2>Luxometer:</h2>
-	<p>
-		<span id="LuxometerData">[Waiting for value]</span>
-	</p>
+	<div id="Luxometer">
+		<h2>Luxometer:</h2>
+		<p>
+			<span id="LuxometerData">[Waiting for value]</span>
+		</p>
+	</div>
 
 	<h2>Device info:</h2>
 	<p>
@@ -98,9 +115,13 @@
 
 	function initialiseSensorTag()
 	{
-		// Create SensorTag instance.
-		sensortag = evothings.tisensortag.createInstance('CC2650 Bluetooth Smart')
-		//sensortag = evothings.tisensortag.createInstance('CC2541 Bluetooth Smart')
+		// Create SensorTag CC2650 instance.
+		sensortag = evothings.tisensortag.createInstance(
+			evothings.tisensortag.CC2650_BLUETOOTH_SMART)
+
+		// Uncomment to use SensorTag CC2541.
+		//sensortag = evothings.tisensortag.createInstance(
+		//	evothings.tisensortag.CC2541_BLUETOOTH_SMART)
 
 		//
 		// Here sensors are set up.
@@ -123,7 +144,17 @@
 			.magnetometerCallback(magnetometerHandler, 1000)
 			.gyroscopeCallback(gyroscopeHandler, 1000)
 			.luxometerCallback(luxometerHandler, 1000)
-			.connectToNearestDevice()
+	}
+
+	function connect()
+	{
+		sensortag.connectToNearestDevice()
+	}
+
+	function disconnect()
+	{
+		sensortag.disconnectDevice()
+		resetSensorDisplayValues()
 	}
 
 	function statusHandler(status)
@@ -152,7 +183,7 @@
 			// Show which sensors are not supported by the connected SensorTag.
 			if (!sensortag.isLuxometerAvailable())
 			{
-				displayValue('LuxometerData', '[Sensor not present]')
+				document.getElementById('Luxometer').style.display = 'none'
 			}
 		}
 
@@ -165,32 +196,33 @@
 
 		if (evothings.easyble.error.DISCONNECTED == error)
 		{
-			// Clear current values.
-			var blank = '[Waiting for value]'
-			displayValue('StatusData', 'Ready to connect')
-			displayValue('DeviceModel', '?')
-			displayValue('FirmwareData', '?')
-			displayValue('KeypressData', blank)
-			displayValue('IRTemperatureData', blank)
-			displayValue('AccelerometerData', blank)
-			displayValue('HumidityData', blank)
-			displayValue('MagnetometerData', blank)
-			displayValue('BarometerData', blank)
-			displayValue('GyroscopeData', blank)
-			displayValue('LuxometerData', blank)
-
-			// Reset screen color.
-			setBackgroundColor('white')
-
-			// If disconneted attempt to connect again.
-			setTimeout(
-				function() { sensortag.connectToClosestDevice() },
-				1000)
+			resetSensorDisplayValues()
+		}
+		else
+		{
+			displayValue('StatusData', 'Error: ' + error)
 		}
 	}
 
-	// calculations implemented as based on TI wiki pages
-	// http://processors.wiki.ti.com/index.php/SensorTag_User_Guide
+	function resetSensorDisplayValues()
+	{
+		// Clear current values.
+		var blank = '[Waiting for value]'
+		displayValue('StatusData', 'Press Connect to find a SensorTag')
+		displayValue('DeviceModel', '?')
+		displayValue('FirmwareData', '?')
+		displayValue('KeypressData', blank)
+		displayValue('IRTemperatureData', blank)
+		displayValue('AccelerometerData', blank)
+		displayValue('HumidityData', blank)
+		displayValue('MagnetometerData', blank)
+		displayValue('BarometerData', blank)
+		displayValue('GyroscopeData', blank)
+		displayValue('LuxometerData', blank)
+
+		// Reset screen color.
+		setBackgroundColor('white')
+	}
 
 	function keypressHandler(data)
 	{
@@ -254,9 +286,9 @@
 		string =
 			//'raw: <span style="font-family: monospace;">0x' +
 			//	bufferToHexStr(data, dataOffset, 6) + '</span><br/>' +
-			'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>' +
-			'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>' +
-			'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'
+			'x: ' + (x >= 0 ? '+' : '') + x.toFixed(5) + 'G<br/>' +
+			'y: ' + (y >= 0 ? '+' : '') + y.toFixed(5) + 'G<br/>' +
+			'z: ' + (z >= 0 ? '+' : '') + z.toFixed(5) + 'G<br/>'
 
 		// Update the value displayed.
 		displayValue('AccelerometerData', string)
@@ -301,9 +333,9 @@
 		string =
 			//'raw: <span style="font-family: monospace;">0x' +
 			//	bufferToHexStr(data, dataOffset, 6) + '</span><br/>' +
-			'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '&micro;T <br/>' +
-			'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '&micro;T <br/>' +
-			'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '&micro;T <br/>'
+			'x: ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '&micro;T <br/>' +
+			'y: ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '&micro;T <br/>' +
+			'z: ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '&micro;T <br/>'
 
 		// Update the value displayed.
 		displayValue('MagnetometerData', string)
@@ -319,7 +351,7 @@
 		string =
 			//'raw: <span style="font-family: monospace;">0x' +
 			//	bufferToHexStr(data, 0, 4) + '</span><br/>' +
-			'Pressure = ' + pressure.toPrecision(5) + ' mbar<br/>'
+			'Pressure: ' + pressure.toPrecision(5) + ' mbar<br/>'
 
 		// Update the value displayed.
 		displayValue('BarometerData', string)
@@ -337,9 +369,9 @@
 		string =
 			//'raw: <span style="font-family: monospace;">0x' +
 			//	bufferToHexStr(data, 0, 6) + '</span><br/>' +
-			'x = ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '<br/>' +
-			'y = ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '<br/>' +
-			'z = ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '<br/>'
+			'x: ' + (x >= 0 ? '+' : '') + x.toFixed(5) + '<br/>' +
+			'y: ' + (y >= 0 ? '+' : '') + y.toFixed(5) + '<br/>' +
+			'z: ' + (z >= 0 ? '+' : '') + z.toFixed(5) + '<br/>'
 
 		// Update the value displayed.
 		displayValue('GyroscopeData', string)
@@ -353,7 +385,7 @@
 		string =
 			//'raw: <span style="font-family: monospace;">0x' +
 			//	bufferToHexStr(data, 0, 2) + '</span><br/>' +
-			'Light level = ' + value.toPrecision(5) + ' lux<br/>'
+			'Light level: ' + value.toPrecision(5) + ' lux<br/>'
 
 		// Update the value displayed.
 		displayValue('LuxometerData', string)
