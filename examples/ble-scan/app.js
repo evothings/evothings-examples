@@ -16,12 +16,6 @@ app.ui.updateTimer = null;
 app.initialize = function()
 {
 	document.addEventListener('deviceready', this.onDeviceReady, false);
-
-	if ('addEventListener' in document) {
-		document.addEventListener('DOMContentLoaded', function() {
-			FastClick.attach(document.body);
-		}, false);
-	}
 };
 
 app.onDeviceReady = function()

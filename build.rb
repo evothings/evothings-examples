@@ -71,7 +71,6 @@ def buildBLEScan
 	destPath = 'examples/ble-scan'
 	copyCommon(destPath)
 	copyJQuery(destPath)
-	copyFastClick(destPath)
 end
 
 def buildTISensorTagCC2541Demo
@@ -79,7 +78,6 @@ def buildTISensorTagCC2541Demo
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
-	copyFastClick(destPath)
 end
 
 def buildTISensorTagCC2650Demo
@@ -87,7 +85,6 @@ def buildTISensorTagCC2650Demo
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
-	copyFastClick(destPath)
 end
 
 def buildTISensorTagSensors
@@ -102,6 +99,12 @@ def buildTISensorTagAccelerometer
 	copyCommon(destPath)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
+end
+
+def buildCordovaAccelerometer
+	destPath = 'examples/cordova-accelerometer'
+	copyCommon(destPath)
+	copyJQuery(destPath)
 end
 
 def buildCordovaBasic
@@ -204,14 +207,11 @@ end
 
 def copyUI(destPath)
 	copyDir('resources/ui', destPath)
+	copyDir('resources/libs/evothings/ui', destPath + '/libs/evothings')
 end
 
 def copyJQuery(destPath)
 	copyDir('resources/libs/jquery', destPath + '/libs')
-end
-
-def copyFastClick(destPath)
-	copyDir('resources/libs/fastclick.js', destPath + '/libs')
 end
 
 def copyEvothings(destPath)
@@ -288,6 +288,7 @@ def build
 	buildArduinoScriptableTCP
 	buildBLEScan
 	buildBlunoHelloWorld
+	buildCordovaAccelerometer
 	buildCordovaBasic
 	buildEstimoteBeacons
 	buildEstimoteNearables
