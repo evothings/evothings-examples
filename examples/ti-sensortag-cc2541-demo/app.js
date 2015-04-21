@@ -50,6 +50,8 @@ app.initialize = function()
 
 		// Adjust the canvas size when the document has loaded.
 		app.respondCanvas();
+
+		FastClick.attach(document.body);
 	});
 };
 

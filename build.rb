@@ -79,6 +79,7 @@ def buildTISensorTagCC2541Demo
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+	copyFastClick(destPath)
 end
 
 def buildTISensorTagCC2650Demo
@@ -86,6 +87,7 @@ def buildTISensorTagCC2650Demo
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+	copyFastClick(destPath)
 end
 
 def buildTISensorTagSensors
