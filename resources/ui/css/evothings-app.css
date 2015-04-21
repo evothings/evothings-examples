@@ -203,7 +203,7 @@ header menu {
 	transition: visibility 0.5s;
 }
 
-header menu menuitem {
+header menu > * {
 	display: block;
 
 	padding: 0 1em 0 1em;
@@ -211,6 +211,10 @@ header menu menuitem {
 	font-family: 'Proxima Nova Bold';
 	font-size: 35%;
 	text-align: right;
+}
+header menu a {
+	color: #000;
+	text-decoration: none;
 }
 
 header h1 {
