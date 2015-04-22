@@ -54,7 +54,8 @@
 			{
 				for (var i = 0; i < scriptsLoadedCallbacks.length; ++i)
 				{
-					(scriptsLoadedCallbacks[i])();
+					var loadedCallback = scriptsLoadedCallbacks[i];
+					loadedCallback && loadedCallback();
 				}
 
 				// Clear callbacks - should we do this???
@@ -128,7 +129,7 @@
 		if (0 != Object.keys(loadedScripts).length &&
 			0 == scriptLoadingCounter)
 		{
-			callback();
+			callback && callback();
 		}
 		else
 		{
