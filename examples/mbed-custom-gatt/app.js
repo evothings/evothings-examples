@@ -1,176 +1,237 @@
-// JavaScript code for the mbed ble scan app
+/*
+Description:
 
-// Short name for EasyBLE library.
-var easyble = evothings.easyble;
+	JavaScript code for the mbed GATT example app.
 
-// Name of device to connect to
-var MyDeviceName = "ChangeMe!!"
+Credits:
 
-// LED defines (inverted)
-var ledOFF = 1;
-var ledON  = 0;
+	ARM mbed [-_-]~
 
-// Object that holds application data and functions.
+	http://mbed.org
+*/
+
+/**
+ * Object that holds application data and functions.
+ */
 var app = {};
 
-var GDevice;
+/**
+ * Name of device to connect to.
+ */
+app.deviceName = 'ChangeMe!!'
 
-/*
+/**
+ * LED defines (inverted).
+ */
+app.ledOFF = 1;
+app.ledON  = 0;
+
+/**
+ * Connected device.
+ */
+app.device = null;
+
+/**
  * Initialise the application.
-*/
+ */
 app.initialize = function()
 {
 	document.addEventListener(
 		'deviceready',
-		function() { evothings.scriptsLoaded(app.onDeviceReady()) },
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
 		false);
 };
 
-/*
- * when low level initialization complete, 
- * this function is called
-*/
+/**
+ * When low level initialization complete, this function is called.
+ */
 app.onDeviceReady = function()
 {
-	// report status
-	app.showInfo('Device Ready!');
-	
-	// call stop before you start, just in case something else is running
-	easyble.stopScan();
-	easyble.closeConnectedDevices();
-	
-	// only report devices once
-	easyble.reportDeviceOnce(true);
-	app.startScan();
-	app.showInfo('Status: Scanning...');
+	// Report status.
+	app.showInfo('Enter BLE device name and tap Connect');
+
+	// Show the saved device name, if any.
+	var name = localStorage.getItem('deviceName');
+	if (name)
+	{
+		app.deviceName = name;
+	}
+	$('#deviceName').val(app.deviceName);
 };
 
-
-/*
- * print debug info to console and application
-*/
+/**
+ * Print debug info to console and application UI.
+ */
 app.showInfo = function(info)
 {
 	document.getElementById('info').innerHTML = info;
 	console.log(info);
 };
 
-/*
- * Scan all devices and report
-*/
+/**
+ * Scan for device and connect.
+ */
 app.startScan = function()
 {
-	easyble.startScan(
+	evothings.easyble.startScan(
 		function(device)
 		{
-			// do not show un-named beacons
-			if(!device.name){
-				return 0;}
-			
-			// print "name : mac address" for every device found
-			console.log(device.name.toString() +" : "+device.address.toString().split(":").join(''))
+			// Do not show un-named devices.
+			if (!device.name) { return }
 
-			// If my device is found connect to it
-			if (device.name == MyDeviceName)
+			// Print "name : mac address" for every device found.
+			console.log(device.name.toString() + ' : ' +
+				device.address.toString().split(':').join(''))
+
+			// If my device is found connect to it.
+			if (device.name == app.deviceName)
 			{
-				app.showInfo('Status: Device found: ' + device.name + '.');
-				easyble.stopScan();
+				app.showInfo('Status: Device found: ' + device.name);
+				evothings.easyble.stopScan();
 				app.connectToDevice(device);
 			}
 		},
-		function(errorCode)
+		function(error)
 		{
-			app.showInfo('Error: startScan: ' + errorCode + '.');
-			//app.reset();
+			app.showInfo('Error: startScan: ' + error);
 		});
 };
 
-/*
+/**
  * Read services for a device.
-*/
+ */
 app.connectToDevice = function(device)
 {
-	console.log("Starting ConnectToDevice")
-	app.showInfo('Connecting...');
+	app.showInfo('Status: Connecting...');
 	device.connect(
 		function(device)
 		{
-			GDevice = device;
+			app.device = device;
 			app.showInfo('Status: Connected');
-			app.readServices(GDevice);
-			app.toggle();
+			app.readServices(app.device);
 		},
 		function(errorCode)
 		{
-			app.showInfo('Error: Connection failed: ' + errorCode + '.');
-			evothings.ble.reset();
-			// This can cause an infinite loop...
-			//app.connectToDevice(device);
+			app.showInfo('Error: Connection failed: ' + errorCode);
 		});
 };
 
-/*
+/**
  * Dump all information on named device to the console
-*/ 
+ */
 app.readServices = function(device)
 {
-	//read all services
+	// Read all services.
 	device.readServices(
 		null,
-		// Function that prints out service data.
-		function(winCode)
+		function()
 		{
-			console.log("ReadServices Sucess");
+			console.log("readServices success");
+
+			// Debug logging of all services, characteristics and descriptors
+			// reported by the BLE board.
+			app.logAllServices(app.device);
 		},
-		function(errorCode)
+		function(error)
 		{
-			console.log('Error: Failed to read services: ' + errorCode + '.');
+			console.log('Error: Failed to read services: ' + error);
 		});
 };
 
-/*
- * convert base64 to array to hex.
-*/ 
-app.getHexData = function(data)
+/**
+ * when low level initialization complete,
+ * this function is called
+ */
+app.onConnectButton = function()
 {
-	if(data){ // sanity check
-		return evothings.util.typedArrayToHexString(evothings.util.base64DecToArr(data))	
-	}
-}
+	// Get device name from text field.
+	app.deviceName = $('#deviceName').val();
 
-/*
- * Toggle the LED on / off
-*/
-app.toggle = function()
-{	
-	// console.log(GDevice.__services[2].__characteristics[0]['uuid'])
-	GDevice.readCharacteristic( 
-		"0000a001-0000-1000-8000-00805f9b34fb",
-		function(win){
-			var view = new Uint8Array(win)
-			var led = new Uint8Array(1)
-			if(view[0] == ledON){
-				$('#toggle').removeClass('green')
-				$('#toggle').addClass('red')
-				led[0] = ledOFF;
+	// Save it for next time we use the app.
+	localStorage.setItem('deviceName', app.deviceName);
+
+	// Call stop before you start, just in case something else is running.
+	evothings.easyble.stopScan();
+	evothings.easyble.closeConnectedDevices();
+
+	// Only report devices once.
+	evothings.easyble.reportDeviceOnce(true);
+
+	// Start scanning.
+	app.startScan();
+	app.showInfo('Status: Scanning...');
+};
+
+/**
+ * Toggle the LED on/off.
+ */
+app.onToggleButton = function()
+{
+	app.device.readCharacteristic(
+		'0000a001-0000-1000-8000-00805f9b34fb',
+		function(data)
+		{
+			var view = new Uint8Array(data);
+			var led = new Uint8Array(1);
+			if(view[0] == app.ledON)
+			{
+				$('#toggleButton').removeClass('green');
+				$('#toggleButton').addClass('red');
+				led[0] = app.ledOFF;
 			}
-			else if (view[0] == ledOFF){
-				$('#toggle').removeClass('red')
-				$('#toggle').addClass('green')
-				led[0] = ledON;
+			else if (view[0] == app.ledOFF)
+			{
+				$('#toggleButton').removeClass('red');
+				$('#toggleButton').addClass('green');
+				led[0] = app.ledON;
 			}
-			GDevice.writeCharacteristic(
+			app.device.writeCharacteristic(
 				'0000a002-0000-1000-8000-00805f9b34fb',
 				led,
-				function(win){console.log("led toggled successfully!")},
-				function(fail){console.log("led toggle failed: "+fail)})
-			
+				function() { console.log('LED toggled successfully!') },
+				function(error) { console.log('LED toggle failed: ' + error) });
+
 		},
-		function(fail){
-			console.log("read char fail: "+fail);
-			}
-		);
+		function(error)
+		{
+			console.log('Error: Read characteristic failed: ' + error);
+		});
 }
+
+/**
+ * Debug logging of found services, characteristics and descriptors.
+ */
+app.logAllServices = function(device)
+{
+	// Here we simply print found services, characteristics,
+	// and descriptors to the debug console in Evothings Workbench.
+
+	// Notice that the fields prefixed with "__" are arrays that
+	// contain services, characteristics and notifications found
+	// in the call to device.readServices().
+
+	// Print all services.
+	console.log('Found services:');
+	for (var serviceUUID in device.__services)
+	{
+		var service = device.__services[serviceUUID];
+		console.log('  service: ' + service.uuid);
+
+		// Print all characteristics for service.
+		for (var characteristicUUID in service.__characteristics)
+		{
+			var characteristic = service.__characteristics[characteristicUUID];
+			console.log('    characteristic: ' + characteristic.uuid);
+
+			// Print all descriptors for characteristic.
+			for (var descriptorUUID in characteristic.__descriptors)
+			{
+				var descriptor = characteristic.__descriptors[descriptorUUID];
+				console.log('      descriptor: ' + descriptor.uuid);
+			}
+		}
+	}
+};
 
 // Initialize the app.
 app.initialize();
