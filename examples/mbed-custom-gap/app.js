@@ -85,8 +85,7 @@ app.startScan = function()
 
 			// Debug logging.
 			console.log('Device Found!')
-			console.log(device.name.toString() + ' : ' +
-				device.address.toString().split(':').join(''))
+			console.log(device.name + ' : ' + device.address.toString().split(':').join(''))
 
 			// Add found device to device list.
 			// See documentation here for BLE device object fields:

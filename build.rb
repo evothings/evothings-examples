@@ -158,11 +158,18 @@ def buildEstimoteNearables
 	copyJQuery(destPath)
 end
 
-def buildNordicBLE
-	destPath = 'examples/nordic-ble'
+def buildNordic_nRF51822EK_BLE
+	destPath = 'examples/nordic-nRF51822-ek-ble'
 	copyCommon(destPath)
 	copyJQuery(destPath)
-	copyNordicBLE(destPath)
+	copyNordic_nRF51822_BLE(destPath)
+end
+
+def buildNordic_nRF51DK_BLE
+	destPath = 'examples/nordic-nRF51-dk-ble/app'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyNordic_nRF51_BLE(destPath)
 end
 
 def buildRFduinoLEDOnOff
@@ -248,9 +255,14 @@ def copyArduinoTCP(destPath)
 	copyDir('resources/libs/evothings/arduinotcp', destPath + '/libs/evothings')
 end
 
-def copyNordicBLE(destPath)
+def copyNordic_nRF51822_BLE(destPath)
 	copyEasyBLE(destPath)
-	copyDir('resources/libs/evothings/nordicble', destPath + '/libs/evothings')
+	copyDir('resources/libs/evothings/nordic-nRF51822-ble', destPath + '/libs/evothings')
+end
+
+def copyNordic_nRF51_BLE(destPath)
+	copyEasyBLE(destPath)
+	copyDir('resources/libs/evothings/nordic-nRF51-ble', destPath + '/libs/evothings')
 end
 
 def copyRFduinoBLE(destPath)
@@ -315,7 +327,8 @@ def build
 	buildIBeaconScan
 	buildLightblueBeanBasic
 	buildLightblueBeanSerial
-	buildNordicBLE
+	buildNordic_nRF51822EK_BLE
+	buildNordic_nRF51DK_BLE
 	buildRedBearLabSimpleChat
 	buildRedBearLabSimpleControl
 	buildRFduinoLEDOnOff

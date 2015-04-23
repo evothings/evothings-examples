@@ -77,16 +77,17 @@ app.startScan = function()
 		function(device)
 		{
 			// Do not show un-named devices.
+			var deviceName = device.advertisementData ?
+				device.advertisementData.kCBAdvDataLocalName : null
 			if (!device.name) { return }
 
 			// Print "name : mac address" for every device found.
-			console.log(device.name.toString() + ' : ' +
-				device.address.toString().split(':').join(''))
+			console.log(device.name + ' : ' + device.address.toString().split(':').join(''))
 
 			// If my device is found connect to it.
-			if (device.name == app.deviceName)
+			if (device.hasName(app.deviceName))
 			{
-				app.showInfo('Status: Device found: ' + device.name);
+				app.showInfo('Status: Device found: ' + deviceName);
 				evothings.easyble.stopScan();
 				app.connectToDevice(device);
 			}

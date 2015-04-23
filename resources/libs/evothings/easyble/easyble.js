@@ -448,6 +448,21 @@
 		var device = deviceObject;
 
 		/**
+		 * Match device name.
+		 * @param name The name to match.
+		 * @return true if device has the given name, false if not.
+		 * @example
+		 *   device.hasName('MyBLEDevice');
+		 */
+		device.hasName = function(name)
+		{
+			var deviceName = device.advertisementData ?
+				device.advertisementData.kCBAdvDataLocalName : null;
+			if (!deviceName) { return false }
+			return 0 == deviceName.indexOf(name);
+		};
+
+		/**
 		 * Connect to the device.
 		 * @param {evothings.easyble.connectCallback} success -
 		 * Called when connected: success(device).
