@@ -392,25 +392,31 @@ input.btn-group:focus {
 button.half,
 input.btn-group.half + label,
 input.btn-group + label.half {
-	font-size: 75%;
-	line-height: 1.0;
-	width: 47%;
+	float: left;
+	width: 50%; /* Fallback in case calc() is unsupported. */
+	width: calc(50% - 4px);
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 button.third,
 input.btn-group.third + label,
 input.btn-group + label.third {
-	font-size: 75%;
-	line-height: 1.0;
-	width: 30%;
+	float: left;
+	width: 33%; /* Fallback in case calc() is unsupported. */
+	width: calc(33% - 4px);
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 button.quarter,
 input.btn-group.quarter + label,
 input.btn-group + label.quarter {
-	font-size: 75%;
-	line-height: 1.0;
-	width: 22%;
+	float: left;
+	width: 25%; /* Fallback in case calc() is unsupported. */
+	width: calc(25% - 4px);
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 button.wide,

@@ -41,17 +41,17 @@ This is an example app that demonstrates how to communicate over BLE
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
-	<h1>Nordic Semiconductor nRF51-DK BLE</h1>
+	<h1>Nordic Semi&shy;conductor nRF51-DK BLE</h1>
 
-	<p><center><img src="nRF51-DK.jpg" style="max-height:25%;" /></center></p>
+	<img src="nRF51-DK.jpg" style="max-height:20%;" />
 
-	<p align=center id="info">- initializing software -</p>
+	<p id="info">initializing software</p>
 
-	<button id="button-connect" class="blue wide" onclick="app.connectOrDisconnect()">CONNECT</button>
+	<button id="button-connect" class="blue wide"
+		onclick="app.connectOrDisconnect()">CONNECT</button>
 
 	<br />
 
-	<center>
 	<button class="green quarter" onclick="app.ledOn(0)">LED1 ON</button>
 	<button class="green quarter" onclick="app.ledOn(1)">LED2 ON</button>
 	<button class="green quarter" onclick="app.ledOn(2)">LED3 ON</button>
@@ -61,11 +61,10 @@ This is an example app that demonstrates how to communicate over BLE
 	<button class="red quarter" onclick="app.ledOff(1)">LED2 OFF</button>
 	<button class="red quarter" onclick="app.ledOff(2)">LED3 OFF</button>
 	<button class="red quarter" onclick="app.ledOff(3)">LED4 OFF</button>
-	</center>
 
 	<button id="button-state" class="black wide">BUTTON STATE: 0</button>
 
-	<p align=center id="data">Not connected to the nRF51-DK</p>
+	<p id="data">Not connected to the nRF51-DK</p>
 
 	<script>
 	// Short name for nRF51-DK BLE library.
