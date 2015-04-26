@@ -239,6 +239,7 @@ end
 
 def copyEvothings(destPath)
 	copyDir('resources/libs/evothings/evothings.js', destPath + '/libs/evothings')
+	copyDir('resources/libs/evothings/version-1.2.0', destPath + '/libs/evothings')
 end
 
 def copyEasyBLE(destPath)
