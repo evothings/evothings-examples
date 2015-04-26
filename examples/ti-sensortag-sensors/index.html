@@ -66,9 +66,9 @@
 		<span id="KeypressData">[Waiting for value]</span>
 	</p>
 
-	<h2>IRTemperature:</h2>
+	<h2>Temperature:</h2>
 	<p>
-		<span id="IRTemperatureData">[Waiting for value]</span>
+		<span id="TemperatureData">[Waiting for value]</span>
 	</p>
 
 	<h2>Accelerometer:</h2>
@@ -137,7 +137,7 @@
 			.statusCallback(statusHandler)
 			.errorCallback(errorHandler)
 			.keypressCallback(keypressHandler)
-			.irTemperatureCallback(irTemperatureHandler, 1000)
+			.temperatureCallback(temperatureHandler, 1000)
 			.humidityCallback(humidityHandler, 1000)
 			.barometerCallback(barometerHandler, 1000)
 			.accelerometerCallback(accelerometerHandler, 1000)
@@ -212,7 +212,7 @@
 		displayValue('DeviceModel', '?')
 		displayValue('FirmwareData', '?')
 		displayValue('KeypressData', blank)
-		displayValue('IRTemperatureData', blank)
+		displayValue('TemperatureData', blank)
 		displayValue('AccelerometerData', blank)
 		displayValue('HumidityData', blank)
 		displayValue('MagnetometerData', blank)
@@ -248,10 +248,10 @@
 		displayValue('KeypressData', string)
 	}
 
-	function irTemperatureHandler(data)
+	function temperatureHandler(data)
 	{
 		// Calculate temperature from raw sensor data.
-		var values = sensortag.getIRTemperatureValues(data)
+		var values = sensortag.getTemperatureValues(data)
 		var ac = values.ambientTemperature
 		var af = sensortag.celsiusToFahrenheit(ac)
 		var tc = values.targetTemperature
@@ -268,7 +268,7 @@
 			'<br/>'
 
 		// Update the value displayed.
-		displayValue('IRTemperatureData', string)
+		displayValue('TemperatureData', string)
 	}
 
 	function accelerometerHandler(data)

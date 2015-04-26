@@ -5,7 +5,7 @@
 
 	/**
 	 * @namespace
-	 * @description JavaScript library for the TI SensorTag.
+	 * @description Internal implementation of JavaScript library for the TI SensorTag CC2650.
 	 * @alias evothings.tisensortag.ble.CC2650
 	 */
 	var sensortag = {}
@@ -13,16 +13,16 @@
 	evothings.tisensortag.ble.CC2650 = sensortag
 
 	/**
-	 * Public. Create a SensorTag CC2650 instance.
-	 * @returns {@link evothings.tisensortag.SensorTagInstance}
-	 * @public
+	 * Create a SensorTag CC2650 instance.
+	 * @returns {@link evothings.tisensortag.SensorTagInstanceBLE_CC2650}
+	 * @private
 	 */
 	sensortag.addInstanceMethods = function(anInstance)
 	{
 		/**
 		 * @namespace
-		 * @alias evothings.tisensortag.SensorTagInstance
-		 * @description Internal. Variable holding the sensor tag instance object.
+		 * @alias evothings.tisensortag.SensorTagInstanceBLE_CC2650
+		 * @description SensorTag CC2650 instance object.
 		 * @public
 		 */
 		var instance = anInstance
@@ -32,6 +32,8 @@
 
 		/**
 		 * The device model.
+		 * @instance
+		 * @public
 		 */
 		instance.deviceModel = 'CC2650'
 
@@ -192,7 +194,7 @@
 			//sensortag.logServices(instance.device)
 			//console.log('---------------------- END -----------------------')
 
-			instance.irTemperatureOn()
+			instance.temperatureOn()
 			instance.humidityOn()
 			instance.barometerOn()
 			instance.luxometerOn()
@@ -258,6 +260,8 @@
 		/**
 		 * SensorTag CC2650.
 		 * Public. Turn on luxometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.luxometerOn = function()
 		{
@@ -277,6 +281,8 @@
 		/**
 		 * SensorTag CC2650.
 		 * Public. Turn off luxometer notification.
+		 * @instance
+		 * @public
 		 */
 		instance.luxometerOff = function()
 		{
@@ -286,15 +292,14 @@
 		}
 
 		/**
-		 * TODO: Is this the code for CC2650? Calibration value is not used here.
 		 * SensorTag CC2650.
-		 * Calculate IR temperature values from raw data.
+		 * Calculate temperature values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: ambientTemperature, targetTemperature.
 		 * @instance
 		 * @public
 		 */
-		instance.getIRTemperatureValues = function(data)
+		instance.getTemperatureValues = function(data)
 		{
 			// Calculate ambient temperature (Celsius).
 			var ac = evothings.util.littleEndianToUint16(data, 2) / 128.0
@@ -312,6 +317,8 @@
 		 * Calculate accelerometer values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: x, y, z.
+		 * @instance
+		 * @public
 		 */
 		instance.getAccelerometerValues = function(data)
 		{
@@ -419,12 +426,12 @@
 		}
 
 		/**
-		 * Public. Checks if the irTemperature sensor is available.
+		 * Public. Checks if the Temperature sensor is available.
 		 * @preturn true if available, false if not.
 		 * @instance
 		 * @public
 		 */
-		instance.isIrTemperatureAvailable = function()
+		instance.isTemperatureAvailable = function()
 		{
 			return true
 		}

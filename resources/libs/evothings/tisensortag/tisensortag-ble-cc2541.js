@@ -8,7 +8,7 @@
 
 	/**
 	 * @namespace
-	 * @description JavaScript library for the TI SensorTag.
+	 * @description Internal implementation of JavaScript library for the TI SensorTag CC2541.
 	 * @alias evothings.tisensortag.ble.CC2541
 	 */
 	var sensortag = {}
@@ -16,16 +16,16 @@
 	evothings.tisensortag.ble.CC2541 = sensortag
 
 	/**
-	 * Public. Create a SensorTag CC2541 instance.
+	 * Create a SensorTag CC2541 instance.
 	 * @returns {@link evothings.tisensortag.SensorTagInstance}
-	 * @public
+	 * @private
 	 */
 	sensortag.addInstanceMethods = function(anInstance)
 	{
 		/**
 		 * @namespace
-		 * @alias evothings.tisensortag.SensorTagInstance
-		 * @description Internal. Variable holding the sensor tag instance object.
+		 * @alias evothings.tisensortag.SensorTagInstanceBLE_CC2541
+		 * @description SensorTag CC2541 instance object.
 		 * @public
 		 */
 		var instance = anInstance
@@ -35,6 +35,8 @@
 
 		/**
 		 * The device model.
+		 * @instance
+		 * @public
 		 */
 		instance.deviceModel = 'CC2541'
 
@@ -125,7 +127,7 @@
 			//sensortag.logServices(instance.device)
 			//console.log('---------------------- END -----------------------')
 
-			instance.irTemperatureOn()
+			instance.temperatureOn()
 			instance.humidityOn()
 			instance.barometerOn()
 			instance.accelerometerOn()
@@ -190,7 +192,7 @@
 		}
 
 		/**
-		 * Public. Turn off gyroscope notification (SensorTag 1).
+		 * Public. Turn off gyroscope notification (SensorTag CC2541).
 		 * @instance
 		 * @public
 		 */
@@ -260,7 +262,7 @@
 		}
 
 		/**
-		 * SensorTag CC2650.
+		 * SensorTag CC2541.
 		 * Private. Enable barometer calibration mode.
 		 * @instance
 		 * @private
@@ -292,7 +294,7 @@
 						},
 						function(error)
 						{
-							console.log('CC2650 Barometer calibration failed: ' + error)
+							console.log('CC2541 Barometer calibration failed: ' + error)
 						})
 				},
 				instance.errorFun)
@@ -381,13 +383,13 @@
 		}
 
 		/**
-		 * Calculate IR temperature values from raw data.
+		 * Calculate temperature values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: ambientTemperature, targetTemperature.
 		 * @instance
 		 * @public
 		 */
-		instance.getIRTemperatureValues = function(data)
+		instance.getTemperatureValues = function(data)
 		{
 			// Calculate ambient temperature (Celsius).
 			var ac = evothings.util.littleEndianToUint16(data, 2) / 128.0
@@ -414,12 +416,12 @@
 		}
 
 		/**
-		 * Public. Checks if the irTemperature sensor is available.
+		 * Public. Checks if the Temperature sensor is available.
 		 * @preturn true if available, false if not.
 		 * @instance
 		 * @public
 		 */
-		instance.isIrTemperatureAvailable = function()
+		instance.isTemperatureAvailable = function()
 		{
 			return true
 		}

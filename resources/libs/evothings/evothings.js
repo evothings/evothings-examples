@@ -4,8 +4,11 @@
 	 * @namespace
 	 * @description <p>Functions for loading scripts asynchronously,
 	 * detecting platform, and other common application functionality.</p>
+	 * @alias evothings
+	 * @public
 	 */
-	evothings = window.evothings || {};
+	var evothings = window.evothings || {};
+	window.evothings = evothings;
 
 	/* ------------------ Script loading ------------------ */
 
@@ -140,7 +143,7 @@
 	/* ------------------ Debugging ------------------ */
 
 	/**
-	 * Print a JavaScript object (dictionary).
+	 * Print a JavaScript object (dictionary). For debugging.
 	 *
 	 * @param {Object} obj - Object to print.
 	 * @param {function} printFun - print function (optional - defaults to

@@ -3,16 +3,19 @@
 /**
  * @namespace
  * @description Top-level object that holds generic functions and sub-modules.
+ * @public
  */
 evothings.tisensortag = {}
 
 /**
  * Constant identifying the CC2650 Bluetooth Smart SensorTag.
+ * @public
  */
 evothings.tisensortag.CC2650_BLUETOOTH_SMART = 'CC2650 Bluetooth Smart'
 
 /**
  * Constant identifying the CC2541 Bluetooth Smart SensorTag.
+ * @public
  */
 evothings.tisensortag.CC2541_BLUETOOTH_SMART = 'CC2541 Bluetooth Smart'
 
@@ -60,7 +63,7 @@ evothings.tisensortag.createGenericInstance = function()
 	/**
 	 * @namespace
 	 * @alias evothings.tisensortag.SensorTagInstance
-	 * @description Variable holding the SensorTag instance object.
+	 * @description Abstract SensorTag instance object that defines a common interface.
 	 * @public
 	 */
 	var instance = {}
@@ -92,7 +95,7 @@ evothings.tisensortag.createGenericInstance = function()
 	 * @instance
 	 * @public
 	 */
-	instance.irTemperatureCallback = function(fun, interval)
+	instance.temperatureCallback = function(fun, interval)
 	{
 		return instance
 	}
@@ -252,12 +255,12 @@ evothings.tisensortag.createGenericInstance = function()
 	}
 
 	/**
-	 * Public. Checks if the irTemperature sensor is available.
+	 * Public. Checks if the Temperature sensor is available.
 	 * @preturn true if available, false if not.
 	 * @instance
 	 * @public
 	 */
-	instance.isIrTemperatureAvailable = function()
+	instance.isTemperatureAvailable = function()
 	{
 		return instance
 	}
@@ -352,21 +355,21 @@ evothings.tisensortag.createGenericInstance = function()
 	}
 
 	/**
-	 * Public. Turn on IR temperature notification.
+	 * Public. Turn on temperature notification.
 	 * @instance
 	 * @public
 	 */
-	instance.irTemperatureOn = function()
+	instance.temperatureOn = function()
 	{
 		return instance
 	}
 
 	/**
-	 * Public. Turn off IR temperature notification.
+	 * Public. Turn off temperature notification.
 	 * @instance
 	 * @public
 	 */
-	instance.irTemperatureOff = function()
+	instance.temperatureOff = function()
 	{
 		return instance
 	}

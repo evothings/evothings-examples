@@ -6,6 +6,7 @@
 	 * @namespace
 	 * @description JavaScript library for the TI SensorTag.
 	 * @alias evothings.tisensortag.ble
+	 * @public
 	 */
 	var sensortag = {}
 
@@ -16,17 +17,68 @@
 	 * @namespace
 	 * @description Status constants.
 	 * @alias evothings.tisensortag.ble.status
+	 * @public
 	 */
-	sensortag.status = {}
-	sensortag.status.SCANNING = 'SCANNING'
-	sensortag.status.SENSORTAG_FOUND = 'SENSORTAG_FOUND'
-	sensortag.status.SENSORTAG_NOT_FOUND = 'SENSORTAG_NOT_FOUND'
-	sensortag.status.CONNECTING = 'CONNECTING'
-	sensortag.status.CONNECTED = 'CONNECTED'
-	sensortag.status.READING_DEVICE_INFO = 'READING_DEVICE_INFO'
-	sensortag.status.DEVICE_INFO_AVAILABLE = 'DEVICE_INFO_AVAILABLE'
-	sensortag.status.READING_SERVICES = 'READING_SERVICES'
-	sensortag.status.SENSORTAG_ONLINE = 'SENSORTAG_ONLINE'
+	var status = {}
+
+	// Add to namespace. This trick is needed for JSDoc,
+	// cannot use sensortag.status below, docs do not
+	// generate properly in this case.
+	sensortag.status = status
+
+	/**
+	 * @description Scanning is ongoing.
+	 * @public
+	 */
+	status.SCANNING = 'SCANNING'
+
+	/**
+	 * @description Found SensorTag device.
+	 * @public
+	 */
+	status.SENSORTAG_FOUND = 'SENSORTAG_FOUND'
+
+	/**
+	 * @description Scanning timed out, no device found.
+	 * @public
+	 */
+	status.SENSORTAG_NOT_FOUND = 'SENSORTAG_NOT_FOUND'
+
+	/**
+	 * @description Connecting to physical device.
+	 * @public
+	 */
+	status.CONNECTING = 'CONNECTING'
+
+	/**
+	 * @description Connected to physical device.
+	 * @public
+	 */
+	status.CONNECTED = 'CONNECTED'
+
+	/**
+	 * @description Reading info about the device.
+	 * @public
+	 */
+	status.READING_DEVICE_INFO = 'READING_DEVICE_INFO'
+
+	/**
+	 * @description Info about the device is available.
+	 * @public
+	 */
+	status.DEVICE_INFO_AVAILABLE = 'DEVICE_INFO_AVAILABLE'
+
+	/**
+	 * @description Reading services of the device.
+	 * @public
+	 */
+	status.READING_SERVICES = 'READING_SERVICES'
+
+	/**
+	 * @description SensorTag device is connected and sensors are avaliable.
+	 * @public
+	 */
+	status.SENSORTAG_ONLINE = 'SENSORTAG_ONLINE'
 
 	/**
 	 * @namespace
@@ -34,21 +86,32 @@
 	 * error strings reported by the cordova-ble plugin
 	 * and the easyble.js library.
 	 * @alias evothings.tisensortag.ble.error
+	 * @public
 	 */
-	sensortag.error = {}
-	sensortag.error.SCAN_FAILED = 'SCAN_FAILED'
+	var error = {}
+
+	// Add to namespace. This trick is needed for JSDoc,
+	// cannot use sensortag.error below, docs do not
+	// generate properly in this case.
+	sensortag.error = error
+
+	/**
+	 * @description Scan failed.
+	 * @public
+	 */
+	error.SCAN_FAILED = 'SCAN_FAILED'
 
 	/**
 	 * Public. Create a SensorTag instance.
-	 * @returns {@link evothings.tisensortag.SensorTagInstance}
-	 * @public
+	 * @returns {@link evothings.tisensortag.SensorTagInstanceBLE}
+	 * @private
 	 */
 	sensortag.addInstanceMethods = function(anInstance)
 	{
 		/**
 		 * @namespace
-		 * @alias evothings.tisensortag.SensorTagInstance
-		 * @description Variable holding the sensor tag instance object.
+		 * @alias evothings.tisensortag.SensorTagInstanceBLE
+		 * @description Abstract SensorTag instance object.
 		 * This object specifies the interface common to Bluetooth Smart
 		 * SensorTags.
 		 * @public
@@ -61,12 +124,12 @@
 		instance.FIRMWARE_DATA = '00002a26-0000-1000-8000-00805f9b34fb'
 		instance.MODELNUMBER_DATA = '00002a24-0000-1000-8000-00805f9b34fb'
 
-		instance.IRTEMPERATURE_SERVICE = 'f000aa00-0451-4000-b000-000000000000'
-		instance.IRTEMPERATURE_DATA = 'f000aa01-0451-4000-b000-000000000000'
-		instance.IRTEMPERATURE_CONFIG = 'f000aa02-0451-4000-b000-000000000000'
+		instance.TEMPERATURE_SERVICE = 'f000aa00-0451-4000-b000-000000000000'
+		instance.TEMPERATURE_DATA = 'f000aa01-0451-4000-b000-000000000000'
+		instance.TEMPERATURE_CONFIG = 'f000aa02-0451-4000-b000-000000000000'
 		// Missing in HW rev. 1.2 (FW rev. 1.5)
-		instance.IRTEMPERATURE_PERIOD = 'f000aa03-0451-4000-b000-000000000000'
-		instance.IRTEMPERATURE_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.TEMPERATURE_PERIOD = 'f000aa03-0451-4000-b000-000000000000'
+		instance.TEMPERATURE_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
 
 		instance.HUMIDITY_SERVICE = 'f000aa20-0451-4000-b000-000000000000'
 		instance.HUMIDITY_DATA = 'f000aa21-0451-4000-b000-000000000000'
@@ -129,15 +192,18 @@
 
 		/**
 		 * Both CC2541 and CC2650.
-		 * Implementation method.
-		 * @private
+		 * Public. Set the humidity temperature callback.
+		 * @param fun - success callback called repeatedly: fun(data)
+		 * @param interval - humidity rate in milliseconds.
+		 * @instance
+		 * @public
 		 */
-		instance.irTemperatureCallback = function(fun, interval)
+		instance.temperatureCallback = function(fun, interval)
 		{
-			instance.irTemperatureFun = fun
-			instance.irTemperatureConfig = [1] // on
-			instance.irTemperatureInterval = Math.max(300, interval)
-			instance.requiredServices.push(instance.IRTEMPERATURE_SERVICE)
+			instance.temperatureFun = fun
+			instance.temperatureConfig = [1] // on
+			instance.temperatureInterval = Math.max(300, interval)
+			instance.requiredServices.push(instance.TEMPERATURE_SERVICE)
 
 			return instance
 		}
@@ -547,16 +613,16 @@
 		 * @instance
 		 * @public
 		 */
-		instance.irTemperatureOn = function()
+		instance.temperatureOn = function()
 		{
 			instance.sensorOn(
-				instance.IRTEMPERATURE_CONFIG,
-				instance.irTemperatureConfig,
-				instance.IRTEMPERATURE_PERIOD,
-				instance.irTemperatureInterval,
-				instance.IRTEMPERATURE_DATA,
-				instance.IRTEMPERATURE_NOTIFICATION,
-				instance.irTemperatureFun
+				instance.TEMPERATURE_CONFIG,
+				instance.temperatureConfig,
+				instance.TEMPERATURE_PERIOD,
+				instance.temperatureInterval,
+				instance.TEMPERATURE_DATA,
+				instance.TEMPERATURE_NOTIFICATION,
+				instance.temperatureFun
 			)
 
 			return instance
@@ -568,9 +634,9 @@
 		 * @instance
 		 * @public
 		 */
-		instance.irTemperatureOff = function()
+		instance.temperatureOff = function()
 		{
-			instance.sensorOff(instance.IRTEMPERATURE_DATA)
+			instance.sensorOff(instance.TEMPERATURE_DATA)
 
 			return instance
 		}
