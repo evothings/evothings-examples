@@ -1,3 +1,3 @@
-The mbed for this example is found at:
+The mbed code for this example is found at:
 
 	http://developer.mbed.org/teams/Bluetooth-Low-Energy/code/BLE_GATT_Example/
