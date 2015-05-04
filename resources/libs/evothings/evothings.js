@@ -16,6 +16,16 @@
 	var loadedScripts = {};
 	var scriptsLoadedCallbacks = [];
 
+	/* Make sure to catch any DOMContentLoaded events occurring before
+	 * asynchronous loading of scripts. Those scripts, like ui.js, should check
+	 * this variable before listening for the event. */
+	evothings.gotDOMContentLoaded = false
+
+	window.addEventListener('DOMContentLoaded', function(e)
+	{
+		evothings.gotDOMContentLoaded = true
+	})
+
 	/**
 	 * Load a script.
 	 * @param {string} url - URL or path to the script. Relative paths are

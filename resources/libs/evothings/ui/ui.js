@@ -20,11 +20,22 @@ FastClick is used to make UI responsive.
 
 	function applyUIUpdatesWhenPageHasLoaded()
 	{
-		window.addEventListener('DOMContentLoaded', function(e)
-		{
+		var applyUIUpdates = function() {
 			applyiOS7LayoutHack();
 			FastClick.attach(document.body);
-		});
+		}
+
+		/* If the DOMContentLoaded event was already fired, apply the UI updates
+		 * now, otherwise wait for the event.
+		 */
+		if (evothings.gotDOMContentLoaded)
+		{
+			applyUIUpdates()
+		}
+		else
+		{
+			window.addEventListener('DOMContentLoaded', applyUIUpdates)
+		}
 	}
 
 	// Load FastClick, when loaded apply UI modifications.
