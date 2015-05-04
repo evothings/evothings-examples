@@ -155,6 +155,7 @@ header button#menu-button {
 	position: absolute;
 	right: 0;
 
+	width: 3em;
 	height: 100%;
 	max-height: 100%;
 	margin: 0;
