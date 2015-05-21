@@ -219,6 +219,12 @@ def buildMediaTekLinkIt
 	copyJQuery(destPath)
 end
 
+def buildMediaTekLinkItConnect
+	destPath = 'examples/mediatek-linkit-connect/app'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -338,6 +344,7 @@ def build
 	buildTISensorTagSensors
 	buildTISensorTagAccelerometer
 	buildMediaTekLinkIt
+	buildMediaTekLinkItConnect
 end
 
 build
