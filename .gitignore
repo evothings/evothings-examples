@@ -5,4 +5,5 @@ examples/**/libs
 examples/**/arduinowifi
 examples/**/arduinoethernet
 examples/**/where-is-the-arduino-code.txt
+experiments/**/libs
 /resources/libs/evothings/out

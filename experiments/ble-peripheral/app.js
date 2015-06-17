@@ -18,11 +18,10 @@ app.initialize = function()
 
 app.onDeviceReady = function()
 {
-	app.startServer();
-	app.startAdvert();
+	app.startServer(app.startAdvert);
 }
 
-app.startServer = function()
+app.startServer = function(win)
 {
 	var settings = {
 		onConnectionStateChange:function(deviceHandle, connected) {
@@ -42,14 +41,16 @@ app.startServer = function()
 						properties:2|8|16,
 						writeType:2,
 						onReadRequest:function(deviceHandle, requestId) {
-							evothings.ble.sendResponse(deviceHandle, requestId, new Uint8Array([6,7,8,9,0]), function() {
+							var data = new Uint8Array([6,7,8,9,0]);
+							console.log("cr1 "+requestId+": "+evothings.util.typedArrayToHexString(data));
+							evothings.ble.sendResponse(deviceHandle, requestId, data, function() {
 								console.log("cr1 success");
 							}, function(err) {
 								console.log("cr1 fail: "+err);
 							});
 						},
 						onWriteRequest:function(deviceHandle, requestId, data) {
-							console.log("cw1:"+evothings.util.typedArrayToHexString(data));
+							console.log("cw1 "+requestId+":"+evothings.util.typedArrayToHexString(data));
 							evothings.ble.sendResponse(deviceHandle, requestId, null, function() {
 								console.log("cw1 success");
 							}, function(err) {
@@ -64,6 +65,7 @@ app.startServer = function()
 									uuid:'00002902-0000-1000-8000-00805f9b34fb',
 									permissions:1|16,
 									onReadRequest:function(deviceHandle, requestId) {
+										console.log("dr1 "+requestId);
 										evothings.ble.sendResponse(deviceHandle, requestId, value, function() {
 											console.log("dr1 success");
 										}, function(err) {
@@ -71,12 +73,60 @@ app.startServer = function()
 										});
 									},
 									onWriteRequest:function(deviceHandle, requestId, data) {
-										console.log("dw1:"+evothings.util.typedArrayToHexString(data));
+										console.log("dw1 "+requestId+": "+evothings.util.typedArrayToHexString(data));
 										value = data;
 										evothings.ble.sendResponse(deviceHandle, requestId, null, function() {
 											console.log("dw1 success");
 										}, function(err) {
 											console.log("dw1 fail: "+err);
+										});
+									},
+								}
+							})(),
+							// characteristic description.
+							{
+								uuid:'00002901-0000-1000-8000-00805f9b34fb',
+								permissions:1,
+								onReadRequest:function(deviceHandle, requestId) {
+									var data = evothings.ble.toUtf8("customThing");
+									console.log("dr3 "+requestId+": "+evothings.util.typedArrayToHexString(data));
+									evothings.ble.sendResponse(deviceHandle, requestId, data, function() {
+										console.log("dr3 success");
+									}, function(err) {
+										console.log("dr3 fail: "+err);
+									});
+								},
+								// no write permission here. discard any incoming writes.
+								onWriteRequest:function(deviceHandle, requestId, data) {
+									console.log("dw3 "+requestId+":"+evothings.util.typedArrayToHexString(data));
+									evothings.ble.sendResponse(deviceHandle, requestId, null, function() {
+										console.log("dw3 success");
+									}, function(err) {
+										console.log("dw3 fail: "+err);
+									});
+								},
+							},
+							// random uuid.
+							(function() {
+								var value = new Uint8Array([1,2,3,4]);
+								return {
+									uuid:'00010001-9dc0-11d1-b245-5ffdce74fad2',
+									permissions:1|16,
+									onReadRequest:function(deviceHandle, requestId) {
+										console.log("dr2 "+requestId);
+										evothings.ble.sendResponse(deviceHandle, requestId, value, function() {
+											console.log("dr2 success");
+										}, function(err) {
+											console.log("dr2 fail: "+err);
+										});
+									},
+									onWriteRequest:function(deviceHandle, requestId, data) {
+										console.log("dw2 "+requestId+":"+evothings.util.typedArrayToHexString(data));
+										value = data;
+										evothings.ble.sendResponse(deviceHandle, requestId, null, function() {
+											console.log("dw2 success");
+										}, function(err) {
+											console.log("dw2 fail: "+err);
 										});
 									},
 								}
@@ -94,6 +144,7 @@ app.startServer = function()
 		console.log(err+", as expected");
 		evothings.ble.startGattServer(settings, function() {
 			console.log("GATT server started successfully.");
+			win();
 		}, function(err) {
 			console.log("GATT server start error: "+err);
 		});

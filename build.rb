@@ -219,6 +219,11 @@ def buildMediaTekLinkIt
 	copyJQuery(destPath)
 end
 
+def buildBlePeripheral
+	destPath = 'experiments/ble-peripheral'
+	copyUtil(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -310,6 +315,7 @@ end
 ###### Script entry point ######
 
 def build
+	buildBlePeripheral
 	buildMbedGAP
 	buildMbedGATT
 	buildArduinoBLE
