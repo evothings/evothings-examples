@@ -306,7 +306,9 @@ input {
 	font-size: 63%;
 }
 
-input[type="text"],input[type="url"] {
+input[type="text"],input[type="url"],input[type="tel"],input[type="password"],
+input[type="email"],input[type="search"],input[type="number"],
+input[type="date"],input[type="month"],input[type="week"],input[type="time"] {
 	width: 50%;
 
 	padding: 7px 14px 7px 14px;
