@@ -55,6 +55,9 @@ Example: A5 -> 42
 #include <SPI.h>
 #include <WiFi.h>
 
+// Remove this line once you've entered WiFi SSID and password below.
+#error "WiFi SSID and password required!"
+
 // Your network SSID (network name).
 // TODO: Enter the name of your wifi network here.
 char ssid[] = "wifi name";
