@@ -1,0 +1,16 @@
+In this project the source code for the MediaTek LinkIt Connect 7681 is
+provided in the form of a patch. In order to apply the patch follow
+these steps:
+
+1. Download the MediaTek Connect SDK version 1.71.
+2. Unzip the SDK and browse to the src/ folder in the unzipped project.
+3. Copy the Evothings-MediaTek-Connect-7681-TCP-Led.patch to the path
+   and execute the following command:
+
+   patch -p1 < Evothings-MediaTek-Connect-7681-TCP-Led.patch
+
+4. If the patch has been successfully applied you should now be able to
+   build the project according to instructions found in the developer´s
+   guide.
+
+* http://labs.mediatek.com
