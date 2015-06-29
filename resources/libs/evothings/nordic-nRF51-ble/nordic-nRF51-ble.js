@@ -109,6 +109,17 @@ evothings.nRF51_ble = {};
 		{
 			console.log('setNotification');
 
+			// Enable notification support (required on Android)
+			device.writeDescriptor(
+				'6e524635-312d-444b-2062-7574746f6e20',
+				'00002902-0000-1000-8000-00805f9b34fb',
+				new Uint8Array([1,0]),
+				function() {
+					console.log('writeDescriptor success');
+				}, function(errorCode) {
+					console.log('writeDescriptor error: ' + errorCode);
+				});
+
 			device.enableNotification(
 				'6e524635-312d-444b-2062-7574746f6e20',
 				callback,
