@@ -184,65 +184,62 @@ app.connect = function(address, name)
 app.getServices = function(deviceHandle)
 {
 	ble.readAllServiceData(deviceHandle, function(services) {
-		var p = $("#serviceList");
-		p.empty();
-		for (var si in services)
+		$("#serviceList").empty();
+		for (var serviceIndex in services)
 		{
-			var s = services[si];
-			console.log('s'+s.handle+': '+s.type+' '+s.uuid+'. '+s.characteristics.length+' chars.');
+			var service = services[serviceIndex];
+			console.log('s'+service.handle+': '+service.type+' '+service.uuid+'. '+service.characteristics.length+' chars.');
 
-			var $c = $("#serviceList").
+			var $serviceList = $("#serviceList").
 				addCollapsible({template: $('#servicesListTemplate'),
-					title: 's' + s.handle + ': ' + s.type + ' ' +
-					s.uuid + '. ' + s.characteristics.length + ' chars.'});
+					title: 's' + service.handle + ': ' + service.type + ' ' +
+					service.uuid + '. ' + service.characteristics.length + ' chars.'});
 
-			var $cs;
-			if (s.characteristics.length > 0)
-				$cs = $c.addCollapsibleSet();
+			var $characteristicList;
+			if (service.characteristics.length > 0)
+				$characteristicList = $serviceList.addCollapsibleSet();
 
-			for (var ci in s.characteristics)
+			for (var characteristicIndex in service.characteristics)
 			{
-				var c = s.characteristics[ci];
-				console.log(' c'+c.handle+': '+c.uuid+'. '+c.descriptors.length+' desc.');
-				console.log(formatFlags('  properties', c.properties, ble.property));
-				console.log(formatFlags('  writeType', c.writeType, ble.writeType));
+				var characteristic = service.characteristics[characteristicIndex];
+				console.log(' c'+characteristic.handle+': '+characteristic.uuid+'. '+characteristic.descriptors.length+' desc.');
+				console.log(formatFlags('  properties', characteristic.properties, ble.property));
+				console.log(formatFlags('  writeType', characteristic.writeType, ble.writeType));
 
-				var $c = $cs.addCollapsible({title: 'c' + c.handle + ': ' +
-					c.uuid + '. ' + c.descriptors.length + ' desc.'});
+				var $characteristic = $characteristicList.addCollapsible({title: 'c' + characteristic.handle + ': ' +
+					characteristic.uuid + '. ' + characteristic.descriptors.length + ' desc.'});
 
-				var $lv;
-				if (c.descriptors.length > 0)
-					$lv = $c.addListView();
+				var $descriptorList;
+				if (characteristic.descriptors.length > 0)
+					$descriptorList = $characteristic.addListView();
 
-				for (var di in c.descriptors)
+				for (var descriptorIndex in characteristic.descriptors)
 				{
-					var d = c.descriptors[di];
-					console.log('  d'+d.handle+': '+d.uuid);
+					var descriptor = characteristic.descriptors[descriptorIndex];
+					console.log('  d'+descriptor.handle+': '+descriptor.uuid);
 
-					var $lvi = $lv.addListViewItem({text: 'd'+d.handle+': '+d.uuid});
+					var $descriptor = $descriptorList.addListViewItem({text: 'd'+descriptor.handle+': '+descriptor.uuid});
 
 					// This be the human-readable name of the characteristic.
-					if (d.uuid == "00002901-0000-1000-8000-00805f9b34fb")
+					if (descriptor.uuid == "00002901-0000-1000-8000-00805f9b34fb")
 					{
-						var h = d.handle;
-						console.log("rd "+h);
-						// need a function here for the closure, so that variables h, ch, dli retain proper values.
+						console.log("rd "+descriptor.handle);
+						// need a function here for the closure, so that variables retain proper values.
 						// without it, all strings would be added to the last descriptor.
-						function f(h, c, lvi)
+						(function(descriptorHandle, characteristicElement, lvi)
 						{
-							ble.readDescriptor(deviceHandle, h, function(data)
+							ble.readDescriptor(deviceHandle, descriptorHandle, function(data)
 							{
-								var s = ble.fromUtf8(data);
-								console.log("rdw "+h+": "+s);
-								c.collapsibleTitleElm().prepend(s + ' ');
+								var readableData = ble.fromUtf8(data);
+								console.log("rdw "+descriptorHandle+": "+readableData);
+								characteristicElement.collapsibleTitleElm().prepend(readableData + ' ');
 							},
 							function(errorCode)
 							{
-								console.log("rdf "+h+": "+errorCode);
+								console.log("rdf "+descriptorHandle+": "+errorCode);
 								lvi.prepend('rdf ' + errorCode);
 							});
-						}
-						f(h, $c, $lvi);
+						})(descriptor.handle, $characteristic, $descriptor);
 					}
 				}
 			}
