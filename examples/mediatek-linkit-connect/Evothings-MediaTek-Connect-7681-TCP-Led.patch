@@ -1,0 +1,197 @@
+diff '--exclude=*.bin' -rupN /home/andreas/Playground/LinkIt171/Src/cust/iot_custom.c ./cust/iot_custom.c
+--- /home/andreas/Playground/LinkIt171/Src/cust/iot_custom.c	2015-01-08 22:14:28.000000000 +0100
++++ ./cust/iot_custom.c	2015-05-20 15:44:23.355838992 +0200
+@@ -182,6 +182,7 @@ void iot_cust_preinit(void)
+ void iot_cust_init(void)
+ {
+     /* run customer initial function */
++    uip_listen(HTONS(4538));
+ }
+ 
+ 
+@@ -347,8 +348,8 @@ void IoT_Cust_SM_Smnt(void)
+ 
+     /*Step1:  create parameter to store the smnt information */
+     /* or it is better to create a structure*/
+-    uint8  Ssid[MAX_LEN_OF_SSID+1] = "belkin";
+-    uint8  Passphase[CIPHER_TEXT_LEN] ="12345678" ;
++    uint8  Ssid[MAX_LEN_OF_SSID+1] = "";
++    uint8  Passphase[CIPHER_TEXT_LEN] = "" ;
+     uint8  PMK[CIPHER_TEXT_LEN];            //= "PMK1234";
+ 
+     /* Must initialize Passphase and PMK  if no reference value be set on the above*/
+diff '--exclude=*.bin' -rupN /home/andreas/Playground/LinkIt171/Src/cust/tcpip/iot_tcp_app.c ./cust/tcpip/iot_tcp_app.c
+--- /home/andreas/Playground/LinkIt171/Src/cust/tcpip/iot_tcp_app.c	2015-01-08 22:14:28.000000000 +0100
++++ ./cust/tcpip/iot_tcp_app.c	2015-05-20 10:26:59.644675196 +0200
+@@ -52,6 +52,150 @@ iot_tcp_app_init(void)
+ 
+ }
+ 
++#define LED_SERVICE_PORT 4538
++
++#define REQUEST_LENGTH 4
++#define REQUEST_PREFIX '$'
++#define REQUEST_PREFIX_OFFSET 0
++#define REQUEST_SUFFIX '#'
++#define REQUEST_SUFFIX_OFFSET 3 
++#define REQUEST_PIN_OFFSET 1
++#define REQUEST_PIN_VALUE_OFFSET 2 
++
++#define RESPONSE_LENGTH 5
++#define RESPONSE_PREFIX REQUEST_PREFIX
++#define RESPONSE_PREFIX_OFFSET REQUEST_PREFIX_OFFSET
++#define RESPONSE_SUFFIX REQUEST_SUFFIX
++#define RESPONSE_SUFFIX_OFFSET REQUEST_SUFFIX_OFFSET 
++#define RESPONSE_PIN_OFFSET REQUEST_PIN_OFFSET
++#define RESPONSE_PIN_VALUE_OFFSET REQUEST_PIN_VALUE_OFFSET
++#define RESPONSE_EOL_OFFSET 4
++
++void write_response_to_buffer(u8_t *buffer, u8_t pin, u8_t pin_value);
++void app_create_response(u8_t *response_buffer, u8_t *response_length);
++
++u8_t app_is_request_valid(u8_t *request);
++u8_t app_parse_request_verify_pin(u8_t *pin);
++u8_t app_parse_request_verify_pin_value(u8_t *pin_value);
++u8_t app_is_value_in_array(u8_t *value, u8_t *array, u8_t array_size);
++
++static const u8_t valid_pins[] = {0,1,2,3,4};
++static const u8_t number_of_valid_pins = sizeof(valid_pins);
++
++/*---------------------------------------------------------------------------*/
++/*
++ */
++void app_handle_request(void) 
++{
++
++    if(uip_connected()) {
++
++        u8_t buffer[sizeof(valid_pins) * RESPONSE_LENGTH];
++        u8_t buffer_length;
++        app_create_response(buffer, &buffer_length);
++        uip_send(buffer,buffer_length);
++    }
++    else if(uip_newdata()) {
++           
++        u16_t index = 0;
++
++        while(index < uip_datalen()) {
++
++            u8_t *request = (u8_t *)uip_appdata + index;
++
++            if(app_is_request_valid(request)) {
++
++                u8_t pin = request[REQUEST_PIN_OFFSET] - '0';
++                u8_t pin_value = request[REQUEST_PIN_VALUE_OFFSET] - '0';
++
++                iot_gpio_output(pin, !pin_value);
++
++                u8_t polarity; 
++                u8_t response[RESPONSE_LENGTH];
++
++                iot_gpio_read((int32)pin, &pin_value, &polarity); 
++
++                write_response_to_buffer(response, (u8_t)pin, pin_value);   
++
++                uip_send(response, sizeof(response));
++                
++                index += REQUEST_LENGTH;                
++            }
++            else {
++                index++;
++            }
++        }
++    }
++}
++
++u8_t app_is_request_valid(u8_t *request)
++{
++    u8_t pin = request[REQUEST_PIN_OFFSET] - '0';
++    u8_t pin_value = request[REQUEST_PIN_VALUE_OFFSET] - '0';
++
++    if((request[REQUEST_PREFIX_OFFSET] == REQUEST_PREFIX) && 
++            (request[REQUEST_SUFFIX_OFFSET] == REQUEST_SUFFIX) &&
++            app_parse_request_verify_pin(&pin) &&
++            app_parse_request_verify_pin_value(&pin_value)) {
++
++        return 1;
++    }
++
++    return 0;
++}
++
++void app_create_response(u8_t *response_buffer, u8_t *response_length)
++{
++    u8_t *response_start_pointer = response_buffer; 
++    u8_t index = 0; 
++
++    for(index = 0; index < number_of_valid_pins; index++) {
++
++      int32 pin = *(valid_pins + index);
++      u8_t polarity, pin_value;
++      
++      iot_gpio_read(pin, &pin_value, &polarity);
++      write_response_to_buffer(response_buffer, (u8_t)pin, pin_value);
++      response_buffer += RESPONSE_LENGTH; 
++    }
++
++    *response_length = response_buffer - response_start_pointer;
++}
++
++void write_response_to_buffer(u8_t *buffer, u8_t pin, u8_t pin_value)
++{
++    buffer[RESPONSE_PREFIX_OFFSET] = RESPONSE_PREFIX;
++    buffer[RESPONSE_PIN_OFFSET] = (u8_t)pin + '0'; 
++    buffer[RESPONSE_PIN_VALUE_OFFSET] = !pin_value + '0';
++    buffer[RESPONSE_SUFFIX_OFFSET] = RESPONSE_SUFFIX;
++    buffer[RESPONSE_EOL_OFFSET] = '\n';
++}
++
++u8_t app_parse_request_verify_pin(u8_t *pin) 
++{
++    return app_is_value_in_array(pin, valid_pins, number_of_valid_pins);
++}
++
++u8_t app_parse_request_verify_pin_value(u8_t *pin_value) 
++{
++    u8_t valid_pin_values[] = {0,1};
++    u8_t number_of_valid_pin_values = sizeof(valid_pin_values); 
++    
++    return app_is_value_in_array(pin_value, valid_pin_values, number_of_valid_pin_values);
++}
++
++u8_t app_is_value_in_array(u8_t *value, u8_t *array, u8_t array_size) 
++{
++    u8_t index;
++    for (index = 0; index < array_size; index++) {
++
++        if(array[index] == *value) {
++            return 1;
++        }
++    }
++    return 0;
++}   
++
+ /*---------------------------------------------------------------------------*/
+ /*
+  * In mt76xx_tcp_app.h we have defined the UIP_APPCALL macro to
+@@ -65,6 +209,10 @@ iot_tcp_appcall(void)
+ {
+     u16_t lport = HTONS(uip_conn->lport);
+ 
++    if(lport == LED_SERVICE_PORT) {
++        app_handle_request();
++    }
++
+ #if UIP_HTTP_CLIENT_SUPPORT
+     if (lport == http_clientPort) {
+         webclient_appcall();
+Binary files /home/andreas/Playground/LinkIt171/Src/file_header and ./file_header differ
+diff '--exclude=*.bin' -rupN /home/andreas/Playground/LinkIt171/Src/mak/MT7681/flags_sta.mk ./mak/MT7681/flags_sta.mk
+--- /home/andreas/Playground/LinkIt171/Src/mak/MT7681/flags_sta.mk	2015-01-08 22:14:28.000000000 +0100
++++ ./mak/MT7681/flags_sta.mk	2015-02-06 11:13:28.206515103 +0100
+@@ -260,4 +260,5 @@ FUNCFLAGS	+=	-DCFG_SUPPORT_DNS=0
+ FUNCFLAGS	+=	-DCONFIG_STATION=1
+ FUNCFLAGS	+=	-DCFG_SUPPORT_MTK_SMNT=1
+ FUNCFLAGS	+=	-DHW_TIMER1_SUPPORT=1
++FUNCFLAGS	+=	-DCFG_SUPPORT_MTK_SMNT=0
+ #END-OF-FILE#
