@@ -109,8 +109,8 @@ app.ui.displayDeviceList = function()
 		if (device.timeStamp + 10000 > timeNow)
 		{
 			// Map the RSSI value to a width in percent for the indicator.
-			var rssiWidth = 1; // Used when RSSI is zero or greater.
-			if (device.rssi < -100) { rssiWidth = 100; }
+			var rssiWidth = 100; // Used when RSSI is zero or greater.
+			if (device.rssi < -100) { rssiWidth = 0; }
 			else if (device.rssi < 0) { rssiWidth = 100 + device.rssi; }
 
 			// Create tag for device data.
