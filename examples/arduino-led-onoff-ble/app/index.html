@@ -106,7 +106,10 @@ Please note that you must use a BLE shield for this example to work.
 			});
 	};
 
-	document.addEventListener('deviceready', app.onDeviceReady, false);
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
 	</script>
 
 </body>

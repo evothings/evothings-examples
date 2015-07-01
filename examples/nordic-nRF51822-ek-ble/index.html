@@ -139,7 +139,10 @@ using BLE (Bluetooth Low Energy).
 			});
 	};
 
-	document.addEventListener('deviceready', app.onDeviceReady, false);
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
 	</script>
 
 </body>

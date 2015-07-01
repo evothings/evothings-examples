@@ -1,6 +1,9 @@
 // JavaScript code for the Cordova Basic example app.
 
-document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener(
+	'deviceready',
+	function() { evothings.scriptsLoaded(onDeviceReady) },
+	false);
 
 function onDeviceReady()
 {

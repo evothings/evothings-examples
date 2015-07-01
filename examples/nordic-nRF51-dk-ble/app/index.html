@@ -155,7 +155,10 @@ This is an example app that demonstrates how to communicate over BLE
 			});
 	};
 
-	document.addEventListener('deviceready', app.onDeviceReady, false);
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
 	</script>
 
 </body>

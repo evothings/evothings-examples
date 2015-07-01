@@ -42,7 +42,10 @@ app.initialize = function()
 // 'load', 'deviceready', 'offline', and 'online'.
 app.bindEvents = function()
 {
-	document.addEventListener('deviceready', this.onDeviceReady, false);
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
 };
 
 // deviceready Event Handler

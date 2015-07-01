@@ -17,7 +17,10 @@
 // version: 0.4 - 2014-12-11
 //
 
-document.addEventListener('deviceready', function() { app.initialize() }, false);
+document.addEventListener(
+	'deviceready',
+	function() { evothings.scriptsLoaded(app.initialize) },
+	false);
 
 var app = {};
 

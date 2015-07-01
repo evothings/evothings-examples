@@ -166,8 +166,8 @@ Demonstration of the Cordova Accelerometer API.
 
 	document.addEventListener(
 		'deviceready',
-		initialise,
-		false)
+		function() { evothings.scriptsLoaded(initialise) },
+		false);
 	</script>
 
 </body>

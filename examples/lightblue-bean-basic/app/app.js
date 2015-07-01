@@ -22,7 +22,10 @@
 // The LightBlue Bean needs to run the arduino sketch example named
 // LightBlue Bean - Basic
 
-document.addEventListener('deviceready', function() { app.initialize() }, false);
+document.addEventListener(
+	'deviceready',
+	function() { evothings.scriptsLoaded(app.initialize) },
+	false);
 
 var app = {};
 

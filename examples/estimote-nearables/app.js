@@ -11,7 +11,10 @@ var app = (function()
 
 	app.initialize = function()
 	{
-		document.addEventListener('deviceready', onDeviceReady, false);
+		document.addEventListener(
+			'deviceready',
+			function() { evothings.scriptsLoaded(onDeviceReady) },
+			false);
 	};
 
 	function onDeviceReady()

@@ -20,7 +20,10 @@
 // Route all console logs to Evothings studio log
 if (window.hyper && window.hyper.log) { console.log = hyper.log; };
 
-document.addEventListener('deviceready', function() { app.initialize(); }, false);
+document.addEventListener(
+	'deviceready',
+	function() { evothings.scriptsLoaded(app.initialize) },
+	false);
 
 var app = {};
 

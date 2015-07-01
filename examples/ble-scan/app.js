@@ -15,7 +15,10 @@ app.ui.updateTimer = null;
 
 app.initialize = function()
 {
-	document.addEventListener('deviceready', this.onDeviceReady, false);
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
 };
 
 app.onDeviceReady = function()

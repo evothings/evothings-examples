@@ -54,7 +54,10 @@ var app =
 
 	initialize: function()
 	{
-		document.addEventListener('deviceready', app.onDeviceReady, false);
+		document.addEventListener(
+			'deviceready',
+			function() { evothings.scriptsLoaded(app.onDeviceReady) },
+			false);
 	},
 
 	// Called when device plugin functions are ready for use.
