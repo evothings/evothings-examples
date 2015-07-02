@@ -60,6 +60,12 @@ var app =
 			false);
 	},
 
+	displayStatus: function(status)
+	{
+		console.log('Status: '+status);
+		document.getElementById('status').innerHTML = status
+	},
+
 	// Called when device plugin functions are ready for use.
 	onDeviceReady: function()
 	{
@@ -70,7 +76,7 @@ var app =
 
 	startScan: function()
 	{
-		console.log('Scanning...');
+		app.displayStatus('Scanning...');
 		evothings.ble.startScan(
 			function(deviceInfo)
 			{
@@ -89,28 +95,32 @@ var app =
 			},
 			function(errorCode)
 			{
-				console.log('startScan error: ' + errorCode);
+				app.displayStatus('startScan error: ' + errorCode);
 			});
 	},
 
 	connect: function(address)
 	{
 		evothings.ble.stopScan();
-		console.log('Connecting...');
+		app.displayStatus('Connecting...');
 		evothings.ble.connect(
 			address,
 			function(connectInfo)
 			{
 				if (connectInfo.state == 2) // Connected
 				{
-					console.log('Connected');
+					app.displayStatus('Connected');
 					app.deviceHandle = connectInfo.deviceHandle;
 					app.getServices(connectInfo.deviceHandle);
+				}
+				else
+				{
+					app.displayStatus('Disconnected');
 				}
 			},
 			function(errorCode)
 			{
-				console.log('connect error: ' + errorCode);
+				app.displayStatus('connect error: ' + errorCode);
 			});
 	},
 
@@ -153,7 +163,7 @@ var app =
 
 	startReading: function(deviceHandle)
 	{
-		console.log('Enabling notifications');
+		app.displayStatus('Enabling notifications...');
 
 		// Turn notifications on.
 		app.write(
@@ -172,7 +182,7 @@ var app =
 			},
 			function(errorCode)
 			{
-				console.log('enableNotification error: ' + errorCode);
+				app.displayStatus('enableNotification error: ' + errorCode);
 			});
 	},
 
@@ -216,7 +226,7 @@ var app =
 
 	getServices: function(deviceHandle)
 	{
-		console.log('Reading services...');
+		app.displayStatus('Reading services...');
 
 		evothings.ble.readAllServiceData(deviceHandle, function(services)
 		{
@@ -258,12 +268,12 @@ var app =
 			}
 			else
 			{
-				console.log('ERROR: RX/TX services not found!');
+				app.displayStatus('ERROR: RX/TX services not found!');
 			}
 		},
 		function(errorCode)
 		{
-			console.log('readAllServiceData error: ' + errorCode);
+			app.displayStatus('readAllServiceData error: ' + errorCode);
 		});
 	},
 
@@ -276,4 +286,3 @@ var app =
 
 // Initialise app.
 app.initialize();
-
