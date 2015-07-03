@@ -62,6 +62,8 @@ var app =
 
 	displayStatus: function(status)
 	{
+		if(document.getElementById('status').innerHTML == status)
+			return;
 		console.log('Status: '+status);
 		document.getElementById('status').innerHTML = status
 	},
@@ -109,7 +111,6 @@ var app =
 			{
 				if (connectInfo.state == 2) // Connected
 				{
-					app.displayStatus('Connected');
 					app.deviceHandle = connectInfo.deviceHandle;
 					app.getServices(connectInfo.deviceHandle);
 				}
@@ -178,6 +179,7 @@ var app =
 			app.characteristicRead,
 			function(data)
 			{
+				app.displayStatus('Active');
 				app.drawLines([new DataView(data).getUint16(0, true)]);
 			},
 			function(errorCode)
