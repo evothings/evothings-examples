@@ -22,23 +22,22 @@
 	border: solid 1px;
 	background-color: #ffffff;
 }
-	
+
 
 .circleBase {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    border: 1px solid black;
-    margin: 2px;
-
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+	border: 1px solid black;
+	margin: 2px;
 }
 
 .ledOff {
-    background: #C7C7C7;
+	background: #C7C7C7;
 }
 
 .ledOn {
-    background: #00FF00;
+	background: #00FF00;
 }
 
 p.center {
