@@ -230,6 +230,12 @@ def buildBlePeripheral
 	copyUtil(destPath)
 end
 
+def buildEsp8266
+	destPath = 'examples/esp8266/app'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+end
+
 ###### Copy helpers ######
 
 ### CSS/JS ###
@@ -351,6 +357,7 @@ def build
 	buildTISensorTagAccelerometer
 	buildMediaTekLinkIt
 	buildMediaTekLinkItConnect
+	buildEsp8266
 end
 
 build
