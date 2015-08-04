@@ -119,69 +119,79 @@
 		var instance = anInstance
 
 		// UUIDs for services, characteristics, and descriptors.
+		instance.NOTIFICATION_DESCRIPTOR = '00002902-0000-1000-8000-00805f9b34fb'
 
 		instance.DEVICEINFO_SERVICE = '0000180a-0000-1000-8000-00805f9b34fb'
 		instance.FIRMWARE_DATA = '00002a26-0000-1000-8000-00805f9b34fb'
 		instance.MODELNUMBER_DATA = '00002a24-0000-1000-8000-00805f9b34fb'
 
-		instance.TEMPERATURE_SERVICE = 'f000aa00-0451-4000-b000-000000000000'
-		instance.TEMPERATURE_DATA = 'f000aa01-0451-4000-b000-000000000000'
-		instance.TEMPERATURE_CONFIG = 'f000aa02-0451-4000-b000-000000000000'
-		// Missing in HW rev. 1.2 (FW rev. 1.5)
-		instance.TEMPERATURE_PERIOD = 'f000aa03-0451-4000-b000-000000000000'
-		instance.TEMPERATURE_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.TEMPERATURE = {
+			SERVICE: 'f000aa00-0451-4000-b000-000000000000',
+			DATA: 'f000aa01-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa02-0451-4000-b000-000000000000',
+			// Missing in HW rev. 1.2 (FW rev. 1.5)
+			PERIOD: 'f000aa03-0451-4000-b000-000000000000',
+		}
 
-		instance.HUMIDITY_SERVICE = 'f000aa20-0451-4000-b000-000000000000'
-		instance.HUMIDITY_DATA = 'f000aa21-0451-4000-b000-000000000000'
-		instance.HUMIDITY_CONFIG = 'f000aa22-0451-4000-b000-000000000000'
-		instance.HUMIDITY_PERIOD = 'f000aa23-0451-4000-b000-000000000000'
-		instance.HUMIDITY_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.HUMIDITY = {
+			SERVICE: 'f000aa20-0451-4000-b000-000000000000',
+			DATA: 'f000aa21-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa22-0451-4000-b000-000000000000',
+			PERIOD: 'f000aa23-0451-4000-b000-000000000000',
+		}
 
-		instance.BAROMETER_SERVICE = 'f000aa40-0451-4000-b000-000000000000'
-		instance.BAROMETER_DATA = 'f000aa41-0451-4000-b000-000000000000'
-		instance.BAROMETER_CONFIG = 'f000aa42-0451-4000-b000-000000000000'
-		instance.BAROMETER_CALIBRATION = 'f000aa43-0451-4000-b000-000000000000'
-		instance.BAROMETER_PERIOD = 'f000aa44-0451-4000-b000-000000000000'
-		instance.BAROMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
-
-		// Only in SensorTag CC2541.
-		instance.ACCELEROMETER_SERVICE = 'f000aa10-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_DATA = 'f000aa11-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_CONFIG = 'f000aa12-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_PERIOD = 'f000aa13-0451-4000-b000-000000000000'
-		instance.ACCELEROMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.BAROMETER = {
+			SERVICE: 'f000aa40-0451-4000-b000-000000000000',
+			DATA: 'f000aa41-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa42-0451-4000-b000-000000000000',
+			CALIBRATION: 'f000aa43-0451-4000-b000-000000000000',
+			PERIOD: 'f000aa44-0451-4000-b000-000000000000',
+		}
 
 		// Only in SensorTag CC2541.
-		instance.MAGNETOMETER_SERVICE = 'f000aa30-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_DATA = 'f000aa31-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_CONFIG = 'f000aa32-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_PERIOD = 'f000aa33-0451-4000-b000-000000000000'
-		instance.MAGNETOMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.ACCELEROMETER = {
+			SERVICE: 'f000aa10-0451-4000-b000-000000000000',
+			DATA: 'f000aa11-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa12-0451-4000-b000-000000000000',
+			PERIOD: 'f000aa13-0451-4000-b000-000000000000',
+		}
 
 		// Only in SensorTag CC2541.
-		instance.GYROSCOPE_SERVICE = 'f000aa50-0451-4000-b000-000000000000'
-		instance.GYROSCOPE_DATA = 'f000aa51-0451-4000-b000-000000000000'
-		instance.GYROSCOPE_CONFIG = 'f000aa52-0451-4000-b000-000000000000'
-		instance.GYROSCOPE_PERIOD = 'f000aa53-0451-4000-b000-000000000000'
-		instance.GYROSCOPE_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.MAGNETOMETER = {
+			SERVICE: 'f000aa30-0451-4000-b000-000000000000',
+			DATA: 'f000aa31-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa32-0451-4000-b000-000000000000',
+			PERIOD: 'f000aa33-0451-4000-b000-000000000000',
+		}
+
+		// Only in SensorTag CC2541.
+		instance.GYROSCOPE = {
+			SERVICE: 'f000aa50-0451-4000-b000-000000000000',
+			DATA: 'f000aa51-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa52-0451-4000-b000-000000000000',
+			PERIOD: 'f000aa53-0451-4000-b000-000000000000',
+		}
 
 		// Only in SensorTag CC2650.
-		instance.LUXOMETER_SERVICE = 'f000aa70-0451-4000-b000-000000000000'
-		instance.LUXOMETER_DATA = 'f000aa71-0451-4000-b000-000000000000'
-		instance.LUXOMETER_CONFIG = 'f000aa72-0451-4000-b000-000000000000'
-		instance.LUXOMETER_PERIOD = 'f000aa73-0451-4000-b000-000000000000'
-		instance.LUXOMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.LUXOMETER = {
+			SERVICE: 'f000aa70-0451-4000-b000-000000000000',
+			DATA: 'f000aa71-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa72-0451-4000-b000-000000000000',
+			PERIOD: 'f000aa73-0451-4000-b000-000000000000',
+		}
 
 		// Only in SensorTag CC2650.
-		instance.MOVEMENT_SERVICE = 'f000aa80-0451-4000-b000-000000000000'
-		instance.MOVEMENT_DATA = 'f000aa81-0451-4000-b000-000000000000'
-		instance.MOVEMENT_CONFIG = 'f000aa82-0451-4000-b000-000000000000'
-		instance.MOVEMENT_PERIOD = 'f000aa83-0451-4000-b000-000000000000'
-		instance.MOVEMENT_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.MOVEMENT = {
+			SERVICE: 'f000aa80-0451-4000-b000-000000000000',
+			DATA: 'f000aa81-0451-4000-b000-000000000000',
+			CONFIG: 'f000aa82-0451-4000-b000-000000000000',
+			PERIOD: 'f000aa83-0451-4000-b000-000000000000',
+		}
 
-		instance.KEYPRESS_SERVICE = '0000ffe0-0000-1000-8000-00805f9b34fb'
-		instance.KEYPRESS_DATA = '0000ffe1-0000-1000-8000-00805f9b34fb'
-		instance.KEYPRESS_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb'
+		instance.KEYPRESS = {
+			SERVICE: '0000ffe0-0000-1000-8000-00805f9b34fb',
+			DATA: '0000ffe1-0000-1000-8000-00805f9b34fb',
+		}
 
 		/**
 		 * Internal. Services used by the application.
@@ -203,7 +213,7 @@
 			instance.temperatureFun = fun
 			instance.temperatureConfig = [1] // on
 			instance.temperatureInterval = Math.max(300, interval)
-			instance.requiredServices.push(instance.TEMPERATURE_SERVICE)
+			instance.requiredServices.push(instance.TEMPERATURE.SERVICE)
 
 			return instance
 		}
@@ -221,7 +231,7 @@
 			instance.humidityFun = fun
 			instance.humidityConfig = [1] // on
 			instance.humidityInterval = Math.max(100, interval)
-			instance.requiredServices.push(instance.HUMIDITY_SERVICE)
+			instance.requiredServices.push(instance.HUMIDITY.SERVICE)
 
 			return instance
 		}
@@ -238,8 +248,8 @@
 		{
 			instance.barometerFun = fun
 			instance.barometerConfig = [1] // on
-  			instance.barometerInterval = Math.max(100, interval)
-			instance.requiredServices.push(instance.BAROMETER_SERVICE)
+			instance.barometerInterval = Math.max(100, interval)
+			instance.requiredServices.push(instance.BAROMETER.SERVICE)
 
 			return instance
 		}
@@ -254,7 +264,7 @@
 		instance.keypressCallback = function(fun)
 		{
 			instance.keypressFun = fun
-			instance.requiredServices.push(instance.KEYPRESS_SERVICE)
+			instance.requiredServices.push(instance.KEYPRESS.SERVICE)
 
 			return instance
 		}
@@ -553,7 +563,8 @@
 
 			function readFirmwareVersion()
 			{
-				instance.device.readCharacteristic(
+				instance.device.readServiceCharacteristic(
+					instance.DEVICEINFO_SERVICE,
 					instance.FIRMWARE_DATA,
 					gotFirmwareVersion,
 					instance.errorFun)
@@ -616,12 +627,9 @@
 		instance.temperatureOn = function()
 		{
 			instance.sensorOn(
-				instance.TEMPERATURE_CONFIG,
+				instance.TEMPERATURE,
 				instance.temperatureConfig,
-				instance.TEMPERATURE_PERIOD,
 				instance.temperatureInterval,
-				instance.TEMPERATURE_DATA,
-				instance.TEMPERATURE_NOTIFICATION,
 				instance.temperatureFun
 			)
 
@@ -636,7 +644,7 @@
 		 */
 		instance.temperatureOff = function()
 		{
-			instance.sensorOff(instance.TEMPERATURE_DATA)
+			instance.sensorOff(instance.TEMPERATURE)
 
 			return instance
 		}
@@ -650,12 +658,9 @@
 		instance.humidityOn = function()
 		{
 			instance.sensorOn(
-				instance.HUMIDITY_CONFIG,
+				instance.HUMIDITY,
 				instance.humidityConfig,
-				instance.HUMIDITY_PERIOD,
 				instance.humidityInterval,
-				instance.HUMIDITY_DATA,
-				instance.HUMIDITY_NOTIFICATION,
 				instance.humidityFun
 			)
 
@@ -670,7 +675,7 @@
 		 */
 		instance.humidityOff = function()
 		{
-			instance.sensorOff(instance.HUMIDITY_DATA)
+			instance.sensorOff(instance.HUMIDITY)
 
 			return instance
 		}
@@ -695,7 +700,7 @@
 		 */
 		instance.barometerOff = function()
 		{
-			instance.sensorOff(instance.BAROMETER_DATA)
+			instance.sensorOff(instance.BAROMETER)
 
 			return instance
 		}
@@ -709,12 +714,9 @@
 		instance.keypressOn = function()
 		{
 			instance.sensorOn(
+				instance.KEYPRESS,
 				null, // Not used.
 				null, // Not used.
-				null, // Not used.
-				null, // Not used.
-				instance.KEYPRESS_DATA,
-				instance.KEYPRESS_NOTIFICATION,
 				instance.keypressFun
 			)
 
@@ -729,7 +731,7 @@
 		 */
 		instance.keypressOff = function()
 		{
-			instance.sensorOff(instance.KEYPRESS_DATA)
+			instance.sensorOff(instance.KEYPRESS)
 
 			return instance
 		}
@@ -743,46 +745,70 @@
 		 * @public
 		 */
 		instance.sensorOn = function(
-			configUUID,
+			service,
 			configValue,
-			periodUUID,
 			periodValue,
-			dataUUID,
-			notificationUUID,
 			notificationFunction)
 		{
 			// Only start sensor if a notification function has been set.
 			if (!notificationFunction) { return }
 
 			// Set sensor configuration to ON.
-			configUUID && instance.device.writeCharacteristic(
-				configUUID,
+			// If configValue is provided, service.CONFIG must be set.
+			configValue && instance.device.writeServiceCharacteristic(
+				service.SERVICE,
+				service.CONFIG,
 				new Uint8Array(configValue),
 				function() {},
 				instance.errorFun)
 
 			// Set sensor update period.
-			periodUUID && periodValue && instance.device.writeCharacteristic(
-				periodUUID,
+			periodValue && instance.device.writeServiceCharacteristic(
+				service.SERVICE,
+				service.PERIOD,
 				new Uint8Array([periodValue / 10]),
 				function() {},
 				instance.errorFun)
 
 			// Set sensor notification to ON.
-			dataUUID && notificationUUID && instance.device.writeDescriptor(
-				dataUUID, // Characteristic for data
-				notificationUUID, // Configuration descriptor
+			service.DATA && instance.device.writeServiceDescriptor(
+				service.SERVICE,
+				service.DATA,
+				instance.NOTIFICATION_DESCRIPTOR,
 				new Uint8Array([1,0]),
-				function() {},
+				function() {
+					// Make sure value got written correctly.
+					// Also test readServiceDescriptor().
+					instance.device.readServiceDescriptor(service.SERVICE, service.DATA, instance.NOTIFICATION_DESCRIPTOR, function(data) {
+						//console.log('BLE descriptor data: ' + instance.dataToString(data))
+					}, function(errorCode)
+					{
+						console.log('BLE readServiceDescriptor error: ' + errorCode)
+					})
+				},
 				instance.errorFun)
 
 			// Start sensor notification.
-			dataUUID && instance.device.enableNotification(
-				dataUUID,
+			service.DATA && instance.device.enableServiceNotification(
+				service.SERVICE,
+				service.DATA,
 				function(data) { notificationFunction(new Uint8Array(data)) },
 				instance.errorFun)
 
 			return instance
+		}
+
+		instance.dataToString = function(data)
+		{
+			var str = '['
+			data = new Uint8Array(data)
+			for(var i=0; i<data.length; i++) {
+				if(i > 0)
+					str += ','
+				str += data[i]
+			}
+			str += ']'
+			return str
 		}
 
 		/**
@@ -790,20 +816,42 @@
 		 * @instance
 		 * @public
 		 */
-		instance.sensorOff = function(dataUUID)
+		instance.sensorOff = function(service)
 		{
 			// TODO: Check that sensor notification function is set.
 
 			// Set sensor configuration to OFF
-			configUUID && instance.device.writeCharacteristic(
-				configUUID,
+			service.CONFIG && instance.device.writeServiceCharacteristic(
+				service.SERVICE,
+				service.CONFIG,
 				new Uint8Array([0]),
 				function() {},
 				instance.errorFun)
 
-			dataUUID && instance.device.disableNotification(
-				dataUUID,
-				function() {},
+			// Set sensor notification to OFF.
+			service.DATA && instance.device.writeServiceDescriptor(
+				service.SERVICE,
+				service.DATA,
+				instance.NOTIFICATION_DESCRIPTOR,
+				new Uint8Array([0,0]),
+				function() {
+					// Make sure value got written correctly.
+					// Also test readServiceDescriptor().
+					instance.device.readServiceDescriptor(service.SERVICE, service.DATA, instance.NOTIFICATION_DESCRIPTOR, function(data) {
+						//console.log('BLE descriptor data: ' + instance.dataToString(data))
+					}, function(errorCode)
+					{
+						console.log('BLE readServiceDescriptor error: ' + errorCode)
+					})
+				},
+				instance.errorFun)
+
+			service.DATA && instance.device.disableServiceNotification(
+				service.SERVICE,
+				service.DATA,
+				function() {
+					//console.log("disableServiceNotification success")
+				},
 				instance.errorFun)
 
 			return instance

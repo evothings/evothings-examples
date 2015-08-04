@@ -66,7 +66,7 @@
 			instance.accelerometerFun = fun
 			instance.accelerometerConfig = [1] // on
 			instance.accelerometerInterval = interval
-			instance.requiredServices.push(instance.ACCELEROMETER_SERVICE)
+			instance.requiredServices.push(instance.ACCELEROMETER.SERVICE)
 
 			return instance
 		}
@@ -93,7 +93,7 @@
 			instance.gyroscopeFun = fun
 			instance.gyroscopeConfig = [axes]
 			instance.gyroscopeInterval = Math.max(100, interval)
-			instance.requiredServices.push(instance.GYROSCOPE_SERVICE)
+			instance.requiredServices.push(instance.GYROSCOPE.SERVICE)
 
 			return instance
 		}
@@ -110,7 +110,7 @@
 			instance.magnetometerFun = fun
 			instance.magnetometerConfig = [1] // on
 			instance.magnetometerInterval = interval
-			instance.requiredServices.push(instance.MAGNETOMETER_SERVICE)
+			instance.requiredServices.push(instance.MAGNETOMETER.SERVICE)
 
 			return instance
 		}
@@ -145,12 +145,9 @@
 		instance.accelerometerOn = function()
 		{
 			instance.sensorOn(
-				instance.ACCELEROMETER_CONFIG,
+				instance.ACCELEROMETER,
 				instance.accelerometerConfig,
-				instance.ACCELEROMETER_PERIOD,
 				instance.accelerometerInterval,
-				instance.ACCELEROMETER_DATA,
-				instance.ACCELEROMETER_NOTIFICATION,
 				instance.accelerometerFun
 			)
 
@@ -165,7 +162,7 @@
 		 */
 		instance.accelerometerOff = function()
 		{
-			instance.sensorOff(instance.ACCELEROMETER_DATA)
+			instance.sensorOff(instance.ACCELEROMETER)
 
 			return instance
 		}
@@ -179,12 +176,9 @@
 		instance.gyroscopeOn = function()
 		{
 			instance.sensorOn(
-				instance.GYROSCOPE_CONFIG,
+				instance.GYROSCOPE,
 				instance.gyroscopeConfig,
-				instance.GYROSCOPE_PERIOD,
 				instance.gyroscopeInterval,
-				instance.GYROSCOPE_DATA,
-				instance.GYROSCOPE_NOTIFICATION,
 				instance.gyroscopeFun
 			)
 
@@ -198,7 +192,7 @@
 		 */
 		instance.gyroscopeOff = function()
 		{
-			instance.sensorOff(instance.GYROSCOPE_DATA)
+			instance.sensorOff(instance.GYROSCOPE)
 
 			return instance
 		}
@@ -211,12 +205,9 @@
 		instance.magnetometerOn = function()
 		{
 			instance.sensorOn(
-				instance.MAGNETOMETER_CONFIG,
+				instance.MAGNETOMETER,
 				instance.magnetometerConfig,
-				instance.MAGNETOMETER_PERIOD,
 				instance.magnetometerInterval,
-				instance.MAGNETOMETER_DATA,
-				instance.MAGNETOMETER_NOTIFICATION,
 				instance.magnetometerFun
 			)
 
@@ -230,7 +221,7 @@
 		 */
 		instance.magnetometerOff = function()
 		{
-			instance.sensorOff(instance.MAGNETOMETER_DATA)
+			instance.sensorOff(instance.MAGNETOMETER)
 
 			return instance
 		}
@@ -248,12 +239,9 @@
 			instance.barometerCalibrate(function()
 			{
 				instance.sensorOn(
-					instance.BAROMETER_CONFIG,
+					instance.BAROMETER,
 					instance.barometerConfig,
-					instance.BAROMETER_PERIOD,
 					instance.barometerInterval,
-					instance.BAROMETER_DATA,
-					instance.BAROMETER_NOTIFICATION,
 					instance.barometerFun
 				)
 			})
@@ -270,12 +258,12 @@
 		instance.barometerCalibrate = function(callback)
 		{
 			instance.device.writeCharacteristic(
-				instance.BAROMETER_CONFIG,
+				instance.BAROMETER.CONFIG,
 				new Uint8Array([2]),
 				function()
 				{
 					instance.device.readCharacteristic(
-						instance.BAROMETER_CALIBRATION,
+						instance.BAROMETER.CALIBRATION,
 						function(data)
 						{
 							data = new Uint8Array(data)

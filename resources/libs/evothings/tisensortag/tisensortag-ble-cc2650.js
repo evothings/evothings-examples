@@ -161,7 +161,7 @@
  			// Set the config that turns on the needed sensors.
 			instance.movementConfig = [sensors, 0]
 			instance.movementInterval = interval
-			instance.requiredServices.push(instance.MOVEMENT_SERVICE)
+			instance.requiredServices.push(instance.MOVEMENT.SERVICE)
 
 			return instance
 		}
@@ -176,7 +176,7 @@
 			instance.luxometerFun = fun
 			instance.luxometerConfig = [1] // on
 			instance.luxometerInterval = Math.max(1000, interval)
-			instance.requiredServices.push(instance.LUXOMETER_SERVICE)
+			instance.requiredServices.push(instance.LUXOMETER.SERVICE)
 
 			return instance
 		}
@@ -211,12 +211,9 @@
 		instance.barometerOn = function()
 		{
 			instance.sensorOn(
-				instance.BAROMETER_CONFIG,
+				instance.BAROMETER,
 				instance.barometerConfig,
-				instance.BAROMETER_PERIOD,
 				instance.barometerInterval,
-				instance.BAROMETER_DATA,
-				instance.BAROMETER_NOTIFICATION,
 				instance.barometerFun
 			)
 
@@ -232,12 +229,9 @@
 		instance.movementOn = function()
 		{
 			instance.sensorOn(
-				instance.MOVEMENT_CONFIG,
+				instance.MOVEMENT,
 				instance.movementConfig,
-				instance.MOVEMENT_PERIOD,
 				instance.movementInterval,
-				instance.MOVEMENT_DATA,
-				instance.MOVEMENT_NOTIFICATION,
 				instance.movementFun
 			)
 
@@ -252,7 +246,7 @@
 		 */
 		instance.movementOff = function()
 		{
-			instance.sensorOff(instance.MOVEMENT_DATA)
+			instance.sensorOff(instance.MOVEMENT)
 
 			return instance
 		}
@@ -266,12 +260,9 @@
 		instance.luxometerOn = function()
 		{
 			instance.sensorOn(
-				instance.LUXOMETER_CONFIG,
+				instance.LUXOMETER,
 				instance.luxometerConfig,
-				instance.LUXOMETER_PERIOD,
 				instance.luxometerInterval,
-				instance.LUXOMETER_DATA,
-				instance.LUXOMETER_NOTIFICATION,
 				instance.luxometerFun
 			)
 
@@ -286,7 +277,7 @@
 		 */
 		instance.luxometerOff = function()
 		{
-			instance.sensorOff(instance.LUXOMETER_DATA)
+			instance.sensorOff(instance.LUXOMETER)
 
 			return instance
 		}

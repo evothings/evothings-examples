@@ -61,6 +61,10 @@
 		<strong>Status:</strong> <span id="StatusData">Press Connect to find the nearest SensorTag</span>
 	</p>
 
+	<p>
+		<button onclick="toggleSensors()" class="charcoal">Toggle sensors</button>
+	</p>
+
 	<h2>Keypress:</h2>
 	<p>
 		<span id="KeypressData">[Waiting for value]</span>
@@ -155,6 +159,36 @@
 	{
 		sensortag.disconnectDevice()
 		resetSensorDisplayValues()
+	}
+
+	var sensorsOn = true
+
+	function toggleSensors()
+	{
+		if(sensorsOn)
+		{
+			sensortag.keypressOff()
+			sensortag.temperatureOff()
+			sensortag.humidityOff()
+			sensortag.barometerOff()
+			sensortag.accelerometerOff()
+			sensortag.magnetometerOff()
+			sensortag.gyroscopeOff()
+			sensortag.luxometerOff()
+			sensorsOn = false
+		}
+		else
+		{
+			sensortag.keypressOn()
+			sensortag.temperatureOn()
+			sensortag.humidityOn()
+			sensortag.barometerOn()
+			sensortag.accelerometerOn()
+			sensortag.magnetometerOn()
+			sensortag.gyroscopeOn()
+			sensortag.luxometerOn()
+			sensorsOn = true
+		}
 	}
 
 	function statusHandler(status)
