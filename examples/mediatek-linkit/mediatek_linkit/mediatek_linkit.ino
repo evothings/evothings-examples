@@ -189,8 +189,8 @@ void convertPositionToDecimalForm()
 // Helper functions from the GPS.ino example by MediaTek
 
 // Helper function for extracting GPS data from a NMEA string.
-// Returns the data in GPS NMEA data str after the n:th comma.
-// Returns 0 if no commas are not found.
+// Returns the offset of the character after the n:th comma.
+// Returns 0 if the n:th comma is not found.
 static unsigned char getComma(unsigned char num, const char *str)
 {
 	unsigned char i, j = 0;
@@ -272,7 +272,7 @@ void parseGPGGA(const char* GPGGAstr)
 		tmp = getComma(1, GPGGAstr);
 		hour     = (GPGGAstr[tmp + 0] - '0') * 10 + (GPGGAstr[tmp + 1] - '0');
 		minute   = (GPGGAstr[tmp + 2] - '0') * 10 + (GPGGAstr[tmp + 3] - '0');
-		second    = (GPGGAstr[tmp + 4] - '0') * 10 + (GPGGAstr[tmp + 5] - '0');
+		second   = (GPGGAstr[tmp + 4] - '0') * 10 + (GPGGAstr[tmp + 5] - '0');
 
 		sprintf(buff, "UTC timer %2d-%2d-%2d", hour, minute, second);
 		Serial.println(buff);
@@ -281,6 +281,36 @@ void parseGPGGA(const char* GPGGAstr)
 		latitude = getDoubleNumber(&GPGGAstr[tmp]);
 		tmp = getComma(4, GPGGAstr);
 		longitude = getDoubleNumber(&GPGGAstr[tmp]);
+
+		// Extract and apply North/South and East/West.
+		tmp = getComma(3, GPGGAstr);
+		if(GPGGAstr[tmp] == 'N')
+		{	// do nothing
+		}
+		else if(GPGGAstr[tmp] == 'S')
+		{
+			latitude = -latitude;
+		}
+		else
+		{
+			sprintf(buff, "Error: found %i(%c). Expected N or S.", GPGGAstr[tmp], GPGGAstr[tmp]);
+			Serial.println(buff);
+		}
+
+		tmp = getComma(5, GPGGAstr);
+		if(GPGGAstr[tmp] == 'E')
+		{	// do nothing
+		}
+		else if(GPGGAstr[tmp] == 'W')
+		{
+			longitude = -longitude;
+		}
+		else
+		{
+			sprintf(buff, "Error: found %i(%c). Expected E or W.", GPGGAstr[tmp], GPGGAstr[tmp]);
+			Serial.println(buff);
+		}
+
 		sprintf(buff, "latitude = %10.4f, longitude = %10.4f", latitude, longitude);
 		Serial.println(buff);
 
