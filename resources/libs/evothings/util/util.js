@@ -84,6 +84,51 @@ evothings.util = {};
 			evothings.util.littleEndianToUint8(data, offset)
 	}
 
+
+	/**
+	 * Interpret byte buffer as signed big endian 16 bit integer.
+	 * Returns converted number.
+	 * @param {ArrayBuffer} data - Input buffer.
+	 * @param {number} offset - Start of data.
+	 * @return Converted number.
+	 * @public
+	 */
+	evothings.util.bigEndianToInt16 = function(data, offset)
+	{
+		return (evothings.util.littleEndianToInt8(data, offset) << 8) +
+			evothings.util.littleEndianToUint8(data, offset + 1)
+	}
+
+	/**
+	 * Interpret byte buffer as unsigned big endian 16 bit integer.
+	 * Returns converted number.
+	 * @param {ArrayBuffer} data - Input buffer.
+	 * @param {number} offset - Start of data.
+	 * @return Converted number.
+	 * @public
+	 */
+	evothings.util.bigEndianToUint16 = function(data, offset)
+	{
+		return (evothings.util.littleEndianToUint8(data, offset) << 8) +
+			evothings.util.littleEndianToUint8(data, offset + 1)
+	}
+
+	/**
+	 * Interpret byte buffer as unsigned big endian 32 bit integer.
+	 * Returns converted number.
+	 * @param {ArrayBuffer} data - Input buffer.
+	 * @param {number} offset - Start of data.
+	 * @return Converted number.
+	 * @public
+	 */
+	evothings.util.bigEndianToUint32 = function(data, offset)
+	{
+		return (evothings.util.littleEndianToUint8(data, offset) << 24) +
+			(evothings.util.littleEndianToUint8(data, offset + 1) << 16) +
+			(evothings.util.littleEndianToUint8(data, offset + 2) << 8) +
+			evothings.util.littleEndianToUint8(data, offset + 3)
+	}
+
 	/**
 	 * Converts a single Base64 character to a 6-bit integer.
 	 * @private
