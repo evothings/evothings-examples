@@ -239,8 +239,4 @@
 	{
 		return /Windows Phone/.test(navigator.userAgent);
 	};
-
-	/* ------------------ Load UI script ------------------ */
-
-	evothings.loadScript('libs/evothings/ui/ui.js');
 })();
