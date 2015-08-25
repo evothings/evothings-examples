@@ -140,6 +140,13 @@ def buildHueLights
 	copyJQuery(destPath)
 end
 
+def buildEddystoneScan
+	destPath = 'examples/eddystone-scan'
+	copyCommon(destPath)
+	copyEddystone(destPath)
+	copyJQuery(destPath)
+end
+
 def buildIBeaconScan
 	destPath = 'examples/ibeacon-scan'
 	copyCommon(destPath)
@@ -293,6 +300,11 @@ def copyTISensorTag(destPath)
 	copyDir('resources/libs/evothings/tisensortag', destPath + '/libs/evothings')
 end
 
+def copyEddystone(destPath)
+	copyEasyBLE(destPath)
+	copyDir('resources/libs/evothings/eddystone', destPath + '/libs/evothings')
+end
+
 def copyUtil(destPath)
 	copyDir('resources/libs/evothings/util', destPath + '/libs/evothings')
 end
@@ -343,6 +355,7 @@ def build
 	buildEstimoteNearables
 	buildHelloWorld
 	buildHueLights
+	buildEddystoneScan
 	buildIBeaconScan
 	buildLightblueBeanBasic
 	buildLightblueBeanSerial
