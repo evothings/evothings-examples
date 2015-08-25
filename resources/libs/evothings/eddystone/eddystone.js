@@ -1,3 +1,8 @@
+// This library scans for Eddystone beacons and translates their
+// advertisements into user-friendly variables.
+// The protocol specification is available at:
+// https://github.com/google/eddystone
+
 // prerequisites
 evothings.loadScripts([
 	'libs/evothings/easyble/easyble.js',
@@ -43,12 +48,10 @@ evothings.eddystone.startScan = function(win, fail) {
 		// And the 0xFEAA service.
 		var base64data = sd['0000feaa'+BLUETOOTH_BASE_UUID];
 		if(!base64data) return;
-
 		var byteArray = evothings.util.base64DecToArr(base64data);
 
-		// If the data matches one of the Eddystone frame formats, we can forward it to the user.
-		// The protocol specification is available at:
-		// https://github.com/google/eddystone
+		// If the data matches one of the Eddystone frame formats,
+		// we can forward it to the user.
 		if(parseFrameUID(device, byteArray, win, fail)) return;
 		if(parseFrameURL(device, byteArray, win, fail)) return;
 		if(parseFrameTLM(device, byteArray, win, fail)) return;
@@ -86,13 +89,16 @@ evothings.eddystone.stopScan = function() {
 // Return true on frame type recognition, false otherwise.
 function parseFrameUID(device, data, win, fail) {
 	if(data[0] != 0x00) return false;
-	if(data.byteLength < 0x15 || data.byteLength > 0x17) {
+	// The UID frame has 18 bytes + 2 bytes reserved for future use
+	// https://github.com/google/eddystone/tree/master/eddystone-uid
+	// Check that we got at least 18 bytes.
+	if(data.byteLength < 18) {
 		fail("UID frame: invalid byteLength: "+data.byteLength);
 		return true;
 	}
-	device.txPower = littleEndianToInt8(data, 1);
-	device.nid = data.sub(2, 12);
-	device.bid = data.sub(12, 18);
+	device.txPower = evothings.util.littleEndianToInt8(data, 1);
+	device.nid = data.subarray(2, 12);  // Namespace ID.
+	device.bid = data.subarray(12, 18); // Beacon ID.
 	win(device);
 	return true;
 }
@@ -103,7 +109,7 @@ function parseFrameURL(device, data, win, fail) {
 		fail("URL frame: invalid byteLength: "+data.byteLength);
 		return true;
 	}
-	device.txPower = littleEndianToInt8(data, 1);
+	device.txPower = evothings.util.littleEndianToInt8(data, 1);
 	var url;
 	// URL scheme prefix
 	switch(data[2]) {
@@ -120,20 +126,20 @@ function parseFrameURL(device, data, win, fail) {
 		// A byte is either a top-domain shortcut, or a printable ascii character.
 		if(c < 14) {
 			switch(c) {
-				case 0: url += '.com/';
-				case 1: url += '.org/';
-				case 2: url += '.edu/';
-				case 3: url += '.net/';
-				case 4: url += '.info/';
-				case 5: url += '.biz/';
-				case 6: url += '.gov/';
-				case 7: url += '.com';
-				case 8: url += '.org';
-				case 9: url += '.edu';
-				case 10: url += '.net';
-				case 11: url += '.info';
-				case 12: url += '.biz';
-				case 13: url += '.gov';
+				case 0: url += '.com/'; break;
+				case 1: url += '.org/'; break;
+				case 2: url += '.edu/'; break;
+				case 3: url += '.net/'; break;
+				case 4: url += '.info/'; break;
+				case 5: url += '.biz/'; break;
+				case 6: url += '.gov/'; break;
+				case 7: url += '.com'; break;
+				case 8: url += '.org'; break;
+				case 9: url += '.edu'; break;
+				case 10: url += '.net'; break;
+				case 11: url += '.info'; break;
+				case 12: url += '.biz'; break;
+				case 13: url += '.gov'; break;
 			}
 		} else if(c < 32 || c >= 127) {
 			// Unprintables are not allowed.
