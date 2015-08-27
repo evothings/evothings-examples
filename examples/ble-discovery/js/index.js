@@ -44,7 +44,7 @@ app.bindEvents = function()
 {
 	document.addEventListener(
 		'deviceready',
-		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		app.onDeviceReady,
 		false);
 };
 
