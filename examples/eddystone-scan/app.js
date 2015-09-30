@@ -48,7 +48,7 @@ var app = (function()
 	function mapBeaconRSSI(rssi)
 	{
 		if (rssi >= 0) return 1; // Unknown RSSI maps to 1.
-		if (rssi < -100) return 100; // Max RSSI
+		if (rssi < -100) return 0; // Max RSSI
 		return 100 + rssi;
 	}
 
