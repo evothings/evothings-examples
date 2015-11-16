@@ -4,8 +4,8 @@
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, user-scalable=no
-		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
 	<title>Redbear Labs - Simple Chat</title>
 
@@ -29,7 +29,7 @@
 </head>
 
 <body ontouchstart="">
-	
+
 	<header>
 
 		<button class="back" onclick="history.back()">
@@ -42,7 +42,7 @@
 
 	<h1>Simple Chat</h1>
 
-	<div id="startView">	
+	<div id="startView">
 
 		<img class="center" src="img/RedBearLab.jpg">
 		<button class="red wide" onclick="app.startScan()">Scan</button>
@@ -56,7 +56,7 @@
 		<div id="conversation"></div>
 
 		<div id="conversationControl" style="width:100%">
-			
+
 			<input id="messageField" value="Hello World!" type="text"
 				onchange="app.sendMessage()">
 
@@ -76,7 +76,7 @@
 			<img src="img/loader.gif" />
 			<p id="loadingStatus"></p>
 		</div>
-		
+
 	</div>
 
 </body>
