@@ -92,8 +92,16 @@ end
 
 def buildBLEScan
 	destPath = 'examples/ble-scan'
-	copyCommon(destPath)
+	icon = 'ble-logo.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
+end
+
+def buildBLEDiscovery
+	destPath = 'examples/ble-discovery'
+	icon = 'ble-logo.png'
+	copyImageFile(destPath, icon)
+	writeSettingsFile(destPath, icon)
 end
 
 def buildTISensorTagCC2541Demo
@@ -387,6 +395,7 @@ def build
 	buildArduinoLEDOnOffTCP
 	buildArduinoScriptableTCP
 	buildBLEScan
+	buildBLEDiscovery
 	buildBlunoHelloWorld
 	buildCordovaAccelerometer
 	buildCordovaBasic
