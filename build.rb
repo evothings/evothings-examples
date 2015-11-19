@@ -138,19 +138,22 @@ end
 
 def buildCordovaAccelerometer
 	destPath = 'examples/cordova-accelerometer'
-	copyCommon(destPath)
+	icon = 'evothings-logo.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildCordovaBasic
 	destPath = 'examples/cordova-basic'
-	copyCommon(destPath)
+	icon = 'evothings-logo.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildHelloWorld
 	destPath = 'examples/hello-world'
-	copyCommon(destPath)
+	icon = 'evothings-logo.png'
+	copyCommon(destPath, icon)
 end
 
 def buildHueLights
@@ -265,6 +268,31 @@ def buildEsp8266
 	destPath = 'examples/esp8266/app'
 	copyCommon(destPath)
 	copyJQuery(destPath)
+end
+
+def buildTemplateBasicApp
+	destPath = 'examples/template-basic-app'
+	icon = 'evothings-logo.png'
+	copyCommon(destPath, icon)
+	copyJQuery(destPath)
+end
+
+# TODO
+def buildTemplateBLEApp
+	destPath = 'examples/template-ble-app'
+	icon = 'evothings-logo.png'
+	copyCommon(destPath, icon)
+	copyJQuery(destPath)
+	#copyEasyBLE(destPath)
+end
+
+# TODO
+def buildTemplateEddystoneApp
+	destPath = 'examples/template-eddystone-app'
+	icon = 'evothings-logo.png'
+	copyCommon(destPath, icon)
+	copyJQuery(destPath)
+	copyEddystone(destPath)
 end
 
 ###### Copy helpers ######
@@ -419,6 +447,10 @@ def build
 	buildMediaTekLinkIt
 	buildMediaTekLinkItConnect
 	buildEsp8266
+	# Templates - these are used by "New" button i Evothings Studio.
+	buildTemplateBasicApp
+	# TODO: Implement - buildTemplateBLEApp
+	# TODO: Implement - buildTemplateEddystoneApp
 end
 
 build
