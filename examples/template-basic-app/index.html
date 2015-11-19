@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no,
 		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-	<title>Estimote Beacons</title>
+	<title>Basic Template App</title>
 
 	<style>
 		@import 'ui/css/evothings-app.css';
@@ -18,15 +18,9 @@
 	if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
 
-	<script src="cordova.js"></script>
-	<script src="libs/jquery/jquery.js"></script>
-	<script src="libs/evothings/evothings.js"></script>
-	<script src="libs/evothings/ui/ui.js"></script>
-	<script src="app.js"></script>
-
 </head>
 
-<body>
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
 	<header>
 		<button class="back" onclick="history.back()">
@@ -38,9 +32,14 @@
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
-	<h1>Estimote Beacons</h1>
-	<p>Demo of ranging for Estimote Beacons. Works with all factory configured beacons.</p>
-	<ul id="found-beacons" class="dynamic"></ul>
+	<h1>TODO: Add app title</h1>
+
+	<p>This is a basic template for an Evothings app.</p>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<!-- TODO: Add libraries that you need -->
 
 </body>
 

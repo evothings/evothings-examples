@@ -4,8 +4,8 @@
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, user-scalable=no
-		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
 	<title>Hello World</title>
 
@@ -17,9 +17,6 @@
 	// Redirect console.log to Evothings Workbench.
 	if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
-
-	<script src="libs/evothings/evothings.js"></script>
-	<script src="libs/evothings/ui/ui.js"></script>
 
 </head>
 
@@ -49,6 +46,10 @@
 			Voil&agrave;! If everything works, the app automatically reloads!
 		</li>
 	</ol>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
 
 </body>
 
