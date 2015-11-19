@@ -12,7 +12,8 @@ include FileUtils::Verbose
 
 def buildMbedGAP
 	destPath = 'examples/mbed-custom-gap'
-	copyCommon(destPath)
+	icon = 'mbed.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
@@ -20,7 +21,8 @@ end
 
 def buildMbedGATT
 	destPath = 'examples/mbed-custom-gatt'
-	copyCommon(destPath)
+	icon = 'mbed.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
@@ -28,7 +30,8 @@ end
 
 def buildArduinoBLE
 	destPath = 'examples/arduino-ble/app'
-	copyCommon(destPath)
+	icon = 'arduino.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyWhereIsTheArduinoCode(destPath)
 end
@@ -36,7 +39,8 @@ end
 def buildArduinoInputTCP
 	# Copy CSS/JS files.
 	destPath = 'examples/arduino-input-tcp/app'
-	copyCommon(destPath)
+	icon = 'arduino.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -49,7 +53,8 @@ end
 
 def buildArduinoLEDOnOffBLE
 	destPath = 'examples/arduino-led-onoff-ble/app'
-	copyCommon(destPath)
+	icon = 'arduino.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyArduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -58,7 +63,8 @@ end
 def buildArduinoLEDOnOffTCP
 	# Copy CSS/JS files.
 	destPath = 'examples/arduino-led-onoff-tcp/app'
-	copyCommon(destPath)
+	icon = 'arduino.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -72,7 +78,8 @@ end
 def buildArduinoScriptableTCP
 	# Copy CSS/JS files.
 	destPath = 'examples/arduino-scriptable-tcp/app'
-	copyCommon(destPath)
+	icon = 'arduino.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -91,28 +98,32 @@ end
 
 def buildTISensorTagCC2541Demo
 	destPath = 'examples/ti-sensortag-cc2541-demo'
-	copyCommon(destPath)
+	icon = 'ti-sensortag-cc2541.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 end
 
 def buildTISensorTagCC2650Demo
 	destPath = 'examples/ti-sensortag-cc2650-demo'
-	copyCommon(destPath)
+	icon = 'ti-sensortag-cc2650.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 end
 
 def buildTISensorTagSensors
 	destPath = 'examples/ti-sensortag-sensors'
-	copyCommon(destPath)
+	icon = 'ti-sensortag-cc2650.png'
+	copyCommon(destPath, icon)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
 end
 
 def buildTISensorTagAccelerometer
 	destPath = 'examples/ti-sensortag-accelerometer'
-	copyCommon(destPath)
+	icon = 'ti-sensortag-cc2650.png'
+	copyCommon(destPath, icon)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
 end
@@ -155,13 +166,15 @@ end
 
 def buildEstimoteBeacons
 	destPath = 'examples/estimote-beacons'
-	copyCommon(destPath)
+	icon = 'estimote.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildEstimoteNearables
 	destPath = 'examples/estimote-nearables'
-	copyCommon(destPath)
+	icon = 'estimote.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
@@ -181,7 +194,8 @@ end
 
 def buildRFduinoLEDOnOff
 	destPath = 'examples/rfduino-led-onoff/app'
-	copyCommon(destPath)
+	icon = 'rfduino.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyRFduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -195,14 +209,16 @@ end
 
 def buildRedBearLabSimpleControl
 	destPath = 'examples/redbearlab-simplecontrol'
-	copyCommon(destPath)
+	icon = 'redbearlab.png'
+	copyCommon(destPath, icon)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
 end
 
 def buildRedBearLabSimpleChat
 	destPath = 'examples/redbearlab-simplechat'
-	copyCommon(destPath)
+	icon = 'redbearlab.png'
+	copyCommon(destPath, icon)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
 end
@@ -247,9 +263,28 @@ end
 
 ### CSS/JS ###
 
-def copyCommon(destPath)
+def copyCommon(destPath, imageFile = nil)
 	copyUI(destPath)
 	copyEvothings(destPath)
+	copyImageFile(destPath, imageFile)
+	writeSettingsFile(destPath, imageFile)
+end
+
+# Image format is hard-wired to png.
+# Get file extension from imageFile if you need to generalise.
+def copyImageFile(destPath, imageFile)
+	unless imageFile.nil?
+		copyFile('resources/app-icons/' + imageFile, destPath + '/app-icon.png')
+	end
+end
+
+def writeSettingsFile(destPath, imageFile)
+	if imageFile.nil?
+		json = '{}'
+	else
+		json = '{"app-icon":"app-icon.png"}'
+	end
+	writeFileUTF8(destPath + '/evothings.json', json)
 end
 
 def copyUI(destPath)
@@ -334,6 +369,10 @@ end
 
 def copyFile(srcPath, destPath)
 	cp(srcPath, destPath)
+end
+
+def writeFileUTF8(destPath, content)
+	File.open(destPath, "w:UTF-8") { |f| f.write(content) }
 end
 
 ###### Script entry point ######
