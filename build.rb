@@ -12,7 +12,7 @@ include FileUtils::Verbose
 
 def buildMbedGAP
 	destPath = 'examples/mbed-custom-gap'
-	icon = 'mbed.png'
+	icon = 'arm-mbed.png'
 	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
@@ -21,7 +21,7 @@ end
 
 def buildMbedGATT
 	destPath = 'examples/mbed-custom-gatt'
-	icon = 'mbed.png'
+	icon = 'arm-mbed.png'
 	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
@@ -158,47 +158,52 @@ end
 
 def buildHueLights
 	destPath = 'examples/hue-lights'
-	copyCommon(destPath)
+	icon = 'philips-hue.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildEddystoneScan
 	destPath = 'examples/eddystone-scan'
-	copyCommon(destPath)
+	icon = 'eddystone.png'
+	copyCommon(destPath, icon)
 	copyEddystone(destPath)
 	copyJQuery(destPath)
 end
 
 def buildIBeaconScan
 	destPath = 'examples/ibeacon-scan'
-	copyCommon(destPath)
+	icon = 'ibeacon.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildEstimoteBeacons
 	destPath = 'examples/estimote-beacons'
-	icon = 'estimote.png'
+	icon = 'estimote-beacons.png'
 	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildEstimoteNearables
 	destPath = 'examples/estimote-nearables'
-	icon = 'estimote.png'
+	icon = 'estimote-nearables.png'
 	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildNordic_nRF51822EK_BLE
 	destPath = 'examples/nordic-nRF51822-ek-ble'
-	copyCommon(destPath)
+	icon = 'nordic-semi.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyNordic_nRF51822_BLE(destPath)
 end
 
 def buildNordic_nRF51DK_BLE
 	destPath = 'examples/nordic-nRF51-dk-ble/app'
-	copyCommon(destPath)
+	icon = 'nordic-semi.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 	copyNordic_nRF51_BLE(destPath)
 end
@@ -214,7 +219,8 @@ end
 
 def buildLightblueBeanBasic
 	destPath = 'examples/lightblue-bean-basic/app'
-	copyCommon(destPath)
+	icon = 'lightblue-bean.png'
+	copyCommon(destPath, icon)
 	copyEasyBLE(destPath)
 end
 
@@ -236,37 +242,44 @@ end
 
 def buildBlunoHelloWorld
 	destPath = 'examples/bluno-helloworld/app'
-	copyCommon(destPath)
+	icon = 'bluno.png'
+	copyCommon(destPath, icon)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
 end
 
 def buildLightblueBeanSerial
 	destPath = 'experiments/lightblue-bean-serial'
-	copyCommon(destPath)
+	icon = 'lightblue-bean.png'
+	copyCommon(destPath, icon)
 	copyUtil(destPath)
 end
 
 def buildMediaTekLinkIt
 	destPath = 'examples/mediatek-linkit/app'
-	copyUI(destPath)
+	icon = 'mediatek-linkit.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildMediaTekLinkItConnect
 	destPath = 'examples/mediatek-linkit-connect/app'
-	copyCommon(destPath)
+	icon = 'mediatek-linkit.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
 def buildBlePeripheral
 	destPath = 'experiments/ble-peripheral'
+	icon = 'ble-logo.png'
+	copyCommon(destPath, icon)
 	copyUtil(destPath)
 end
 
 def buildEsp8266
 	destPath = 'examples/esp8266/app'
-	copyCommon(destPath)
+	icon = 'esp8266.png'
+	copyCommon(destPath, icon)
 	copyJQuery(destPath)
 end
 
@@ -278,22 +291,22 @@ def buildTemplateBasicApp
 end
 
 # TODO
-def buildTemplateBLEApp
-	destPath = 'examples/template-ble-app'
-	icon = 'evothings-logo.png'
-	copyCommon(destPath, icon)
-	copyJQuery(destPath)
-	#copyEasyBLE(destPath)
-end
+#def buildTemplateBLEApp
+#	destPath = 'examples/template-ble-app'
+#	icon = 'evothings-logo.png'
+#	copyCommon(destPath, icon)
+#	copyJQuery(destPath)
+#	copyEasyBLE(destPath)
+#end
 
 # TODO
-def buildTemplateEddystoneApp
-	destPath = 'examples/template-eddystone-app'
-	icon = 'evothings-logo.png'
-	copyCommon(destPath, icon)
-	copyJQuery(destPath)
-	copyEddystone(destPath)
-end
+#def buildTemplateEddystoneApp
+#	destPath = 'examples/template-eddystone-app'
+#	icon = 'evothings-logo.png'
+#	copyCommon(destPath, icon)
+#	copyJQuery(destPath)
+#	copyEddystone(destPath)
+#end
 
 ###### Copy helpers ######
 
@@ -449,8 +462,8 @@ def build
 	buildEsp8266
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
-	# TODO: Implement - buildTemplateBLEApp
-	# TODO: Implement - buildTemplateEddystoneApp
+	# TODO: buildTemplateBLEApp
+	# TODO: buildTemplateEddystoneApp
 end
 
 build
