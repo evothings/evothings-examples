@@ -1,0 +1,30 @@
+{
+  "name": "nrfe-widgets",
+  "version": "0.0.4",
+  "homepage": "https://github.com/psvensson/nrfe-widgets",
+  "authors": [
+    "psvensson <psvensson@gmail.com>"
+  ],
+  "description": "widgets and modules that implement the logic of node-red front-end flows made in evothings studio",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "node-red",
+    "iot",
+    "widgets",
+    "evothings"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mustache.js": "mustache#~2.2.0",
+    "requirejs": "~2.1.22"
+  }
+}

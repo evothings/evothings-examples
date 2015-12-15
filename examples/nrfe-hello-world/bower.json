@@ -1,0 +1,27 @@
+{
+  "name": "nrfe-hello-world",
+  "version": "0.0.1",
+  "homepage": "https://github.com/psvensson/nrfe-hello-world",
+  "authors": [
+    "psvensson <psvensson@gmail.com>"
+  ],
+  "description": "sample app that makes use of the node-red front-end functionality",
+  "main": "index.html",
+  "keywords": [
+    "node-red",
+    "nrfe",
+    "iot"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "nrfe": "~0.0.5"
+  }
+}

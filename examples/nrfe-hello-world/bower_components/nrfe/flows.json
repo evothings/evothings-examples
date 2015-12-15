@@ -1,0 +1,217 @@
+[
+  {
+    "type": "tab",
+    "id": "60efd3b0.9f102c",
+    "label": "Sheet 1"
+  },
+  {
+    "type": "tab",
+    "id": "5edadb99.a12524",
+    "label": "Sheet 2"
+  },
+  {
+    "id": "192a5232.e6d5ae",
+    "type": "page",
+    "z": "60efd3b0.9f102c",
+    "style": "background-color:#88f4ef",
+    "name": "foo",
+    "x": 120,
+    "y": 55,
+    "wires": [
+      [
+        "66b74dec.9948b4",
+        "85894cc1.7a76b"
+      ]
+    ]
+  },
+  {
+    "id": "66b74dec.9948b4",
+    "type": "section",
+    "_order":1,
+    "z": "60efd3b0.9f102c",
+    "x": 136,
+    "y": 189,
+    "wires": [
+      [
+        "b9b8a6dd.464758",
+        "338ee42a.cc711c",
+        "f131bf1d.0ece4",
+        "736870ba.8c979",
+        "10e44456.ef1bbc",
+        "e88b2425.1774d8"
+      ]
+    ]
+  },
+  {
+    "id": "b9b8a6dd.464758",
+    "type": "image",
+    "z": "60efd3b0.9f102c",
+    "image": "http://resources3.news.com.au/images/2010/10/21/1225941/548851-star-trek.gif",
+    "x": 297,
+    "y": 57,
+    "wires": [[]]
+  },
+  {
+    "id": "338ee42a.cc711c",
+    "type": "button",
+    "z": "60efd3b0.9f102c",
+    "name": "Start Scan",
+    "events": "click",
+    "x": 357,
+    "y": 240,
+    "wires": [["2f81c1cd.d07e3e"]]
+  },
+  {
+    "id": "32433c93.cdbcc4",
+    "type": "bluetooth",
+    "z": "60efd3b0.9f102c",
+    "name": "bluetooth",
+    "x": 357,
+    "y": 390,
+    "wires": [["f131bf1d.0ece4"]]
+  },
+  {
+    "id": "f131bf1d.0ece4",
+    "type": "picklist",
+    "z": "60efd3b0.9f102c",
+    "picklist": "name,address",
+    "idproperty": "address",
+    "x": 350,
+    "y": 494,
+    "wires": [
+      [
+        "736870ba.8c979",
+        "2517b873.dae848"
+      ]
+    ]
+  },
+  {
+    "id": "2517b873.dae848",
+    "type": "bleservices",
+    "z": "60efd3b0.9f102c",
+    "name": "bleservices",
+    "x": 611,
+    "y": 495,
+    "wires": [
+      [
+        "10e44456.ef1bbc",
+        "410a6c6.fbef594"
+      ]
+    ]
+  },
+  {
+    "id": "736870ba.8c979",
+    "type": "fetemplate",
+    "z": "60efd3b0.9f102c",
+    "name": "Selection template",
+    "field": "payload",
+    "format": "handlebars",
+    "template": "<h4>Device Selected: <b>{{name}}</b></h4>",
+    "x": 806,
+    "y": 58,
+    "wires": [[]]
+  },
+  {
+    "id": "10e44456.ef1bbc",
+    "type": "fetemplate",
+    "z": "60efd3b0.9f102c",
+    "name": "Scan template",
+    "field": "payload",
+    "format": "handlebars",
+    "template": "<h4>Scan result: {{error}}</h4>",
+    "x": 787,
+    "y": 120,
+    "wires": [[]]
+  },
+  {
+    "id": "e88b2425.1774d8",
+    "type": "picklist",
+    "z": "60efd3b0.9f102c",
+    "picklist": "handle,uuid,type",
+    "idproperty": "uuid",
+    "x": 759,
+    "y": 180,
+    "wires": [[]]
+  },
+  {
+    "id": "410a6c6.fbef594",
+    "type": "fefunction",
+    "z": "60efd3b0.9f102c",
+    "name": "Iterate over array",
+    "func": "console.log('----foo-----');\ndump(msg);\nconsole.log('--dumping payload')\ndump(msg.payload);\nif(msg.payload)\n{\n    console.log(\"iterating over services\");\n    var services = msg.payload || []\n    services.forEach(function(item)\n    {\n        console.log('sending item '+item);\n        this.out({payload:item});\n    }.bind(this))\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 592,
+    "y": 390,
+    "wires": [["e88b2425.1774d8"]]
+  },
+  {
+    "id": "dce69923.231968",
+    "type": "cdgeolocation",
+    "z": "60efd3b0.9f102c",
+    "name": "Cordova Geolocation",
+    "x": 164,
+    "y": 597,
+    "wires": [["fbbbfa4a.044408"]]
+  },
+  {
+    "id": "cfdd07cf.3022f8",
+    "type": "button",
+    "z": "60efd3b0.9f102c",
+    "name": "Where Am I?",
+    "events": "click",
+    "x": 130,
+    "y": 499,
+    "wires": [
+      [
+        "dce69923.231968",
+        "ef3c8b57.10c378"
+      ]
+    ]
+  },
+  {
+    "id": "fbbbfa4a.044408",
+    "type": "fetemplate",
+    "z": "60efd3b0.9f102c",
+    "name": "Geo coords",
+    "field": "payload",
+    "format": "handlebars",
+    "template": "Geolocation: {{coords.longitude}} --- {{coords.latitude}}",
+    "x": 411,
+    "y": 597,
+    "wires": [[]]
+  },
+  {
+    "id": "85894cc1.7a76b",
+    "type": "section",
+    "_order":1,
+    "z": "60efd3b0.9f102c",
+    "x": 110,
+    "y": 323,
+    "wires": [
+      [
+        "cfdd07cf.3022f8",
+        "fbbbfa4a.044408"
+      ]
+    ]
+  },
+  {
+    "id": "ef3c8b57.10c378",
+    "type": "cdvibration",
+    "z": "60efd3b0.9f102c",
+    "name": "Cordova vibration",
+    "vibration": "300",
+    "x": 611,
+    "y": 592,
+    "wires": [[]]
+  },
+  {
+    "id": "2f81c1cd.d07e3e",
+    "type": "fefunction",
+    "z": "60efd3b0.9f102c",
+    "name": "Function",
+    "x": 354,
+    "y": 317,
+    "wires": [["338ee42a.cc711c"]]
+  }
+]
