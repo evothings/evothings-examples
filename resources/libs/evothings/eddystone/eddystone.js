@@ -1,3 +1,5 @@
+// File: eddystone.js
+
 // This library scans for Eddystone beacons and translates their
 // advertisements into user-friendly variables.
 // The protocol specification is available at:
@@ -10,7 +12,7 @@ evothings.loadScripts([
 
 evothings.eddystone = {};
 
-(function() {
+;(function() {
 // constants
 var BLUETOOTH_BASE_UUID = '-0000-1000-8000-00805f9b34fb';
 
