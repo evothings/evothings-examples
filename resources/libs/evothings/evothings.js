@@ -1,5 +1,11 @@
+// File: evothings.js
+//
+// Here we define common function such as async script loading and OS detection.
+
 ;(function()
 {
+	window.evothings = window.evothings || {};
+
 	/**
 	 * @namespace
 	 * @description <p>Functions for loading scripts asynchronously,
@@ -7,45 +13,48 @@
 	 * @alias evothings
 	 * @public
 	 */
-	var evothings = window.evothings || {};
-	window.evothings = evothings;
+	var evothings = window.evothings;
 
 	/* ------------------ Script loading ------------------ */
 
-	var scriptLoadingCounter = 0;
-	var loadedScripts = {};
-	var scriptsLoadedCallbacks = [];
+	var mScriptLoadingCounter = 0;
+	var mLoadedScripts = {};
+	var mScriptsLoadedCallbacks = [];
 
-	/* Make sure to catch any DOMContentLoaded events occurring before
+	/**
+	 * Make sure to catch any DOMContentLoaded events occurring before
 	 * asynchronous loading of scripts. Those scripts, like ui.js, should check
-	 * this variable before listening for the event. */
-	evothings.gotDOMContentLoaded = false
+	 * this variable before listening for the event.
+	 */
+	evothings.gotDOMContentLoaded = false;
 
 	window.addEventListener('DOMContentLoaded', function(e)
 	{
-		evothings.gotDOMContentLoaded = true
+		evothings.gotDOMContentLoaded = true;
 	})
 
 	/**
 	 * Load a script.
 	 * @param {string} url - URL or path to the script. Relative paths are
 	 * relative to the HTML file that initiated script loading.
-	 * @param {function} callback - Optional parameterless function that will
-	 * be called when the script has loaded.
+	 * @param {function} successCallback - Optional parameterless function that
+	 * will be called when the script has loaded.
+	 * @param {function} errorCallback - Optional function that will be called
+	 * if loading the script fails, takes an error object as parameter.
 	 * @public
 	 */
-	evothings.loadScript = function(url, callback)
+	evothings.loadScript = function(url, successCallback, errorCallback)
 	{
 		// If script is already loaded call callback directly and return.
-		if (loadedScripts[url])
+		if (mLoadedScripts[url] == 'loadingcomplete')
 		{
-			callback && callback();
+			successCallback && successCallback();
 			return;
 		}
 
 		// Add script to dictionary of loaded scripts.
-		loadedScripts[url] = 'loadingstarted';
-		++scriptLoadingCounter;
+		mLoadedScripts[url] = 'loadingstarted';
+		++mScriptLoadingCounter;
 
 		// Create script tag.
 		var script = document.createElement('script');
@@ -56,32 +65,32 @@
 		script.onload = function()
 		{
 			// Mark as loaded.
-			loadedScripts[url] = 'loadingcomplete';
-			--scriptLoadingCounter;
+			mLoadedScripts[url] = 'loadingcomplete';
+			--mScriptLoadingCounter;
 
-			// Call callback if given.
-			callback && callback();
+			// Call success callback if given.
+			successCallback && successCallback();
 
 			// Call scripts loaded callbacks if this was the last script loaded.
-			if (0 == scriptLoadingCounter)
+			if (0 == mScriptLoadingCounter)
 			{
-				for (var i = 0; i < scriptsLoadedCallbacks.length; ++i)
+				for (var i = 0; i < mScriptsLoadedCallbacks.length; ++i)
 				{
-					var loadedCallback = scriptsLoadedCallbacks[i];
+					var loadedCallback = mScriptsLoadedCallbacks[i];
 					loadedCallback && loadedCallback();
 				}
 
 				// Clear callbacks - should we do this???
-				scriptsLoadedCallbacks = [];
+				mScriptsLoadedCallbacks = [];
 			}
 		};
 
 		// onerror fires for things like malformed URLs and 404's.
 		// If this function is called, the matching onload will not be called and
 		// scriptsLoaded will not fire.
-		script.onerror = function()
+		script.onerror = function(error)
 		{
-			throw "Could not load script '" + url + "'";
+			errorCallback && errorCallback(error);
 		};
 
 		// Attaching the script tag to the document starts loading the script.
@@ -124,7 +133,7 @@
 	 */
 	evothings.markScriptAsLoaded = function(pathOrURL)
 	{
-		loadedScripts[url] = 'loadingcomplete';
+		mLoadedScripts[url] = 'loadingcomplete';
 	};
 
 	/**
@@ -139,14 +148,14 @@
 	{
 		// If scripts are already loaded call the callback directly,
 		// else add the callback to the callbacks array.
-		if (0 != Object.keys(loadedScripts).length &&
-			0 == scriptLoadingCounter)
+		if (0 != Object.keys(mLoadedScripts).length &&
+			0 == mScriptLoadingCounter)
 		{
 			callback && callback();
 		}
 		else
 		{
-			scriptsLoadedCallbacks.push(callback);
+			mScriptsLoadedCallbacks.push(callback);
 		}
 	};
 
