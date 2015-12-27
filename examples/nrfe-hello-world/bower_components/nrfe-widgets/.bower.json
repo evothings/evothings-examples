@@ -1,6 +1,6 @@
 {
   "name": "nrfe-widgets",
-  "version": "0.0.25",
+  "version": "0.0.43",
   "homepage": "https://github.com/psvensson/nrfe-widgets",
   "authors": [
     "psvensson <psvensson@gmail.com>"
@@ -27,11 +27,11 @@
     "mustache.js": "mustache#~2.2.0",
     "requirejs": "~2.1.22"
   },
-  "_release": "0.0.25",
+  "_release": "0.0.43",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.25",
-    "commit": "55e5d055fcba24ed26bffd73f80b4464e835879c"
+    "tag": "v0.0.43",
+    "commit": "986dbe24b8178eb5c7cd2db720b0a2c11bf6462f"
   },
   "_source": "git://github.com/psvensson/nrfe-widgets.git",
   "_target": "~0.0.2",

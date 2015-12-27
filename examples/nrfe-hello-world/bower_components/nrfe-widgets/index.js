@@ -1,4 +1,153 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.nrfeWidgets = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var fn = function (def, parent)
+{
+  console.log('ble characteristics instantiated');
+  def.in = function(msg)
+  {
+    var deviceHandle = msg.payload.device
+    var serviceHandle = msg.payload.handle
+    console.log('ble characteristics device = '+deviceHandle+', service = '+serviceHandle)
+    if(deviceHandle && serviceHandle && evothings && evothings.ble)
+    {
+      evothings.ble.characteristics(
+        deviceHandle,
+        serviceHandle,
+        function(characteristics)
+        {
+          characteristics.forEach(function(ch)
+          {
+            ch.device = deviceHandle
+            ch.service = serviceHandle
+          })
+          def.out({payload: {characteristics: characteristics}})
+        })
+    }
+  };
+};
+module.exports = fn;
+},{}],2:[function(require,module,exports){
+
+var fn = function (def, parent)
+{
+  def.in = function(msg)
+  {
+    if(evothings && evothings.ble)
+    {
+      console.log('ble-services called for address ' + msg.payload.address);
+      evothings.ble.connect(msg.payload.address, function (r)
+      {
+        var deviceHandle = r.deviceHandle;
+        console.log('ble connect ' + r.deviceHandle + ' state ' + r.state);
+        if (r.state == 2) // connected
+        {
+          def.out({payload:{device: deviceHandle}})
+        }
+      }, function (errorCode)
+      {
+        console.log('connect error: ' + errorCode);
+        def.out({payload: {error: 'connect error: ' + errorCode}});
+      });
+    }
+  };
+};
+module.exports = fn;
+},{}],3:[function(require,module,exports){
+var fn = function (def, parent)
+{
+  def.in = function(msg)
+  {
+    var deviceHandle = msg.payload.device
+    var characteristicHandle = msg.payload.characteristic
+    var rv = undefined
+    if(deviceHandle && characteristicHandle && evothings && evothings.ble)
+    {
+      evothings.ble.descriptors(
+        deviceHandle,
+        characteristicHandle,
+        function(descriptors)
+        {
+          def.out({payload: descriptors})
+        })
+    }
+  };
+};
+module.exports = fn;
+},{}],4:[function(require,module,exports){
+var fn = function (def, parent)
+{
+  def.in = function(msg)
+  {
+    var deviceHandle = msg.payload.device
+    var characteristicHandle = msg.payload.characteristic
+    if(deviceHandle && serviceHandle && evothings && evothings.ble)
+    {
+      evothings.ble.descriptors(
+        deviceHandle,
+        characteristicHandle,
+        function(descriptors)
+        {
+          def.out({payload: {descriptors:descriptors}})
+        })
+    }
+  };
+};
+module.exports = fn;
+},{}],5:[function(require,module,exports){
+var fn = function (def, parent)
+{
+  console.log('============================================ble read characteristic instantiated');
+  def.in = function(msg)
+  {
+    var deviceHandle = msg.payload.device
+    var characteristicHandle = msg.payload.handle
+    var rv = undefined
+    if(deviceHandle && characteristicHandle && evothings && evothings.ble)
+    {
+      evothings.ble.readCharacteristic(
+        deviceHandle,
+        characteristicHandle,
+        function(data)
+        {
+          rv = escape(String.fromCharCode.apply(null, new Uint8Array(data)));
+          def.out({payload:{result: rv}})
+        },
+        function(errorCode)
+        {
+          rv = errorCode
+          def.out({payload:{error: errorCode}})
+        }
+      )
+    }
+  };
+};
+module.exports = fn;
+},{}],6:[function(require,module,exports){
+var fn = function (def, parent)
+{
+  def.in = function(msg)
+  {
+    var deviceHandle = msg.payload.device
+    var descriptorHandle = msg.payload.descriptor
+    var rv = undefined
+    if(deviceHandle && descriptorHandle && evothings && evothings.ble)
+    {
+      evothings.ble.readDescriptor(
+        deviceHandle,
+        descriptorHandle,
+        function(data)
+        {
+          def.out({payload: escape(String.fromCharCode.apply(null, new Uint8Array(data)))})
+        },
+        function(errorCode)
+        {
+          def.out({payload:{error: errorCode}})
+        }
+      );
+    }
+  };
+};
+module.exports = fn;
+},{}],7:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -23,37 +172,32 @@
 		};
 	};
 	module.exports = fn;
-},{}],2:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
 		def.in = function(msg)
 		{
-			if(evothings && evothings.ble)
+			var deviceHandle = msg.payload.device;
+			if(evothings && evothings.ble && deviceHandle)
 			{
-				console.log('ble-services called for address ' + msg.payload.address);
-				evothings.ble.connect(msg.payload.address, function (r)
-				{
-					var deviceHandle = r.deviceHandle;
-					console.log('connect ' + r.deviceHandle + ' state ' + r.state);
-					if (r.state == 2) // connected
-					{
-						console.log('connected, requesting services...');
-						evothings.ble.readAllServiceData(deviceHandle, function (services)
+					console.log('connected, requesting services...');
+					evothings.ble.services(
+						deviceHandle,
+						function(services)
 						{
-							def.out({payload: services});
-						});
-					}
-				}, function (errorCode)
-				{
-					console.log('connect error: ' + errorCode);
-					def.out({payload: {error: 'connect error: ' + errorCode}});
-				});
+							console.log('got services')
+							services.forEach(function(service)
+							{
+								service.device = deviceHandle
+							})
+							def.out({payload:{services: services}})
+						})
 			}
 		};
 	};
 	module.exports = fn;
-},{}],3:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 
 		var fn = function(def, parent)
 		{
@@ -74,7 +218,7 @@
 			return node;
 		};
 		module.exports = fn;
-},{}],4:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -92,7 +236,7 @@
 		}, false);
 	};
 	module.exports = fn;
-},{}],5:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -110,7 +254,7 @@
 		}
 	};
 	module.exports = fn;
-},{}],6:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -120,7 +264,7 @@
 		}
 	};
 	module.exports = fn;
-},{}],7:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -135,7 +279,7 @@
 
 	};
 	module.exports = fn;
-},{}],8:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -147,7 +291,7 @@
 		};
 	};
 	module.exports = fn;
-},{}],9:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -169,7 +313,7 @@
 		return node;
 	};
 	module.exports = fn;
-},{}],10:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -182,7 +326,7 @@
 
 	};
 	module.exports = fn;
-},{}],11:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -198,9 +342,9 @@
 		return node;
 	}
 	module.exports = fn;
-},{}],12:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 
-},{}],13:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -210,7 +354,7 @@
 		return node;
 	};
 	module.exports = fn;
-},{}],14:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 
 		var fn = function(def, parent)
 		{
@@ -223,7 +367,7 @@
 			return node;
 		};
 		module.exports = fn;
-},{}],15:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 
 	var fn = function (def, parent)
 	{
@@ -271,30 +415,49 @@
 
 		var seenitems = []
 
-		def.in = function(msg)
+		var addRow = function(item)
 		{
-			var item = msg.payload;
-			//console.log("---------------------- picklist population");
 			console.log(JSON.stringify(item));
-			if(item && item[idproperty] && !seenitems[item[idproperty]])
+			if (item && item[idproperty] && !seenitems[item[idproperty]])
 			{
-				console.log('adding new row for item '+item[idproperty]);
+				console.log('adding new row for item ' + item[idproperty]);
 				seenitems[item[idproperty]] = item;
 				var tr = document.createElement('tr');
 				tbody.appendChild(tr);
-				tdef.forEach(function(p)
+				tdef.forEach(function (p)
 				{
 					var td = document.createElement('td');
-					td.className="mdl-data-table__cell--non-numeric";
+					td.className = "mdl-data-table__cell--non-numeric";
 					td.innerHTML = item[p];
 					tr.appendChild(td);
 				});
-				tr.addEventListener('click', function(e)
+				tr.addEventListener('click', function (e)
 				{
-					var p = {payload:item};
-					console.log('sending item '+JSON.stringify(p));
+					var p = {payload: item};
+					console.log('sending item ' + JSON.stringify(p));
 					def.out(p);
 				});
+			}
+		};
+
+		def.in = function(msg)
+		{
+			if(msg && msg.payload)
+			{
+				var item = msg.payload;
+				//console.log("---------------------- picklist population");
+				if(item.forEach)
+				{
+					console.log('picklist got array. iterating..')
+					item.forEach(function(e)
+					{
+						addRow(e)
+					})
+				}
+				else
+				{
+					addRow(item)
+				}
 			}
 		};
 
@@ -303,7 +466,7 @@
 		return node;
 	};
 	module.exports = fn;
-},{}],16:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 
 		var fn = function(def, parent)
 		{
@@ -314,15 +477,48 @@
 			return node;
 		};
 		module.exports = fn;
-},{}],17:[function(require,module,exports){
-arguments[4][12][0].apply(exports,arguments)
-},{"dup":12}],18:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
+
+console.dir(window.nrfeWidgets);
+},{}],24:[function(require,module,exports){
+var app = {}
+app.sensortag = {};
+
+app.sensortag.ACCELEROMETER_SERVICE = 'f000aa10-0451-4000-b000-000000000000';
+app.sensortag.ACCELEROMETER_DATA = 'f000aa11-0451-4000-b000-000000000000';
+app.sensortag.ACCELEROMETER_CONFIG = 'f000aa12-0451-4000-b000-000000000000';
+app.sensortag.ACCELEROMETER_PERIOD = 'f000aa13-0451-4000-b000-000000000000';
+app.sensortag.ACCELEROMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb';
+
+app.sensortag.MAGNETOMETER_SERVICE = 'f000aa30-0451-4000-b000-000000000000';
+app.sensortag.MAGNETOMETER_DATA = 'f000aa31-0451-4000-b000-000000000000';
+app.sensortag.MAGNETOMETER_CONFIG = 'f000aa32-0451-4000-b000-000000000000';
+app.sensortag.MAGNETOMETER_PERIOD = 'f000aa33-0451-4000-b000-000000000000';
+app.sensortag.MAGNETOMETER_NOTIFICATION = '00002902-0000-1000-8000-00805f9b34fb';
+
+var fn = function (def, parent)
+{
+  def.in = function(msg)
+  {
+    var device = msg.payload
+    if(device && evothings && evothings.ble)
+    {
+
+    }
+  };
+};
+module.exports = fn;
+},{}],25:[function(require,module,exports){
 
 var widgets =
 {
 	page: require("./page"),
 	bleservices: require("./bleservices"),
+	blecharacteristics: require("./blecharacteristics"),
+	blereadcharacteristic: require("./blereadcharacteristic"),
+	bledesccriptors: require("./bledescriptors"),
 	blescan: require("./blescan"),
+	bleconnect: require("./bleconnect"),
 	button: require("./button"),
 	cdbattery: require("./cdbattery"),
 	cdgeolocation: require("./cdgeolocation"),
@@ -334,8 +530,9 @@ var widgets =
 	picklist: require("./picklist"),
 	section: require("./section"),
 	fetemplate: require("./fetemplate"),
-	html: require("./html")
+	html: require("./html"),
+	tisensor: require('./tisensor')
 }
 module.exports = widgets
-},{"./blescan":1,"./bleservices":2,"./button":3,"./cdbattery":4,"./cdgeolocation":5,"./cdvibration":6,"./event":7,"./fefunction":8,"./fetemplate":9,"./html":10,"./image":11,"./input":13,"./page":14,"./picklist":15,"./section":16}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])(18)
+},{"./blecharacteristics":1,"./bleconnect":2,"./bledescriptors":4,"./blereadcharacteristic":5,"./blescan":7,"./bleservices":8,"./button":9,"./cdbattery":10,"./cdgeolocation":11,"./cdvibration":12,"./event":13,"./fefunction":14,"./fetemplate":15,"./html":16,"./image":17,"./input":19,"./page":20,"./picklist":21,"./section":22,"./tisensor":24}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25])(25)
 });

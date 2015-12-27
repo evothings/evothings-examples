@@ -128,7 +128,15 @@ nrfe.prototype.instantiateWidget = function(widget_def, parentNode)
 					//console.log('sending message to widget '+wid+' type '+widget_def.type);
 					var w = this.widgets[wid];
 					//console.log(JSON.stringify(w));
-					w.in(msg);
+					if(!w.in)
+					{
+						console.log('***** ERROR: no "in" function defined at widget '+w+' '+widget_def.type)
+						dump(w);
+					}
+					else
+					{
+						w.in(msg);
+					}
 				}.bind(this))
 			}.bind(this))
 		}.bind(this);

@@ -1,6 +1,6 @@
 {
   "name": "nrfe",
-  "version": "0.0.19",
+  "version": "0.0.21",
   "homepage": "https://github.com/psvensson/nrfe",
   "authors": [
     "psvensson <psvensson@gmail.com>"
@@ -26,11 +26,11 @@
     "nrfe-widgets": "~0.0.2",
     "requirejs-plugins": "~1.0.3"
   },
-  "_release": "0.0.19",
+  "_release": "0.0.21",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.19",
-    "commit": "34e47c25b7b15904831487237a5b4c75f26182dd"
+    "tag": "v0.0.21",
+    "commit": "3a1e7e3b7f92740d706a5b9e034fd5a07087dce9"
   },
   "_source": "git://github.com/psvensson/nrfe.git",
   "_target": "~0.0.5",

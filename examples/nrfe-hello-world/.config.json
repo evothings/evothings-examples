@@ -11,7 +11,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/analysis/72-sentiment.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/analysis/72-sentiment.js"
     },
     "inject": {
      "name": "inject",
@@ -20,7 +20,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/20-inject.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/20-inject.js"
     },
     "catch": {
      "name": "catch",
@@ -29,7 +29,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/25-catch.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/25-catch.js"
     },
     "status": {
      "name": "status",
@@ -38,7 +38,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/25-status.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/25-status.js"
     },
     "debug": {
      "name": "debug",
@@ -47,7 +47,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/58-debug.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/58-debug.js"
     },
     "exec": {
      "name": "exec",
@@ -56,7 +56,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/75-exec.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/75-exec.js"
     },
     "function": {
      "name": "function",
@@ -65,7 +65,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/80-function.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/80-function.js"
     },
     "template": {
      "name": "template",
@@ -74,7 +74,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/80-template.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/80-template.js"
     },
     "delay": {
      "name": "delay",
@@ -83,7 +83,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/89-delay.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/89-delay.js"
     },
     "trigger": {
      "name": "trigger",
@@ -92,7 +92,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/89-trigger.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/89-trigger.js"
     },
     "comment": {
      "name": "comment",
@@ -101,7 +101,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/90-comment.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/90-comment.js"
     },
     "unknown": {
      "name": "unknown",
@@ -110,7 +110,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/core/98-unknown.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/98-unknown.js"
     },
     "rpi-gpio": {
      "name": "rpi-gpio",
@@ -121,7 +121,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/hardware/36-rpi-gpio.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/hardware/36-rpi-gpio.js"
     },
     "mqtt": {
      "name": "mqtt",
@@ -132,7 +132,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/io/10-mqtt.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/10-mqtt.js"
     },
     "httpin": {
      "name": "httpin",
@@ -143,7 +143,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/io/21-httpin.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/21-httpin.js"
     },
     "websocket": {
      "name": "websocket",
@@ -155,7 +155,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/io/22-websocket.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/22-websocket.js"
     },
     "watch": {
      "name": "watch",
@@ -164,7 +164,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/io/23-watch.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/23-watch.js"
     },
     "tcpin": {
      "name": "tcpin",
@@ -175,7 +175,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/io/31-tcpin.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/31-tcpin.js"
     },
     "udp": {
      "name": "udp",
@@ -185,7 +185,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/io/32-udp.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/32-udp.js"
     },
     "switch": {
      "name": "switch",
@@ -194,7 +194,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/logic/10-switch.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/logic/10-switch.js"
     },
     "change": {
      "name": "change",
@@ -203,7 +203,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/logic/15-change.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/logic/15-change.js"
     },
     "range": {
      "name": "range",
@@ -212,7 +212,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/logic/16-range.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/logic/16-range.js"
     },
     "CSV": {
      "name": "CSV",
@@ -221,7 +221,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/parsers/70-CSV.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/parsers/70-CSV.js"
     },
     "HTML": {
      "name": "HTML",
@@ -239,7 +239,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/parsers/70-JSON.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/parsers/70-JSON.js"
     },
     "XML": {
      "name": "XML",
@@ -248,7 +248,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/parsers/70-XML.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/parsers/70-XML.js"
     },
     "tail": {
      "name": "tail",
@@ -257,7 +257,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/storage/28-tail.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/storage/28-tail.js"
     },
     "file": {
      "name": "file",
@@ -267,7 +267,7 @@
      ],
      "enabled": true,
      "module": "node-red",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/nodes/core/storage/50-file.js"
+     "file": "/usr/lib/node_modules/node-red/nodes/core/storage/50-file.js"
     },
     "BLESERVICES": {
      "name": "BLESERVICES",
@@ -394,6 +394,51 @@
      "enabled": true,
      "module": "node-red",
      "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/section/1004-SECTION.js"
+    },
+    "TISENSOR": {
+     "name": "TISENSOR",
+     "types": [
+      "tisensor"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/tisensortag/1015-TISENSOR.js"
+    },
+    "BLECHARACTERISTICS": {
+     "name": "BLECHARACTERISTICS",
+     "types": [
+      "blecharacteristics"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/blecharacteristics/1016-BLECHARACTERISTICS.js"
+    },
+    "BLECONNECT": {
+     "name": "BLECONNECT",
+     "types": [
+      "bleconnect"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/bleconnect/1019-BLECONNECT.js"
+    },
+    "BLEDESCRIPTORS": {
+     "name": "BLEDESCRIPTORS",
+     "types": [
+      "bledescriptors"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/bledescriptors/1017-BLEDESCRIPTORS.js"
+    },
+    "BLEREADCHARACTERISTICS": {
+     "name": "BLEREADCHARACTERISTICS",
+     "types": [
+      "blereadcharacteristic"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/blereadcharacteristics/1018-BLEREADCHARACTERISTICS.js"
     }
    }
   },
@@ -409,7 +454,7 @@
      ],
      "enabled": true,
      "module": "node-red-node-email",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/node_modules/node-red-node-email/61-email.js"
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-email/61-email.js"
     }
    }
   },
@@ -424,7 +469,7 @@
      ],
      "enabled": true,
      "module": "node-red-node-feedparser",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/node_modules/node-red-node-feedparser/32-feedparse.js"
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-feedparser/32-feedparse.js"
     }
    }
   },
@@ -439,7 +484,7 @@
      ],
      "enabled": true,
      "module": "node-red-node-rbe",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/node_modules/node-red-node-rbe/rbe.js"
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-rbe/rbe.js"
     }
    }
   },
@@ -456,7 +501,7 @@
      ],
      "enabled": true,
      "module": "node-red-node-serialport",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/node_modules/node-red-node-serialport/25-serial.js"
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-serialport/25-serial.js"
     }
    }
   },
@@ -473,7 +518,7 @@
      ],
      "enabled": true,
      "module": "node-red-node-twitter",
-     "file": "/home/peter/projects/evothings-studio/node_modules/node-red/node_modules/node-red-node-twitter/27-twitter.js"
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-twitter/27-twitter.js"
     }
    }
   }
