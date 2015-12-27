@@ -1,0 +1,526 @@
+{
+ "nodes": {
+  "node-red": {
+   "name": "node-red",
+   "version": "0.12.1",
+   "nodes": {
+    "sentiment": {
+     "name": "sentiment",
+     "types": [
+      "sentiment"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/analysis/72-sentiment.js"
+    },
+    "inject": {
+     "name": "inject",
+     "types": [
+      "inject"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/20-inject.js"
+    },
+    "catch": {
+     "name": "catch",
+     "types": [
+      "catch"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/25-catch.js"
+    },
+    "status": {
+     "name": "status",
+     "types": [
+      "status"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/25-status.js"
+    },
+    "debug": {
+     "name": "debug",
+     "types": [
+      "debug"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/58-debug.js"
+    },
+    "exec": {
+     "name": "exec",
+     "types": [
+      "exec"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/75-exec.js"
+    },
+    "function": {
+     "name": "function",
+     "types": [
+      "function"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/80-function.js"
+    },
+    "template": {
+     "name": "template",
+     "types": [
+      "template"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/80-template.js"
+    },
+    "delay": {
+     "name": "delay",
+     "types": [
+      "delay"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/89-delay.js"
+    },
+    "trigger": {
+     "name": "trigger",
+     "types": [
+      "trigger"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/89-trigger.js"
+    },
+    "comment": {
+     "name": "comment",
+     "types": [
+      "comment"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/90-comment.js"
+    },
+    "unknown": {
+     "name": "unknown",
+     "types": [
+      "unknown"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/core/98-unknown.js"
+    },
+    "rpi-gpio": {
+     "name": "rpi-gpio",
+     "types": [
+      "rpi-gpio in",
+      "rpi-gpio out",
+      "rpi-mouse"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/hardware/36-rpi-gpio.js"
+    },
+    "mqtt": {
+     "name": "mqtt",
+     "types": [
+      "mqtt in",
+      "mqtt out",
+      "mqtt-broker"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/10-mqtt.js"
+    },
+    "httpin": {
+     "name": "httpin",
+     "types": [
+      "http in",
+      "http response",
+      "http request"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/21-httpin.js"
+    },
+    "websocket": {
+     "name": "websocket",
+     "types": [
+      "websocket in",
+      "websocket out",
+      "websocket-listener",
+      "websocket-client"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/22-websocket.js"
+    },
+    "watch": {
+     "name": "watch",
+     "types": [
+      "watch"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/23-watch.js"
+    },
+    "tcpin": {
+     "name": "tcpin",
+     "types": [
+      "tcp in",
+      "tcp out",
+      "tcp request"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/31-tcpin.js"
+    },
+    "udp": {
+     "name": "udp",
+     "types": [
+      "udp in",
+      "udp out"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/io/32-udp.js"
+    },
+    "switch": {
+     "name": "switch",
+     "types": [
+      "switch"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/logic/10-switch.js"
+    },
+    "change": {
+     "name": "change",
+     "types": [
+      "change"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/logic/15-change.js"
+    },
+    "range": {
+     "name": "range",
+     "types": [
+      "range"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/logic/16-range.js"
+    },
+    "CSV": {
+     "name": "CSV",
+     "types": [
+      "csv"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/parsers/70-CSV.js"
+    },
+    "HTML": {
+     "name": "HTML",
+     "types": [
+      "html"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/html/1008-HTML.js"
+    },
+    "JSON": {
+     "name": "JSON",
+     "types": [
+      "json"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/parsers/70-JSON.js"
+    },
+    "XML": {
+     "name": "XML",
+     "types": [
+      "xml"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/parsers/70-XML.js"
+    },
+    "tail": {
+     "name": "tail",
+     "types": [
+      "tail"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/storage/28-tail.js"
+    },
+    "file": {
+     "name": "file",
+     "types": [
+      "file",
+      "file in"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/usr/lib/node_modules/node-red/nodes/core/storage/50-file.js"
+    },
+    "BLECHARACTERISTICS": {
+     "name": "BLECHARACTERISTICS",
+     "types": [
+      "blecharacteristics"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/blecharacteristics/1016-BLECHARACTERISTICS.js"
+    },
+    "BLESERVICES": {
+     "name": "BLESERVICES",
+     "types": [
+      "bleservices"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/bleservices/1010-BLESERVICES.js"
+    },
+    "BLUETOOTH": {
+     "name": "BLUETOOTH",
+     "types": [
+      "blescan"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/bluetooth/1006-BLUETOOTH.js"
+    },
+    "BUTTON": {
+     "name": "BUTTON",
+     "types": [
+      "button"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/button/1001-BUTTON.js"
+    },
+    "CDBATTERY": {
+     "name": "CDBATTERY",
+     "types": [
+      "cdbattery"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/cdbattery/1010-CDBATTERY.js"
+    },
+    "CDGEOLOCATION": {
+     "name": "CDGEOLOCATION",
+     "types": [
+      "cdgeolocation"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/cdgeolocation/1011-CDGEOLOCATION.js"
+    },
+    "CDVIBRATION": {
+     "name": "CDVIBRATION",
+     "types": [
+      "cdvibration"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/cdvibration/1012-CDVIBRATION.js"
+    },
+    "EVENT": {
+     "name": "EVENT",
+     "types": [
+      "event"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/event/1005-EVENT.js"
+    },
+    "FEFUNCTION": {
+     "name": "FEFUNCTION",
+     "types": [
+      "fefunction"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/fefunction/1013-FEFUNCTION.js"
+    },
+    "FETEMPLATE": {
+     "name": "FETEMPLATE",
+     "types": [
+      "fetemplate"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/fetemplate/1014-FETEMPLATE.js"
+    },
+    "IMAGE": {
+     "name": "IMAGE",
+     "types": [
+      "image"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/image/1007-IMAGE.js"
+    },
+    "INPUT": {
+     "name": "INPUT",
+     "types": [
+      "input"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/input/1003-INPUT.js"
+    },
+    "PAGE": {
+     "name": "PAGE",
+     "types": [
+      "page"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/page/1002-PAGE.js"
+    },
+    "PICKLIST": {
+     "name": "PICKLIST",
+     "types": [
+      "picklist"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/picklist/1009-PICKLIST.js"
+    },
+    "SECTION": {
+     "name": "SECTION",
+     "types": [
+      "section"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/section/1004-SECTION.js"
+    },
+    "TISENSOR": {
+     "name": "TISENSOR",
+     "types": [
+      "tisensor"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/tisensortag/1015-TISENSOR.js"
+    },
+    "BLEDESCRIPTORS": {
+     "name": "BLEDESCRIPTORS",
+     "types": [
+      "bledescriptors"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/bledescriptors/1017-BLEDESCRIPTORS.js"
+    },
+    "BLEREADCHARACTERISTICS": {
+     "name": "BLEREADCHARACTERISTICS",
+     "types": [
+      "blereadcharacteristic"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/blereadcharacteristics/1018-BLEREADCHARACTERISTICS.js"
+    },
+    "BLECONNECT": {
+     "name": "BLECONNECT",
+     "types": [
+      "bleconnect"
+     ],
+     "enabled": true,
+     "module": "node-red",
+     "file": "/home/peter/projects/evothings-studio/node_modules/nrmodules/bleconnect/1019-BLECONNECT.js"
+    }
+   }
+  },
+  "node-red-node-email": {
+   "name": "node-red-node-email",
+   "version": "0.1.0",
+   "nodes": {
+    "email": {
+     "name": "email",
+     "types": [
+      "e-mail",
+      "e-mail in"
+     ],
+     "enabled": true,
+     "module": "node-red-node-email",
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-email/61-email.js"
+    }
+   }
+  },
+  "node-red-node-feedparser": {
+   "name": "node-red-node-feedparser",
+   "version": "0.1.3",
+   "nodes": {
+    "feedparse": {
+     "name": "feedparse",
+     "types": [
+      "feedparse"
+     ],
+     "enabled": true,
+     "module": "node-red-node-feedparser",
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-feedparser/32-feedparse.js"
+    }
+   }
+  },
+  "node-red-node-rbe": {
+   "name": "node-red-node-rbe",
+   "version": "0.1.0",
+   "nodes": {
+    "rbe": {
+     "name": "rbe",
+     "types": [
+      "rbe"
+     ],
+     "enabled": true,
+     "module": "node-red-node-rbe",
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-rbe/rbe.js"
+    }
+   }
+  },
+  "node-red-node-serialport": {
+   "name": "node-red-node-serialport",
+   "version": "0.0.5",
+   "nodes": {
+    "serialport": {
+     "name": "serialport",
+     "types": [
+      "serial in",
+      "serial out",
+      "serial-port"
+     ],
+     "enabled": true,
+     "module": "node-red-node-serialport",
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-serialport/25-serial.js"
+    }
+   }
+  },
+  "node-red-node-twitter": {
+   "name": "node-red-node-twitter",
+   "version": "0.1.2",
+   "nodes": {
+    "twitter": {
+     "name": "twitter",
+     "types": [
+      "twitter-credentials",
+      "twitter in",
+      "twitter out"
+     ],
+     "enabled": true,
+     "module": "node-red-node-twitter",
+     "file": "/usr/lib/node_modules/node-red/node_modules/node-red-node-twitter/27-twitter.js"
+    }
+   }
+  }
+ }
+}
