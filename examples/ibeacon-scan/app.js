@@ -17,6 +17,12 @@ var app = (function()
 		{uuid:'585CDE93-1B01-42CC-9A13-25009BEDC65E'},	// Dialog Semiconductor.
 	];
 
+	// Background detection.
+	var notificationID = 0;
+	var inBackground = false;
+	document.addEventListener('pause', function() { inBackground = true });
+	document.addEventListener('resume', function() { inBackground = false });
+
 	// Dictionary of beacons.
 	var beacons = {};
 
@@ -71,10 +77,24 @@ var app = (function()
 		};
 
 		// Called when monitoring and the state of a region changes.
-		// (Not used in this example, included as a reference.)
+		// If we are in the background, a notification is shown.
 		delegate.didDetermineStateForRegion = function(pluginResult)
 		{
-			//console.log('didDetermineStateForRegion: ' + JSON.stringify(pluginResult))
+			if (inBackground)
+			{
+				// Show notification if a beacon is inside the region.
+				// TODO: Add check for specific beacon(s) in your app.
+				if (pluginResult.region.typeName == 'BeaconRegion' &&
+					pluginResult.state == 'CLRegionStateInside')
+				{
+					cordova.plugins.notification.local.schedule(
+						{
+							id: ++notificationID,
+							title: "Beacon in range",
+							text: "iBeacon Scan detected a beacon, tap here to open app."
+						});
+				}
+			}
 		};
 
 		// Set the delegate object to use.
