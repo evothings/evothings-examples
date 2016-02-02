@@ -323,7 +323,9 @@ end
 # Get file extension from imageFile if you need to generalise.
 def copyImageFile(destPath, imageFile)
 	unless imageFile.nil?
-		copyFile('resources/app-icons/' + imageFile, destPath + '/app-icon.png')
+		copyFile(
+			'resources/app-icons/' + imageFile,
+			fullDestPath(destPath) + '/app-icon.png')
 	end
 end
 
@@ -333,80 +335,106 @@ def writeSettingsFile(destPath, imageFile)
 	else
 		json = '{"app-icon":"app-icon.png"}'
 	end
-	writeFileUTF8(destPath + '/evothings.json', json)
+	writeFileUTF8(fullDestPath(destPath) + '/evothings.json', json)
 end
 
 def copyUI(destPath)
-	copyDir('resources/ui', destPath)
-	copyDir('resources/libs/evothings/ui', destPath + '/libs/evothings')
+	copyDir('resources/ui', fullDestPath(destPath))
+	copyDir('resources/libs/evothings/ui', fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyJQuery(destPath)
-	copyDir('resources/libs/jquery', destPath + '/libs')
+	copyDir('resources/libs/jquery', fullDestPath(destPath) + '/libs')
 end
 
 def copyEvothings(destPath)
-	copyDir('resources/libs/evothings/evothings.js', destPath + '/libs/evothings')
-	copyDir('resources/libs/evothings/version-1.2.0', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/evothings.js',
+		fullDestPath(destPath) + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/version-1.2.0',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyEasyBLE(destPath)
 	copyUtil(destPath)
-	copyDir('resources/libs/evothings/easyble', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/easyble',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyArduinoBLE(destPath)
 	copyEasyBLE(destPath)
-	copyDir('resources/libs/evothings/arduinoble', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/arduinoble',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyArduinoTCP(destPath)
-	copyDir('resources/libs/evothings/arduinotcp', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/arduinotcp',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyNordic_nRF51822_BLE(destPath)
 	copyEasyBLE(destPath)
-	copyDir('resources/libs/evothings/nordic-nRF51822-ble', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/nordic-nRF51822-ble',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyNordic_nRF51_BLE(destPath)
 	copyEasyBLE(destPath)
-	copyDir('resources/libs/evothings/nordic-nRF51-ble', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/nordic-nRF51-ble',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyRFduinoBLE(destPath)
 	copyEasyBLE(destPath)
-	copyDir('resources/libs/evothings/rfduinoble', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/rfduinoble',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyTISensorTag(destPath)
 	copyEasyBLE(destPath)
-	copyDir('resources/libs/evothings/tisensortag', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/tisensortag',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyEddystone(destPath)
 	copyEasyBLE(destPath)
-	copyDir('resources/libs/evothings/eddystone', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/eddystone',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyUtil(destPath)
-	copyDir('resources/libs/evothings/util', destPath + '/libs/evothings')
+	copyDir(
+		'resources/libs/evothings/util',
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyWhereIsTheArduinoCode(destPath)
 	copyFile(
 		'resources/txt/where-is-the-arduino-code.txt',
-		destPath + '/where-is-the-arduino-code.txt')
+		fullDestPath(destPath) + '/where-is-the-arduino-code.txt')
 end
 
 ### Arduino .ino files ###
 
 def copyArduinoEthernet(destPath)
-	copyDir('resources/arduino/arduinoethernet', destPath + '/arduinoethernet')
+	copyDir(
+		'resources/arduino/arduinoethernet',
+		fullDestPath(destPath) + '/arduinoethernet')
 end
 
 def copyArduinoWiFi(destPath)
-	copyDir('resources/arduino/arduinowifi', destPath + '/arduinowifi')
+	copyDir(
+		'resources/arduino/arduinowifi',
+		fullDestPath(destPath) + '/arduinowifi')
 end
 
 ### General copy methods ###
@@ -426,7 +454,7 @@ end
 
 ###### Script entry point ######
 
-def build
+def buildExamples
 	buildBlePeripheral
 	buildMbedGAP
 	buildMbedGATT
@@ -466,4 +494,21 @@ def build
 	# TODO: buildTemplateEddystoneApp
 end
 
-build
+
+### Destination path for generated files ###
+
+def fullDestPath(destPath)
+	'generated/' + destPath
+end
+
+def buildGenerated
+	copyDir(
+		'examples',
+		'generated')
+	copyDir(
+		'experiments',
+		'generated')
+	buildExamples
+end
+
+buildGenerated
