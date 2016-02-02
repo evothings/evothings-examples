@@ -35,16 +35,12 @@ void loop(void) {
 
     while (client.connected()) {
       if (client.available()) {
-
         char command = client.read();
-
         if (command == 'H') {
-
           digitalWrite(ledPin, HIGH);
           Serial.println("LED is now on.");
         }
         else if (command == 'L') {
-
           digitalWrite(ledPin, LOW);
           Serial.println("LED is now off.");
         }
