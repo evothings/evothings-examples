@@ -1,12 +1,13 @@
 .DS_Store
-build
 examples/**/ui
 examples/**/libs
 examples/**/arduinowifi
 examples/**/arduinoethernet
 examples/**/where-is-the-arduino-code.txt
+examples/**/evothings.json
+examples/**/app-icon.png
 experiments/**/ui
 experiments/**/libs
+experiments/**/evothings.json
+experiments/**/app-icon.png
 /resources/libs/evothings/out
-evothings.json
-app-icon.png
