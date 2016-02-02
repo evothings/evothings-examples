@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one
+	or more contributor license agreements.  See the NOTICE file
+	distributed with this work for additional information
+	regarding copyright ownership.  The ASF licenses this file
+	to you under the Apache License, Version 2.0 (the
+	"License"); you may not use this file except in compliance
+	with the License.  You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the License is distributed on an
+	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	 KIND, either express or implied.  See the License for the
+	specific language governing permissions and limitations
+	under the License.
+-->
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.0-beta.1.min.css" />
+		<link rel="stylesheet" href="css/index.css" />
+		<title>BLE Discovery</title>
+		<script>
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) { console.log = hyper.log }
+		</script>
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery.mobile-1.4.0-beta.1.js"></script>
+		<script src="cordova.js"></script>
+		<script src="js/index.js"></script>
+		<script>
+		app.initialize();
+		</script>
+	</head>
+	<body>
+	<div data-role="page" id="first" data-theme="a">
+		<div data-role="header">
+			<h1>BLE Discovery</h1>
+		</div>
+
+		<div data-role="content">
+			<h2>Devices (auto discovery)</h2>
+			<!-- TODO: buttons to start/stop scan. -->
+			<ul data-role="listview" id="deviceList">
+				<li>Address RSSI Name</li>
+			</ul>
+			<div style="margin-top:30px;padding:0px 10px;border:1px solid;">
+			<p>This app automatically scans for BLE devices.</p>
+			<p><b>Requirements:</b> <b>1)</b> The Evothings Client app or your own Cordova app having the plugin com.evothings.ble. <b>2)</b> A device with support for Bluetooth 4.0 and Android 4.3 or higher.</p>
+			<p><b>How to use:</b> Make sure that your BLE devices are discoverable. Choose a discovered device in the list to retrieve its services.</p>
+			<p><b>Troubleshooting:</b> There are known problems with that BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
+			</div>
+		</div><!-- /content -->
+
+	</div><!-- /page #first -->
+
+	<div data-role="page" id="connected" data-theme="a">
+		<div data-role="header" data-add-back-btn="true">
+			<h1>BLE Discovery</h1>
+			<h3 id="deviceName"></h3>
+			<h3>State: <span id="deviceState"></span></h3>
+		</div>
+
+		<div data-role="content">
+			<h2>Services</h2>
+			<div id="serviceList" data-role="collapsible-set" data-theme="a"></div>
+
+			<div id="servicesListTemplate" data-role="collapsible-set" data-theme="a">
+				<div data-role="collapsible">
+					<h2></h2>
+					<ul data-role="listview" data-theme="b" data-divider-theme="b">
+						<li></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</body>
+</html>

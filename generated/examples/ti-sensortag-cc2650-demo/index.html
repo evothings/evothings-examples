@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--
+	Description:
+
+	BLE example application that demonstrates how to read values
+	from the TI SensorTag.
+
+	Requirements:
+
+	See text in the app user interface.
+-->
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>TI SensorTag CC2650 Demo</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem>
+				<a href="#">Demo</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#information">Info</a>
+			</menuitem>
+		</menu>
+	</header>
+
+	<h1>TI SensorTag CC2650 Demo</h1>
+
+	<p id="info">Not Connected</p>
+
+	<button onclick="app.onStartButton()" class="green">START</button>
+	<button onclick="app.onStopButton()" class="red">STOP</button>
+
+	<canvas id="canvas" width="300" height="150"></canvas>
+
+	<section id='information'>
+
+		<h2>Info</h2>
+
+		<p>
+			This app charts accelerometer data from the Texas Instruments SensorTag
+			CC2650. Note that you must run this app in the Evothings Client app, or
+			build a Cordova app with the plugin com.evothings.ble. A device with
+			support for Bluetooth 4.0 and Android 4.3+ or iOS 7+ is required.
+		</p>
+
+		<h2>How to use</h2>
+
+		<p>
+			Activate the SensorTag and tap the Connect button. If everything works
+			the tag is discovered and accelerometer data is plotted to the canvas.
+			Shake your SensorTag to see the plot change.
+		</p>
+
+		<h2>Troubleshooting</h2>
+
+		<p>
+			On Android, there are sometimes problems with that BLE stops working when
+			switching between apps or doing multiple reloads. In this case restart
+			the Evothings Client app. Additionally, you can use the Evothings
+			Workbench Tools to see any error messages that may help in your
+			investigation.
+		</p>
+
+	</section>
+
+</body>
+
+</html>

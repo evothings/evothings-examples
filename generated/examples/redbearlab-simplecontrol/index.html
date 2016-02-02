@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Redbear Labs - Simple Control</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+		@import 'app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body ontouchstart="">
+
+	<header>
+
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+	</header>
+
+	<h1>Simple Control</h1>
+
+	<div id="startView">
+
+		<img class="center" src="img/RedBearLab.jpg">
+		<button class="red wide" onclick="app.startScan()"> Scan </button>
+
+	</div>
+
+	<div id="scanResultView" style="display:none">
+
+	</div>
+
+	<div id="controlView" style="display:none">
+
+		<h2>Digital Out - Pin 2</h2>
+
+		<button class="green wide" onclick="app.sendData([0x01,0x01,0x00])">
+			High
+		</button>
+
+		<button class="green wide" onclick="app.sendData([0x01,0x00,0x00])">
+			Low
+		</button>
+
+		<h2>Digital In - Pin A4</h2>
+
+		<button id="digitalInputResult" class="aluminum wide">-</button>
+
+		<h2>PWM - Pin 3</h2>
+
+		<input type="range" min="0" max="255" step="1" value="0"
+			onchange="app.sendData([0x02,this.value,0x00])">
+
+		<h2>Servo - Pin 5</h2>
+
+		<input type="range" min="0" max="179" step="1" value="0"
+			onchange="app.sendData([0x03,this.value,0x00])">
+
+		<h2>Analog In - Pin A5</h2>
+
+		<button id="analogDigitalResult" class="aluminum wide">-</button>
+
+		<button id="analogToggleButton" class="green wide"
+			onclick="app.toggelAnalog()">
+			Enable Analog
+		</button>
+
+		<hr />
+
+		<button id="disconnectButton" class="red wide" onclick="app.disconnect()">
+			Disconnect
+		</button>
+
+	</div>
+
+	<div id="loadingView" style="display:none">
+
+		<div id="loadingIndicator">
+			<img src="img/loader.gif">
+			<p id="loadingStatus"></p>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

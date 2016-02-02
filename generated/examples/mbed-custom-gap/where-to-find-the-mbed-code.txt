@@ -1,0 +1,3 @@
+The mbed code for this example is found at:
+
+	http://developer.mbed.org/teams/Bluetooth-Low-Energy/code/BLE_GAP_Example/

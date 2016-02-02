@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Hello World</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>Hello World</h1>
+
+	<p>The purpose of this example is to demonstrate the simple development
+	workflow enabled by Evothings Workbench.</p>
+
+	<ol>
+		<li>Press the "Code" button in the Workbench window to see the source
+			file of this example app.</li>
+		<li>Open the file "index.html" in a text editor.</li>
+		<li>Make some changes and save the file.</li>
+		<li>
+			Voil&agrave;! If everything works, the app automatically reloads!
+		</li>
+	</ol>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+
+</body>
+
+</html>

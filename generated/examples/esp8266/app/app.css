@@ -1,0 +1,45 @@
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#connectingView {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: table;
+	text-align: center;
+}
+
+#connectingIndicator {
+	width:20%;
+	display: table-cell;
+	vertical-align: middle;
+	border: solid 1px;
+	background-color: #ffffff;
+}
+
+
+.circleBase {
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+	border: 1px solid black;
+	margin: 2px;
+}
+
+.ledOff {
+	background: #C7C7C7;
+}
+
+.ledOn {
+	background: #00FF00;
+}
+
+p.center {
+	text-align: center;
+}

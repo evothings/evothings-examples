@@ -1,0 +1,3 @@
+https://github.com/NordicSemiconductor/nrf51-ble-app-lbs
+
+See also the document "nAN-36".

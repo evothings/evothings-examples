@@ -1,0 +1,15 @@
+/* Common styles for Evothings examples. */
+body {
+	font-family: sans-serif;
+	font-size: 120%;
+}
+button {
+	font-family: sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 10px 20px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #00000;
+}

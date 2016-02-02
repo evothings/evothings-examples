@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>BLE Scan</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem>
+				<a href="#">Home</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#troubleshooting">Troubleshooting</a>
+			</menuitem>
+		</menu>
+	</header>
+
+	<h1>BLE Scan</h1>
+
+	<button onclick="app.ui.onStartScanButton()" class="green">
+		START SCAN
+	</button>
+
+	<button onclick="app.ui.onStopScanButton()" class="charcoal">
+		STOP SCAN
+	</button>
+
+	<p id="scan-status">Scanning Paused</p>
+
+	<ul id="found-devices" class="dynamic"></ul>
+
+	<section id='troubleshooting'>
+
+		<h2>Troubleshooting</h2>
+
+		<p>Sometimes BLE stops working when switching between apps or doing multiple reloads. In this case restart the Evothings Client app. Additionally, you can use the Evothings Workbench Tools to see any error messages that may help in your investigation.</p>
+
+	</section>
+
+</body>
+
+</html>

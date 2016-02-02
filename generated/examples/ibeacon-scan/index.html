@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>iBeacon Scan</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body>
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>iBeacon Scan</h1>
+	<p id="warning">To detect iBeacons you will have to add the 128bit UUID's you
+	are looking for to the regions array in app.js of the iBeacon example.
+	</p>
+	<ul id="found-beacons" class="dynamic"></ul>
+
+</body>
+
+</html>

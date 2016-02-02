@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!--
+Demonstration of the Cordova Accelerometer API.
+-->
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Cordova Accelerometer</title>
+
+	<style>
+	@import 'ui/css/evothings-app.css';
+
+	#sprite
+	{
+		position: absolute;
+		width: 300px;
+		height: auto;
+		top: 0px;
+		left: 0px;
+		z-index: 1000;
+		display: none;
+	}
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+</head>
+
+<body>
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>Cordova Accelerometer</h1>
+
+	<p>This app demonstrates the built-in accelerometer of the mobile device.</p>
+	<p>Tilt the mobile device you are holding to move the Evothings Logo.</p>
+	<p>When at the edge, the device vibrates if vibration is supported (iPad has no vibration for example).</p>
+
+	<img id="sprite" src="sprite.svg" />
+
+	<button class="blue" onclick="showVibrationDialog()">
+		Vibration Setting
+	</button>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="SpriteManager.js"></script>
+
+	<script>
+	// Globals.
+	var sprite = null
+	var shouldVibrate = false
+	var blockVibrate = false
+
+	function initialise()
+	{
+		initialiseAccelerometer()
+		initialiseSprite()
+
+	}
+
+	function initialiseAccelerometer()
+	{
+		function onSuccess(acceleration)
+		{
+			accelerometerHandler(acceleration.x, acceleration.y)
+		}
+
+		function onError(error)
+		{
+			console.log('Accelerometer error: ' + error)
+		}
+
+		navigator.accelerometer.watchAcceleration(
+			onSuccess,
+			onError,
+			{ frequency: 50 })
+	}
+
+	function initialiseSprite()
+	{
+		sprite = SpriteManager.makeSprite()
+		sprite.setDOMElement(document.getElementById('sprite'))
+		sprite.whenLoaded(function()
+		{
+			sprite.show()
+			sprite.setCenterX(SpriteManager.getPlayfieldWidth() / 2)
+			sprite.setCenterY(SpriteManager.getPlayfieldHeight() / 2)
+		})
+	}
+
+	function accelerometerHandler(accelerationX, accelerationY)
+	{
+		var dx = accelerationX * -10
+		var dy = accelerationY * -10
+		moveSprite(dx, dy)
+		vibrateOnEdgeCollision()
+	}
+
+	function moveSprite(dx, dy)
+	{
+		var x = sprite.getCenterX() + dx
+		var y = sprite.getCenterY() - dy
+
+		x = Math.min(x, SpriteManager.getPlayfieldWidth())
+		x = Math.max(x, 0)
+
+		y = Math.min(y, SpriteManager.getPlayfieldHeight())
+		y = Math.max(y, 0)
+
+		sprite.setCenterX(x)
+		sprite.setCenterY(y)
+	}
+
+	function vibrateOnEdgeCollision()
+	{
+		var x = sprite.getCenterX()
+		var y = sprite.getCenterY()
+
+		var isAtEdge =
+			x <= 0 ||
+			x >= SpriteManager.getPlayfieldWidth() ||
+			y <= 0 ||
+			y >= SpriteManager.getPlayfieldHeight()
+
+		if (isAtEdge && shouldVibrate && !blockVibrate)
+		{
+			// Sprite is at an edge, vibrate the device.
+			navigator.notification.vibrate(500)
+
+			// Block vibration for a seconds.
+			blockVibrate = true
+			setTimeout(
+				function() { blockVibrate = false },
+				1000)
+		}
+	}
+
+	function showVibrationDialog()
+	{
+		navigator.notification.confirm(
+			'Use vibration when the image hits an edge?',
+    		function(buttonIndex) {
+    			shouldVibrate = (1 == buttonIndex) ? true : false
+    		},
+			'Vibration Setting',
+			['Yes','No']
+		)
+	}
+
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(initialise) },
+		false);
+	</script>
+
+</body>
+
+</html>

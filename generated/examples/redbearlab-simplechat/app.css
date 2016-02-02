@@ -1,0 +1,83 @@
+img.messageIcon {
+	height: 100%;
+}
+
+div.messageContainer {
+	border-radius: 10px;
+	border: 1px solid;
+	border-color: #CCCCCC;
+	overflow: hidden;
+	margin: 10px 0px;
+}
+
+div.messageIcon {
+	height: 50px;
+	float: left;
+}
+
+div {
+	border: 0px solid;
+}
+
+div.messageTimestamp {
+	margin: 5px 0px 0px 5px;
+}
+
+p.messageTimestamp {
+	margin: 0px 0px 0px 0px;
+	font-size: xx-small;
+	font-weight: bold;
+}
+
+p.message {
+	margin: 0px 0px 0px 5px;
+}
+
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+p.deviceAddress {
+	margin: 5px 0px 10px 10px;
+	font-size: xx-small;
+	font-weight:bold;
+}
+
+p.deviceName {
+	margin: 5px 0px 0px 10px;
+	font-weight: bold
+}
+
+div.deviceContainer {
+	border-radius: 10px;
+	border: 1px solid;
+	border-color: #CCCCCC;
+	overflow: hidden;
+	margin: 10px 0px;
+}
+
+#messageField {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#loadingView {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: table;
+	text-align: center;
+}
+
+#loadingIndicator {
+	width: 20%;
+	display: table-cell;
+	vertical-align: middle;
+	border: solid 1px;
+	background-color: #ffffff;
+}

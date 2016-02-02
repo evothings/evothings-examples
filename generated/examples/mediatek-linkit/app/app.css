@@ -1,0 +1,41 @@
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#connectingView {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: table;
+	text-align: center;
+}
+
+#mapView {
+	height: 80%;
+}
+
+#connectingIndicator {
+	width:20%;
+	display: table-cell;
+	vertical-align: middle;
+	border: solid 1px;
+	background-color: #ffffff;
+}
+
+#map-canvas {
+	height: 80%;
+	margin: 0;
+	padding: 0;
+}
+
+/* This is added to solve issue with Google Maps JavaScript API */
+canvas {
+	background-color:inherit;
+
+}
+

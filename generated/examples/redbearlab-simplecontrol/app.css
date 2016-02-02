@@ -1,0 +1,61 @@
+input[type=range] {
+	-webkit-appearance: none;
+	background-color: silver;
+	width: 100%;
+	height: 20px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	border-radius: 2px;
+	background-color: #e2e2e2;
+	opacity: 1;
+	width: 40px;
+	height: 30px;
+}
+
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+p.deviceAddress {
+	margin: 5px 0px 10px 10px;
+	font-size: xx-small;
+	font-weight:bold;
+}
+
+p.deviceName {
+	margin: 5px 0px 0px 10px;
+	font-weight: bold
+}
+
+div.deviceContainer {
+	border-radius: 10px;
+	border: 1px solid;
+	border-color: #CCCCCC;
+	overflow: hidden;
+	margin: 10px 0px;
+}
+
+#loadingView {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: table;
+	text-align: center;
+}
+
+#loadingIndicator {
+	width: 20%;
+	display: table-cell;
+	vertical-align: middle;
+	border: solid 1px;
+	background-color: #ffffff;
+}
