@@ -90,8 +90,8 @@ var app = (function()
 					cordova.plugins.notification.local.schedule(
 						{
 							id: ++notificationID,
-							title: "Beacon in range",
-							text: "iBeacon Scan detected a beacon, tap here to open app."
+							title: 'Beacon in range',
+							text: 'iBeacon Scan detected a beacon, tap here to open app.'
 						});
 				}
 			}
