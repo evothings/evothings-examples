@@ -2,9 +2,11 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="-1" />
 	<meta name="viewport" content="width=device-width, user-scalable=no,
 		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-	<title>Evothings Examples</title>
+	<title>Evothings Launchpad</title>
 	<style>
 	/* Use the CSS in hello-world. */
 	@import 'hello-world/ui/css/evothings-app.css';
@@ -18,24 +20,18 @@
 		<img class="logotype" src="hello-world/ui/images/logo.svg" alt="Evothings" />
 		<!--<button class="menu" onclick=""><img src="hello-world/ui/images/menu.svg" /></button>-->
 	</header>
-	<h1>Evothings Examples</h1>
+	<h1>Evothings Launchpad</h1>
+
+	<p>This file is meant to be put on a web server, and be opened in a mobile browser. From this page you can launch the Evothings Viewer app, using the custom evo: and evos: protocols (evo: maps to http: and evos: maps to https:). You can use this on your own web pages, or in emails, to share apps with others.</p>
+
+	<p>Evothings Viewer must be installed on the mobile device for this to work.</p>
+
 	<ul>
-		<li><a href="hello-world/index.html">Hello World</a></li>
-		<li><a href="cordova-basic/index.html">Cordova Basic</a></li>
-		<li><a href="ble-scan/index.html">BLE Scan</a></li>
-		<li><a href="ibeacon-scan/index.html">iBeacon Scan</a></li>
-		<li><a href="mbed-custom-gap/index.html">mbed GAP Example</a></li>
-		<li><a href="mbed-custom-gatt/index.html">mbed GATT Example</a></li>
-		<li><a href="ti-sensortag-demo/index.html">TI SensorTag Demo</a></li>
-		<li><a href="ti-sensortag-sensors/index.html">TI SensorTag Sensors</a></li>
-		<li><a href="arduino-ble/app/index.html">Arduino BLE</a></li>
-		<li><a href="arduino-led-onoff-ble/app/index.html">Arduino LED On/Off BLE</a></li>
-		<li><a href="arduino-led-onoff-tcp/app/index.html">Arduino LED On/Off TCP</a></li>
-		<li><a href="arduino-scriptable-tcp/app/index.html">Arduino Scriptable TCP</a></li>
-		<li><a href="hue-lights/index.html">Philips Hue</a></li>
+		<li><a href="evo://evothings.com/uploads/demo/demos.html">
+			Open evo://evothings.com/uploads/demo/demos.html</a></li>
+		<li><a href="evos://evothings.com/uploads/demo/demos.html">
+			Open evos://evos.com/uploads/demo/demos.html</a></li>
 	</ul>
-	<button onclick="window.location.assign('evothings://evothings.com/demo/index.html')" class="green">
-		Open in Evothings Client
-	</button>
+
 </body>
 </html>
