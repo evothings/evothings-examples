@@ -37,6 +37,4 @@ Note that the 'evothings-libraries' repo must be in a sibling folder to this rep
 
 ## It is quick and fun to get started with Evothings Studio
 
-Download Evothings Studio at: [http://evothings.com](http://evothings.com)
-
-It is fast and fun to get started!
+[Download Evothings Studio](http://evothings.com/download) and be up and running with mobile IoT apps in minutes!
