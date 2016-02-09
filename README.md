@@ -2,7 +2,7 @@
 
 ## Example app bundled with Evothings Studio
 
-Apps in folder [generated/examples](https://github.com/evothings/evothings-examples/tree/master/generated/examples) are included in the [Evothings Studio download](http://evothings.com/dowload).
+Apps in folder [generated/examples](https://github.com/evothings/evothings-examples/tree/master/generated/examples) are included in the [Evothings Studio download](http://evothings.com/download).
 
 ## Folder structure
 
