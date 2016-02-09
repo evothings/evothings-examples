@@ -8,6 +8,34 @@ require 'fileutils'
 
 include FileUtils::Verbose
 
+### Path to libraries ###
+
+# Libraries are in repository evothings-libraries. This repo
+# has to be cloned to a sibling folder to evothings-examples.
+
+# Get the path to library files.
+def libraryPath(sourcePath)
+	'../evothings-libraries/' + sourcePath
+end
+
+### Paths to generated examples ###
+
+# Destination path for generated files.
+def fullDestPath(destPath)
+	'generated/' + destPath
+end
+
+# Build generated examples.
+def buildGenerated
+	copyDir(
+		'examples',
+		'generated')
+	copyDir(
+		'experiments',
+		'generated')
+	buildExamples
+end
+
 ###### Examples ######
 
 def buildMbedGAP
@@ -340,80 +368,77 @@ end
 
 def copyUI(destPath)
 	copyDir('resources/ui', fullDestPath(destPath))
-	copyDir('resources/libs/evothings/ui', fullDestPath(destPath) + '/libs/evothings')
+	copyDir(libraryPath('libs/evothings/ui'), fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyJQuery(destPath)
-	copyDir('resources/libs/jquery', fullDestPath(destPath) + '/libs')
+	copyDir(libraryPath('libs/jquery'), fullDestPath(destPath) + '/libs')
 end
 
 def copyEvothings(destPath)
 	copyDir(
-		'resources/libs/evothings/evothings.js',
-		fullDestPath(destPath) + '/libs/evothings')
-	copyDir(
-		'resources/libs/evothings/version-1.2.0',
+		libraryPath('libs/evothings/evothings.js'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyEasyBLE(destPath)
 	copyUtil(destPath)
 	copyDir(
-		'resources/libs/evothings/easyble',
+		libraryPath('libs/evothings/easyble'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyArduinoBLE(destPath)
 	copyEasyBLE(destPath)
 	copyDir(
-		'resources/libs/evothings/arduinoble',
+		libraryPath('libs/evothings/arduinoble'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyArduinoTCP(destPath)
 	copyDir(
-		'resources/libs/evothings/arduinotcp',
+		libraryPath('libs/evothings/arduinotcp'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyNordic_nRF51822_BLE(destPath)
 	copyEasyBLE(destPath)
 	copyDir(
-		'resources/libs/evothings/nordic-nRF51822-ble',
+		libraryPath('libs/evothings/nordic-nRF51822-ble'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyNordic_nRF51_BLE(destPath)
 	copyEasyBLE(destPath)
 	copyDir(
-		'resources/libs/evothings/nordic-nRF51-ble',
+		libraryPath('libs/evothings/nordic-nRF51-ble'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyRFduinoBLE(destPath)
 	copyEasyBLE(destPath)
 	copyDir(
-		'resources/libs/evothings/rfduinoble',
+		libraryPath('libs/evothings/rfduinoble'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyTISensorTag(destPath)
 	copyEasyBLE(destPath)
 	copyDir(
-		'resources/libs/evothings/tisensortag',
+		libraryPath('libs/evothings/tisensortag'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyEddystone(destPath)
 	copyEasyBLE(destPath)
 	copyDir(
-		'resources/libs/evothings/eddystone',
+		libraryPath('libs/evothings/eddystone'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyUtil(destPath)
 	copyDir(
-		'resources/libs/evothings/util',
+		libraryPath('libs/evothings/util'),
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
@@ -427,13 +452,13 @@ end
 
 def copyArduinoEthernet(destPath)
 	copyDir(
-		'resources/arduino/arduinoethernet',
+		libraryPath('arduino/arduinoethernet'),
 		fullDestPath(destPath) + '/arduinoethernet')
 end
 
 def copyArduinoWiFi(destPath)
 	copyDir(
-		'resources/arduino/arduinowifi',
+		libraryPath('arduino/arduinowifi'),
 		fullDestPath(destPath) + '/arduinowifi')
 end
 
@@ -494,21 +519,6 @@ def buildExamples
 	# TODO: buildTemplateEddystoneApp
 end
 
-
-### Destination path for generated files ###
-
-def fullDestPath(destPath)
-	'generated/' + destPath
-end
-
-def buildGenerated
-	copyDir(
-		'examples',
-		'generated')
-	copyDir(
-		'experiments',
-		'generated')
-	buildExamples
-end
+# Build the examples.
 
 buildGenerated
