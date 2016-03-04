@@ -153,7 +153,8 @@
 
 	/**
 	 * Start scanning for devices.
-	 * @param {evothings.easyble.scanCallback} - Success function called when a device is found.
+	 * @param {evothings.easyble.scanCallback} - Success function called when a
+	 * device is found.
 	 * Format: success({@link evothings.easyble.EasyBLEDevice}).
 	 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 	 * @public
@@ -411,13 +412,14 @@
 		var advertisementData = device.advertisementData;
 		if (advertisementData)
 		{
-			if (advertisementData.kCBAdvDataServiceUUIDs)
+			var serviceUUIDs = advertisementData.kCBAdvDataServiceUUIDs;
+			if (serviceUUIDs)
 			{
-				for (var i in advertisementData)
+				for (var i in serviceUUIDs)
 				{
 					for (var j in serviceFilter)
 					{
-						if (advertisementData[i].toLowerCase() ==
+						if (serviceUUIDs[i].toLowerCase() ==
 							serviceFilter[j].toLowerCase())
 						{
 							return true;
@@ -451,6 +453,8 @@
 		 * Match device name.
 		 * @param name The name to match.
 		 * @return true if device has the given name, false if not.
+		 * @public
+		 * @instance
 		 * @example
 		 *   device.hasName('MyBLEDevice');
 		 */
@@ -476,7 +480,7 @@
 		 *     function(device)
 		 *     {
 		 *       console.log('BLE device connected.');
-		 *       // TODO: Read services here.
+		 *       // Read services here.
 		 *     },
 		 *     function(errorCode)
 		 *     {
@@ -502,7 +506,8 @@
 
 		/**
 		 * Read devices RSSI. Device must be connected.
-		 * @param {evothings.easyble.rssiCallback} success - Called with RSSI value: success(rssi).
+		 * @param {evothings.easyble.rssiCallback} success - Callback called with
+		 * RSSI value: success(rssi).
 		 * @param {evothings.easyble.failCallback} fail - Called on error: fail(error).
 		 * @public
 		 * @instance
@@ -523,7 +528,8 @@
 		 * reading selected services).
 		 * @param {evothings.easyble.servicesCallback} success -
 		 * Called when services are read: success(device).
-		 * @param {evothings.easyble.failCallback} fail - error callback: error(errorMessage)
+		 * @param {evothings.easyble.failCallback} fail - error callback:
+		 * error(errorMessage)
 		 * @public
 		 * @instance
 		 * @example
@@ -532,7 +538,7 @@
 		 *     function(device)
 		 *     {
 		 *       console.log('BLE Services available.');
-		 *       // TODO: Read/write/enable notifications here.
+		 *       // Read/write/enable notifications here.
 		 *     },
 		 *     function(errorCode)
 		 *     {
@@ -547,7 +553,8 @@
 		/**
 		 * Read value of characteristic.
 		 * @param {string} characteristicUUID - UUID of characteristic to read.
-		 * @param {evothings.easyble.dataCallback} success - Success callback: success(data).
+		 * @param {evothings.easyble.dataCallback} success - Success callback:
+		 * success(data).
 		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
@@ -569,36 +576,41 @@
 		};
 
 		/**
-		* Read value of a specific characteristic.
-		* @param {string} serviceUUID - UUID of service in which the characteristic is found.
-		* @param {string} characteristicUUID - UUID of characteristic to read.
-		* @param {evothings.easyble.dataCallback} success - Success callback: success(data).
-		* @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
-		* @public
-		* @instance
-		* @example
-		*   device.readServiceCharacteristic(
-		*     serviceUUID,
-		*     characteristicUUID,
-		*     function(data)
-		*     {
-		*       console.log('BLE characteristic data: ' + evothings.ble.fromUtf8(data));
-		*     },
-		*     function(errorCode)
-		*     {
-		*       console.log('BLE readServiceCharacteristic error: ' + errorCode);
-		*     });
-		*/
-		device.readServiceCharacteristic = function(serviceUUID, characteristicUUID, success, fail)
+		 * Read value of a characteristic for a specific service. This is useful when
+		 * multiple services have characteristics with the same UUID.
+		 * @param {string} serviceUUID - UUID of service for characteristic.
+		 * @param {string} characteristicUUID - UUID of characteristic to read.
+		 * @param {evothings.easyble.dataCallback} success - Success callback:
+		 * success(data).
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
+		 * @public
+		 * @instance
+		 * @example
+		 *   device.readServiceCharacteristic(
+		 *     serviceUUID,
+		 *     characteristicUUID,
+		 *     function(data)
+		 *     {
+		 *       console.log('BLE characteristic data: ' + evothings.ble.fromUtf8(data));
+		 *     },
+		 *     function(errorCode)
+		 *     {
+		 *       console.log('BLE readServiceCharacteristic error: ' + errorCode);
+		 *     });
+		 */
+		device.readServiceCharacteristic = function(
+			serviceUUID, characteristicUUID, success, fail)
 		{
-			internal.readServiceCharacteristic(device, serviceUUID, characteristicUUID, success, fail);
+			internal.readServiceCharacteristic(
+				device, serviceUUID, characteristicUUID, success, fail);
 		};
 
 		/**
 		 * Read value of descriptor.
 		 * @param {string} characteristicUUID - UUID of characteristic for descriptor.
 		 * @param {string} descriptorUUID - UUID of descriptor to read.
-		 * @param {evothings.easyble.dataCallback} success - Success callback: success(data).
+		 * @param {evothings.easyble.dataCallback} success - Success callback:
+		 * success(data).
 		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
@@ -615,37 +627,44 @@
 		 *       console.log('BLE readDescriptor error: ' + errorCode);
 		 *     });
 		 */
-		device.readDescriptor = function(characteristicUUID, descriptorUUID, success, fail)
+		device.readDescriptor = function(
+			characteristicUUID, descriptorUUID, success, fail)
 		{
-			internal.readDescriptor(device, characteristicUUID, descriptorUUID, success, fail);
+			internal.readDescriptor(
+				device, characteristicUUID, descriptorUUID, success, fail);
 		};
 
 		/**
-		* Read value of a specific descriptor.
-		* @param {string} serviceUUID - UUID of service in which the characteristic is found.
-		* @param {string} characteristicUUID - UUID of characteristic for descriptor.
-		* @param {string} descriptorUUID - UUID of descriptor to read.
-		* @param {evothings.easyble.dataCallback} success - Success callback: success(data).
-		* @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
-		* @public
-		* @instance
-		* @example
-		*   device.readServiceDescriptor(
-		*     serviceUUID,
-		*     characteristicUUID,
-		*     descriptorUUID,
-		*     function(data)
-		*     {
-		*       console.log('BLE descriptor data: ' + evothings.ble.fromUtf8(data));
-		*     },
-		*     function(errorCode)
-		*     {
-		*       console.log('BLE readServiceDescriptor error: ' + errorCode);
-		*     });
-		*/
-		device.readServiceDescriptor = function(serviceUUID, characteristicUUID, descriptorUUID, success, fail)
+		 * Read value of a descriptor for a specific service and characteristic.
+		 * This is useful when multiple services and characteristics have
+		 * descriptors with the same UUID.
+		 * @param {string} serviceUUID - UUID of service that has the characteristic.
+		 * @param {string} characteristicUUID - UUID of characteristic for descriptor.
+		 * @param {string} descriptorUUID - UUID of descriptor to read.
+		 * @param {evothings.easyble.dataCallback} success - Success callback:
+		 * success(data).
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
+		 * @public
+		 * @instance
+		 * @example
+		 *   device.readServiceDescriptor(
+		 *     serviceUUID,
+		 *     characteristicUUID,
+		 *     descriptorUUID,
+		 *     function(data)
+		 *     {
+		 *       console.log('BLE descriptor data: ' + evothings.ble.fromUtf8(data));
+		 *     },
+		 *     function(errorCode)
+		 *     {
+		 *       console.log('BLE readServiceDescriptor error: ' + errorCode);
+		 *     });
+		 */
+		device.readServiceDescriptor = function(
+			serviceUUID, characteristicUUID, descriptorUUID, success, fail)
 		{
-			internal.readServiceDescriptor(device, serviceUUID, characteristicUUID, descriptorUUID, success, fail);
+			internal.readServiceDescriptor(
+				device, serviceUUID, characteristicUUID, descriptorUUID, success, fail);
 		};
 
 		/**
@@ -671,35 +690,39 @@
 		 */
 		device.writeCharacteristic = function(characteristicUUID, value, success, fail)
 		{
-			internal.writeCharacteristic(device, characteristicUUID, value, success, fail);
+			internal.writeCharacteristic(
+				device, characteristicUUID, value, success, fail);
 		};
 
 		/**
-		* Write value of a specific characteristic.
-		* @param {string} serviceUUID - UUID of service in which the characteristic is found.
-		* @param {string} characteristicUUID - UUID of characteristic to write to.
-		* @param {ArrayBufferView} value - Value to write.
-		* @param {evothings.easyble.emptyCallback} success - Success callback: success().
-		* @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
-		* @public
-		* @instance
-		* @example
-		*   device.writeServiceCharacteristic(
-		*     serviceUUID,
-		*     characteristicUUID,
-		*     new Uint8Array([1]), // Write byte with value 1.
-		*     function()
-		*     {
-		*       console.log('BLE characteristic written.');
-		*     },
-		*     function(errorCode)
-		*     {
-		*       console.log('BLE writeServiceCharacteristic error: ' + errorCode);
-		*     });
-		*/
-		device.writeServiceCharacteristic = function(serviceUUID, characteristicUUID, value, success, fail)
+		 * Write value of a characteristic for a specific service. This is useful when
+		 * multiple services have characteristics with the same UUID.
+		 * @param {string} serviceUUID - UUID of service that has the characteristic.
+		 * @param {string} characteristicUUID - UUID of characteristic to write to.
+		 * @param {ArrayBufferView} value - Value to write.
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success().
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
+		 * @public
+		 * @instance
+		 * @example
+		 *   device.writeServiceCharacteristic(
+		 *     serviceUUID,
+		 *     characteristicUUID,
+		 *     new Uint8Array([1]), // Write byte with value 1.
+		 *     function()
+		 *     {
+		 *       console.log('BLE characteristic written.');
+		 *     },
+		 *     function(errorCode)
+		 *     {
+		 *       console.log('BLE writeServiceCharacteristic error: ' + errorCode);
+		 *     });
+		 */
+		device.writeServiceCharacteristic = function(
+			serviceUUID, characteristicUUID, value, success, fail)
 		{
-			internal.writeServiceCharacteristic(device, serviceUUID, characteristicUUID, value, success, fail);
+			internal.writeServiceCharacteristic(
+				device, serviceUUID, characteristicUUID, value, success, fail);
 		};
 
 		/**
@@ -725,46 +748,59 @@
 		 *       console.log('BLE writeDescriptor error: ' + errorCode);
 		 *     });
 		 */
-		device.writeDescriptor = function(characteristicUUID, descriptorUUID, value, success, fail)
+		device.writeDescriptor = function(
+			characteristicUUID, descriptorUUID, value, success, fail)
 		{
-			internal.writeDescriptor(device, characteristicUUID, descriptorUUID, value, success, fail);
+			internal.writeDescriptor(
+				device, characteristicUUID, descriptorUUID, value, success, fail);
 		};
 
 		/**
-		* Write value of a specific descriptor.
-		* @param {string} serviceUUID - UUID of service in which the characteristic is found.
-		* @param {string} characteristicUUID - UUID of characteristic for descriptor.
-		* @param {string} descriptorUUID - UUID of descriptor to write to.
-		* @param {ArrayBufferView} value - Value to write.
-		* @param {evothings.easyble.emptyCallback} success - Success callback: success().
-		* @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
-		* @public
-		* @instance
-		* @example
-		*   device.writeServiceDescriptor(
-		*     serviceUUID,
-		*     characteristicUUID,
-		*     descriptorUUID,
-		*     new Uint8Array([1]), // Write byte with value 1.
-		*     function()
-		*     {
-		*       console.log('BLE descriptor written.');
-		*     },
-		*     function(errorCode)
-		*     {
-		*       console.log('BLE writeServiceDescriptor error: ' + errorCode);
-		*     });
-		*/
-		device.writeServiceDescriptor = function(serviceUUID, characteristicUUID, descriptorUUID, value, success, fail)
+		 * Write value of a descriptor for a specific service and characteristic.
+		 * This is useful when multiple services and characteristics have descriptors
+		 * with the same UUID.
+		 * @param {string} serviceUUID - UUID of service for characteristic.
+		 * @param {string} characteristicUUID - UUID of characteristic for descriptor.
+		 * @param {string} descriptorUUID - UUID of descriptor to write to.
+		 * @param {ArrayBufferView} value - Value to write.
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success().
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
+		 * @public
+		 * @instance
+		 * @example
+		 *   device.writeServiceDescriptor(
+		 *     serviceUUID,
+		 *     characteristicUUID,
+		 *     descriptorUUID,
+		 *     new Uint8Array([1]), // Write byte with value 1.
+		 *     function()
+		 *     {
+		 *       console.log('BLE descriptor written.');
+		 *     },
+		 *     function(errorCode)
+		 *     {
+		 *       console.log('BLE writeServiceDescriptor error: ' + errorCode);
+		 *     });
+		 */
+		device.writeServiceDescriptor = function(
+			serviceUUID, characteristicUUID, descriptorUUID, value, success, fail)
 		{
-			internal.writeServiceDescriptor(device, serviceUUID, characteristicUUID, descriptorUUID, value, success, fail);
+			internal.writeServiceDescriptor(
+				device,
+				serviceUUID,
+				characteristicUUID,
+				descriptorUUID,
+				value,
+				success,
+				fail);
 		};
 
 		/**
-		 * Subscribe to characteristic value updates. The success function
+		 * Subscribe to value updates of a characteristic. The success function
 		 * will be called repeatedly whenever there is new data available.
 		 * @param {string} characteristicUUID - UUID of characteristic to subscribe to.
-		 * @param {evothings.easyble.dataCallback} success - Success callback: success(data).
+		 * @param {evothings.easyble.dataCallback} success - Success callback:
+		 * success(data).
 		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 		 * @public
 		 * @instance
@@ -785,14 +821,46 @@
 			internal.enableNotification(device, characteristicUUID, success, fail);
 		};
 
-		device.enableServiceNotification = function(serviceUUID, characteristicUUID, success, fail)
+		/**
+		 * Subscribe to value updates of a characteristic for a specific service.
+		 * This is useful when multiple services have characteristics with the
+		 * same UUID. The success function will be called repeatedly whenever there
+		 * is new data available.
+		 * @param {string} serviceUUID - UUID of service that has the given
+		 * characteristic.
+		 * @param {string} characteristicUUID - UUID of characteristic to subscribe to.
+		 * @param {evothings.easyble.dataCallback} success - Success callback:
+		 * success(data).
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
+		 * @public
+		 * @instance
+		 * @example
+		 * device.enableServiceNotification(
+		 *   serviceUUID,
+		 *   characteristicUUID,
+		 *   function(data)
+		 *   {
+		 *     console.log('BLE characteristic data: ' + evothings.ble.fromUtf8(data));
+		 *   },
+		 *   function(errorCode)
+		 *   {
+		 *     console.log('BLE enableServiceNotification error: ' + errorCode);
+		 *   });
+		 */
+		device.enableServiceNotification = function(
+			serviceUUID, characteristicUUID, success, fail)
 		{
-			internal.enableServiceNotification(device, serviceUUID, characteristicUUID, success, fail);
+			internal.enableServiceNotification(
+				device,
+				serviceUUID,
+				characteristicUUID,
+				success,
+				fail);
 		};
 
 		/**
 		 * Unsubscribe from characteristic updates to stop notifications.
-		 * @param characteristicUUID - UUID of characteristic to unsubscribe from
+		 * @param characteristicUUID - UUID of characteristic to unsubscribe from.
 		 * @param {evothings.easyble.emptyCallback} success - Success callback: success()
 		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error)
 		 * @public
@@ -814,9 +882,34 @@
 			internal.disableNotification(device, characteristicUUID, success, fail);
 		};
 
-		device.disableServiceNotification = function(serviceUUID, characteristicUUID, success, fail)
+		/**
+		 * Unsubscribe from characteristic updates for a specific service to stop
+		 * notifications. This is useful when multiple services have characteristics
+		 * with the same UUID.
+		 * @param serviceUUID - UUID of service that has the given characteristic.
+		 * @param characteristicUUID - UUID of characteristic to unsubscribe from.
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success()
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error)
+		 * @public
+		 * @instance
+		 * @example
+		 *  device.disableServiceNotification(
+		 *    serviceUUID,
+		 *    characteristicUUID,
+		 *    function()
+		 *    {
+		 *      console.log('BLE characteristic notification disabled');
+		 *    },
+		 *    function(errorCode)
+		 *    {
+		 *      console.log('BLE disableNotification error: ' + errorCode);
+		 *    });
+		 */
+		device.disableServiceNotification = function(
+			serviceUUID, characteristicUUID, success, fail)
 		{
-			internal.disableServiceNotification(device, serviceUUID, characteristicUUID, success, fail);
+			internal.disableServiceNotification(
+				device, serviceUUID, characteristicUUID, success, fail);
 		};
 	};
 
@@ -1025,10 +1118,11 @@
 	};
 
 	/**
-	* Called from evothings.easyble.EasyBLEDevice.
-	* @private
-	*/
-	internal.readServiceCharacteristic = function(device, serviceUUID, characteristicUUID, success, fail)
+	 * Called from evothings.easyble.EasyBLEDevice.
+	 * @private
+	 */
+	internal.readServiceCharacteristic = function(
+		device, serviceUUID, characteristicUUID, success, fail)
 	{
 		var key = serviceUUID.toLowerCase() + ':' + characteristicUUID.toLowerCase();
 
@@ -1050,7 +1144,8 @@
  	 * Called from evothings.easyble.EasyBLEDevice.
 	 * @private
 	 */
-	internal.readDescriptor = function(device, characteristicUUID, descriptorUUID, success, fail)
+	internal.readDescriptor = function(
+		device, characteristicUUID, descriptorUUID, success, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
 		descriptorUUID = descriptorUUID.toLowerCase();
@@ -1077,12 +1172,15 @@
 	};
 
 	/**
-	* Called from evothings.easyble.EasyBLEDevice.
-	* @private
-	*/
-	internal.readServiceDescriptor = function(device, serviceUUID, characteristicUUID, descriptorUUID, success, fail)
+	 * Called from evothings.easyble.EasyBLEDevice.
+	 * @private
+	 */
+	internal.readServiceDescriptor = function(
+		device, serviceUUID, characteristicUUID, descriptorUUID, success, fail)
 	{
-		var key = serviceUUID.toLowerCase() + ':' + characteristicUUID.toLowerCase() + ':' + descriptorUUID.toLowerCase();
+		var key = serviceUUID.toLowerCase() + ':' +
+			characteristicUUID.toLowerCase() + ':' +
+			descriptorUUID.toLowerCase();
 
 		var descriptor = device.__serviceMap[key];
 		if (!descriptor)
@@ -1102,7 +1200,8 @@
  	 * Called from evothings.easyble.EasyBLEDevice.
 	 * @private
 	 */
-	internal.writeCharacteristic = function(device, characteristicUUID, value, success, fail)
+	internal.writeCharacteristic = function(
+		device, characteristicUUID, value, success, fail)
 	{
 		characteristicUUID = characteristicUUID.toLowerCase();
 
@@ -1132,7 +1231,8 @@
 	* Called from evothings.easyble.EasyBLEDevice.
 	* @private
 	*/
-	internal.writeServiceCharacteristic = function(device, serviceUUID, characteristicUUID, value, success, fail)
+	internal.writeServiceCharacteristic = function(
+		device, serviceUUID, characteristicUUID, value, success, fail)
 	{
 		var key = serviceUUID.toLowerCase() + ':' + characteristicUUID.toLowerCase();
 
@@ -1183,12 +1283,15 @@
 	};
 
 	/**
-	* Called from evothings.easyble.EasyBLEDevice.
-	* @private
-	*/
-	internal.writeServiceDescriptor = function(device, serviceUUID, characteristicUUID, descriptorUUID, value, success, fail)
+	 * Called from evothings.easyble.EasyBLEDevice.
+	 * @private
+	 */
+	internal.writeServiceDescriptor = function(
+		device, serviceUUID, characteristicUUID, descriptorUUID, value, success, fail)
 	{
-		var key = serviceUUID.toLowerCase() + ':' + characteristicUUID.toLowerCase() + ':' + descriptorUUID.toLowerCase();
+		var key = serviceUUID.toLowerCase() + ':' +
+			characteristicUUID.toLowerCase() + ':' +
+			descriptorUUID.toLowerCase();
 
 		var descriptor = device.__serviceMap[key];
 		if (!descriptor)
@@ -1229,10 +1332,11 @@
 	};
 
 	/**
-	* Called from evothings.easyble.EasyBLEDevice.
-	* @private
-	*/
-	internal.enableServiceNotification = function(device, serviceUUID, characteristicUUID, success, fail)
+	 * Called from evothings.easyble.EasyBLEDevice.
+	 * @private
+	 */
+	internal.enableServiceNotification = function(
+		device, serviceUUID, characteristicUUID, success, fail)
 	{
 		var key = serviceUUID.toLowerCase() + ':' + characteristicUUID.toLowerCase();
 
@@ -1274,10 +1378,11 @@
 	};
 
 	/**
-	* Called from evothings.easyble.EasyBLEDevice.
-	* @private
-	*/
-	internal.disableServiceNotification = function(device, serviceUUID, characteristicUUID, success, fail)
+	 * Called from evothings.easyble.EasyBLEDevice.
+	 * @private
+	 */
+	internal.disableServiceNotification = function(
+		device, serviceUUID, characteristicUUID, success, fail)
 	{
 		var key = serviceUUID.toLowerCase() + ':' + characteristicUUID.toLowerCase();
 
