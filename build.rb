@@ -41,7 +41,9 @@ end
 def buildMbedGAP
 	destPath = 'examples/mbed-custom-gap'
 	icon = 'arm-mbed.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b00'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
@@ -50,25 +52,33 @@ end
 def buildMbedGATT
 	destPath = 'examples/mbed-custom-gatt'
 	icon = 'arm-mbed.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b01'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
 end
 
 def buildArduinoBLE
+	settingsPath = 'examples/arduino-ble'
 	destPath = 'examples/arduino-ble/app'
 	icon = 'arduino.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b02'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyWhereIsTheArduinoCode(destPath)
 end
 
 def buildArduinoInputTCP
 	# Copy CSS/JS files.
+	settingsPath = 'examples/arduino-input-tcp'
 	destPath = 'examples/arduino-input-tcp/app'
 	icon = 'arduino.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b03'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -80,9 +90,12 @@ def buildArduinoInputTCP
 end
 
 def buildArduinoLEDOnOffBLE
+	settingsPath = 'examples/arduino-led-onoff-ble'
 	destPath = 'examples/arduino-led-onoff-ble/app'
 	icon = 'arduino.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b04'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -90,9 +103,12 @@ end
 
 def buildArduinoLEDOnOffTCP
 	# Copy CSS/JS files.
+	settingsPath = 'examples/arduino-led-onoff-tcp'
 	destPath = 'examples/arduino-led-onoff-tcp/app'
 	icon = 'arduino.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b05'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -105,9 +121,12 @@ end
 
 def buildArduinoScriptableTCP
 	# Copy CSS/JS files.
+	settingsPath = 'examples/arduino-scriptable-tcp'
 	destPath = 'examples/arduino-scriptable-tcp/app'
 	icon = 'arduino.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b06'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoTCP(destPath)
 	copyWhereIsTheArduinoCode(destPath)
@@ -121,21 +140,27 @@ end
 def buildBLEScan
 	destPath = 'examples/ble-scan'
 	icon = 'ble-logo.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b07'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildBLEDiscovery
 	destPath = 'examples/ble-discovery'
 	icon = 'ble-logo.png'
-	copyImageFile(destPath, icon)
-	writeSettingsFile(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b08'
+	# This example uses no libs.
+	#copyCommon(destPath)
+	copySettings(destPath, '', icon, uuid)
 end
 
 def buildTISensorTagCC2541Demo
 	destPath = 'examples/ti-sensortag-cc2541-demo'
 	icon = 'ti-sensortag-cc2541.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b09'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 end
@@ -143,7 +168,9 @@ end
 def buildTISensorTagCC2650Demo
 	destPath = 'examples/ti-sensortag-cc2650-demo'
 	icon = 'ti-sensortag-cc2650.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0a'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 end
@@ -151,7 +178,9 @@ end
 def buildTISensorTagSensors
 	destPath = 'examples/ti-sensortag-sensors'
 	icon = 'ti-sensortag-cc2650.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0b'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
 end
@@ -159,7 +188,9 @@ end
 def buildTISensorTagAccelerometer
 	destPath = 'examples/ti-sensortag-accelerometer'
 	icon = 'ti-sensortag-cc2650.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0c'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
 end
@@ -167,34 +198,44 @@ end
 def buildCordovaAccelerometer
 	destPath = 'examples/cordova-accelerometer'
 	icon = 'evothings-logo.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0d'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildCordovaBasic
 	destPath = 'examples/cordova-basic'
 	icon = 'evothings-logo.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0e'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildHelloWorld
 	destPath = 'examples/hello-world'
 	icon = 'evothings-logo.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0f'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 end
 
 def buildHueLights
 	destPath = 'examples/hue-lights'
 	icon = 'philips-hue.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b1f'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildEddystoneScan
 	destPath = 'examples/eddystone-scan'
 	icon = 'eddystone.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b2f'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyEddystone(destPath)
 	copyJQuery(destPath)
 end
@@ -202,60 +243,79 @@ end
 def buildIBeaconScan
 	destPath = 'examples/ibeacon-scan'
 	icon = 'ibeacon.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b3f'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildEstimoteBeacons
 	destPath = 'examples/estimote-beacons'
 	icon = 'estimote-beacons.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b4f'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildEstimoteNearables
 	destPath = 'examples/estimote-nearables'
 	icon = 'estimote-nearables.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b5f'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildNordic_nRF51822EK_BLE
 	destPath = 'examples/nordic-nRF51822-ek-ble'
 	icon = 'nordic-semi.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b6f'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyNordic_nRF51822_BLE(destPath)
 end
 
 def buildNordic_nRF51DK_BLE
+	settingsPath = 'examples/nordic-nRF51-dk-ble'
 	destPath = 'examples/nordic-nRF51-dk-ble/app'
 	icon = 'nordic-semi.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b7f'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyNordic_nRF51_BLE(destPath)
 end
 
 def buildRFduinoLEDOnOff
+	settingsPath = 'examples/rfduino-led-onoff'
 	destPath = 'examples/rfduino-led-onoff/app'
 	icon = 'rfduino.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b8f'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyRFduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
 end
 
 def buildLightblueBeanBasic
+	settingsPath = 'examples/lightblue-bean-basic'
 	destPath = 'examples/lightblue-bean-basic/app'
 	icon = 'lightblue-bean.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b9f'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyEasyBLE(destPath)
 end
 
 def buildRedBearLabSimpleControl
 	destPath = 'examples/redbearlab-simplecontrol'
 	icon = 'redbearlab.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8baf'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
 end
@@ -263,15 +323,20 @@ end
 def buildRedBearLabSimpleChat
 	destPath = 'examples/redbearlab-simplechat'
 	icon = 'redbearlab.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8bbf'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
 end
 
 def buildBlunoHelloWorld
+	settingsPath = 'examples/bluno-helloworld'
 	destPath = 'examples/bluno-helloworld/app'
 	icon = 'bluno.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8bcf'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
 end
@@ -279,42 +344,57 @@ end
 def buildLightblueBeanSerial
 	destPath = 'experiments/lightblue-bean-serial'
 	icon = 'lightblue-bean.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8bdf'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyUtil(destPath)
 end
 
 def buildMediaTekLinkIt
+	settingsPath = 'examples/mediatek-linkit'
 	destPath = 'examples/mediatek-linkit/app'
 	icon = 'mediatek-linkit.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8bef'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildMediaTekLinkItConnect
+	settingsPath = 'examples/mediatek-linkit-connect'
 	destPath = 'examples/mediatek-linkit-connect/app'
 	icon = 'mediatek-linkit.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8bff'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildBlePeripheral
 	destPath = 'experiments/ble-peripheral'
 	icon = 'ble-logo.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b11'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyUtil(destPath)
 end
 
 def buildEsp8266
+	settingsPath = 'examples/esp8266'
 	destPath = 'examples/esp8266/app'
 	icon = 'esp8266.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b12'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
 def buildTemplateBasicApp
 	destPath = 'examples/template-basic-app'
 	icon = 'evothings-logo.png'
-	copyCommon(destPath, icon)
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b13'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
 	copyJQuery(destPath)
 end
 
@@ -322,7 +402,8 @@ end
 #def buildTemplateBLEApp
 #	destPath = 'examples/template-ble-app'
 #	icon = 'evothings-logo.png'
-#	copyCommon(destPath, icon)
+#	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b14'
+#	copyCommon(destPath)
 #	copyJQuery(destPath)
 #	copyEasyBLE(destPath)
 #end
@@ -331,7 +412,8 @@ end
 #def buildTemplateEddystoneApp
 #	destPath = 'examples/template-eddystone-app'
 #	icon = 'evothings-logo.png'
-#	copyCommon(destPath, icon)
+#	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b15'
+#	copyCommon(destPath)
 #	copyJQuery(destPath)
 #	copyEddystone(destPath)
 #end
@@ -340,11 +422,14 @@ end
 
 ### CSS/JS ###
 
-def copyCommon(destPath, imageFile = nil)
+def copyCommon(destPath)
 	copyUI(destPath)
 	copyEvothings(destPath)
+end
+
+def copySettings(destPath, indexPath, imageFile, uuid)
 	copyImageFile(destPath, imageFile)
-	writeSettingsFile(destPath, imageFile)
+	writeSettingsFile(destPath, indexPath, uuid)
 end
 
 # Image format is hard-wired to png.
@@ -357,12 +442,14 @@ def copyImageFile(destPath, imageFile)
 	end
 end
 
-def writeSettingsFile(destPath, imageFile)
-	if imageFile.nil?
-		json = '{}'
-	else
-		json = '{"app-icon":"app-icon.png"}'
-	end
+def writeSettingsFile(destPath, indexPath, uuid)
+	json =
+		"{\n" +
+		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
+		"  \"app-uuid\" :\"" +  uuid + "\",\n"+
+		"  \"app-icon\" :\"app-icon.png\"\n" +
+		"}\n"
+	puts 'Writing settings file ' + fullDestPath(destPath) + '/evothings.json'
 	writeFileUTF8(fullDestPath(destPath) + '/evothings.json', json)
 end
 
