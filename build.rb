@@ -165,6 +165,17 @@ def buildTISensorTagCC2541Demo
 	copyEasyBLE(destPath)
 end
 
+
+def buildTISensorTagCC2541WebBluetooth
+	settingsPath = 'examples/ti-sensortag-cc2541-webbluetooth'
+	destPath = 'examples/ti-sensortag-cc2541-webbluetooth/app'
+	icon = 'ti-sensortag-cc2541.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8d00'
+	copyExtendedSettings(destPath, 'app/', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+end
+
 def buildTISensorTagCC2650Demo
 	destPath = 'examples/ti-sensortag-cc2650-demo'
 	icon = 'ti-sensortag-cc2650.png'
@@ -432,6 +443,11 @@ def copySettings(destPath, indexPath, imageFile, uuid)
 	writeSettingsFile(destPath, indexPath, uuid)
 end
 
+def copyExtendedSettings(destPath, indexPath, imageFile, uuid)
+	copyImageFile(destPath, imageFile)
+	writeExtendedSettingsFile(destPath, indexPath, uuid)
+end
+
 # Image format is hard-wired to png.
 # Get file extension from imageFile if you need to generalise.
 def copyImageFile(destPath, imageFile)
@@ -445,6 +461,21 @@ end
 def writeSettingsFile(destPath, indexPath, uuid)
 	json =
 		"{\n" +
+		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
+		"  \"app-uuid\" :\"" +  uuid + "\",\n"+
+		"  \"app-icon\" :\"app-icon.png\"\n" +
+		"}\n"
+	puts 'Writing settings file ' + fullDestPath(destPath) + '/evothings.json'
+	writeFileUTF8(fullDestPath(destPath) + '/evothings.json', json)
+end
+
+def writeExtendedSettingsFile(destPath, indexPath, uuid)
+	json =
+		"{\n" +
+		"  \"app-dir\": \"app\",\n" +
+		"  \"www-dir\": \"www\",\n" +
+		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
+		"  \"dont-build\": [\"libs\", \"ui\"],\n" +
 		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
 		"  \"app-uuid\" :\"" +  uuid + "\",\n"+
 		"  \"app-icon\" :\"app-icon.png\"\n" +
@@ -594,6 +625,7 @@ def buildExamples
 	buildRedBearLabSimpleControl
 	buildRFduinoLEDOnOff
 	buildTISensorTagCC2541Demo
+	buildTISensorTagCC2541WebBluetooth
 	buildTISensorTagCC2650Demo
 	buildTISensorTagSensors
 	buildTISensorTagAccelerometer
