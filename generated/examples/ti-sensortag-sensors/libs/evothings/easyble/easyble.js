@@ -439,15 +439,43 @@
 	internal.addMethodsToDeviceObject = function(deviceObject)
 	{
 		/**
-		 * This is the BLE DeviceInfo object obtained by calling
-		 * evothings.ble.startScan, with additional properties and
-		 * functions added. Internal properties are prefixed with two
-		 * underscores. Properties are also added to the Characteristic
-		 * and Descriptor objects.
 		 * @namespace
 		 * @alias evothings.easyble.EasyBLEDevice
+		 * @description This is the BLE DeviceInfo object obtained from the
+		 * underlying Cordova plugin.
+		 * @property {string} address - Uniquely identifies the device.
+		 * The form of the address depends on the host platform.
+		 * @property {number} rssi - A negative integer, the signal strength in decibels.
+		 * @property {string} name - The device's name, or nil.
+		 * @property {string} scanRecord - Base64-encoded binary data. Its meaning is
+		 * device-specific. Not available on iOS.
+		 * @property {evothings.easyble.AdvertisementData} advertisementData -
+		 * Object containing some of the data from the scanRecord.
 		 */
 		var device = deviceObject;
+
+		/**
+		 * @typedef {Object} evothings.easyble.AdvertisementData
+		 * @description Information extracted from a scanRecord. Some or all of the fields may be
+		 * undefined. This varies between BLE devices.
+		 * Depending on OS version and BLE device, additional fields, not documented
+		 * here, may be present.
+		 * @property {string} kCBAdvDataLocalName - The device's name. Use this field
+		 * rather than device.name, since on iOS the device name is cached and changes
+		 * are not reflected in device.name.
+		 * @property {number} kCBAdvDataTxPowerLevel - Transmission power level as
+		 * advertised by the device.
+		 * @property {boolean} kCBAdvDataIsConnectable - True if the device accepts
+		 * connections. False if it doesn't.
+		 * @property {array} kCBAdvDataServiceUUIDs - Array of strings, the UUIDs of
+		 * services advertised by the device. Formatted according to RFC 4122,
+		 * all lowercase.
+		 * @property {object} kCBAdvDataServiceData - Dictionary of strings to strings.
+		 * The keys are service UUIDs. The values are base-64-encoded binary data.
+		 * @property {string} kCBAdvDataManufacturerData - Base-64-encoded binary data.
+		 * This field is used by BLE devices to advertise custom data that don't fit
+		 * into any of the other fields.
+		 */
 
 		/**
 		 * Match device name.
@@ -1160,15 +1188,8 @@
 		evothings.ble.readDescriptor(
 			device.deviceHandle,
 			descriptor.handle,
-			value,
-			function()
-			{
-				success();
-			},
-			function(errorCode)
-			{
-				fail(errorCode);
-			});
+			success,
+			fail);
 	};
 
 	/**

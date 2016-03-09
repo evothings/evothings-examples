@@ -1,9 +1,0 @@
-{
-  "app-dir": "app",
-  "www-dir": "www",
-  "index-file": "app/index.html",
-  "dont-build": ["libs", "ui"],
-  "index-file": "app/index.html",
-  "app-uuid" :"fe860e6e-d35e-4bd0-831a-7703cc2f8d00",
-  "app-icon" :"app-icon.png"
-}

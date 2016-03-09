@@ -117,7 +117,6 @@ evothings.eddystone.startScan = function(scanCallback, failCallback)
  * Which properties are available depends on which packets types broadcasted
  * by the beacon. Properties may be undefined. Typically properties are populated
  * as scanning processes.
- * @alias evothings.eddystone.EddystoneDevice
  * @typedef {Object} evothings.eddystone.EddystoneDevice
  * @property {string} url - An Internet URL.
  * @property {number} txPower - A signed integer, the signal strength in decibels,
