@@ -27,6 +27,7 @@ end
 
 # Build generated examples.
 def buildGenerated
+	rmDir('generated')
 	copyDir(
 		'examples',
 		'generated')
@@ -58,6 +59,17 @@ def buildMbedGATT
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
+end
+
+def buildMbedGATTWebBluetooth
+	settingsPath = 'examples/mbed-custom-gatt-webbluetooth'
+	destPath = 'examples/mbed-custom-gatt-webbluetooth/app'
+	icon = 'arm-mbed.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8d02'
+	copyExtendedSettings(settingsPath, '', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyWebBluetooth(destPath)
 end
 
 def buildArduinoBLE
@@ -165,15 +177,15 @@ def buildTISensorTagCC2541Demo
 	copyEasyBLE(destPath)
 end
 
-
 def buildTISensorTagCC2541WebBluetooth
 	settingsPath = 'examples/ti-sensortag-cc2541-webbluetooth'
 	destPath = 'examples/ti-sensortag-cc2541-webbluetooth/app'
 	icon = 'ti-sensortag-cc2541.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8d00'
-	copyExtendedSettings(destPath, 'app/', icon, uuid)
+	copyExtendedSettings(settingsPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	copyWebBluetooth(destPath)
 end
 
 def buildTISensorTagCC2650Demo
@@ -230,6 +242,16 @@ def buildHelloWorld
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0f'
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
+end
+
+def buildHelloECMAScript6
+	settingsPath = 'examples/hello-ecmascript6'
+	destPath = 'examples/hello-ecmascript6/app'
+	icon = 'evothings-logo.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8d01'
+	copyExtendedSettings(settingsPath, '', icon, uuid)
+	copyCommon(destPath)
+	copyWebBluetooth(destPath)
 end
 
 def buildHueLights
@@ -476,8 +498,7 @@ def writeExtendedSettingsFile(destPath, indexPath, uuid)
 		"  \"www-dir\": \"www\",\n" +
 		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
 		"  \"dont-build\": [\"libs\", \"ui\"],\n" +
-		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
-		"  \"app-uuid\" :\"" +  uuid + "\",\n"+
+		"  \"app-uuid\" :\"" +  uuid + "\",\n" +
 		"  \"app-icon\" :\"app-icon.png\"\n" +
 		"}\n"
 	puts 'Writing settings file ' + fullDestPath(destPath) + '/evothings.json'
@@ -497,6 +518,9 @@ def copyEvothings(destPath)
 	copyDir(
 		libraryPath('libs/evothings/evothings.js'),
 		fullDestPath(destPath) + '/libs/evothings')
+	copyDir(
+		libraryPath('libs/evothings/VERSION'),
+		fullDestPath(destPath) + '/libs/evothings')
 end
 
 def copyEasyBLE(destPath)
@@ -504,6 +528,12 @@ def copyEasyBLE(destPath)
 	copyDir(
 		libraryPath('libs/evothings/easyble'),
 		fullDestPath(destPath) + '/libs/evothings')
+end
+
+def copyWebBluetooth(destPath)
+	copyDir(
+		libraryPath('libs/bleat'),
+		fullDestPath(destPath) + '/libs')
 end
 
 def copyArduinoBLE(destPath)
@@ -587,6 +617,10 @@ def copyDir(srcPath, destPath)
 	cp_r(srcPath, destPath)
 end
 
+def rmDir(path)
+	rm_rf(path)
+end
+
 def copyFile(srcPath, destPath)
 	cp(srcPath, destPath)
 end
@@ -601,6 +635,7 @@ def buildExamples
 	buildBlePeripheral
 	buildMbedGAP
 	buildMbedGATT
+	buildMbedGATTWebBluetooth
 	buildArduinoBLE
 	buildArduinoInputTCP
 	buildArduinoLEDOnOffBLE
@@ -614,6 +649,7 @@ def buildExamples
 	buildEstimoteBeacons
 	buildEstimoteNearables
 	buildHelloWorld
+	buildHelloECMAScript6
 	buildHueLights
 	buildEddystoneScan
 	buildIBeaconScan
