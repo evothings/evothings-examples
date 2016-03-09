@@ -79,6 +79,12 @@ app.showInfo = function(info)
  */
 app.connect = function()
 {
+	// Disconnect if connected.
+	if (app.gattServer && app.gattServer.connected)
+	{
+		app.gattServer.disconnect();
+	}
+
 	app.showInfo('Status: Scanning...');
 
 	// Find and connect to device and get characteristics for LED read/write.
@@ -96,7 +102,7 @@ app.connect = function()
 		// Save gatt server.
 		app.gattServer = server;
 		// Get LED service.
-		return gattServer.getPrimaryService(app.ledServiceUUID);
+		return app.gattServer.getPrimaryService(app.ledServiceUUID);
 	})
 	.then(service => {
 		// Save LED service.
@@ -111,6 +117,7 @@ app.connect = function()
 		return app.ledService.getCharacteristic(app.ledWriteCharacteristicUUID);
 	})
 	.then(characteristic => {
+		app.showInfo('Status: Ready');
 		// Save LED write characteristic.
 		app.ledWriteCharacteristic = characteristic
 	})
@@ -140,22 +147,27 @@ app.onConnectButton = function()
  */
 app.onToggleButton = function()
 {
+
 	// Read LED status from the device.
 	app.ledReadCharacteristic.readValue().then(data => {
+
 		// Toggle status.
-		var ledStatus = data.getUint8();
+		var ledStatus = data.getUint8(0);
 		if (ledStatus == app.ledON)
 		{
+			app.showInfo('Status: LED OFF');
 			$('#toggleButton').removeClass('green');
 			$('#toggleButton').addClass('red');
-			led[0] = app.ledOFF;
+			ledStatus = app.ledOFF;
 		}
 		else if (ledStatus == app.ledOFF)
 		{
+			app.showInfo('Status: LED ON');
 			$('#toggleButton').removeClass('red');
 			$('#toggleButton').addClass('green');
-			led[0] = app.ledON;
+			ledStatus = app.ledON;
 		}
+
 		// Write new LED status to device.
 		app.ledWriteCharacteristic.writeValue(new Uint8Array([ledStatus]));
 	});

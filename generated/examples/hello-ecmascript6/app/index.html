@@ -13,6 +13,14 @@
 		@import 'ui/css/evothings-app.css';
 	</style>
 
+	<style>
+	li {
+		padding: 0px !important;
+		margin: 5px !important;
+		margin-left: 20px !important;
+	}
+	</style>
+
 	<script>
 	// Redirect console.log to Evothings Workbench.
 	if (window.hyper && window.hyper.log) { console.log = hyper.log }
@@ -40,13 +48,23 @@
 
 	<p>This app is written in ECMAScript 6.</p>
 
-	<p>When clicking Run in the Workbench, the app is build and ECMAScript 6 code is translated to regular JavaScript code (ECMAScript 5).</p>
+	<p>When clicking Run in the Workbench, the app is built and ECMAScript 6 code is translated to regular JavaScript code (ECMAScript 5).</p>
 
 	<p>The application code is in folder <strong>app</strong>.</p>
 
 	<p>The built code is in folder <strong>www</strong>.</p>
 
 	<p>Settings are in file evothings.json.</p>
+
+	<p>Overview of settings:</p>
+	<ul>
+		<li><strong>app-dir:</strong> Application directory.</li>
+		<li><strong>www-dir:</strong> Build output directory.</li>
+		<li><strong>index-file:</strong> Main HTML file in application directory.</li>
+		<li><strong>dont-build:</strong> Array of subdirectories in the application directory that should not be processed, these directories are copied verbatim to the output directory.</li>
+		<li><strong>app-uuid:</strong> UUID for the app.</li>
+		<li><strong>app-icon:</strong> App icon file name.</li>
+	</ul>
 
 	<script src="cordova.js"></script>
 	<script src="libs/evothings/evothings.js"></script>

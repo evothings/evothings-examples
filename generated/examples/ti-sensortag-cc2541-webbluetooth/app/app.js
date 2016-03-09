@@ -138,7 +138,7 @@ app.start = () =>
 
 app.stop = () =>
 {
-	if (gattServer.connected)
+	if (gattServer && gattServer.connected)
 	{
 		gattServer.disconnect();
 	}
