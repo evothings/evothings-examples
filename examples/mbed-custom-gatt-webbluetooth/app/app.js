@@ -103,7 +103,6 @@ function connect()
 
 	// Find and connect to device and get characteristics for LED read/write.
 	bleat.requestDevice({
-		//filters:[{ services:[ '0xf000aa10' ] }]
 		filters:[{ name: deviceName }]
 	})
 	.then(device => {

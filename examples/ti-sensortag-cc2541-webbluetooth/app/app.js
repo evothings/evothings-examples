@@ -72,8 +72,6 @@ app.start = () =>
 	showInfo('Scanning...');
 
 	bleat.requestDevice({
-		//filters:[{ services:[ '0xf000aa10' ] }]
-		// The SensorTag does not advertise services so we use the name.
 		filters:[{ name: 'SensorTag' }]
 	})
 	.then(device => {
