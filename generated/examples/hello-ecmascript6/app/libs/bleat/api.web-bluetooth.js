@@ -73,6 +73,30 @@
         }
     }
 
+    var events = {};
+    function createListenerFn(eventTypes) {
+        return function(type, callback, capture) {
+            if (eventTypes.indexOf(type) < 0) return; //error
+            if (!events[this]) events[this] = {};
+            if (!events[this][type]) events[this][type] = [];
+            events[this][type].push(callback);
+        };
+    }
+    function removeEventListener(type, callback, capture) {
+        if (!events[this] || !events[this][type]) return; //error
+        var i = events[this][type].indexOf(callback);
+        if (i >= 0) events[this][type].splice(i, 1);
+        if (events[this][type].length === 0) delete events[this][type];
+        if (Object.keys(events[this]).length === 0) delete events[this];
+    }
+    function dispatchEvent(event) {
+        if (!events[this] || !events[this][event.type]) return; //error
+        event.target = this;
+        events[this][event.type].forEach(function(callback) {
+            if (typeof callback === "function") callback(event);
+        });
+    }
+
     function filterDevice(options, deviceInfo) {
         var valid = false;
         var validServices = [];
@@ -116,76 +140,80 @@
         return deviceInfo;
     }
 
-    function scan(options, foundFn, completeFn, errorFn) {
-        // Must have a filter
-        if (!options.filters || options.filters.length === 0) {
-            return errorFn("no filters specified");
-        }
+    var scanner = null;
+    function requestDevice(options) {
+        return new Promise(function(resolve, reject) {
+            if (scanner !== null) return reject("requestDevice error: request in progress");
 
-        // Don't allow empty filters
-        var emptyFilter = options.filters.some(function(filter) {
-            return (Object.keys(filter).length === 0);
-        });
-        if (emptyFilter) {
-            return errorFn("empty filter specified");
-        }
+            if (!options.deviceFound) {
+                // Must have a filter
+                if (!options.filters || options.filters.length === 0) {
+                    return reject(new TypeError("requestDevice error: no filters specified"));
+                }
 
-        // Don't allow empty namePrefix
-        var emptyPrefix = options.filters.some(function(filter) {
-            return (typeof filter.namePrefix !== "undefined" && filter.namePrefix === "");
-        });
-        if (emptyPrefix) {
-            return errorFn("empty namePrefix specified");
-        }
+                // Don't allow empty filters
+                var emptyFilter = options.filters.some(function(filter) {
+                    return (Object.keys(filter).length === 0);
+                });
+                if (emptyFilter) {
+                    return reject(new TypeError("requestDevice error: empty filter specified"));
+                }
 
-        var searchUUIDs = [];
-        if (options.filters) {
-            options.filters.forEach(function(filter) {
-                if (filter.services) searchUUIDs = searchUUIDs.concat(filter.services.map(helpers.getServiceUUID));
+                // Don't allow empty namePrefix
+                var emptyPrefix = options.filters.some(function(filter) {
+                    return (typeof filter.namePrefix !== "undefined" && filter.namePrefix === "");
+                });
+                if (emptyPrefix) {
+                    return reject(new TypeError("requestDevice error: empty namePrefix specified"));
+                }
+            }
+
+            var searchUUIDs = [];
+            if (options.filters) {
+                options.filters.forEach(function(filter) {
+                    if (filter.services) searchUUIDs = searchUUIDs.concat(filter.services.map(helpers.getServiceUUID));
+                });
+            }
+            // Unique-ify
+            searchUUIDs = searchUUIDs.filter(function(item, index, array) {
+                return array.indexOf(item) === index;
             });
-        }
-        // Unique-ify
-        searchUUIDs = searchUUIDs.filter(function(item, index, array) {
-            return array.indexOf(item) === index;
+
+            var scanTime = options.scanTime || defaultScanTime;
+            var completeFn = options.deviceFound ? resolve : function() {
+                reject("requestDevice error: no devices found");
+            };
+
+            adapter.startScan(searchUUIDs, function(deviceInfo) {
+                if (!options.deviceFound) {
+                    deviceInfo = filterDevice(options, deviceInfo);
+                }
+
+                if (deviceInfo) {
+                    var bluetoothDevice = new BluetoothDevice(deviceInfo);
+                    if (!options.deviceFound || options.deviceFound(bluetoothDevice)) {
+                        cancelRequest()
+                        .then(function() {
+                            resolve(bluetoothDevice);
+                        });
+                    }
+                }
+            }, function() {
+                scanner = setTimeout(function() {
+                    cancelRequest()
+                    .then(completeFn);
+                }, scanTime);
+            }, wrapReject(reject, "requestDevice error"));
         });
-
-        var scanTime = options.scanTime || defaultScanTime;
-        var scanTimeout;
-        adapter.startScan(searchUUIDs, function(deviceInfo) {
-            deviceInfo = filterDevice(options, deviceInfo);
-            if (deviceInfo) foundFn(deviceInfo, scanTimeout);
-        }, function() {
-            scanTimeout = setTimeout(function() {
+    }
+    function cancelRequest() {
+        return new Promise(function(resolve, reject) {
+            if (scanner) {
+                clearTimeout(scanner);
+                scanner = null;
                 adapter.stopScan();
-                completeFn();
-            }, scanTime);
-        }, errorFn);
-    }
-
-    var events = {};
-
-    function createListenerFn(eventTypes) {
-        return function(type, callback, capture) {
-            if (eventTypes.indexOf(type) < 0) return; //error
-            if (!events[this]) events[this] = {};
-            if (!events[this][type]) events[this][type] = [];
-            events[this][type].push(callback);
-        };
-    }
-
-    function removeEventListener(type, callback, capture) {
-        if (!events[this] || !events[this][type]) return; //error
-        var i = events[this][type].indexOf(callback);
-        if (i >= 0) events[this][type].splice(i, 1);
-        if (events[this][type].length === 0) delete events[this][type];
-        if (Object.keys(events[this]).length === 0) delete events[this];
-    }
-
-    function dispatchEvent(event) {
-        if (!events[this] || !events[this][event.type]) return; //error
-        event.target = this;
-        events[this][event.type].forEach(function(callback) {
-            if (typeof callback === "function") callback(event);
+            }
+            resolve();
         });
     }
 
@@ -229,6 +257,8 @@
     };
     BluetoothRemoteGATTServer.prototype.connect = function() {
         return new Promise(function(resolve, reject) {
+            if (this.connected) return reject("connect error: device already connected");
+
             adapter.connect(this.device._handle, function() {
                 this.connected = true;
                 resolve(this);
@@ -244,7 +274,9 @@
     };
     BluetoothRemoteGATTServer.prototype.getPrimaryService = function(serviceUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.connected) return reject("getPrimaryService error: device not connected");
             if (!serviceUUID) return reject("getPrimaryService error: no service specified");
+
             this.getPrimaryServices(serviceUUID)
             .then(function(services) {
                 if (services.length !== 1) return reject("getPrimaryService error: service not found");
@@ -257,6 +289,8 @@
     };
     BluetoothRemoteGATTServer.prototype.getPrimaryServices = function(serviceUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.connected) return reject("getPrimaryServices error: device not connected");
+
             function complete() {
                 if (!serviceUUID) return resolve(this._services);
                 var filtered = this._services.filter(function(service) {
@@ -291,7 +325,9 @@
     };
     BluetoothRemoteGATTService.prototype.getCharacteristic = function(characteristicUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.device.gatt.connected) return reject("getCharacteristic error: device not connected");
             if (!characteristicUUID) return reject("getCharacteristic error: no characteristic specified");
+
             this.getCharacteristics(characteristicUUID)
             .then(function(characteristics) {
                 if (characteristics.length !== 1) return reject("getCharacteristic error: characteristic not found");
@@ -304,6 +340,8 @@
     };
     BluetoothRemoteGATTService.prototype.getCharacteristics = function(characteristicUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.device.gatt.connected) return reject("getCharacteristics error: device not connected");
+
             function complete() {
                 if (!characteristicUUID) return resolve(this._characteristics);
                 var filtered = this._characteristics.filter(function(characteristic) {
@@ -324,7 +362,9 @@
     };
     BluetoothRemoteGATTService.prototype.getIncludedService = function(serviceUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.device.gatt.connected) return reject("getIncludedService error: device not connected");
             if (!serviceUUID) return reject("getIncludedService error: no service specified");
+
             this.getIncludedServices(serviceUUID)
             .then(function(services) {
                 if (services.length !== 1) return reject("getIncludedService error: service not found");
@@ -337,6 +377,8 @@
     };
     BluetoothRemoteGATTService.prototype.getIncludedServices = function(serviceUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.device.gatt.connected) return reject("getIncludedServices error: device not connected");
+
             function complete() {
                 if (!serviceUUID) return resolve(this._services);
                 var filtered = this._services.filter(function(service) {
@@ -387,7 +429,9 @@
     };
     BluetoothRemoteGATTCharacteristic.prototype.getDescriptor = function(descriptorUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.service.device.gatt.connected) return reject("getDescriptor error: device not connected");
             if (!descriptorUUID) return reject("getDescriptor error: no descriptor specified");
+
             this.getDescriptors(descriptorUUID)
             .then(function(descriptors) {
                 if (descriptors.length !== 1) return reject("getDescriptor error: descriptor not found");
@@ -400,6 +444,8 @@
     };
     BluetoothRemoteGATTCharacteristic.prototype.getDescriptors = function(descriptorUUID) {
         return new Promise(function(resolve, reject) {
+            if (!this.service.device.gatt.connected) return reject("getDescriptors error: device not connected");
+
             function complete() {
                 if (!descriptorUUID) return resolve(this._descriptors);
                 var filtered = this._descriptors.filter(function(descriptor) {
@@ -420,6 +466,8 @@
     };
     BluetoothRemoteGATTCharacteristic.prototype.readValue = function() {
         return new Promise(function(resolve, reject) {
+            if (!this.service.device.gatt.connected) return reject("readValue error: device not connected");
+
             adapter.readCharacteristic(this._handle, function(dataView) {
                 this.value = dataView;
                 resolve(dataView);
@@ -428,9 +476,11 @@
         }.bind(this));
     };
     BluetoothRemoteGATTCharacteristic.prototype.writeValue = function(bufferSource) {
-        var arrayBuffer = bufferSource.buffer || bufferSource;
-        var dataView = new DataView(arrayBuffer);
         return new Promise(function(resolve, reject) {
+            if (!this.service.device.gatt.connected) return reject("writeValue error: device not connected");
+
+            var arrayBuffer = bufferSource.buffer || bufferSource;
+            var dataView = new DataView(arrayBuffer);
             adapter.writeCharacteristic(this._handle, dataView, function() {
                 this.value = dataView;
                 resolve();
@@ -439,6 +489,8 @@
     };
     BluetoothRemoteGATTCharacteristic.prototype.startNotifications = function() {
         return new Promise(function(resolve, reject) {
+            if (!this.service.device.gatt.connected) return reject("startNotifications error: device not connected");
+
             adapter.enableNotify(this._handle, function(dataView) {
                 this.value = dataView;
                 this.dispatchEvent({ type: "characteristicvaluechanged", bubbles: true });
@@ -447,6 +499,8 @@
     };
     BluetoothRemoteGATTCharacteristic.prototype.stopNotifications = function() {
         return new Promise(function(resolve, reject) {
+            if (!this.service.device.gatt.connected) return reject("stopNotifications error: device not connected");
+
             adapter.disableNotify(this._handle, resolve, wrapReject(reject, "stopNotifications error"));
         }.bind(this));
     };
@@ -468,6 +522,8 @@
     };
     BluetoothRemoteGATTDescriptor.prototype.readValue = function() {
         return new Promise(function(resolve, reject) {
+            if (!this.characteristic.service.device.gatt.connected) return reject("readValue error: device not connected");
+
             adapter.readDescriptor(this._handle, function(dataView) {
                 this.value = dataView;
                 resolve(dataView);
@@ -475,9 +531,11 @@
         }.bind(this));
     };
     BluetoothRemoteGATTDescriptor.prototype.writeValue = function(bufferSource) {
-        var arrayBuffer = bufferSource.buffer || bufferSource;
-        var dataView = new DataView(arrayBuffer);
         return new Promise(function(resolve, reject) {
+            if (!this.characteristic.service.device.gatt.connected) return reject("writeValue error: device not connected");
+
+            var arrayBuffer = bufferSource.buffer || bufferSource;
+            var dataView = new DataView(arrayBuffer);
             adapter.writeDescriptor(this._handle, dataView, function() {
                 this.value = dataView;
                 resolve();
@@ -491,29 +549,7 @@
             adapters[adapterName] = definition;
             adapter = definition;
         },
-        requestDevice: function(options) {
-            return new Promise(function(resolve, reject) {
-                scan(options, function(deviceInfo, scanTimeout) {
-                    if (scanTimeout) clearTimeout(scanTimeout);
-                    adapter.stopScan();
-                    resolve(new BluetoothDevice(deviceInfo));
-                }, function() {
-                    reject("requestDevice error: no devices found");
-                }, wrapReject(reject, "requestDevice error"));
-            });
-        },
-        requestDevices: function(options) {
-            return new Promise(function(resolve, reject) {
-                var devices = [];
-                scan(options, function(deviceInfo) {
-                    devices.push(deviceInfo);
-                }, function() {
-                    if (devices.length === 0) reject("requestDevices error: no devices found");
-                    else resolve(devices.map(function(deviceInfo) {
-                        return new BluetoothDevice(deviceInfo);
-                    }));
-                }, wrapReject(reject, "requestDevices error"));
-            });
-        }
+        requestDevice: requestDevice,
+        cancelRequest: cancelRequest
     };
 }));
