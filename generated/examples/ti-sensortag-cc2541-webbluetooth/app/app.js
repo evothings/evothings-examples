@@ -1,3 +1,4 @@
+// Using closure to avoid global name space conflicts.
 ;(() =>
 {
 'use strict';

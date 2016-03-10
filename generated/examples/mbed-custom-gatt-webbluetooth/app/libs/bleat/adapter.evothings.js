@@ -67,19 +67,20 @@
 	adapter.startScan = function(
 		serviceUUIDs,	// String[] serviceUUIDs		advertised service UUIDs to restrict results by
 		foundFn,		// Function(Object deviceInfo)	function called with each discovered deviceInfo
-		completeFn,		// Function()					function called when scanning completed
+		completeFn,		// Function()					function called once starting scanning
 		errorFn			// Function(String errorMsg)	function called if error occurs
 		)
 	{
 		init(function() {
+			evothings.ble.stopScan();
 			evothings.ble.startScan(
 				function(deviceInfo) {
-					//if (!this.deviceHandles[deviceID]) this.deviceHandles[deviceID] = deviceInfo;
 					if (foundFn) { foundFn(createBleatDeviceObject(deviceInfo)); }
 				},
 				function(error) {
 					if (errorFn) { errorFn(error); }
 				});
+			if (completeFn) { completeFn(); }
 		});
 	};
 

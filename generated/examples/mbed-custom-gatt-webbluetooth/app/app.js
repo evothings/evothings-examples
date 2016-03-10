@@ -10,168 +10,186 @@ Credits:
 	http://mbed.org
 */
 
+// Using closure to avoid global name space conflicts.
+;(() =>
+{
+'use strict';
+
 /**
- * Object that holds application data and functions.
+ * Application object that exposes global functions.
  */
-var app = {};
+window.app = {};
 
 /**
  * Name of device to connect to.
  */
-app.deviceName = 'ChangeMe!!'
+var deviceName = 'ChangeMe!!'
 
 /**
  * LED defines (inverted).
  */
-app.ledOFF = 1;
-app.ledON  = 0;
+var ledOFF = 1;
+var ledON  = 0;
 
-app.device = null;
-app.gattServer = null;
+/**
+ * The BLE GATT server.
+ */
+var gattServer = null;
 
-app.ledServiceUUID = '0000a000-0000-1000-8000-00805f9b34fb';
-app.ledReadCharacteristicUUID = '0000a001-0000-1000-8000-00805f9b34fb';
-app.ledWriteCharacteristicUUID = '0000a002-0000-1000-8000-00805f9b34fb';
+/**
+ * BLE UUIDs.
+ */
+var ledServiceUUID = '0000a000-0000-1000-8000-00805f9b34fb';
+var ledReadCharacteristicUUID = '0000a001-0000-1000-8000-00805f9b34fb';
+var ledWriteCharacteristicUUID = '0000a002-0000-1000-8000-00805f9b34fb';
 
-app.ledService = null;
-app.ledReadCharacteristic = null;
-app.ledWriteCharacteristic = null;
+/**
+ * BLE Objects.
+ */
+var ledService = null;
+var ledReadCharacteristic = null;
+var ledWriteCharacteristic = null;
 
 /**
  * Initialise the application.
  */
-app.initialize = function()
+function initialize()
 {
 	document.addEventListener(
 		'deviceready',
-		app.onDeviceReady,
+		onDeviceReady,
 		false);
-};
+}
 
 /**
  * When low level initialization is complete, this function is called.
  */
-app.onDeviceReady = function()
+function onDeviceReady()
 {
 	// Report status.
-	app.showInfo('Enter BLE device name and tap Connect');
+	showInfo('Enter BLE device name and tap Connect');
 
 	// Show the saved device name, if any.
 	var name = localStorage.getItem('deviceName');
 	if (name)
 	{
-		app.deviceName = name;
+		deviceName = name;
 	}
-	$('#deviceName').val(app.deviceName);
-};
+	$('#deviceName').val(deviceName);
+}
 
 /**
  * Print debug info to console and application UI.
  */
-app.showInfo = function(info)
+function showInfo(info)
 {
 	document.getElementById('info').innerHTML = info;
 	console.log(info);
-};
+}
 
 /**
  * Scan for device and connect.
  */
-app.connect = function()
+function connect()
 {
 	// Disconnect if connected.
-	if (app.gattServer && app.gattServer.connected)
+	if (gattServer && gattServer.connected)
 	{
-		app.gattServer.disconnect();
+		gattServer.disconnect();
+		gattServer = null;
 	}
 
-	app.showInfo('Status: Scanning...');
+	showInfo('Status: Scanning...');
 
 	// Find and connect to device and get characteristics for LED read/write.
 	bleat.requestDevice({
 		//filters:[{ services:[ '0xf000aa10' ] }]
-		filters:[{ name: app.deviceName }]
+		filters:[{ name: deviceName }]
 	})
 	.then(device => {
-		app.showInfo('Status: Found device: ' + device.name);
+		showInfo('Status: Found device: ' + device.name);
 		// Connect to device.
 		return device.gatt.connect();
 	})
 	.then(server => {
-		app.showInfo('Status: Connected');
+		showInfo('Status: Connected');
 		// Save gatt server.
-		app.gattServer = server;
+		gattServer = server;
 		// Get LED service.
-		return app.gattServer.getPrimaryService(app.ledServiceUUID);
+		return gattServer.getPrimaryService(ledServiceUUID);
 	})
 	.then(service => {
 		// Save LED service.
-		app.ledService = service
+		ledService = service
 		// Get LED read characteristic.
-		return app.ledService.getCharacteristic(app.ledReadCharacteristicUUID);
+		return ledService.getCharacteristic(ledReadCharacteristicUUID);
 	})
 	.then(characteristic => {
 		// Save LED read characteristic.
-		app.ledReadCharacteristic = characteristic
+		ledReadCharacteristic = characteristic
 		// Get LED write characteristic.
-		return app.ledService.getCharacteristic(app.ledWriteCharacteristicUUID);
+		return ledService.getCharacteristic(ledWriteCharacteristicUUID);
 	})
 	.then(characteristic => {
-		app.showInfo('Status: Ready');
+		showInfo('Status: Ready');
 		// Save LED write characteristic.
-		app.ledWriteCharacteristic = characteristic
+		ledWriteCharacteristic = characteristic
 	})
 	.catch(error => {
-		app.showInfo(error);
+		showInfo(error);
 	});
 };
 
 /**
- * when low level initialization complete,
- * this function is called
+ *  Connect to device. Called from the UI.
  */
 app.onConnectButton = function()
 {
 	// Get device name from text field.
-	app.deviceName = $('#deviceName').val();
+	deviceName = $('#deviceName').val();
 
 	// Save it for next time we use the app.
-	localStorage.setItem('deviceName', app.deviceName);
+	localStorage.setItem('deviceName', deviceName);
 
 	// Connect to device.
-	app.connect();
+	connect();
 };
 
 /**
- * Toggle the LED on/off.
+ * Toggle the LED on/off. Called from the UI.
  */
 app.onToggleButton = function()
 {
+	// Must have read && write characteristics.
+	if (ledReadCharacteristic && ledWriteCharacteristic)
+	{
+		// Read LED status from the device.
+		ledReadCharacteristic.readValue().then(data => {
 
-	// Read LED status from the device.
-	app.ledReadCharacteristic.readValue().then(data => {
+			// Toggle status.
+			var ledStatus = data.getUint8(0);
+			if (ledStatus == ledON)
+			{
+				showInfo('Status: LED OFF');
+				$('#toggleButton').removeClass('green');
+				$('#toggleButton').addClass('red');
+				ledStatus = ledOFF;
+			}
+			else if (ledStatus == ledOFF)
+			{
+				showInfo('Status: LED ON');
+				$('#toggleButton').removeClass('red');
+				$('#toggleButton').addClass('green');
+				ledStatus = ledON;
+			}
 
-		// Toggle status.
-		var ledStatus = data.getUint8(0);
-		if (ledStatus == app.ledON)
-		{
-			app.showInfo('Status: LED OFF');
-			$('#toggleButton').removeClass('green');
-			$('#toggleButton').addClass('red');
-			ledStatus = app.ledOFF;
-		}
-		else if (ledStatus == app.ledOFF)
-		{
-			app.showInfo('Status: LED ON');
-			$('#toggleButton').removeClass('red');
-			$('#toggleButton').addClass('green');
-			ledStatus = app.ledON;
-		}
-
-		// Write new LED status to device.
-		app.ledWriteCharacteristic.writeValue(new Uint8Array([ledStatus]));
-	});
+			// Write new LED status to device.
+			ledWriteCharacteristic.writeValue(new Uint8Array([ledStatus]));
+		});
+	}
 }
 
 // Initialize the app.
-app.initialize();
+initialize();
+
+})();
