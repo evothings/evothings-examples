@@ -422,6 +422,13 @@ def buildEsp8266
 	copyJQuery(destPath)
 end
 
+def buildArduino101LEDOnOff
+	destPath = 'experiments/arduino101-led-onoff'
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyArduinoBLE(destPath)
+end
+
 def buildTemplateBasicApp
 	destPath = 'examples/template-basic-app'
 	icon = 'evothings-logo.png'
@@ -670,6 +677,7 @@ def buildExamples
 	buildMediaTekLinkIt
 	buildMediaTekLinkItConnect
 	buildEsp8266
+	buildArduino101LEDOnOff
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
 	# TODO: buildTemplateBLEApp
