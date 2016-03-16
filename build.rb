@@ -168,7 +168,7 @@ def buildBLEDiscovery
 end
 
 def buildTISensorTagCC2541Demo
-	destPath = 'examples/ti-sensortag-cc2541-demo'
+	destPath = 'examples/ble-ti-sensortag-cc2541-demo'
 	icon = 'ti-sensortag-cc2541.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b09'
 	copySettings(destPath, '', icon, uuid)
@@ -178,8 +178,8 @@ def buildTISensorTagCC2541Demo
 end
 
 def buildTISensorTagCC2541WebBluetooth
-	settingsPath = 'examples/ti-sensortag-cc2541-webbluetooth'
-	destPath = 'examples/ti-sensortag-cc2541-webbluetooth/app'
+	settingsPath = 'examples/ble-ti-sensortag-cc2541-webbluetooth'
+	destPath = 'examples/ble-ti-sensortag-cc2541-webbluetooth/app'
 	icon = 'ti-sensortag-cc2541.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8d00'
 	copyExtendedSettings(settingsPath, '', icon, uuid)
@@ -189,7 +189,7 @@ def buildTISensorTagCC2541WebBluetooth
 end
 
 def buildTISensorTagCC2650Demo
-	destPath = 'examples/ti-sensortag-cc2650-demo'
+	destPath = 'examples/ble-ti-sensortag-cc2650-demo'
 	icon = 'ti-sensortag-cc2650.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0a'
 	copySettings(destPath, '', icon, uuid)
@@ -199,7 +199,7 @@ def buildTISensorTagCC2650Demo
 end
 
 def buildTISensorTagSensors
-	destPath = 'examples/ti-sensortag-sensors'
+	destPath = 'examples/ble-ti-sensortag-sensors'
 	icon = 'ti-sensortag-cc2650.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0b'
 	copySettings(destPath, '', icon, uuid)
@@ -209,7 +209,7 @@ def buildTISensorTagSensors
 end
 
 def buildTISensorTagAccelerometer
-	destPath = 'examples/ti-sensortag-accelerometer'
+	destPath = 'examples/ble-ti-sensortag-accelerometer'
 	icon = 'ti-sensortag-cc2650.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0c'
 	copySettings(destPath, '', icon, uuid)
@@ -311,8 +311,8 @@ def buildNordic_nRF51822EK_BLE
 end
 
 def buildNordic_nRF51DK_BLE
-	settingsPath = 'examples/nordic-nRF51-dk-ble'
-	destPath = 'examples/nordic-nRF51-dk-ble/app'
+	settingsPath = 'examples/nordic-nRF51-ble'
+	destPath = 'examples/nordic-nRF51-ble/app'
 	icon = 'nordic-semi.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b7f'
 	copySettings(settingsPath, 'app/', icon, uuid)
@@ -334,8 +334,8 @@ def buildRFduinoLEDOnOff
 end
 
 def buildLightblueBeanBasic
-	settingsPath = 'examples/lightblue-bean-basic'
-	destPath = 'examples/lightblue-bean-basic/app'
+	settingsPath = 'examples/lightbluebean-basic'
+	destPath = 'examples/lightbluebean-basic/app'
 	icon = 'lightblue-bean.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b9f'
 	copySettings(settingsPath, 'app/', icon, uuid)
@@ -484,8 +484,9 @@ def writeSettingsFile(destPath, indexPath, uuid)
 	json =
 		"{\n" +
 		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
-		"  \"app-uuid\" :\"" +  uuid + "\",\n"+
-		"  \"app-icon\" :\"app-icon.png\"\n" +
+		"  \"app-uuid\" :\"" +  uuid + "\",\n" +
+		"  \"app-icon\" :\"app-icon.png\",\n" +
+		"  \"app-doc-url\" :\"https://evothings.com/doc/" + destPath + ".html\"\n" +
 		"}\n"
 	puts 'Writing settings file ' + fullDestPath(destPath) + '/evothings.json'
 	writeFileUTF8(fullDestPath(destPath) + '/evothings.json', json)
@@ -499,7 +500,8 @@ def writeExtendedSettingsFile(destPath, indexPath, uuid)
 		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
 		"  \"dont-build\": [\"libs\", \"ui\"],\n" +
 		"  \"app-uuid\" :\"" +  uuid + "\",\n" +
-		"  \"app-icon\" :\"app-icon.png\"\n" +
+		"  \"app-icon\" :\"app-icon.png\",\n" +
+		"  \"app-doc-url\" :\"https://evothings.com/doc/" + destPath + ".html\"\n" +
 		"}\n"
 	puts 'Writing settings file ' + fullDestPath(destPath) + '/evothings.json'
 	writeFileUTF8(fullDestPath(destPath) + '/evothings.json', json)
