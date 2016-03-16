@@ -6,7 +6,7 @@
 #define CONSOLE_LOG 
 
 #include "mbed.h"
-#include "BLEDevice.h"
+#include "ble/BLE.h"
 
 //-------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ const UUID nRF51_GATT_CHAR_LED    = UUID((uint8_t *)"nRF51-DK led    ");
 #define CHARACTERISTIC_COUNT  2
 
 // our bluetooth smart objects
-BLEDevice           ble;
+BLE                ble;
 GattService        *gatt_service;
 GattCharacteristic *gatt_characteristics[CHARACTERISTIC_COUNT];
 uint8_t             gatt_char_value[CHARACTERISTIC_COUNT];
@@ -116,10 +116,7 @@ void onLedDataWritten(const uint8_t* value, uint8_t length)
 
 //-------------------------------------------------------------------------
 
-void onConnection(Gap::Handle_t handle,
-                  Gap::addr_type_t peerAddrType,
-                  const Gap::address_t peerAddr,
-                  const Gap::ConnectionParams_t * connectionParams) 
+void onConnection(const Gap::ConnectionCallbackParams_t *params)
 {
   INFO_NL(">> connected");
 
@@ -128,23 +125,23 @@ void onConnection(Gap::Handle_t handle,
   onLedDataWritten(&led_value, 1); // force LED's to be in off state
 }
 
-void onDataWritten(const GattCharacteristicWriteCBParams *context) 
+void onDataWritten(const GattWriteCallbackParams *context) 
 {
-  // was the characteristic being written to nRF51_GATT_CHAR_LED? 
-  if (context -> charHandle == 
-      gatt_characteristics[CHARACTERISTIC_LED] -> getValueHandle())
-  {
-    onLedDataWritten(context -> data, context -> len);
-  } 
+   // was the characteristic being written to nRF51_GATT_CHAR_LED? 
+  if (context -> handle == 
+       gatt_characteristics[CHARACTERISTIC_LED] -> getValueHandle())
+   {
+     onLedDataWritten(context -> data, context -> len);
+   } 
 }
 
-void onDisconnection(Gap::Handle_t handle, 
-                     Gap::DisconnectionReason_t disconnectReason) 
+void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {
-  INFO_NL(">> disconnected");
-  ble.startAdvertising();
-  INFO_NL(">> device advertising");
+    INFO_NL(">> disconnected");
+    ble.gap().startAdvertising(); // restart advertising
+    INFO_NL(">> device advertising");
 }
+
 
 int main() 
 {
@@ -178,23 +175,23 @@ int main()
 
     // initialize our ble device
     ble.init();
-    ble.setDeviceName((uint8_t *)DEVICE_NAME);
+    ble.gap().setDeviceName((uint8_t *)DEVICE_NAME);
     INFO_NL(">> initialized device '%s'", DEVICE_NAME);
 
     // configure our advertising type, payload and interval
-    ble.accumulateAdvertisingPayload(
+    ble.gap().accumulateAdvertisingPayload(
           GapAdvertisingData::BREDR_NOT_SUPPORTED | 
           GapAdvertisingData::LE_GENERAL_DISCOVERABLE);
-    ble.accumulateAdvertisingPayload(
+    ble.gap().accumulateAdvertisingPayload(
           GapAdvertisingData::COMPLETE_LOCAL_NAME, 
           (uint8_t *)DEVICE_NAME, sizeof(DEVICE_NAME));
-    ble.setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);
-    ble.setAdvertisingInterval(160); // 100ms
+    ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);
+    ble.gap().setAdvertisingInterval(160); // 100ms
     INFO_NL(">> configured advertising type, payload and interval");
 
     // configure our callbacks
-    ble.onDisconnection(onDisconnection);
-    ble.onConnection(onConnection);
+    ble.gap().onDisconnection(disconnectionCallback);
+    ble.gap().onConnection(onConnection);
     ble.onDataWritten(onDataWritten);
     INFO_NL(">> registered for callbacks");
 
@@ -208,7 +205,7 @@ int main()
     INFO_UUID("  :", nRF51_GATT_CHAR_LED);
 
     // start advertising
-    ble.startAdvertising();
+    ble.gap().startAdvertising();
     INFO_NL(">> device advertising");
 
     // start monitoring the buttons and posting new values
