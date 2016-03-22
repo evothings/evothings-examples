@@ -1,5 +1,6 @@
 {
   "index-file": "index.html",
   "app-uuid" :"fe860e6e-d35e-4bd0-831a-7703cc2f8b07",
-  "app-icon" :"app-icon.png"
+  "app-icon" :"app-icon.png",
+  "app-doc-url" :"https://evothings.com/doc/examples/ble-scan.html"
 }
