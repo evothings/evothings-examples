@@ -422,13 +422,6 @@ def buildEsp8266
 	copyJQuery(destPath)
 end
 
-def buildArduino101LEDOnOff
-	destPath = 'experiments/arduino101-led-onoff'
-	copyCommon(destPath)
-	copyJQuery(destPath)
-	copyArduinoBLE(destPath)
-end
-
 def buildTemplateBasicApp
 	destPath = 'examples/template-basic-app'
 	icon = 'evothings-logo.png'
@@ -437,6 +430,18 @@ def buildTemplateBasicApp
 	copyCommon(destPath)
 	copyJQuery(destPath)
 end
+
+def buildArduino101LEDOnOff
+	settingsPath = 'examples/arduino101-led-onoff'
+	destPath = 'examples/arduino101-led-onoff/app'
+	icon = 'arduino101.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b14'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyArduinoBLE(destPath)
+end
+
 
 # TODO
 #def buildTemplateBLEApp
