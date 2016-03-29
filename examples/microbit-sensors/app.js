@@ -6,11 +6,6 @@
 var app = {};
 
 /**
- * Data that is plotted on the canvas.
- */
-app.dataPoints = [];
-
-/**
  * Timeout (ms) after which a message is shown if the Microbit wasn't found.
  */
 app.CONNECT_TIMEOUT = 3000;
@@ -56,7 +51,6 @@ app.initialize = function()
 }
 
 function onConnect(context) {
-	// Once a connection has been made, make a subscription and send a message.
 	console.log("Client Connected");
 	console.log(context);
 }
@@ -64,7 +58,6 @@ function onConnect(context) {
 app.onDeviceReady = function()
 {
 	app.showInfo('Activate the Microbit and tap Start.');
-	//app.onStartButton();
 }
 
 app.showInfo = function(info)
@@ -152,8 +145,6 @@ app.connectToDevice = function(device)
 		{
 			app.showInfo('Error: Connection failed: ' + errorCode + '.');
 			evothings.ble.reset();
-			// This can cause an infinite loop...
-			//app.connectToDevice(device);
 		});
 }
 
@@ -184,10 +175,6 @@ app.writeCharacteristic = function(device, characteristicUUID, value) {
 		},
 		function(errorCode)
 		{
-			// This error will happen on iOS, since this descriptor is not
-			// listed when requesting descriptors. On iOS you are not allowed
-			// to use the configuration descriptor explicitly. It should be
-			// safe to ignore this error.
 			console.log('Error: writeCharacteristic: ' + errorCode + '.');
 		});
 }
@@ -221,6 +208,11 @@ app.startNotifications = function(device)
 	app.showInfo('Status: Starting notifications...');
 
 	app.readDeviceInfo(device);
+
+	// Due to https://github.com/evothings/cordova-ble/issues/30
+	// ... we have to do double work to make it function properly
+	// on both Android and iOS. This first part is only needed for Android
+	// and causes an error message on iOS that is safe to ignore.
 
 	// Set notifications to ON.
 	app.writeNotificationDescriptor(device, app.microbit.ACCELEROMETER_DATA);
