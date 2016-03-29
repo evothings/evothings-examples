@@ -442,6 +442,34 @@ def buildArduino101LEDOnOff
 	copyArduinoBLE(destPath)
 end
 
+def buildMicrobitLED
+	destPath = 'examples/microbit-led'
+	icon = 'microbit.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b15'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
+	copyEasyBLE(destPath)
+end
+
+def buildMicrobitDemo
+	destPath = 'examples/microbit-demo'
+	icon = 'microbit.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b16'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+end
+ 
+def buildMicrobitSensors
+	destPath = 'examples/microbit-sensors'
+	icon = 'microbit.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b17'
+	copySettings(destPath, '', icon, uuid)
+	copyCommon(destPath)
+	copyEasyBLE(destPath)
+end
+
 
 # TODO
 #def buildTemplateBLEApp
@@ -683,6 +711,9 @@ def buildExamples
 	buildMediaTekLinkItConnect
 	buildEsp8266
 	buildArduino101LEDOnOff
+	buildMicrobitLED
+	buildMicrobitDemo
+	buildMicrobitSensors
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
 	# TODO: buildTemplateBLEApp
