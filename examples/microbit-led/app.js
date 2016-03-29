@@ -145,18 +145,16 @@ app.readServices = function(device)
 		[
 		app.microbit.LED_SERVICE,
 		],
-		app.ready(device),
+		function(device)
+    {
+	    app.showInfo('Connection established. Ready for input.');
+	    app.device = device;
+    },
 		function(errorCode)
 		{
 			console.log('Error: Failed to read services: ' + errorCode + '.');
 		});
-}
-
-app.ready = function(device)
-{
-	app.showInfo('Connection established. Ready for input.');
-	app.device = device;
-}
+} 
 
 app.printPhoneModel = function()
 {
