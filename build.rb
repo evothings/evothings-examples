@@ -451,8 +451,8 @@ def buildMicrobitLED
 	copyEasyBLE(destPath)
 end
 
-def buildMicrobitDemo
-	destPath = 'examples/microbit-demo'
+def buildMicrobitAccelerometer
+	destPath = 'examples/microbit-accelerometer'
 	icon = 'microbit.png'
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b16'
 	copySettings(destPath, '', icon, uuid)
