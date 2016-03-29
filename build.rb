@@ -470,6 +470,27 @@ def buildMicrobitSensors
 	copyEasyBLE(destPath)
 end
 
+def buildArduinoBluefruitLEDOnOff
+  settingsPath = 'examples/arduino-bluefruit-led-onoff'
+	destPath = 'examples/arduino-bluefruit-led-onoff/app'
+	icon = 'bluefruit-le-uart.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b18'
+	copySettings(settingsPath,  'app/', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+end
+
+def buildArduinoBluefruitRFDataGatherer
+	settingsPath = 'examples/arduino-bluefruit-rf-data-gatherer'
+	destPath = 'examples/arduino-bluefruit-rf-data-gatherer/app'
+	icon = 'bluefruit-le-uart.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b19'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+end
 
 # TODO
 #def buildTemplateBLEApp
@@ -714,6 +735,8 @@ def buildExamples
 	buildMicrobitLED
 	buildMicrobitDemo
 	buildMicrobitSensors
+	buildArduinoBluefruitLEDOnOff
+	buildArduinoBluefruitRFDataGatherer
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
 	# TODO: buildTemplateBLEApp
