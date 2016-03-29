@@ -733,7 +733,7 @@ def buildExamples
 	buildEsp8266
 	buildArduino101LEDOnOff
 	buildMicrobitLED
-	buildMicrobitDemo
+	buildMicrobitAccelerometer
 	buildMicrobitSensors
 	buildArduinoBluefruitLEDOnOff
 	buildArduinoBluefruitRFDataGatherer
