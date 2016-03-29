@@ -58,7 +58,6 @@ app.respondCanvas = function()
 };
 
 function onConnect(context) {
-  // Once a connection has been made, make a subscription and send a message.
   console.log("Client Connected");
   console.log(context);
 }
@@ -153,17 +152,13 @@ app.connectToDevice = function(device)
 		{
 			app.showInfo('Error: Connection failed: ' + errorCode + '.');
 			evothings.ble.reset();
-			// This can cause an infinite loop...
-			//app.connectToDevice(device);
 		});
 };
 
 app.readServices = function(device)
 {
 	device.readServices(
-		[
-		app.microbit.ACCELEROMETER_SERVICE, // Accelerometer service UUID.
-		],
+		[ app.microbit.ACCELEROMETER_SERVICE], // Accelerometer service UUID.
 		// Function that monitors accelerometer data.
 		app.startAccelerometerNotification,
 		// Use this function to monitor magnetometer data
@@ -183,6 +178,11 @@ app.startAccelerometerNotification = function(device)
 {
 	app.showInfo('Status: Starting accelerometer notification...');
 
+	// Due to https://github.com/evothings/cordova-ble/issues/30
+	// ... we have to do double work to make it function properly
+	// on both Android and iOS. This first part is only needed for Android
+	// and causes an error message on iOS that is safe to ignore.
+  
 	// Set accelerometer notification to ON.
 	device.writeDescriptor(
 		app.microbit.ACCELEROMETER_DATA,
