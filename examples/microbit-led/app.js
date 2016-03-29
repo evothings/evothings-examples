@@ -6,11 +6,6 @@
 var app = {};
 
 /**
- * Data that is plotted on the canvas.
- */
-app.dataPoints = [];
-
-/**
  * Timeout (ms) after which a message is shown if the Microbit wasn't found.
  */
 app.CONNECT_TIMEOUT = 3000;
@@ -39,7 +34,6 @@ app.initialize = function()
 }
 
 function onConnect(context) {
-  // Once a connection has been made, make a subscription and send a message.
   console.log("Client Connected");
   console.log(context);
 }
@@ -134,17 +128,13 @@ app.connectToDevice = function(device)
 		{
 			app.showInfo('Error: Connection failed: ' + errorCode + '.');
 			evothings.ble.reset();
-			// This can cause an infinite loop...
-			//app.connectToDevice(device);
 		});
 }
 
 app.readServices = function(device)
 {
 	device.readServices(
-		[
-		app.microbit.LED_SERVICE,
-		],
+		[app.microbit.LED_SERVICE],
 		function(device)
     {
 	    app.showInfo('Connection established. Ready for input.');
@@ -172,31 +162,7 @@ app.writeCharacteristic = function(device, characteristicUUID, value) {
 		},
 		function(errorCode)
 		{
-			// This error will happen on iOS, since this descriptor is not
-			// listed when requesting descriptors. On iOS you are not allowed
-			// to use the configuration descriptor explicitly. It should be
-			// safe to ignore this error.
 			console.log('Error: writeCharacteristic: ' + errorCode + '.');
-		});
-}
-
-app.writeNotificationDescriptor = function(device, characteristicUUID)
-{
-	device.writeDescriptor(
-		characteristicUUID,
-		BLE_NOTIFICATION_UUID,
-		new Uint8Array([1,0]),
-		function()
-		{
-			console.log('writeDescriptor '+characteristicUUID+' ok.');
-		},
-		function(errorCode)
-		{
-			// This error will happen on iOS, since this descriptor is not
-			// listed when requesting descriptors. On iOS you are not allowed
-			// to use the configuration descriptor explicitly. It should be
-			// safe to ignore this error.
-			console.log('Error: writeDescriptor: ' + errorCode + '.');
 		});
 }
 
