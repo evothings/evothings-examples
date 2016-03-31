@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Arduino Bluefruit RF Data Gatherer</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="style/style.css">
+	<link rel="stylesheet" type="text/css" href="style/rangeSlider.css">
+
+	<script>
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+<!---------------------------------------------------------------------------
+Libraries
+---------------------------------------------------------------------------->
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/util/util.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="rangeSlider.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+<header>
+	<button class="back" onclick="history.back()">
+		<img src="ui/images/arrow-left.svg" />
+	</button>
+
+	<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+	<!-- <<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button> -->
+
+</header>
+
+<h1>Arduino Bluefruit RF Data Gatherer</h1>
+
+<div id="connexion">
+	<button id="connect">Connect</button>
+	<button id="disconnect">Disconnect</button>
+</div>
+
+<ul id="roomList" class="dynamic"></ul>
+
+<!---------------------------------------------------------------------------
+Scripts
+---------------------------------------------------------------------------->
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>

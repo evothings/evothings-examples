@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Arduino Bluefruit LE UART Friend LED On/Off</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+<header>
+	<button class="back" onclick="history.back()">
+		<img src="ui/images/arrow-left.svg" />
+	</button>
+
+	<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+	<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+</header>
+
+<h1>Arduino Bluefruit LE UART Friend LED On/Off</h1>
+
+<button class="yellow wide" onclick="app.connectToBluefruit(app.readServices)">CONNECT</button>
+<button class="red wide" onclick="app.disconnect()">DISCONNECT</button>
+
+<br><br>
+
+<button class="green wide big" onclick="app.sendMessage('on')">ON</button>
+<button class="red wide big" onclick="app.sendMessage('off')">OFF</button>
+
+<script>
+	var app = {}; // Object holding the functions and variables
+	var BluefruitUART = null; // Object holding the BLE device
+	var BLEDevice = {}; // Object holding Bluefruit BLE device information
+
+	BLEDevice.name = 'Adafruit Bluefruit LE'; // Bluefruit name
+	BLEDevice.services = ['6e400001-b5a3-f393-e0a9-e50e24dcca9e']; // Bluefruit services UUID
+	BLEDevice.writeCharacteristicUUID = '6e400002-b5a3-f393-e0a9-e50e24dcca9e'; // Bluefruit writeCharacteristic UUID
+
+	app.connectToBluefruit = function(callback) // Connect to Bluefruit device
+	{
+		evothings.easyble.startScan // Start scanning
+		(
+				function(device)
+				{
+					console.log('Scan started');
+					if (device.name == BLEDevice.name) // If device name correspond to Bluefruit device name
+					{
+						evothings.easyble.stopScan(); // Stop the scan
+						BluefruitUART = device; // Store the Bluefruit device
+
+						console.log('Adafruit Bluefruit LE UART found !');
+
+						BluefruitUART.connect // Connect to Bluefruit device
+						(
+								function(device)
+								{
+									console.log('Connected to BLE device ' + BluefruitUART.name);
+									callback();
+								},
+								function(errorCode)
+								{
+									console.log('Failed to connect to BLE device: ' + errorCode);
+								}
+						)
+					}
+				},
+				function(errorString)
+				{
+					console.log('Error while scanning: ' + errorString);
+				}
+		);
+	};
+
+	app.disconnect = function() // Disconnect from Bluefruit device
+	{
+		evothings.easyble.stopScan();
+		BluefruitUART.close();
+		console.log('Disconnected from BLE device ' + BluefruitUART.name);
+	};
+
+	app.readServices = function() // Read services from Bluefruit device
+	{
+		BluefruitUART.readServices
+		(
+				BLEDevice.services,
+				function(device)
+				{
+					console.log('BLE services available for device ' + BluefruitUART.name);
+				},
+				function(errorString)
+				{
+					console.log('BLE services error: ' + errorString);
+				}
+		)
+	};
+
+	app.sendMessage = function(message) // Send a message to Bluefruit device
+	{
+		var data = evothings.ble.toUtf8(message);
+		BluefruitUART.writeCharacteristic
+		(
+				BLEDevice.writeCharacteristicUUID,
+				data,
+				function()
+				{
+					console.log('Sent: ' + message);
+				},
+				function(errorString)
+				{
+					console.log('BLE writeCharacteristic error: ' + errorString);
+				}
+		)
+	};
+
+</script>
+
+<script src="cordova.js"></script>
+<script src="libs/evothings/evothings.js"></script>
+<script src="libs/evothings/ui/ui.js"></script>
+<script src="libs/evothings/util/util.js"></script>
+<script src="libs/evothings/easyble/easyble.js"></script>
+
+</body>
+
+</html>
