@@ -1,0 +1,17 @@
+#connexion button {
+    font-size: 6vw;
+}
+
+#connect {
+    float: left;
+}
+
+#disconnect {
+    float: right;
+    display: none;
+}
+
+#roomList {
+    display: inline-block;
+    width: 100%;
+}
