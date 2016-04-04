@@ -492,6 +492,17 @@ def buildArduinoBluefruitRFDataGatherer
 	copyEasyBLE(destPath)
 end
 
+def buildRPi3SystemInformation
+	settingsPath = 'examples/rpi3-system-information'
+	destPath = 'examples/rpi3-system-information/app'
+	icon = 'rpi.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b1a'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyEasyBLE(destPath)
+end
+
 # TODO
 #def buildTemplateBLEApp
 #	destPath = 'examples/template-ble-app'
@@ -737,6 +748,7 @@ def buildExamples
 	buildMicrobitSensors
 	buildArduinoBluefruitLEDOnOff
 	buildArduinoBluefruitRFDataGatherer
+	buildRPi3SystemInformation
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
 	# TODO: buildTemplateBLEApp
