@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// C.H.I.P - System Information
-// version: 0.1 - 2016-01-29
+// Raspberry Pi 3 - System Information
+// version: 0.1 - 2016-04-04
 //
 
 document.addEventListener(
