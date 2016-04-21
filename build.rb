@@ -422,6 +422,43 @@ def buildEsp8266
 	copyJQuery(destPath)
 end
 
+def buildDialogBlinky
+	settingsPath = 'examples/dialog-blinky'
+	destPath = 'examples/dialog-blinky/app'
+	icon = 'dialog-semiconductor.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703ee2f8b01'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
+	copyEasyBLE(destPath)
+	copyUtil(destPath)
+end
+
+def buildDialogBeacons
+	settingsPath = 'examples/dialog-beacons'
+	destPath = 'examples/dialog-beacons/app'
+	icon = 'dialog-semiconductor.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703ee2f8b02'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyUtil(destPath)
+	copyEasyBLE(destPath)
+	copyEddystone(destPath)
+end
+
+def buildDialogIoTSensor
+	settingsPath = 'examples/dialog-iotsensor'
+	destPath = 'examples/dialog-iotsensor/app'
+	icon = 'dialog-semiconductor.png'
+	uuid = 'fe860e6e-d35e-4bd0-831a-7703ee2f8b03'
+	copySettings(settingsPath, 'app/', icon, uuid)
+	copyCommon(destPath)
+	copyJQuery(destPath)
+	copyUtil(destPath)
+	copyEasyBLE(destPath)
+	copyDialogIoTSensorLibrary(destPath)
+end
+
 def buildTemplateBasicApp
 	destPath = 'examples/template-basic-app'
 	icon = 'evothings-logo.png'
@@ -460,7 +497,7 @@ def buildMicrobitAccelerometer
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 end
- 
+
 def buildMicrobitSensors
 	destPath = 'examples/microbit-sensors'
 	icon = 'microbit.png'
@@ -653,6 +690,12 @@ def copyUtil(destPath)
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
+def copyDialogIoTSensorLibrary(destPath)
+	copyDir(
+		libraryPath('libs/evothings/dialog-iotsensor'),
+		fullDestPath(destPath) + '/libs/evothings')
+end
+
 def copyWhereIsTheArduinoCode(destPath)
 	copyFile(
 		'resources/txt/where-is-the-arduino-code.txt',
@@ -737,6 +780,9 @@ def buildExamples
 	buildMicrobitSensors
 	buildArduinoBluefruitLEDOnOff
 	buildArduinoBluefruitRFDataGatherer
+	buildDialogBlinky
+	buildDialogBeacons
+	buildDialogIoTSensor
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
 	# TODO: buildTemplateBLEApp

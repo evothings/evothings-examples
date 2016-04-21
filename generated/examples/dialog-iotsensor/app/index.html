@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Dialog Semiconductor IoT Sensor</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+		@import 'app.css';
+	</style>
+
+	<script>
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+</head>
+
+<body ontouchstart="" onresize="ui.resizeChart()"><!-- ontouchstart="" enables low-delay CSS transitions. -->
+	<script>window.location= "#"</script>
+	<header>
+		<button style="display: none" id="back" class="back" onclick="app.onBackButton()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+		
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+	
+	</header>
+	
+	<button onclick="app.onScanButton()" class="blue small wide">
+			SCAN
+	</button>
+	
+	<p id="scan-time" style="text-align: center">Scan time: 10 seconds</p>
+	<input type="range" id="slider" min="1" max="50" step="1" onchange="app.setScanTime(value)" value="10">
+
+	<p style="text-align: center" id="scan-status">Initializing App</p>	
+
+	<ul id="found-devices" class="dynamic"></ul>
+	
+	<section id="connected">
+	<p style="text-align: center" id="device-information"></p>		
+		<a href="#">
+			<button onclick="app.onDisconnectButton()" class="red small wide">Disconnect</button>
+		</a>
+		
+		<button onclick="app.onSettingsButton()" class="yellow small wide">Settings</button>
+		
+		<div id="sensor-buttons"></div>
+	</section>
+		
+
+	<section id="sensor">
+		<h1 id="sensor-view"><b></b></h1>
+		<canvas width="200" height="200" id="chart-div"></canvas>
+		<div id="table-div"></div>
+		<button onclick="app.onToggleSensorButton()" class="red small wide">Toggle Sensor</button>
+	</section>
+
+	<section id="settings">
+			<table class="subheader">
+			<tr><td>
+				<div id="basic" onclick="app.onSubheaderButton('basic')" class="subheader-button">Basic</div>
+			</td><td>
+				<div id="calibration" onclick="app.onSubheaderButton('calibration')" class="subheader-button">Calibration</div>
+			</td><td>
+				<div id="sensf" onclick="app.onSubheaderButton('sensf')" class="subheader-button">Sensor Fusion</div>
+			</td></tr>
+			</table>
+			
+		<div class="dropdown">	
+			<div class="filler-button"></div>
+			<div id="settings_menu"></div>
+		
+			<p class="settings sensf">Sensor Fusion Coefficient Beta A</p>
+			<button onclick="app.onSflButton('A')" class="settings sensf dropdown">
+				<div id="sensf_coef_a"></div>
+			</button>
+			
+			<p class="settings sensf">Sensor Fusion Coefficient Beta M</p>
+			<button onclick="app.onSflButton('M')" class="settings sensf dropdown">
+				<div id="sensf_coef_m"></div>
+			</button>
+			
+			
+		</div>
+		
+		<button onClick="app.onSaveButton()" class="small yellow wide">Store in flash</button>
+		<button onclick="app.onResetToDefaultButton()" class="small yellow wide">Reset to default</button>
+		<p id="save-status" style="vertical-align: center"></p>	
+	</section>
+
+	<script>
+		// Call initialize() as soon as device is ready
+		document.addEventListener(
+			'deviceready',
+			function() { evothings.scriptsLoaded(app.initialize) },
+			false
+		);
+	</script>
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="js/app.js"></script>
+	<script src="libs/evothings/dialog-iotsensor/iotsensor.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	
+</body>
+
+</html>
