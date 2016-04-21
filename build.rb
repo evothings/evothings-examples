@@ -311,6 +311,34 @@ def buildEsp8266
 	copyJQuery(destPath)
 end
 
+def buildDialogBlinky
+	destPath = 'examples/dialog-blinky/app'
+	icon = 'dialog-semiconductor.png'
+	copyCommon(destPath, icon)
+	copyEasyBLE(destPath)
+	copyUtil(destPath)
+end
+
+def buildDialogBeacons
+	destPath = 'examples/dialog-beacons/app'
+	icon = 'dialog-semiconductor.png'
+	copyCommon(destPath, icon)
+	copyJQuery(destPath)
+	copyUtil(destPath)
+	copyEasyBLE(destPath)
+	copyEddystone(destPath)
+end
+
+def buildDialogIoTSensor
+	destPath = 'examples/dialog-iotsensor/app'
+	icon = 'dialog-semiconductor.png'
+	copyCommon(destPath, icon)
+	copyJQuery(destPath)
+	copyUtil(destPath)
+	copyEasyBLE(destPath)
+	copyDialogIoTSensorLibrary(destPath)
+end
+
 def buildTemplateBasicApp
 	destPath = 'examples/template-basic-app'
 	icon = 'evothings-logo.png'
@@ -442,6 +470,12 @@ def copyUtil(destPath)
 		fullDestPath(destPath) + '/libs/evothings')
 end
 
+def copyDialogIoTSensorLibrary(destPath)
+	copyDir(
+		libraryPath('libs/evothings/dialog-iotsensor'),
+		fullDestPath(destPath) + '/libs/evothings')
+end
+
 def copyWhereIsTheArduinoCode(destPath)
 	copyFile(
 		'resources/txt/where-is-the-arduino-code.txt',
@@ -513,6 +547,9 @@ def buildExamples
 	buildMediaTekLinkIt
 	buildMediaTekLinkItConnect
 	buildEsp8266
+	buildDialogBlinky
+	buildDialogBeacons
+	buildDialogIoTSensor
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
 	# TODO: buildTemplateBLEApp

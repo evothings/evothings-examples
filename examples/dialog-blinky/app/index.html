@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Dialog Semiconductor Blinky</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+		@import 'app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="app.js"></script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+	
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<button id="menu-button" tabindex="0" onclick="this.focus()">
+			<img src="ui/images/menu.svg" />
+		</button>
+
+		<menu>
+			<menuitem>
+				<a href="#">Home</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#about">About</a>
+			</menuitem>
+
+			<menuitem>
+				<a href="#settings">Settings</a>
+			</menuitem>
+		</menu>
+	</header>
+	
+	<h1 align='middle'>BLE LED Control</h1>
+	
+	<button onclick="app.onStartScanButton()" class="blue small middle">
+		SCAN
+	</button>
+
+	<p align='middle' id="scan-status">Not Connected</p>	
+			
+	<ul id="found-devices" class="dynamic"></ul>
+	
+	<section id='connected'>
+		<a href="#">
+			<button onclick="app.onDisconnectButton()" class="blue small wide">
+				DISCONNECT
+			</button>
+
+		</a>	
+		
+			<button onclick="app.toggle()" class="green small wide">
+				TOGGLE LED
+			</button>
+			
+			<button  onclick="app.blink()" class="yellow small wide">
+				BLINK LED
+			</button>
+			
+		<input type="range" id="slider" min="1" max="100" step="1" onchange="app.blink(value)" value="50">
+		
+		<p align='middle' id="speed-status">LED speed</p>
+	
+		
+	</section>
+
+	<section id='about'>
+
+		<h2>Troubleshooting</h2>
+
+		<p>This application demonstrates the functionality of the DA1458x Development Kit. It is a simple application which demonstrates basic initialization of DA1458x and LED blinking. A user can control the LED on the Development Kit (DK) via this app.</p>
+
+		<p>A BLE connection connection is set up between the DK and the smartphone. The user interface on the smartphone consists of multiple buttons to turn the LED  on or off and a slider to control the blinking speed of the LED. A button is added to the DK as an extra component. Pressing the button has effect on the mobile device to demonstrate the connection is bidirectional.</p>
+
+	</section>
+
+	<section id='settings'>
+
+		<p align='middle' id="scan-time">Bluetooth scan time: 25 seconds</p>
+
+		<input type="range" id="slider" min="2" max="50" step="1" onchange="app.setScanTime(value)" value="25">
+
+	</section>
+
+</body>
+
+</html>

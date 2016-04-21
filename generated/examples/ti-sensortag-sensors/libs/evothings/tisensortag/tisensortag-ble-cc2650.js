@@ -305,6 +305,28 @@
 
 		/**
 		 * SensorTag CC2650.
+		 * Calculate humidity values from raw data.
+		 * @param data - an Uint8Array.
+		 * @return Object with fields: humidityTemperature, relativeHumidity.
+		 * @instance
+		 * @public
+		 */
+		instance.getHumidityValues = function(data)
+		{
+			// Calculate the humidity temperature (Celsius).
+			var tData = evothings.util.littleEndianToInt16(data, 0);
+			var tc = (tData / 65536.0) * 165 - 40;
+
+			// Calculate the relative humidity.
+			var hData = evothings.util.littleEndianToUint16(data, 2);
+			var h = hData * 100 / 65536.0;
+
+			// Return result.
+			return { humidityTemperature: tc, relativeHumidity: h }
+		}
+
+		/**
+		 * SensorTag CC2650.
 		 * Calculate accelerometer values from raw data.
 		 * @param data - an Uint8Array.
 		 * @return Object with fields: x, y, z.

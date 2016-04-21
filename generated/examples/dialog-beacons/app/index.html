@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Dialog Semiconductor Beacons</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+		@import 'app.css';
+	</style>
+
+	
+	<script>
+		// Redirect console if running from Evothings Workbench.
+		if (window.hyper) { console.log = hyper.log }
+
+		var toggle = function(element) {
+			var el = document.getElementById(element);
+		  	if (el.style.display === 'block' || el.style.display === '')
+		    	el.style.display = 'none';
+		  	else
+		    	el.style.display = 'block'
+		 };
+	</script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+		<header>
+			<button class="back" onclick="history.back()">
+				<img src="ui/images/arrow-left.svg" />
+			</button>
+		
+			<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+			<button id="menu-button" tabindex="0" onclick="this.focus()">
+				<img src="ui/images/menu.svg" />
+			</button>
+
+			<menu>
+				<menuitem>
+					<a href="#">Home</a>
+				</menuitem>
+
+				<menuitem>
+					<a href="#settings">Settings</a>
+				</menuitem>
+
+				<menuitem>
+					<a href="#troubleshooting">Troubleshooting</a>
+				</menuitem>
+			</menu>
+		</header>
+
+		<button id="eddystone-start-stop" onclick="eddystone.startStop()" class="blue small wide">
+			START EDDYSTONE
+		</button>
+
+		<button id="ibeacon-start-stop" onclick="ibeacon.startStop()" class="blue small wide">
+			START IBEACON
+		</button>
+
+		<div class="container">	
+			<div class="eddystone">
+				<button class="red small wide" onclick="toggle('found-eddystone-beacons')" style="font-size:40%";>EDDYSTONE DATA</button>
+
+				<div class="content" id="page-eddystone-default">
+					<h1>Eddystone demo</h1>
+					<p>
+						Please move within range of the Eddystone beacons <br />
+					</p>
+				</div>
+
+				<div class="content" id="page-eddystone-elephant">
+					<h1>Eddystone</h1>
+					<img class="my-header-image" src="photos/picture-elephant.png" />
+				</div>
+
+				<div class="content" id="page-eddystone-giraffe">
+					<h1>Eddystone</h1>
+					<img class="my-header-image" src="photos/picture-giraffe.png" />
+				</div>
+
+				<div class="content" id="page-eddystone-ostrich">
+					<h1>Eddystone</h1>
+					<img class="my-header-image" src="photos/picture-ostrich.png" />
+				</div>
+
+				<ul class = "beacon-list dynamic" id="found-eddystone-beacons" style="display:none"></ul>
+
+			</div>
+
+			<div class="ibeacon">
+				<button class="red small wide" onclick="toggle('found-ibeacon-beacons')" style="font-size:40%">IBEACON DATA</button>
+
+				<div class="content" id="page-ibeacon-default">
+					<h1>iBeacon demo</h1>
+					<p>
+						Please move within range of the iBeacon <br />
+					</p>
+				</div>
+
+				<div class="content" id="page-ibeacon-elephant">
+					<h1>iBeacon</h1>
+					<img class="my-header-image" src="photos/picture-elephant.png" />
+				</div>
+
+				<div class="content" id="page-ibeacon-giraffe">
+					<h1>iBeacon</h1>
+					<img class="my-header-image" src="photos/picture-giraffe.png" />
+				</div>
+
+				<div class="content" id="page-ibeacon-ostrich">
+					<h1>iBeacon</h1>
+					<img class="my-header-image" src="photos/picture-ostrich.png" />
+				</div>
+
+				<ul class = "beacon-list dynamic" id="found-ibeacon-beacons" style="display:none"></ul>
+				
+			</div>
+
+		</div>
+
+
+	<section id='troubleshooting'>
+
+		<h1>Troubleshooting</h1>
+
+		<p><a href="https://github.com/nbezembinder1/nbezembinder1.github.io">Source code</a></p>
+
+		<p>
+			The app filters beacons by using the following data. Eddystone beacons are distinguishes by NID, a 10 byte namespace. iBeacon beacons are distinguished by both UUID and major/minor numbers.
+		</p>
+
+		<p>
+			<b>Eddystone</b></br>
+			25 d5 9d 55 df ec 62 e6 13 56: page-eddystone-elephant <br />
+			26 d5 9d 55 df ec 62 e6 13 56: page-eddystone-giraffe <br />
+			27 d5 9d 55 df ec 62 e6 13 56: page-eddystone-ostrich
+
+		</p>
+
+		<p>
+			<b>iBeacon:</b></br/>
+			id: page-ibeacon-elephant
+			uuid: 54392FC4-CB60-AB74-CE8E-7679F8F1B916 <br />
+			major: 0 <br />
+			minor: 0 <br /> <br />
+
+			id: page-ibeacon-giraffe <br />
+			uuid: 55392FC4-CB60-AB74-CE8E-7679F8F1B916 <br />
+			major: 1 <br />
+			minor: 1 <br /> <br />
+
+			id: page-ibeacon-ostrich <br />
+			uuid: 56392FC4-CB60-AB74-CE8E-7679F8F1B916 <br />
+			major: 2 <br />
+			minor: 2 <br /> 
+		</p>
+
+	</section>
+
+	<section id='settings'>
+		<p align='middle' id="rssi-threshold">RSSI threshold: -60</p>
+		<input type="range" id"slider" min="-100" max="0" step="1" onchange="eddystone.setRSSIthreshold(value); ibeacon.setRSSIthreshold(value)" value="-60">
+
+		<p align='middle' id="rssi-offset">RSSI offset: 20</p>
+		<input type="range" id"slider" min="0" max="50" step="1" onchange="eddystone.setRSSIoffset(value); ibeacon.setRSSIoffset(value)" value="20">
+
+		<p>The RSSI threshold defines when to show a different beacon. To increase sensitivity move the slider to the left (decrease RSSI threshold). If the beacons are too close too close to the beacons interfering each other.</p>
+
+		<p>The RSSI offset defines when the beacon is removed from the screen. When the beacon's RSSI is lower than the RSSI threshold and offset combined the beacon is removed. </p>
+	</section>
+
+	<script src="lib/jquery.js"></script>
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/eddystone/eddystone.js"></script>
+	<script src="app-eddystone.js"></script>
+	<script src="app-ibeacon.js"></script>
+</body>
+</html>

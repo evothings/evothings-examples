@@ -1,0 +1,163 @@
+input[type=range] {
+	-webkit-appearance: none;
+	background-color: silver;
+	width: 100%;
+	height:20px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	border-radius: 2px;
+	background-color: red;
+	opacity: 1;
+	width: 40px;
+	height: 30px;
+}
+
+#slider::-webkit-slider-thumb {
+	background-color: #ecd53b;
+}
+
+button.small,
+input.btn-group.small + label,
+input.btn-group + label.small {
+	font-size: 75%;
+	line-height: 1.0;
+}
+
+button.dropdown,
+input.btn-group.dropdown + label,
+input.btn-group + label.dropdown {
+	text-align: left;
+	font-size: 75%;
+	margin: -0.5em 0 0.5em 0;
+	width: 100%;
+	background-color: #54dfb3;
+}
+
+
+canvas{
+	box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+	
+	padding: 0px;
+
+	border-radius: 0px;
+	border: none;
+}
+
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+	width: 100%;
+    display: inline-block;
+}
+
+
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 2.5vw 16px;
+	font-size: 4.5vw;
+    text-decoration: none;
+    display: block;
+}
+
+/*  ----------------------------------------------------------
+								SUB HEADER
+	---------------------------------------------------------- */
+.subheader{
+	box-shadow: inset 0px 2px 4px 0px rgba(0,0,0,0.2);
+	box-sizing: border-box; /* Width & height includes padding & border. */
+
+	position: fixed;
+	top: 1.1em;
+	left: 0;
+	right: 0;
+
+	width: 100%;
+	height: 0.9em;
+
+	font-size: 180%;
+	vertical-align: middle;
+
+	z-index: 1000;
+	background: #f3f3f3;
+	
+	padding-left:0.7em;
+	padding-right:0.7em;
+	padding-top: 0.4em;
+	border: none;
+	border-collapse: collapse;
+}
+
+.subheader-button{
+	float: left;
+	text-align: center;
+	line-height: 50px;
+	vertical-align: bottom;
+	width: 100%;
+	height: 100%;
+	font-size: 30%;
+}
+
+.filler-button{
+		position: relative;
+		height: 1.2em;
+		display:block;
+}
+/*------------------------------------------------------------------------*/
+.sensor-table {
+	padding-left:0.7em;
+	padding-right:0.7em;
+	padding-top: 0.4em;
+	border: none;
+	border-collapse: collapse;
+	
+	box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+	
+}.sensor-table table{
+    border-collapse: collapse;
+    border-spacing: 0;
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+}
+.sensor-table tr:nth-child(odd){ background-color:#e3e3e3}
+.sensor-table tr:nth-child(even)    { background-color:#ffffff; }.sensor-table td{
+	vertical-align:middle;
+	border:1px solid #000000;
+	border-width:0px 0px 0px 0px;
+	text-align:left;
+	padding:0.5em;
+	font-size:100%;
+	font-weight:normal;
+	color:#000000;
+}
+
+.sensor-table td:nth-child(1){ width: 20%}
+.sensor-table td:nth-child(2){ width: 40%}
+
+.sensor-table tr:first-child td{
+	background-color:#000000;
+	text-align:left;
+	border-width:0px 0px 0px 0px;
+	font-size:100%;
+	font-family:Arial;
+	font-weight:bold;
+	color:#ffffff;
+}
