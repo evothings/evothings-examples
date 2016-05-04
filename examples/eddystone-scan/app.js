@@ -113,12 +113,6 @@ var app = (function()
 			'URL: ' + beacon.url + '<br/>' :  '';
 	}
 
-	function htmlBeaconURL(beacon)
-	{
-		return beacon.url ?
-			'URL: ' + beacon.url + '<br/>' :  '';
-	}
-
 	function htmlBeaconNID(beacon)
 	{
 		return beacon.nid ?
