@@ -8,6 +8,9 @@ require 'fileutils'
 
 include FileUtils::Verbose
 
+
+@listJson = nil
+
 ### Path to libraries ###
 
 # Libraries are in repository evothings-libraries. This repo
@@ -35,7 +38,15 @@ def buildGenerated
 		'experiments',
 		'generated')
 	buildExamples
+	buildExamplesList
 end
+
+def buildExamplesList
+  @listJson = @listJson + "]"
+  puts 'Writing examples-list.json file ' + fullDestPath('examples') + '/examples-list.json'
+  writeFileUTF8(fullDestPath('examples') + '/examples-list.json', @listJson)
+end
+
 
 ###### Examples ######
 
@@ -48,6 +59,7 @@ def buildMbedGAP
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
+  collectExamplesList("mbed-custom-gap", "mbed Evothings GAP", "Example app using mbed and GAP")
 end
 
 def buildMbedGATT
@@ -59,6 +71,7 @@ def buildMbedGATT
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
+	collectExamplesList("mbed-custom-gatt", "mbed Evothings GATT", "Example app using mbed and GATT")
 end
 
 def buildMbedGATTWebBluetooth
@@ -70,6 +83,7 @@ def buildMbedGATTWebBluetooth
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyWebBluetooth(destPath)
+	collectExamplesList("mbed-custom-gatt-webbluetooth", "mbed Evothings GATT Web Bluetooth")
 end
 
 def buildArduinoBLE
@@ -81,6 +95,7 @@ def buildArduinoBLE
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyWhereIsTheArduinoCode(destPath)
+	collectExamplesList("arduino-ble", "Arduino BLE")
 end
 
 def buildArduinoInputTCP
@@ -99,6 +114,8 @@ def buildArduinoInputTCP
 	destPath = 'examples/arduino-input-tcp'
 	copyArduinoEthernet(destPath)
 	copyArduinoWiFi(destPath)
+	
+	collectExamplesList("arduino-input-tcp", "Arduino Input TCP")
 end
 
 def buildArduinoLEDOnOffBLE
@@ -111,6 +128,7 @@ def buildArduinoLEDOnOffBLE
 	copyJQuery(destPath)
 	copyArduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
+	collectExamplesList("arduino-led-onoff-ble", "Arduino LED On/Off BLE")
 end
 
 def buildArduinoLEDOnOffTCP
@@ -129,6 +147,7 @@ def buildArduinoLEDOnOffTCP
 	destPath = 'examples/arduino-led-onoff-tcp'
 	copyArduinoEthernet(destPath)
 	copyArduinoWiFi(destPath)
+	collectExamplesList("arduino-led-onoff-tcp", "Arduino LED On/Off TCP")
 end
 
 def buildArduinoScriptableTCP
@@ -147,6 +166,7 @@ def buildArduinoScriptableTCP
 	destPath = 'examples/arduino-scriptable-tcp'
 	copyArduinoEthernet(destPath)
 	copyArduinoWiFi(destPath)
+	collectExamplesList("arduino-scriptable-tcp", "Arduino Scriptable")
 end
 
 def buildBLEScan
@@ -156,6 +176,7 @@ def buildBLEScan
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("ble-scan", "BLE Scan")
 end
 
 def buildBLEDiscovery
@@ -165,6 +186,7 @@ def buildBLEDiscovery
 	# This example uses no libs.
 	#copyCommon(destPath)
 	copySettings(destPath, '', icon, uuid)
+	collectExamplesList("ble-discovery", "BLE Discovery")
 end
 
 def buildTISensorTagCC2541Demo
@@ -175,6 +197,7 @@ def buildTISensorTagCC2541Demo
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+	collectExamplesList("ble-ti-sensortag-cc2541-demo", "TI SensorTag CC2541 Demo")
 end
 
 def buildTISensorTagCC2541WebBluetooth
@@ -186,6 +209,7 @@ def buildTISensorTagCC2541WebBluetooth
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyWebBluetooth(destPath)
+	collectExamplesList("ble-ti-sensortag-cc2541-webbluetooth", "TI SensorTag CC2541 Accelerometer Web Bluetooth")
 end
 
 def buildTISensorTagCC2650Demo
@@ -196,6 +220,7 @@ def buildTISensorTagCC2650Demo
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+	collectExamplesList("ble-ti-sensortag-cc2650-demo", "TI SensorTag CC2650 Demo")
 end
 
 def buildTISensorTagSensors
@@ -206,6 +231,7 @@ def buildTISensorTagSensors
 	copyCommon(destPath)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
+	collectExamplesList("ble-ti-sensortag-sensors", "TI SensorTag CC2650 & CC2541 Sensors")
 end
 
 def buildTISensorTagAccelerometer
@@ -216,6 +242,7 @@ def buildTISensorTagAccelerometer
 	copyCommon(destPath)
 	copyUtil(destPath)
 	copyTISensorTag(destPath)
+	collectExamplesList("ble-ti-sensortag-accelerometer", "TI SensorTag CC2650 & CC2541 Accelerometer")
 end
 
 def buildCordovaAccelerometer
@@ -225,6 +252,7 @@ def buildCordovaAccelerometer
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("cordova-accelerometer", "Cordova Accelerometer")
 end
 
 def buildCordovaBasic
@@ -234,6 +262,7 @@ def buildCordovaBasic
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("cordova-basic", "Cordova Basic")
 end
 
 def buildHelloWorld
@@ -242,6 +271,7 @@ def buildHelloWorld
 	uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b0f'
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
+	collectExamplesList("hello-world", "Hello World")
 end
 
 def buildHelloECMAScript6
@@ -252,6 +282,7 @@ def buildHelloECMAScript6
 	copyExtendedSettings(settingsPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyWebBluetooth(destPath)
+	collectExamplesList("hello-ecmascript6", "Hello ECMAScript 6")
 end
 
 def buildHueLights
@@ -261,6 +292,7 @@ def buildHueLights
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("hue-lights", "Philips Hue Demo")
 end
 
 def buildEddystoneScan
@@ -271,6 +303,7 @@ def buildEddystoneScan
 	copyCommon(destPath)
 	copyEddystone(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("eddystone-scan", "Eddystone Scan")
 end
 
 def buildIBeaconScan
@@ -280,6 +313,7 @@ def buildIBeaconScan
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("ibeacon-scan", "iBeacon Scan")
 end
 
 def buildEstimoteBeacons
@@ -289,6 +323,7 @@ def buildEstimoteBeacons
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("estimote-beacons", "Estimote Beacons")
 end
 
 def buildEstimoteNearables
@@ -298,6 +333,7 @@ def buildEstimoteNearables
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("estimote-nearables", "Estimote Nearables (iOS only)")
 end
 
 def buildNordic_nRF51822EK_BLE
@@ -308,6 +344,7 @@ def buildNordic_nRF51822EK_BLE
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyNordic_nRF51822_BLE(destPath)
+	collectExamplesList("nordic-nRF51822-ek-ble", "Nordic Semiconductor nRF51822-EK BLE")
 end
 
 def buildNordic_nRF51DK_BLE
@@ -319,6 +356,7 @@ def buildNordic_nRF51DK_BLE
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyNordic_nRF51_BLE(destPath)
+	collectExamplesList("nordic-nRF51-ble", "Nordic Semiconductor nRF51-DK BLE")
 end
 
 def buildRFduinoLEDOnOff
@@ -331,6 +369,7 @@ def buildRFduinoLEDOnOff
 	copyJQuery(destPath)
 	copyRFduinoBLE(destPath)
 	copyWhereIsTheArduinoCode(destPath)
+	collectExamplesList("rfduino-led-onoff", "RFduino LED On/Off")
 end
 
 def buildLightblueBeanBasic
@@ -341,6 +380,7 @@ def buildLightblueBeanBasic
 	copySettings(settingsPath, 'app/', icon, uuid)
 	copyCommon(destPath)
 	copyEasyBLE(destPath)
+	collectExamplesList("lightbluebean-basic", "LightBlue Bean - Basic")
 end
 
 def buildRedBearLabSimpleControl
@@ -351,6 +391,7 @@ def buildRedBearLabSimpleControl
 	copyCommon(destPath)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("redbearlab-simplecontrol", "Redbear Labs - Simple Control")
 end
 
 def buildRedBearLabSimpleChat
@@ -361,6 +402,7 @@ def buildRedBearLabSimpleChat
 	copyCommon(destPath)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("redbearlab-simplechat", "Redbear Labs - Simple Chat")
 end
 
 def buildBlunoHelloWorld
@@ -372,6 +414,7 @@ def buildBlunoHelloWorld
 	copyCommon(destPath)
 	copyEasyBLE(destPath)
 	copyJQuery(destPath)
+	collectExamplesList("bluno-helloworld", "Bluno - Hello World")
 end
 
 def buildLightblueBeanSerial
@@ -381,6 +424,7 @@ def buildLightblueBeanSerial
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyUtil(destPath)
+	#collectExamplesList("lightblue-bean-serial", "LightBlue Bean - Serial")
 end
 
 def buildMediaTekLinkIt
@@ -391,6 +435,7 @@ def buildMediaTekLinkIt
 	copySettings(settingsPath, 'app/', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+  collectExamplesList("mediatek-linkit", "MediaTek Linkit ONE - Position")
 end
 
 def buildMediaTekLinkItConnect
@@ -401,6 +446,7 @@ def buildMediaTekLinkItConnect
 	copySettings(settingsPath, 'app/', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+  collectExamplesList("mediatek-linkit-connect", "Linkit Connect 7681")
 end
 
 def buildBlePeripheral
@@ -410,6 +456,7 @@ def buildBlePeripheral
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyUtil(destPath)
+  #collectExamplesList("mediatek-linkit-connect", "Linkit Connect 7681")
 end
 
 def buildEsp8266
@@ -420,6 +467,7 @@ def buildEsp8266
 	copySettings(settingsPath, 'app/', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+  collectExamplesList("esp8266", "ESP8266")
 end
 
 def buildDialogBlinky
@@ -431,6 +479,7 @@ def buildDialogBlinky
 	copyCommon(destPath)
 	copyEasyBLE(destPath)
 	copyUtil(destPath)
+  collectExamplesList("dialog-blinky", "Dialog - Blinky")
 end
 
 def buildDialogBeacons
@@ -444,6 +493,7 @@ def buildDialogBeacons
 	copyUtil(destPath)
 	copyEasyBLE(destPath)
 	copyEddystone(destPath)
+  collectExamplesList("dialog-beacons", "Dialog - Beacons")
 end
 
 def buildDialogIoTSensor
@@ -457,6 +507,7 @@ def buildDialogIoTSensor
 	copyUtil(destPath)
 	copyEasyBLE(destPath)
 	copyDialogIoTSensorLibrary(destPath)
+  collectExamplesList("dialog-iotsensor", "Dialog - IoT Sensor")
 end
 
 def buildTemplateBasicApp
@@ -466,6 +517,8 @@ def buildTemplateBasicApp
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
+  # We don't include templates in example list
+  #collectExamplesList("template-basic-app", "Template Basic App")
 end
 
 def buildArduino101LEDOnOff
@@ -477,6 +530,7 @@ def buildArduino101LEDOnOff
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyArduinoBLE(destPath)
+  collectExamplesList("arduino101-led-onoff", "Arduino101 LED On/Off BLE")
 end
 
 def buildMicrobitLED
@@ -486,6 +540,7 @@ def buildMicrobitLED
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyEasyBLE(destPath)
+  collectExamplesList("microbit-led", "Microbit LED")
 end
 
 def buildMicrobitAccelerometer
@@ -496,6 +551,7 @@ def buildMicrobitAccelerometer
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+  collectExamplesList("microbit-accelerometer", "Microbit Accelerometer")
 end
 
 def buildMicrobitSensors
@@ -505,6 +561,7 @@ def buildMicrobitSensors
 	copySettings(destPath, '', icon, uuid)
 	copyCommon(destPath)
 	copyEasyBLE(destPath)
+  collectExamplesList("microbit-sensors", "Microbit Sensors")
 end
 
 def buildArduinoBluefruitLEDOnOff
@@ -516,6 +573,7 @@ def buildArduinoBluefruitLEDOnOff
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+  collectExamplesList("arduino-bluefruit-led-onoff", "Arduino Bluefruit LE UART Friend LED On/Off")
 end
 
 def buildArduinoBluefruitRFDataGatherer
@@ -527,6 +585,7 @@ def buildArduinoBluefruitRFDataGatherer
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+  collectExamplesList("arduino-bluefruit-rf-data-gatherer", "Arduino Bluefruit RF Data Gatherer")
 end
 
 def buildRPi3SystemInformation
@@ -538,6 +597,7 @@ def buildRPi3SystemInformation
 	copyCommon(destPath)
 	copyJQuery(destPath)
 	copyEasyBLE(destPath)
+  collectExamplesList("rpi3-system-information", "Raspberry Pi 3 - System Information")
 end
 
 # TODO
@@ -587,6 +647,21 @@ def copyImageFile(destPath, imageFile)
 			'resources/app-icons/' + imageFile,
 			fullDestPath(destPath) + '/app-icon.png')
 	end
+end
+
+def collectExamplesList(path, title, description = "The simplest application you can make.", icon = "app-icon.png")
+  if @listJson.nil?
+    @listJson = "["
+  else
+    @listJson = @listJson + ",\n"
+  end 
+  @listJson = @listJson + 
+		"{\n" +
+		"  \"path\": \"" + path + "\",\n" +
+		"  \"icon\" :\"" + icon + "\",\n" +
+		"  \"title\" :\"" + title + "\",\n" +
+		"  \"description\" :\"" + description + "\"\n" +
+		"}\n"
 end
 
 def writeSettingsFile(destPath, indexPath, uuid)
