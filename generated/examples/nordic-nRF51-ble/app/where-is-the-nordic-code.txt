@@ -1,1 +1,0 @@
-The folder with the nRF51-DK mbed source code is in the parent folder.

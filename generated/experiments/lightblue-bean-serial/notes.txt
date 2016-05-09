@@ -1,6 +1,0 @@
-11:20 2015-01-29
-Added Arduino sketch SerialLoopback (modified example code) which tests reading and sending data over serial.
-Evaluate app.serialWrite() in the Workbench Tools window to send data.
-
-11:27 2015-02-10
-Example: app.serialWriteString("0123456789abcdef")

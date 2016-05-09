@@ -1,1 +1,0 @@
-The folder with the Arduino .ino file used to program the LightBlue Bean is in the parent folder.

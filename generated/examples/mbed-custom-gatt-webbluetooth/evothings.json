@@ -1,9 +1,0 @@
-{
-  "app-dir": "app",
-  "www-dir": "www",
-  "index-file": "index.html",
-  "dont-build": ["libs", "ui"],
-  "app-uuid" :"fe860e6e-d35e-4bd0-831a-7703cc2f8d02",
-  "app-icon" :"app-icon.png",
-  "app-doc-url" :"https://evothings.com/doc/examples/mbed-custom-gatt-webbluetooth.html"
-}
