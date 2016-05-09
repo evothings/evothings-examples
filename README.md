@@ -33,8 +33,7 @@ Note that the 'evothings-libraries' repo must be in a sibling folder to this rep
             build.sh
 
 ## Documentation
-Documentation for the applications is currently maintained in a [separate repo](http://github.com/evothings/evothings-doc). It is also branched per version of Evothings, here is the [hosted examples documentation for Evothings Studio 2.1.x](https://evothings.com/2.1/doc/examples/examples.html)
-[Documentation for example apps](https://evothings.com/doc/examples/examples.html) is available at the [Evothings documentation web site](https://evothings.com/doc/).
+Documentation for the applications is currently maintained in a [separate repo](http://github.com/evothings/evothings-doc). It is also branched per version of Evothings, here is the [hosted examples documentation for Evothings Studio 2.1.x](https://evothings.com/2.1/doc/examples/examples.html).
 
 ## It is quick and fun to get started with Evothings Studio
 [Download Evothings Studio](http://evothings.com/download) and be up and running with mobile IoT apps in minutes!
