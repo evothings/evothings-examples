@@ -8,6 +8,11 @@ require 'fileutils'
 
 include FileUtils::Verbose
 
+# Make sure these are correct!
+MAJOR = 2
+MINOR = 1
+
+VERSION = "#{MAJOR}.#{MINOR}"
 
 @listJson = nil
 
@@ -670,7 +675,7 @@ def writeSettingsFile(destPath, indexPath, uuid)
 		"  \"index-file\": \"" + indexPath + "index.html\",\n" +
 		"  \"app-uuid\" :\"" +  uuid + "\",\n" +
 		"  \"app-icon\" :\"app-icon.png\",\n" +
-		"  \"app-doc-url\" :\"https://evothings.com/doc/" + destPath + ".html\"\n" +
+		"  \"app-doc-url\" :\"https://evothings.com/" + VERSION + "/doc/" + destPath + ".html\"\n" +
 		"}\n"
 	puts 'Writing settings file ' + fullDestPath(destPath) + '/evothings.json'
 	writeFileUTF8(fullDestPath(destPath) + '/evothings.json', json)
@@ -685,7 +690,7 @@ def writeExtendedSettingsFile(destPath, indexPath, uuid)
 		"  \"dont-build\": [\"libs\", \"ui\"],\n" +
 		"  \"app-uuid\" :\"" +  uuid + "\",\n" +
 		"  \"app-icon\" :\"app-icon.png\",\n" +
-		"  \"app-doc-url\" :\"https://evothings.com/doc/" + destPath + ".html\"\n" +
+		"  \"app-doc-url\" :\"https://evothings.com/" + VERSION + "/doc/" + destPath + ".html\"\n" +
 		"}\n"
 	puts 'Writing settings file ' + fullDestPath(destPath) + '/evothings.json'
 	writeFileUTF8(fullDestPath(destPath) + '/evothings.json', json)
