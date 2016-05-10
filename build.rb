@@ -600,6 +600,17 @@ def buildRPi3SystemInformation
   collectExamplesList("rpi3-system-information", "Raspberry Pi 3 - System Information")
 end
 
+def buildMediaTekLinkIt7688Duo
+    settingsPath = 'examples/mediatek-linkit-7688-duo'
+    destPath = 'examples/mediatek-linkit-7688-duo/app'
+    icon = 'mediatek-linkit.png'
+    uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b1b'
+    copySettings(settingsPath, 'app/', icon, uuid)
+    copyCommon(destPath)
+    copyJQuery(destPath)
+  collectExamplesList("mediatek-linkit-7688-duo", "MediaTek LinkIt 7688 Duo")
+end
+
 # TODO
 #def buildTemplateBLEApp
 #	destPath = 'examples/template-ble-app'
@@ -870,6 +881,7 @@ def buildExamples
 	buildDialogBeacons
 	buildDialogIoTSensor
 	buildRPi3SystemInformation
+    buildMediaTekLinkIt7688Duo
 	# Templates - these are used by "New" button i Evothings Studio.
 	buildTemplateBasicApp
 	# TODO: buildTemplateBLEApp
