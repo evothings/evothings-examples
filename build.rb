@@ -451,7 +451,7 @@ def buildMediaTekLinkItConnect
 	copySettings(settingsPath, 'app/', icon, uuid)
 	copyCommon(destPath)
 	copyJQuery(destPath)
-  collectExamplesList("mediatek-linkit-connect", "Linkit Connect 7681")
+  collectExamplesList("mediatek-linkit-connect", "MediaTek Linkit Connect 7681")
 end
 
 def buildBlePeripheral
@@ -606,14 +606,14 @@ def buildRPi3SystemInformation
 end
 
 def buildMediaTekLinkIt7688Duo
-    settingsPath = 'examples/mediatek-linkit-7688-duo'
-    destPath = 'examples/mediatek-linkit-7688-duo/app'
-    icon = 'mediatek-linkit.png'
-    uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b1b'
-    copySettings(settingsPath, 'app/', icon, uuid)
-    copyCommon(destPath)
-    copyJQuery(destPath)
-  collectExamplesList("mediatek-linkit-7688-duo", "MediaTek LinkIt 7688 Duo")
+  settingsPath = 'examples/mediatek-linkit-7688-duo'
+  destPath = 'examples/mediatek-linkit-7688-duo/app'
+  icon = 'mediatek-linkit.png'
+  uuid = 'fe860e6e-d35e-4bd0-831a-7703cc2f8b1b'
+  copySettings(settingsPath, 'app/', icon, uuid)
+  copyCommon(destPath)
+  copyJQuery(destPath)
+  collectExamplesList("mediatek-linkit-7688-duo", "MediaTek LinkIt Smart 7688 Duo")
 end
 
 # TODO
