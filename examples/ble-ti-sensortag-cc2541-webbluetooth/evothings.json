@@ -4,7 +4,8 @@
   "title": "TI SensorTag CC2541 Accelerometer Web Bluetooth",
   "description": "App to read accelerometer data from the TI SensorTag CC2541 using BLE and the Web Bluetooth API",
   "tags": [
-	  {"label": "ti-sensortag", "type": "platform"},
+    {"label": "ti-sensortag", "type": "platform"},
+    {"label": "es6", "type": "platform"},
     {"label": "ble", "type": "comm"},
     {"label": "webbluetooth", "type": "protocol"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
