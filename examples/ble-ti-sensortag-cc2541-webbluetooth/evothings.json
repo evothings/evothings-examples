@@ -1,0 +1,18 @@
+{
+  "name": "ble-ti-sensortag-cc2541-webbluetooth",
+  "version": "1.0",
+  "title": "TI SensorTag CC2541 Accelerometer Web Bluetooth",
+  "description": "App to read accelerometer data from the TI SensorTag CC2541 using BLE and the Web Bluetooth API",
+  "tags": [
+	  {"label": "ti-sensortag", "type": "platform"},
+    {"label": "ble", "type": "comm"},
+    {"label": "webbluetooth", "type": "protocol"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "app-dir": "app",
+  "www-dir": "www",
+  "index-file": "index.html",
+  "dont-build": ["libs", "ui"],
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8d00",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/ble-ti-sensortag-cc2541-webbluetooth.html"
+}
