@@ -1,0 +1,14 @@
+{
+  "name": "mediatek-linkit-connect",
+  "version": "1.0",
+  "title": "MediaTek Linkit Connect 7681",
+  "description": "Simple app to control a MediaTek Linkit Connect 7681 using TCP sockets.",
+  "tags": [
+    {"label": "mediatek", "type": "hwpartner"},
+    {"label": "wifi", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "index-file": "app/index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8bff",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/mediatek-linkit-connect.html"
+}
