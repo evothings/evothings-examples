@@ -111,6 +111,7 @@ app.stopConnectTimer = function()
 
 app.startScan = function()
 {
+	evothings.easyble.reportDeviceOnce(true);
 	evothings.easyble.startScan(
 		function(device)
 		{
@@ -152,10 +153,7 @@ app.connectToDevice = function(device)
 		},
 		function(errorCode)
 		{
-			app.showInfo('Error: Connection failed: ' + errorCode + '.');
-			evothings.ble.reset();
-			// This can cause an infinite loop...
-			//app.connectToDevice(device);
+			app.showInfo('Connection error: ' + errorCode);
 		});
 };
 
