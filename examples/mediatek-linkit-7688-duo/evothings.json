@@ -1,0 +1,14 @@
+{
+  "name": "mediatek-linkit-7688-duo",
+  "version": "1.0",
+  "title": "MediaTek LinkIt Smart 7688 Duo",
+  "description": "App to control the MediaTek LinkIt Smart 7688 Duo using Wifi.",
+  "tags": [
+    {"label": "mediatek", "type": "hwpartner"},
+    {"label": "wifi", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "index-file": "app/index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b1b",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/mediatek-linkit-7688-duo.html"
+}
