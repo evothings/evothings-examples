@@ -1,0 +1,14 @@
+{
+  "name": "rpi3-system-information",
+  "version": "1.0",
+  "title": "Raspberry Pi 3 - System Information",
+  "description": "App to control your Raspberry Pi 3 using BLE.",
+  "tags": [
+    {"label": "nodejs", "type": "platform"},
+    {"label": "ble", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "index-file": "app/index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b1a",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/rpi3-system-information.html"
+}
