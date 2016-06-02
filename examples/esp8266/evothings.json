@@ -1,0 +1,14 @@
+{
+  "name": "esp8266",
+  "version": "1.0",
+  "title": "ESP8266",
+  "description": "Simple app that controls an ESP8266 module using Wifi",
+  "tags": [
+    {"label": "esp8266", "type": "platform"},
+    {"label": "wifi", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "index-file": "app/index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b12",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/esp8266.html"
+}
