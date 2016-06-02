@@ -1,0 +1,15 @@
+{
+  "name": "dialog-beacons",
+  "version": "1.0",
+  "title": "Dialog - Beacons",
+  "description": "App to get started using Beacons (both iBeacon and Eddystone) from Dialog Semiconductor",
+  "tags": [
+    {"label": "beacon", "type": "platform"},
+	  {"label": "dialog", "type": "hwpartner"},
+    {"label": "ble", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "index-file": "app/index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703ee2f8b02",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/dialog-beacons.html"
+}
