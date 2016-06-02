@@ -1,0 +1,20 @@
+{
+  "name": "mbed-custom-gatt-webbluetooth",
+  "version": "1.0",
+  "title": "mbed Evothings GATT Web Bluetooth",
+  "description": "Simple app using Web Bluetooth, ARM mbed and the Nordic Semiconductor nRF51 DK or other mbed compatible hardware.",
+  "tags": [
+    {"label": "nordic", "type": "hwpartner"},
+    {"label": "mbed", "type": "platform"},
+    {"label": "es6", "type": "platform"},
+    {"label": "webbluetooth", "type": "protocol"},
+    {"label": "ble", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "app-dir": "app",
+  "www-dir": "www",
+  "index-file": "index.html",
+  "dont-build": ["libs", "ui"],
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8d02",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/mbed-custom-gatt-webbluetooth.html"
+}
