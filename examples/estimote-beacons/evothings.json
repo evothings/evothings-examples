@@ -1,0 +1,15 @@
+{
+  "name": "estimote-beacons",
+  "version": "1.0",
+  "title": "Estimote Beacons",
+  "description": "App that scans for Estimote beacons to be used as starting point for Estimote apps",
+  "tags": [
+    {"label": "estimote", "type": "hwpartner"},
+    {"label": "beacon", "type": "platform"},
+    {"label": "ble", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "index-file": "index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b4f",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/estimote-beacons.html"
+}
