@@ -1,0 +1,14 @@
+{
+  "name": "ble-ti-sensortag-sensors",
+  "version": "1.0",
+  "title": "TI SensorTag CC2650 & CC2541 Sensors",
+  "description": "This app displays all the sensors available in the TI Bluetooth Smart SensorTags",
+  "tags": [
+	  {"label": "ti-sensortag", "type": "platform"},
+    {"label": "ble", "type": "comm"}],
+  "libraries": [],
+  "index-file": "index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b0b",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/ble-ti-sensortag-sensors.html"
+}
