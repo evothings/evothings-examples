@@ -8,6 +8,7 @@
     {"label": "wifi", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "app/index.html",
+  "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b12",
   "icon": "app-icon.png",
   "doc-url": "https://evothings.com/2.1/doc/examples/esp8266.html"
