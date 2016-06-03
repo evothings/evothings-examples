@@ -7,6 +7,7 @@
 	  {"label": "arduino", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "app-dir": "app",
   "index-file": "app/index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b18",
   "icon": "app-icon.png",

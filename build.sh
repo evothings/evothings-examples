@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OUT=$PWD/generated
-LIST=$OUT/example-list.json
+LIST=$OUT/examples-list.json
 
 rm -rf $OUT
 mkdir $OUT
