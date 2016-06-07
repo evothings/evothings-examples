@@ -5,6 +5,7 @@
   "description": "Simple app to control the RFduino using BLE.",
   "tags": [
     {"label": "arduino", "type": "platform"},
+    {"label": "rfduino", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

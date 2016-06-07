@@ -4,7 +4,7 @@
   "title": "mbed Evothings GATT",
   "description": "Simple app that toggles a LED on the Nordic Semiconductor nRF51 DK using ARM mbed and Bluetooth Low Energy (BLE)",
   "tags": [
-    {"label": "nordic", "type": "hwpartner"},
+    {"label": "nordic", "type": "vendor"},
     {"label": "mbed", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],

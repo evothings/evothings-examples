@@ -4,7 +4,8 @@
   "title": "MediaTek Linkit ONE - Position",
   "description": "Advanced app using GPS and Wifi on the MediaTek LinkIt ONE to get a position and display on Google Maps.",
   "tags": [
-    {"label": "mediatek", "type": "hwpartner"},
+    {"label": "mediatek", "type": "vendor"},
+    {"label": "gps", "type": "comm"},
     {"label": "wifi", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

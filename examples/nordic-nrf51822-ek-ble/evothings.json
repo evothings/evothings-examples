@@ -4,7 +4,7 @@
   "title": "Nordic Semiconductor nRF51822-EK BLE",
   "description": "Simple app to control a Nordic Semiconductor nRF51822 Eval kit using BLE.",
   "tags": [
-    {"label": "nordic", "type": "hwpartner"},
+    {"label": "nordic", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

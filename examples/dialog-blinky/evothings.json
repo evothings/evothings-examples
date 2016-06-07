@@ -4,7 +4,7 @@
   "title": "Dialog - Blinky",
   "description": "App to get started using DA1458x Bluetooth Low Energy (BLE) development kits from Dialog Semiconductor",
   "tags": [
-	  {"label": "dialog", "type": "hwpartner"},
+	  {"label": "dialog", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [],
   "index-file": "index.html",

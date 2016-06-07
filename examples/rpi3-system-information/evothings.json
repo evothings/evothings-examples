@@ -5,6 +5,7 @@
   "description": "App to control your Raspberry Pi 3 using BLE.",
   "tags": [
     {"label": "nodejs", "type": "platform"},
+    {"label": "raspberrypi", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

@@ -5,6 +5,7 @@
   "description": "App to communicate in both directions (Read/Write) with your RedBearLab BLE boards.",
   "tags": [
     {"label": "arduino", "type": "platform"},
+    {"label": "redbearlabs", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

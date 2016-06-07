@@ -4,8 +4,9 @@
   "title": "Dialog - Beacons",
   "description": "App to get started using Beacons (both iBeacon and Eddystone) from Dialog Semiconductor",
   "tags": [
-    {"label": "beacon", "type": "platform"},
-	  {"label": "dialog", "type": "hwpartner"},
+    {"label": "ibeacon", "type": "platform"},
+    {"label": "eddystone", "type": "platform"},
+    {"label": "dialog", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

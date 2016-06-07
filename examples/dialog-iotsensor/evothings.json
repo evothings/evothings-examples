@@ -4,7 +4,7 @@
   "title": "Dialog - IoT Sensor",
   "description": "Advanced app to use a starting point developing apps using the Dialog Semiconductor DA14583 IoT Sensor Kit",
   "tags": [
-	  {"label": "dialog", "type": "hwpartner"},
+	  {"label": "dialog", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

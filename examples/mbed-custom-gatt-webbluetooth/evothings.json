@@ -4,7 +4,7 @@
   "title": "mbed Evothings GATT Web Bluetooth",
   "description": "Simple app using Web Bluetooth, ARM mbed and the Nordic Semiconductor nRF51 DK or other mbed compatible hardware.",
   "tags": [
-    {"label": "nordic", "type": "hwpartner"},
+    {"label": "nordic", "type": "vendor"},
     {"label": "mbed", "type": "platform"},
     {"label": "es6", "type": "platform"},
     {"label": "webbluetooth", "type": "protocol"},

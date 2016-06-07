@@ -4,7 +4,7 @@
   "title": "mbed Evothings GAP",
   "description": "App that scans for a BLE device, set up with ARM mbed (classic) and the Nordic Semiconductor nRF51 DK.",
   "tags": [
-    {"label": "nordic", "type": "hwpartner"},
+    {"label": "nordic", "type": "vendor"},
     {"label": "mbed", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],

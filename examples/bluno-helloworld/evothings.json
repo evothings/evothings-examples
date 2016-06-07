@@ -4,7 +4,8 @@
   "title": "Bluno - Hello World",
   "description": "Simple app to get started with the Bluno Bluetooth Low Energy (BLE) board.",
   "tags": [
-	  {"label": "arduino", "type": "platform"},
+    {"label": "arduino", "type": "platform"},
+    {"label": "bluno", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

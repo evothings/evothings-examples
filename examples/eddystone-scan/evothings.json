@@ -4,7 +4,7 @@
   "title": "Eddystone Scan",
   "description": "App that scans for Eddystone beacons and can be used as a starting point for Eddystone apps",
   "tags": [
-    {"label": "beacon", "type": "platform"},
+    {"label": "eddystone", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

@@ -4,7 +4,7 @@
   "title": "Microbit Accelerometer",
   "description": "App that reads and displays accelerometer data from the BBC Micro:bit using BLE for connection.",
   "tags": [
-    {"label": "nordic", "type": "hwpartner"},
+    {"label": "microbit", "type": "vendor"},
     {"label": "mbed", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],

@@ -4,7 +4,7 @@
   "title": "iBeacon Scan",
   "description": "App that scans for iBeacons to be used as a starting point for iBeacons apps",
   "tags": [
-    {"label": "beacon", "type": "platform"},
+    {"label": "ibeacon", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

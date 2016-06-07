@@ -1,10 +1,11 @@
 {
   "name": "lightbluebean-basic",
   "version": "1.0",
-  "title": "LightBlue Bean - Basic",
+  "title": "Light Blue Bean - Basic",
   "description": "Simple app to control a Light Blue Bean using Bluetooth Low Energy (BLE)",
   "tags": [
     {"label": "arduino", "type": "platform"},
+    {"label": "lightbluebean", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
   "libraries": [],
   "index-file": "index.html",

@@ -4,7 +4,7 @@
   "title": "Estimote Nearables (iOS only)",
   "description": "App that scans for Estimote nearables",
   "tags": [
-    {"label": "estimote", "type": "hwpartner"},
+    {"label": "estimote", "type": "vendor"},
     {"label": "beacon", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],

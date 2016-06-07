@@ -2,10 +2,10 @@
   "name": "estimote-beacons",
   "version": "1.0",
   "title": "Estimote Beacons",
-  "description": "App that scans for Estimote beacons to be used as starting point for Estimote apps",
+  "description": "App that scans for Estimote iBeacons to be used as starting point for Estimote apps",
   "tags": [
-    {"label": "estimote", "type": "hwpartner"},
-    {"label": "beacon", "type": "platform"},
+    {"label": "estimote", "type": "vendor"},
+    {"label": "ibeacon", "type": "platform"},
     {"label": "ble", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",

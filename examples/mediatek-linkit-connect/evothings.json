@@ -4,7 +4,7 @@
   "title": "MediaTek Linkit Connect 7681",
   "description": "Simple app to control a MediaTek Linkit Connect 7681 using TCP sockets.",
   "tags": [
-    {"label": "mediatek", "type": "hwpartner"},
+    {"label": "mediatek", "type": "vendor"},
     {"label": "wifi", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
   "index-file": "index.html",
