@@ -1,5 +1,5 @@
 {
-  "name": "redbearlab-simplechat",
+  "name": "redbearlab-simplecontrol",
   "version": "1.0",
   "title": "RedBearLab - Simple Control",
   "description": "App to communicate in both directions (Read/Write) with your RedBearLab BLE boards.",
