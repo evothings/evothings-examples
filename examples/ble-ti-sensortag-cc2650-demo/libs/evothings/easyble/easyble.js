@@ -204,6 +204,8 @@
 		if ('function' == typeof serviceUUIDs)
 		{
 			// No Service UUIDs specified.
+			fail = success;
+			success = serviceUUIDs;
 			evothings.ble.startScan(onDeviceFound, onError);
 		}
 		else
