@@ -201,7 +201,7 @@
 
 		internal.knownDevices = {};
 
-		if ('function' == typeof uuids)
+		if ('function' == typeof serviceUUIDs)
 		{
 			// No Service UUIDs specified.
 			evothings.ble.startScan(onDeviceFound, onError);
