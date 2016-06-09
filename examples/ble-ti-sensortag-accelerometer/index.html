@@ -70,7 +70,7 @@ Demonstration of the TI SensorTag accelerometer.
 		Disconnect
 	</button>
 
-	<p><strong>Status:</strong> <span id="status">Ready</span></p>
+	<p><strong>Status:</strong> <span id="status">Initializing</span></p>
 
 	<img id="sprite" src="sprite.svg" />
 
@@ -89,6 +89,7 @@ Demonstration of the TI SensorTag accelerometer.
 	{
 		initialiseSprite()
 		initialiseSensorTag()
+		displayStatus('Ready')
 	}
 
 	function initialiseSprite()
@@ -141,7 +142,7 @@ Demonstration of the TI SensorTag accelerometer.
 
 	function connect()
 	{
-		sensortag.connectToNearestDevice()
+		if (sensortag) sensortag.connectToNearestDevice()
 	}
 
 	function disconnect()
