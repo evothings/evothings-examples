@@ -121,7 +121,7 @@ app.connectTo = function(address)
 			device.enableNotification(
 				app.DFRBLU_CHAR_RXTX_UUID,
 				app.receivedData,
-				function(errorcode) {
+				function(errorCode) {
 					console.log('BLE enableNotification error: ' + errorCode);
 				});
 		}
