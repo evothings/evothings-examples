@@ -153,74 +153,33 @@
 
 	/**
 	 * Start scanning for devices.
-	 * @param {array} serviceUUIDs - Array with service UUID strings (optional).
-	 * On iOS multiple UUIDs are scanned for using logical OR operator,
-	 * any UUID that matches any of the UUIDs adverticed by the device
-	 * will count as a match. On Android, multiple UUIDs are scanned for
-	 * using AND logic, the device must advertise all of the given UUIDs
-	 * to produce a match. (The matching logic will be unified in future
-	 * versions of the plugin.) When providing one service UUID, behaviour
-	 * is the same on Android and iOS. Learning out this parameter or
-	 * setting it to null, will scan for all devices, regardless of
-	 * advertised services.
 	 * @param {evothings.easyble.scanCallback} - Success function called when a
 	 * device is found.
 	 * Format: success({@link evothings.easyble.EasyBLEDevice}).
 	 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
 	 * @public
 	 * @example
-	 *   // Scan for all services.
 	 *   evothings.easyble.startScan(
-	 *       function(device)
-	 *       {
-	 *           console.log('Found device named: ' + device.name);
-	 *       },
-	 *       function(errorCode)
-	 *       {
-	 *           console.log('startScan error: ' + errorCode);
-	 *       }
-	 *   );
-	 *
-	 *   // Scan for specific service.
-	 *   evothings.easyble.startScan(
-	 *       // Eddystone service UUID.
-	 *       ['0000FEAA-0000-1000-8000-00805F9B34FB'],
-	 *       function(device)
-	 *       {
-	 *           console.log('Found device named: ' + device.name);
-	 *       },
-	 *       function(errorCode)
-	 *       {
-	 *           console.log('startScan error: ' + errorCode);
-	 *       }
-	 *   );
+	 *     function(device)
+	 *     {
+	 *       console.log('BLE Found device: ' + device.name);
+	 *     },
+	 *     function(error)
+	 *     {
+	 *       console.log('BLE Scan error: ' + error);
+	 *     });
 	 */
-	evothings.easyble.startScan = function(serviceUUIDs, success, fail)
+	evothings.easyble.startScan = function(success, fail)
 	{
 		evothings.easyble.stopScan();
-
 		internal.knownDevices = {};
-
-		if ('function' == typeof serviceUUIDs)
-		{
-			// No Service UUIDs specified.
-			fail = success;
-			success = serviceUUIDs;
-			evothings.ble.startScan(onDeviceFound, onError);
-		}
-		else
-		{
-			evothings.ble.startScan(serviceUUIDs, onDeviceFound, onError);
-		}
-
-		function onDeviceFound(device)
+		evothings.ble.startScan(function(device)
 		{
 			// Ensure we have advertisementData.
 			internal.ensureAdvertisementData(device);
 
 			// Check if the device matches the filter, if we have a filter.
-			if (!internal.deviceMatchesServiceFilter(device))
-			{
+			if(!internal.deviceMatchesServiceFilter(device)) {
 				return;
 			}
 
@@ -248,12 +207,11 @@
 
 			// Call callback function with device info.
 			success(device);
-		}
-
-		function onError(errorCode)
+		},
+		function(errorCode)
 		{
 			fail(errorCode);
-		}
+		});
 	};
 
 	/**
@@ -765,6 +723,44 @@
 		};
 
 		/**
+		 * Write value of characteristic without response.
+		 * Asks the remote device to NOT send a confirmation message
+		 * This may be used for increased data troughput
+		 * @param {string} characteristicUUID - UUID of characteristic to write to.
+		 * @param {ArrayBufferView} value - Value to write.
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success().
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
+		 * @public
+		 * @instance
+		 * @example
+		 *   device.writeCharacteristicWithoutResponse(
+		 *     characteristicUUID,
+		 *     new Uint8Array([1]), // Write byte with value 1.
+		 *     function()
+		 *     {
+		 *       console.log('BLE characteristic written.');
+		 *     },
+		 *     function(errorCode)
+		 *     {
+		 *       console.log('BLE writeCharacteristicWithoutResponse error: ' + errorCode);
+		 *     });
+		 */
+		device.writeCharacteristicWithoutResponse = function(characteristicUUID, value, success, fail)
+		{
+			// Only implemented for Android, for any other OS, use writeCharacteristic
+			if(evothings.os.isAndroid())
+			{
+				internal.writeCharacteristicWithoutResponse(
+					device, characteristicUUID, value, success, fail);
+			}
+			else
+			{
+				internal.writeCharacteristic(
+					device, characteristicUUID, value, success, fail);
+			}
+		};
+
+		/**
 		 * Write value of a characteristic for a specific service. This is useful when
 		 * multiple services have characteristics with the same UUID.
 		 * @param {string} serviceUUID - UUID of service that has the characteristic.
@@ -793,6 +789,48 @@
 		{
 			internal.writeServiceCharacteristic(
 				device, serviceUUID, characteristicUUID, value, success, fail);
+		};
+
+		/**
+		 * Write value of a characteristic for a specific service without response. This is useful when
+		 * multiple services have characteristics with the same UUID.
+		 * Asks the remote device to NOT send a confirmation message
+		 * This may be used for increased data troughput
+		 * @param {string} serviceUUID - UUID of service that has the characteristic.
+		 * @param {string} characteristicUUID - UUID of characteristic to write to.
+		 * @param {ArrayBufferView} value - Value to write.
+		 * @param {evothings.easyble.emptyCallback} success - Success callback: success().
+		 * @param {evothings.easyble.failCallback} fail - Error callback: fail(error).
+		 * @public
+		 * @instance
+		 * @example
+		 *   device.writeServiceCharacteristicWithoutResponse(
+		 *     serviceUUID,
+		 *     characteristicUUID,
+		 *     new Uint8Array([1]), // Write byte with value 1.
+		 *     function()
+		 *     {
+		 *       console.log('BLE characteristic written.');
+		 *     },
+		 *     function(errorCode)
+		 *     {
+		 *       console.log('BLE writeServiceCharacteristicWithoutResponse error: ' + errorCode);
+		 *     });
+		 */
+		device.writeServiceCharacteristicWithoutResponse = function(
+			serviceUUID, characteristicUUID, value, success, fail)
+		{
+			// Only implemented for Android, for any other OS, use writeServiceCharacteristic
+			if(evothings.os.isAndroid())
+			{
+				internal.writeServiceCharacteristicWithoutResponse(
+					device, serviceUUID, characteristicUUID, value, success, fail);
+			}
+			else
+			{
+				internal.writeServiceCharacteristic(
+					device, serviceUUID, characteristicUUID, value, success, fail);
+			}
 		};
 
 		/**
@@ -1291,6 +1329,38 @@
 	};
 
 	/**
+ 	 * Called from evothings.easyble.EasyBLEDevice.
+ 	 * Experimental, implemented on Android
+	 * @private
+	 */
+	internal.writeCharacteristicWithoutResponse = function(
+		device, characteristicUUID, value, success, fail)
+	{
+		characteristicUUID = characteristicUUID.toLowerCase();
+
+		var characteristic = device.__uuidMap[characteristicUUID];
+		if (!characteristic)
+		{
+			fail(evothings.easyble.error.CHARACTERISTIC_NOT_FOUND + ' ' +
+				characteristicUUID);
+			return;
+		}
+
+		evothings.ble.writeCharacteristicWithoutResponse(
+			device.deviceHandle,
+			characteristic.handle,
+			value,
+			function()
+			{
+				success();
+			},
+			function(errorCode)
+			{
+				fail(errorCode);
+			});
+	};
+
+	/**
 	* Called from evothings.easyble.EasyBLEDevice.
 	* @private
 	*/
@@ -1307,6 +1377,31 @@
 		}
 
 		evothings.ble.writeCharacteristic(
+			device.deviceHandle,
+			characteristic.handle,
+			value,
+			success,
+			fail);
+	};
+
+	/**
+	* Called from evothings.easyble.EasyBLEDevice.
+ 	* Experimental, implemented on Android
+	* @private
+	*/
+	internal.writeServiceCharacteristicWithoutResponse = function(
+		device, serviceUUID, characteristicUUID, value, success, fail)
+	{
+		var key = serviceUUID.toLowerCase() + ':' + characteristicUUID.toLowerCase();
+
+		var characteristic = device.__serviceMap[key];
+		if (!characteristic)
+		{
+			fail(evothings.easyble.error.CHARACTERISTIC_NOT_FOUND + ' ' + key);
+			return;
+		}
+
+		evothings.ble.writeCharacteristicWithoutResponse(
 			device.deviceHandle,
 			characteristic.handle,
 			value,

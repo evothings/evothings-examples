@@ -190,23 +190,7 @@ var app = (function()
 	};
 
 	function enableButtonNotification(device)
-	{
-		// Enable notifications
-		device.writeServiceDescriptor(
-			SERVICE_UUID,
-			CHAR_BUTTON,
-			NOTIFICATION_DESCRIPTOR,
-			new Uint8Array([1, 0]),
-			function() 
-			{
-				// success
-			},
-			function(error)
-			{ 
-				console.log('Error writing service descriptor: '  + error);
-			}
-		);
-		
+	{	
 		// Start notifications
 		device.enableServiceNotification(
 			SERVICE_UUID,
@@ -229,8 +213,8 @@ var app = (function()
 	{
 		ledStatus = !ledStatus; // Invert LED (on/off)
 
-	   	connectee.writeServiceCharacteristic(
-	    	SERVICE_UUID,
+	   	connectee.writeServiceCharacteristicWithoutResponse(
+	   		SERVICE_UUID,
 	     	CHAR_LED,
 	     	new Uint8Array([ledStatus]),
 	     	function()
@@ -252,7 +236,7 @@ var app = (function()
 			blinkSpeedVal = 100 - value;
 		}
 		
-	   	connectee.writeServiceCharacteristic(
+	   	connectee.writeServiceCharacteristicWithoutResponse(
 	    	SERVICE_UUID,
 	     	CHAR_BLINK,
 	     	new Uint8Array([blinkSpeedVal]),
