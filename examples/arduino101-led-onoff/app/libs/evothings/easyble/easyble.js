@@ -1,4 +1,4 @@
-// File: easyble.js
+// File: easyble.js updated 160620
 
 ;(function()
 {
