@@ -243,6 +243,9 @@
 			// New device, add to known devices.
 			internal.knownDevices[device.address] = device;
 
+			// Set connect status.
+			device.__isConnected = false;
+
 			// Add methods to the device info object.
 			internal.addMethodsToDeviceObject(device);
 
@@ -520,7 +523,8 @@
 		 */
 
 		/**
-		 * Match device name.
+		 * Match device name. First checks the device name present in
+		 * advertisement data, if not present checks device.name field.
 		 * @param name The name to match.
 		 * @return true if device has the given name, false if not.
 		 * @public
@@ -530,10 +534,18 @@
 		 */
 		device.hasName = function(name)
 		{
+			// If there is a device name present in advertisement data,
+			// check if this matches. (This name is not cached by iOS.)
 			var deviceName = device.advertisementData ?
-				device.advertisementData.kCBAdvDataLocalName : null;
-			if (!deviceName) { return false }
-			return 0 == deviceName.indexOf(name);
+				device.advertisementData.kCBAdvDataLocalName : false;
+			if (deviceName) 
+			{ 
+				return 0 == deviceName.indexOf(name);
+			}
+			
+			// Otherwise check if device.name matches (cached by iOS,
+			// might not match if device name is updated).
+			return name = device.name;
 		};
 
 		/**
@@ -563,6 +575,19 @@
 		};
 
 		/**
+		 * Check if device is connected.
+		 * @return true if connected, false if not connected.
+		 * @public
+		 * @instance
+		 * @example
+		 *   var connected = device.isConnected();
+		 */
+		device.isConnected = function()
+		{
+			return device.__isConnected;
+		};
+
+		/**
 		 * Close the device. This disconnects from the BLE device.
 		 * @public
 		 * @instance
@@ -571,7 +596,11 @@
 		 */
 		device.close = function()
 		{
-			device.deviceHandle && evothings.ble.close(device.deviceHandle);
+			if (device.deviceHandle)
+			{
+				device.__isConnected = false;
+				evothings.ble.close(device.deviceHandle);
+			}
 		};
 
 		/**
@@ -990,6 +1019,13 @@
 	 */
 	internal.connectToDevice = function(device, success, fail)
 	{
+		// Check that device is not already connected.
+		if (device.__isConnected)
+		{
+			fail('Device already connected');
+			return;
+		}
+		
 		evothings.ble.connect(device.address, function(connectInfo)
 		{
 			if (connectInfo.state == 2) // connected
@@ -997,12 +1033,15 @@
 				device.deviceHandle = connectInfo.deviceHandle;
 				device.__uuidMap = {};
 				device.__serviceMap = {};
+				device.__isConnected = true;
 				internal.connectedDevices[device.address] = device;
 
 				success(device);
 			}
 			else if (connectInfo.state == 0) // disconnected
 			{
+				var theDevice = internal.connectedDevices[device.address];
+				theDevice.__isConnected = false;
 				internal.connectedDevices[device.address] = null;
 
 				// TODO: Perhaps this should be redesigned, as disconnect is
@@ -1015,7 +1054,7 @@
 			fail(errorCode);
 		});
 	};
-
+	
 	/**
 	 * Obtain device services, them read characteristics and descriptors
 	 * for the services with the given uuid(s).
