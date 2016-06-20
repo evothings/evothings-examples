@@ -1,0 +1,15 @@
+{
+  "name": "arduino101-bleat-led-onoff",
+  "version": "1.0",
+  "title": "Arduino101 Bleat LED On/Off",
+  "description": "App that demonstrates the use of the Bleat BLE library with Arduino/Genuino 101",
+  "tags": [
+	  {"label": "arduino", "type": "platform"},
+    {"label": "ble", "type": "comm"}],
+  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "index-file": "index.html",
+  "app-dir": "app",
+  "uuid": "de1fa256-3380-4627-9252-3f920012da04",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/arduino101-bleat-led-onoff.html"
+}
