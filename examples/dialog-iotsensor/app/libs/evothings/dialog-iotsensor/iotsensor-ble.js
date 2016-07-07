@@ -36,6 +36,12 @@
 	 * @public
 	 */
 	status.SCANNING = 'SCANNING';
+	
+	/**
+	 * @description Scanning is ongoing.
+	 * @public
+	 */
+	status.STOPPED_SCANNING = 'STOPPED_SCANNING';
 
 	/**
 	 * @description Found IoT Sensor device.
@@ -357,8 +363,8 @@
 						// No devices found after timeout period, stop scanning
 						if(Object.keys(devices).length === 0)
 						{
-							evothings.easyble.stopScan();
 							instance.callErrorCallback(iotsensor.error.IOTSENSOR_NOT_FOUND);
+							instance.stopScanningForDevices();
 						}
 					},
 					scanTime
@@ -438,7 +444,6 @@
 		 */
 		instance.startScanningForDevices = function(callbackFun)
 		{
-			// TODO: Add code from dialog/iotsensor/iotsensor.js
 			instance.callStatusCallback(iotsensor.status.SCANNING);
 			instance.disconnectDevice();
 			evothings.easyble.stopScan();
@@ -466,7 +471,7 @@
 		}
 
 		/**
-		 * @description Stop scanning for physical devices and call {@link evothings.iotsensor.instance#statusCallback|statusCallback} with {@link evothings.iotsensor.ble.status|IOTSENSOR_NOT_FOUND} message.
+		 * @description Stop scanning for physical devices and call {@link evothings.iotsensor.instance#statusCallback|statusCallback} with {@link evothings.iotsensor.ble.status|STOPPED_SCANNING} message.
 		 * @instance
 		 * @example
 		 * iotsensor.stopScanningForDevices();
@@ -474,7 +479,7 @@
 		 */
 		instance.stopScanningForDevices = function()
 		{
-			instance.callStatusCallback(iotsensor.status.IOTSENSOR_NOT_FOUND);
+			instance.callStatusCallback(iotsensor.status.STOPPED_SCANNING);
 			evothings.easyble.stopScan();
 			return instance;
 		}
