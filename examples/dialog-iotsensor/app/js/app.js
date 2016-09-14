@@ -93,10 +93,14 @@ var app = {};
 		iotsensor.startScanningForDevices(
 			function(device)
 			{
-				device.timeStamp = Date.now();
+				// Only show IoT devices based on the advertising name
+				if(device.name === evothings.iotsensor.SFL || device.name === evothings.iotsensor.RAW)
+				{
+					device.timeStamp = Date.now();
 
-				// Insert the device into table of found devices.
-				devices[device.address] = device;
+					// Insert the device into table of found devices.
+					devices[device.address] = device;
+				}
 			}
 		);
 		displayConnectStatus("Scanning for Bluetooth devices..");

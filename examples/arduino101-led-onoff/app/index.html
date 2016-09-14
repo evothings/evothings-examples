@@ -92,10 +92,11 @@ using BLE (Bluetooth Low Energy).
 	app.connect = function()
 	{
 		evothings.arduinoble.close();
+		
 		app.showMessage('Connecting...');
 
 		evothings.arduinoble.connect(
-			'GENUINO 101-1DD5', // Advertised name of BLE device.
+			'LED', // Advertised name of BLE device.
 			function(device)
 			{
 				app.device = device;

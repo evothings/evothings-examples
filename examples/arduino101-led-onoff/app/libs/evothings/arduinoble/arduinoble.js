@@ -64,10 +64,11 @@ evothings.arduinoble = {};
 	 */
 	evothings.arduinoble.connect = function(deviceName, success, fail)
 	{
+		evothings.easyble.reportDeviceOnce(true);
 		evothings.easyble.startScan(
 			function(device)
 			{
-				if (device.name == deviceName)
+				if (device.hasName(deviceName))
 				{
 					evothings.easyble.stopScan();
 					internal.connectToDevice(device, success, fail);
