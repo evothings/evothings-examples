@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="com.bosch.cds.xdk.toolchain.1598593486">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.bosch.cds.xdk.toolchain.1598593486" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration buildProperties="" id="com.bosch.cds.xdk.toolchain.1598593486" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="com.bosch.cds.xdk.toolchain.1598593486.1521841530" name="/" resourcePath="">
+						<toolChain id="com.bosch.cds.xdk.toolchain.1836766941" name="BCDS XDK Toolchain" superClass="com.bosch.cds.xdk.toolchain">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.bosch.cds.xdk.toolchain.targetplatform.907954009" isAbstract="false" osList="all" superClass="com.bosch.cds.xdk.toolchain.targetplatform"/>
+							<builder id="com.bosch.cds.xdk.toolchain.builder.1527573239" managedBuildOn="false" name="Gnu Make Builder.Default" superClass="com.bosch.cds.xdk.toolchain.builder"/>
+							<tool id="com.bosch.cds.xdk.toolchain.c.964755712" name="BCDS C Compiler" superClass="com.bosch.cds.xdk.toolchain.c"/>
+							<tool id="com.bosch.cds.xdk.toolchain.c.ld.1901602564" name="BCDS C Linker" superClass="com.bosch.cds.xdk.toolchain.c.ld"/>
+							<tool id="com.bosch.cds.xdk.toolchain.as.595101170" name="BCDS Assembler" superClass="com.bosch.cds.xdk.toolchain.as"/>
+							<tool id="com.bosch.cds.xdk.toolchain.cxx.1628988979" name="BCDS C++ Compiler" superClass="com.bosch.cds.xdk.toolchain.cxx"/>
+							<tool id="com.bosch.cds.xdk.toolchain.cxx.ld.571682284" name="BCDS C++ Linker" superClass="com.bosch.cds.xdk.toolchain.cxx.ld"/>
+							<tool id="com.bosch.cds.xdk.toolchain.ar.360560113" name="BCDS Archiver" superClass="com.bosch.cds.xdk.toolchain.ar"/>
+							<tool id="com.bosch.cds.xdk.toolchain.tool1.1341893745" name="BCDS Create Flash Image" superClass="com.bosch.cds.xdk.toolchain.tool1"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.mingw.base.2085283633;cdt.managedbuild.toolchain.gnu.mingw.base.2085283633.823056962;com.bosch.cds.xdk.toolchain.c.16501066;cdt.managedbuild.tool.gnu.c.compiler.input.435089939">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="SendSensorDataOverBle-1.6.null.462083792" name="SendSensorDataOverBle-1.6"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+</cproject>

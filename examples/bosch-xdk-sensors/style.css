@@ -1,0 +1,23 @@
+#disconnect, #start, #stop {
+    display: none;
+}
+
+table {
+    margin-top: 20px;
+    font-size: 4.8vw;
+    border-radius: 15px;
+}
+
+td {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.data {
+    font-size: 3.4vw;
+}

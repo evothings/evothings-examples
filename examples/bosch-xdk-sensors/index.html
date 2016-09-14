@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Bosch XDK Sensors</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script>
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+<header>
+	<button class="back" onclick="history.back()">
+		<img src="ui/images/arrow-left.svg" />
+	</button>
+
+	<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+	<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+</header>
+
+<h1>Bosch XDK Sensors</h1>
+
+<p id="status">Waiting for user input</p>
+
+<button id="connect" class="green wide" onclick="app.connect()">Connect</button>
+<button id="disconnect" class="red wide" onclick="app.disconnect()">Disconnect</button>
+
+<button id="start" class="yellow wide" onclick="app.start()">Start</button>
+<button id="stop" class="red wide" onclick="app.stop()">Stop</button>
+
+
+<table>
+	<tr>
+		<td width="40%">Accelerometer<br/>raw data:</td>
+		<td width="60%" id="accelerometerRaw" class="data"></td>
+	</tr>
+	<tr>
+		<td>Accelerometer<br/>data:</td>
+		<td id="accelerometer" class="data"></td>
+	</tr>
+	<tr>
+		<td>Gyroscope<br/>raw data:</td>
+		<td id="gyroscopeRaw" class="data"></td>
+	</tr>
+	<tr>
+		<td>Gyroscope<br/>data:</td>
+		<td id="gyroscope" class="data"></td>
+	</tr>
+	<tr>
+		<td>Magnetometer<br/>raw data:</td>
+		<td id="magnetometerRaw" class="data"></td>
+	</tr>
+	<tr>
+		<td>Magnetometer<br/>data:</td>
+		<td id="magnetometer" class="data"></td>
+	</tr>
+	<tr>
+		<td>Environmental<br/>raw data:</td>
+		<td id="environmentalRaw" class="data"></td>
+	</tr>
+	<tr>
+		<td>Environmental<br/>data:</td>
+		<td id="environmental" class="data"></td>
+	</tr>
+	<tr>
+		<td>Light sensor<br/>raw data:</td>
+		<td id="lightRaw" class="data"></td>
+	</tr>
+	<tr>
+		<td>Light sensor<br/>data:</td>
+		<td id="light" class="data"></td>
+	</tr>
+</table>
+
+<script src="cordova.js"></script>
+<script src="libs/evothings/evothings.js"></script>
+<script src="libs/evothings/ui/ui.js"></script>
+<script src="libs/evothings/util/util.js"></script>
+<script src="libs/evothings/easyble/easyble.js"></script>
+<script src="app.js"></script>
+
+</body>
+
+</html>
