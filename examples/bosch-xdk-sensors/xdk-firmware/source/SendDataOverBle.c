@@ -1,6 +1,9 @@
 /**
  * This software is copyrighted by Bosch Connected Devices and Solutions GmbH, 2016.
  * The use of this software is subject to the XDK SDK EULA
+ *
+ * Contributors:
+ * Evothings AB
  */
 //lint -esym(956,*) /* Suppressing "Non const, non volatile static or external variable" lint warning*/
 

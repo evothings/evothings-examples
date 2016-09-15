@@ -1,6 +1,9 @@
 /**
  * This software is copyrighted by Bosch Connected Devices and Solutions GmbH, 2016.
  * The use of this software is subject to the XDK SDK EULA
+ *
+ * Contributors:
+ * Evothings AB
  */
 
 /* header definition ******************************************************** */
