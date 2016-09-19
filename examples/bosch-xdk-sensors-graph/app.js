@@ -61,19 +61,6 @@ window.addEventListener('resize', function () {
     setTimeout(toggleGraph, 50);
 });
 
-/*
- Setting the right dimension for the canvas
- * The width is equal to the screen width, or height if the phone is in landscape mode
- * The height is equal to the screen height, or width if the phone is in landscape mode
- IMPORTANT : Set the canvas size before streaming the Smoothie chart to it
- */
-var graphCanvas = document.getElementById('graphCanvas');
-graphCanvas.width = (screen.height > screen.width) ? 0.99 * screen.height : 0.99 * screen.width;
-graphCanvas.height = (screen.height < screen.width) ? 0.4 * screen.height : 0.4 * screen.width;
-
-// Creating the Smoothie object and starting streaming to the canvas
-var smoothie = new SmoothieChart();
-smoothie.streamTo(graphCanvas, 1000);
 
 /*
  Variable that holds the 'setInterval' of the 'appendData' function, makes it possible to clear the 'setInterval'
@@ -110,7 +97,7 @@ function toggleGraph() {
 
         // Add the time series to the graph
         for (var key in line) {
-            smoothie.addTimeSeries(line[key], {
+            app.smoothie.addTimeSeries(line[key], {
                 strokeStyle: app.selectedData[key].color,
                 lineWidth: app.selectedData[key].thickness
             });
@@ -124,7 +111,7 @@ function toggleGraph() {
                 console.log("Appending " + app.XDK[app.selectedData[key].sensor][app.selectedData[key].data] + " to line " + key);
                 line[key].append(new Date().getTime(), app.XDK[app.selectedData[key].sensor][app.selectedData[key].data]);
             }
-            smoothie.updateValueRange(); // Updating the scale for a dynamic display
+            app.smoothie.updateValueRange(); // Updating the scale for a dynamic display
         }
     }
     else { // If the phone is in portrait mode
@@ -132,9 +119,9 @@ function toggleGraph() {
         document.getElementById('graphContainer').style.display = 'none'; // Hide the 'graphContainer' div
 
         // Removing the time series from the chart
-        if (smoothie) {
+        if (app.smoothie) {
             for (var key in line) {
-                smoothie.removeTimeSeries(line[key]);
+                app.smoothie.removeTimeSeries(line[key]);
             }
         }
 
@@ -249,6 +236,20 @@ app.disconnect = function () {
 };
 
 app.start = function () {
+    /*
+     Setting the right dimension for the canvas
+     * The width is equal to the screen width, or height if the phone is in landscape mode
+     * The height is equal to the screen height, or width if the phone is in landscape mode
+     IMPORTANT : Set the canvas size before streaming the Smoothie chart to it
+     */
+    var graphCanvas = document.getElementById('graphCanvas');
+    graphCanvas.width = (screen.height > screen.width) ? 0.99 * screen.height : 0.99 * screen.width;
+    graphCanvas.height = (screen.height < screen.width) ? 0.4 * screen.height : 0.4 * screen.width;
+
+    // Creating the Smoothie object and starting streaming to the canvas
+    app.smoothie = new SmoothieChart();
+    app.smoothie.streamTo(graphCanvas, 1000);
+
     if (app.XDK.device) {
         app.XDK.device.writeCharacteristic(
             app.XDK.readCharacteristicUUID,
