@@ -1,13 +1,23 @@
 // JavaScript code for the BLE Scan example app.
+// The code is inside a closure to avoid polluting the global scope.
+;(function()
+{
+
+// When document has loaded we attach FastClick to
+// eliminate the 300 ms delay on click events.
+$(function()
+{
+    FastClick.attach(document.body)
+})
 
 // Application object.
-var app = {};
+var app = {}
 
-// Device list.
-app.devices = {};
+// Dictionary of found devices.
+app.devices = {}
 
 // UI methods.
-app.ui = {};
+app.ui = {}
 
 // Timer that updates the device list and removes inactive
 // devices in case no devices are found by scan.
@@ -141,3 +151,5 @@ app.ui.displayStatus = function(message)
 };
 
 app.initialize();
+
+})();
