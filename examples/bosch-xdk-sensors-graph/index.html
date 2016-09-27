@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Bosch XDK Sensors Graph</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script>
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+</head>
+
+<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+
+<header>
+	<button class="back" onclick="history.back()">
+		<img src="ui/images/arrow-left.svg" />
+	</button>
+
+	<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+	<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+</header>
+
+<h1 id="title">Bosch XDK<br/>Sensors Graph</h1>
+
+<p id="status">Waiting for user input</p>
+
+<button id="connect" class="green wide" onclick="app.connect()">Connect</button>
+<button id="disconnect" class="red wide" onclick="app.disconnect()">Disconnect</button>
+
+<button id="start" class="yellow wide" onclick="app.start()">Start</button>
+<button id="stop" class="red wide" onclick="app.stop()">Stop</button>
+
+<table id="selectTable">
+	<caption>Select data to be shown in the graph</caption>
+	<tr>
+		<th style="width:45%">Sensor</th>
+		<th style="width:15%">Data</th>
+		<th>Raw</th>
+		<th>Normal</th>
+	</tr>
+	<tr>
+		<th rowspan="3" class="topRow">Accelerometer</th>
+		<th class="topRow">X</th>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="rawAccX">
+		</td>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="normAccX">
+		</td>
+	</tr>
+	<tr>
+		<th>Y</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawAccY">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normAccY">
+		</td>
+	</tr>
+	<tr>
+		<th>Z</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawAccZ">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normAccZ">
+		</td>
+	</tr>
+	<tr>
+		<th rowspan="3" class="topRow">Gyroscope</th>
+		<th class="topRow">X</th>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="rawGyroX">
+		</td>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="normGyroX">
+		</td>
+	</tr>
+	<tr>
+		<th>Y</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawGyroY">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normGyroY">
+		</td>
+	</tr>
+	<tr>
+		<th>Z</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawGyroZ">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normGyroZ">
+		</td>
+	</tr>
+	<tr>
+		<th rowspan="3" class="topRow">Magnetometer</th>
+		<th class="topRow">X</th>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="rawMagX">
+		</td>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="normMagX">
+		</td>
+	</tr>
+	<tr>
+		<th>Y</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawMagY">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normMagY">
+		</td>
+	</tr>
+	<tr>
+		<th>Z</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawMagZ">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normMagZ">
+		</td>
+	</tr>
+	<tr>
+		<th rowspan="3" class="topRow">Environmental</th>
+		<th class="topRow">P</th>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="rawEnvP">
+		</td>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="normEnvP">
+		</td>
+	</tr>
+	<tr>
+		<th>T</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawEnvT">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normEnvT">
+		</td>
+	</tr>
+	<tr>
+		<th>H</th>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="rawEnvH">
+		</td>
+		<td onclick="toggleCheckbox(this)">
+			<input type="checkbox" id="normEnvH">
+		</td>
+	</tr>
+	<tr>
+		<th class="topRow">Light</th>
+		<th class="topRow">L</th>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="rawLightX">
+		</td>
+		<td onclick="toggleCheckbox(this)" class="topRow">
+			<input type="checkbox" id="normLightX">
+		</td>
+	</tr>
+</table>
+
+<div id="graphContainer">
+	<div id="container">
+		<div id="colorInstructions"></div>
+		<canvas id="graphCanvas"></canvas><br/>
+		<div id="lineInstructions"><b>Thin line:</b> Raw data&nbsp;&nbsp;&nbsp;&nbsp;<b>Thick line:</b> Normal Data</div>
+	</div>
+</div>
+
+<script src="cordova.js"></script>
+<script src="libs/evothings/evothings.js"></script>
+<script src="libs/evothings/ui/ui.js"></script>
+<script src="libs/evothings/util/util.js"></script>
+<script src="libs/evothings/easyble/easyble.js"></script>
+<script src="libs/smoothie/smoothie.js"></script>
+<script src="app.js"></script>
+<!-- TODO: Add libraries that you need -->
+
+</body>
+
+</html>
