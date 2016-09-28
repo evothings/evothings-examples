@@ -12,42 +12,13 @@
 	<link rel="stylesheet" href="libs/mdl/material.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue_grey-blue.min.css" />
+	<link rel="stylesheet" href="app.css">
+
 	<script>
 	// Redirect console.log to Evothings Workbench.
 	if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
 
-	<style>
-	.flex-row
-	{
-		display: -webkit-flex;
-		display: flex;
-		-webkit-flex-direction: row;
-		flex-direction: row;
-	}
-
-	.flex-column
-	{
-		display: -webkit-flex;
-		display: flex;
-		-webkit-flex-direction: column;
-		flex-direction: column;
-	}
-
-	.flex-item
-	{
-		flex: 1 1 auto;
-		width: 100%;
-	}
-
-	.flex-spacer
-	{
-		flex: 0 0 auto;
-		width: 5px;
-		height: 5px;
-	}
-
-	</style>
 </head>
 
 <body>
@@ -71,8 +42,10 @@
 	<div class="mdl-layout__drawer">
 		<span class="mdl-layout-title">Menu</span>
 		<nav class="mdl-navigation">
-			<a class="app-back mdl-navigation__link" href="">Go Back</a>
-			<a class="app-about mdl-navigation__link" href="">About</a>
+			<a class="app-start-scan mdl-navigation__link" href="javascript:void(0)">Start Scan</a>
+			<a class="app-stop-scan mdl-navigation__link" href="javascript:void(0)">Stop Scan</a>
+			<a class="app-about mdl-navigation__link" href="javascript:void(0)">About</a>
+			<a class="app-back mdl-navigation__link" href="javascript:void(0)">Back</a>
 		</nav>
 	</div>
 
@@ -81,50 +54,37 @@
 
 		<!-- page-start -->
 		<section>
-			<div class="page-content" style="margin:5px;">
+			<div class="page-content">
 
 				<!-- Raised button with ripple
 				https://material.google.com/style/color.html#color-color-palette
 				-->
-				<div class="flex-row">
-					<button class="app-start-scan flex-item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--green-600 mdl-color-text--white">
-						Start Scan
+				<div class="app-buttons">
+					<button class="app-start-scan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--white mdl-button--disabled">
+							Start Scan
 					</button>
-					<div class="flex-spacer"></div>
-					<button class="app-start-scan flex-item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--red-800 mdl-color-text--white">
+					<button class="app-stop-scan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--white mdl-button--disabled">
 						Stop Scan
 					</button>
 				</div>
 
-				<div class="flex-column" style="margin-top:5px;">
+				<div class="mdl-progress mdl-js-progress"></div>
 
-				<div class="flex-item mdl-card mdl-card--border mdl-shadow--2dp">
-					<div class="mdl-card__title" style="background-color:darkblue;color:white;">
-						<h2 class="mdl-card__title-text">Beacon</h2>
-					</div>
-					<div class="mdl-card__supporting-text">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-					Aenan convallis.
-					</div>
-				</div>
-					<div class="flex-spacer"></div>
-				<div class="flex-item mdl-card mdl-shadow--2dp">
-					<div class="mdl-card__title">
-						<h2 class="mdl-card__title-text">Beacon</h2>
-					</div>
-					<div class="mdl-card__media">
-  </div>
-					<div class="mdl-card__supporting-text">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-					Aenan convallis.
-					</div>
-				</div>
-					<div class="flex-spacer"></div>
+				<div class="app-cards"></div>
 
 			</div>
+			<!-- End page-content -->
 		</section>
 
+
 	</main>
+
+	<!-- Toast element used for messages -->
+	<div class="mdl-snackbar mdl-js-snackbar">
+		<div class="mdl-snackbar__text"></div>
+		<button class="mdl-snackbar__action" type="button"></button>
+	</div>
+
 </div>
 
 <!--
@@ -154,7 +114,8 @@
 	<script src="libs/jquery/jquery-3.1.1.min.js"></script>
 	<script src="libs/fastclick/fastclick.js"></script>
 	<script src="libs/mdl/material.min.js"></script>
-	<xscript src="app.js"></xscript>
+	<script src="easyble.dist.js"></script>
+	<script src="app.js"></script>
 
 </body>
 

@@ -1,0 +1,37 @@
+xbutton
+{
+	font-size: 16px !important;
+}
+
+.xmdl-card__supporting-text
+{
+	font-size: 16px !important;
+}
+
+.page-content
+{
+	margin: 10px 15px;;
+}
+
+.mdl-card__title
+{
+	padding-bottom: 6px;
+}
+
+.mdl-card__supporting-text
+{
+	color: rgba(0,0,0,0.67);
+}
+
+.mdl-card
+{
+	min-height: 100px;
+	margin: 15px 0px;
+	width: 100%;
+}
+
+.app-buttons
+{
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
