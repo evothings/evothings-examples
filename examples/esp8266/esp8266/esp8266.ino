@@ -2,7 +2,7 @@
 
 const char* ssid = "your_wifi_network_name";
 const char* password = "your_wifi_network_password";
-const int ledPin = 2;
+const int ledPin = 16; // onboard LED
 WiFiServer server(1337);
 
 void printWiFiStatus();
