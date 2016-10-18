@@ -3,6 +3,8 @@
 ;(function()
 {
 
+var mobileDevice
+
 // Dictionary of found devices.
 var devices = {}
 
@@ -35,6 +37,9 @@ function initialize()
 
 function onDeviceReady()
 {
+	// Save global device object.
+	mobileDevice = device
+
 	// Un-gray buttons.
 	$('button.app-start-scan')
 		.removeClass('mdl-button--disabled')
@@ -53,6 +58,7 @@ function startScan()
 	// Make sure scan is stopped.
 	stopScan()
 
+console.log('start scan')
 	// Start scan.
 	evothings.easyble.startScan(
 		function(device)
@@ -71,6 +77,7 @@ function startScan()
 		function(error)
 		{
 			showMessage('Scan error: ' + error)
+console.log('Scan error: ' + JSON.stringify(error))
 			stopScan()
 		}
 	)
@@ -85,6 +92,8 @@ function startScan()
 
 function stopScan()
 {
+console.log('stop scan')
+
 	// Stop scan.
 	evothings.easyble.stopScan()
 
@@ -142,8 +151,10 @@ function updateDeviceList()
 
 function displayDevice(device)
 {
-console.log(device.advertisementData.kCBAdvDataLocalName)
-if (device.advertisementData.kCBAdvDataLocalName != "CC2650 SensorTag") return
+
+	if (device.advertisementData) console.log(mobileDevice.model + ' ' + device.name + ' ' + JSON.stringify(device.advertisementData))
+
+//if (device.advertisementData.kCBAdvDataLocalName != "CC2650 SensorTag") return
 
 	if (!deviceIsDisplayed(device))
 	{
