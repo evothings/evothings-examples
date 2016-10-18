@@ -1,8 +1,9 @@
 {
   "name": "hello-ecmascript6",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Hello ECMAScript 6",
-  "description": "A simple example app where you can play around with the new JavaScript standard - ECMAScript 6",
+  "description": "A simple example app where you can play around with ECMAScript 6",
+  "long-description": "A simple example app where you can play around with the new JavaScript standard - ECMAScript 6",
   "tags": [
     {"label": "es6", "type": "platform"}],
   "libraries": [],
@@ -12,5 +13,6 @@
   "dont-build": ["libs", "ui"],
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8d01",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/hello-ecmascript6.html"
+  "cordova-id": "com.evothings.examples.hello-ecmascript6",
+  "doc-url": "https://evothings.com/2.2/doc/examples/hello-ecmascript6.html"
 }
