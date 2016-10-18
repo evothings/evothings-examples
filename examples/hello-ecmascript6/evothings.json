@@ -13,6 +13,6 @@
   "dont-build": ["libs", "ui"],
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8d01",
   "icon": "app-icon.png",
-  "cordova-id": "com.evothings.examples.hello-ecmascript6",
+  "cordova-id": "com.evothings.examples.helloecmascript6",
   "doc-url": "https://evothings.com/2.2/doc/examples/hello-ecmascript6.html"
 }

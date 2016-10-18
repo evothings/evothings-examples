@@ -9,6 +9,6 @@
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b0f",
   "icon": "app-icon.png",
-  "cordova-id": "com.evothings.examples.hello-world",
+  "cordova-id": "com.evothings.examples.helloworld",
   "doc-url": "https://evothings.com/2.2/doc/examples/hello-world.html"
 }
