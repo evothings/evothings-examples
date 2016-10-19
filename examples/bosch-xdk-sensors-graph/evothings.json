@@ -2,7 +2,8 @@
   "name": "bosch-xdk-sensors-graph",
   "title": "Bosch XDK Sensors Graph",
   "version": "1.0.0",
-  "description": "Sample application for the Bosch XDK device that plots sensor data in a graph in real time.",
+  "description": "Sample app for the Bosch XDK device that plots sensor data in real time.",
+  "long-description": "Sample application for the Bosch XDK device that plots sensor data in a graph in real time.",
   "tags": [
     {"label": "bosch", "type": "vendor"},
     {"label": "ble", "type": "comm"}],
@@ -19,5 +20,6 @@
   "index-file": "index.html",
   "uuid": "db9ad8e7-2386-48e0-81f7-675c71fe9bb3",
   "icon": "app-icon.png",
+  "cordova-id": "com.evothings.examples.boschxdksensorsgraph",
   "doc-url": "http://evothings.com/2.2/doc/examples/bosch-xdk-sensors-graph.html"
 }
