@@ -1,6 +1,6 @@
 {
   "name": "arduino-scriptable-tcp",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Arduino Scriptable TCP",
   "description": "App with a simple UI to script your Arduino over TCP",
   "tags": [
@@ -11,5 +11,5 @@
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b06",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/arduino-scriptable-tcp.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/arduino-scriptable-tcp.html"
 }

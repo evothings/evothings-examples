@@ -1,6 +1,6 @@
 {
   "name": "microbit-sensors",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Microbit Sensors",
   "description": "App that reads sensor data from the BBC Micro:bit using BLE for connection.",
   "tags": [
@@ -11,5 +11,5 @@
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b17",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/microbit-sensors.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/microbit-sensors.html"
 }

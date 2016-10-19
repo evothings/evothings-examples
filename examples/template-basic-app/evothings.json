@@ -1,6 +1,6 @@
 {
   "name": "template-basic-app",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Basic Template App",
   "description": "A basic template for a simple Evothings app.",
   "tags": [],
@@ -8,5 +8,5 @@
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b13",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/template-basic-app.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/template-basic-app.html"
 }

@@ -1,6 +1,6 @@
 {
   "name": "bluno-helloworld",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Bluno - Hello World",
   "description": "Simple app to get started with the Bluno Bluetooth Low Energy (BLE) board.",
   "tags": [
@@ -12,5 +12,5 @@
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8bcf",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/bluno-helloworld.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/bluno-helloworld.html"
 }

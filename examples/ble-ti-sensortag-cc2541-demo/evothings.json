@@ -1,6 +1,6 @@
 {
   "name": "ble-ti-sensortag-cc2541-demo",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "TI SensorTag CC2541 Demo",
   "description": "This app charts data from the TI SensorTag CC2541 using BLE",
   "tags": [
@@ -10,5 +10,5 @@
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b09",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/ble-ti-sensortag-cc2541-demo.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/ble-ti-sensortag-cc2541-demo.html"
 }

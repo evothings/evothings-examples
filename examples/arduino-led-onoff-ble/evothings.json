@@ -1,6 +1,6 @@
 {
   "name": "arduino-led-onoff-ble",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Arduino LED On/Off BLE",
   "description": "Simple app to control an Arduino using Bluetooth Low Energy (BLE)",
   "tags": [
@@ -11,5 +11,5 @@
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b04",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/arduino-led-onoff-ble.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/arduino-led-onoff-ble.html"
 }
