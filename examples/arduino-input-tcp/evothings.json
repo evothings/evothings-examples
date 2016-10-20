@@ -2,11 +2,23 @@
   "name": "arduino-input-tcp",
   "version": "1.0.0",
   "title": "Arduino Input TCP",
-  "description": "An app demonstrating how to read analog input from the Arduino using TCP over WiFi and a WiFi shield or an Ethernet shield.",
+  "description": "An app showing how to read analog input from the Arduino using TCP over WiFi.",
   "tags": [
-	  {"label": "arduino", "type": "platform"},
-    {"label": "wifi", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "arduino",
+      "type": "platform"
+    },
+    {
+      "label": "wifi",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [
     {
       "name": "cordova-plugin-chrome-apps-sockets-tcp"
@@ -16,5 +28,7 @@
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b03",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/arduino-input-tcp.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/arduino-input-tcp.html",
+  "long-description": "An app demonstrating how to read analog input from the Arduino using TCP over WiFi and a WiFi shield or an Ethernet shield.",
+  "cordova-id": "com.evothings.demos.arduinoinputtcp"
 }
