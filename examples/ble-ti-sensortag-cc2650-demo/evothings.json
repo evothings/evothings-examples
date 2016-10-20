@@ -1,12 +1,24 @@
 {
   "name": "ble-ti-sensortag-cc2650-demo",
   "version": "1.0.0",
-  "title": "TI SensorTag CC2650 Demo",
-  "description": "This app charts data from the TI Bluetooth Smart SensorTag CC2650",
+  "title": "SensorTag CC2650 Demo",
+  "description": "This app charts data from the TI Bluetooth Smart SensorTag CC2650.",
   "tags": [
-	  {"label": "ti-sensortag", "type": "platform"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "ti-sensortag",
+      "type": "platform"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [
     {
       "name": "cordova-plugin-ble",
@@ -16,5 +28,7 @@
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b0a",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/ble-ti-sensortag-cc2650-demo.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/ble-ti-sensortag-cc2650-demo.html",
+  "long-description": "This app charts data from the TI Bluetooth Smart SensorTag CC2650.",
+  "cordova-id": "com.evothings.examples.bletisensortagcc2650demo"
 }

@@ -4,10 +4,25 @@
   "title": "RFduino LED On/Off",
   "description": "Simple app to control the RFduino using BLE.",
   "tags": [
-    {"label": "arduino", "type": "platform"},
-    {"label": "rfduino", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "arduino",
+      "type": "platform"
+    },
+    {
+      "label": "rfduino",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [
     {
       "name": "cordova-plugin-ble",
@@ -18,5 +33,7 @@
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b8f",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/rfduino-led-onoff.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/rfduino-led-onoff.html",
+  "long-description": "Simple app to control the RFduino using BLE.",
+  "cordova-id": "com.evothings.examples.rfduinoledonoff"
 }
