@@ -10,8 +10,15 @@
   "cordova-id": "com.evothings.examples.boschxdksensors",
   "doc-url": "https://evothings.com/2.2/doc/examples/bosch-xdk-sensors.html",
   "tags": [
-    {"label": "bosch", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
+    {
+      "label": "bosch",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
   "libraries": [
     {
       "name": "jquery",

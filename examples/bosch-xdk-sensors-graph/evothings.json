@@ -5,8 +5,15 @@
   "description": "Sample app for the Bosch XDK device that plots sensor data in real time.",
   "long-description": "Sample application for the Bosch XDK device that plots sensor data in a graph in real time.",
   "tags": [
-    {"label": "bosch", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
+    {
+      "label": "bosch",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
   "libraries": [
     {
       "name": "jquery",
