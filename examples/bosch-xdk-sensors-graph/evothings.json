@@ -17,6 +17,12 @@
       "version": "1.28"
     }
   ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "index-file": "index.html",
   "uuid": "db9ad8e7-2386-48e0-81f7-675c71fe9bb3",
   "icon": "app-icon.png",

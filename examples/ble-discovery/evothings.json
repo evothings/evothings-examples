@@ -7,6 +7,12 @@
   "tags": [
     {"label": "ble", "type": "comm"}],
   "libraries": [],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b08",
   "cordova-id": "com.evothings.examples.blediscovery",

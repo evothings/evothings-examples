@@ -9,6 +9,12 @@
     {"label": "ble", "type": "comm"},
     {"label": "webbluetooth", "type": "protocol"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "app-dir": "app",
   "www-dir": "www",
   "index-file": "index.html",

@@ -13,6 +13,9 @@
   "plugins": [
     {
       "name": "cordova-plugin-device-motion"
+    },
+    {
+      "name": "cordova-plugin-vibration"
     }
   ],
   "doc-url": "https://evothings.com/2.2/doc/examples/cordova-accelerometer.html"

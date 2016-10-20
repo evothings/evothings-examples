@@ -7,6 +7,11 @@
 	  {"label": "arduino", "type": "platform"},
     {"label": "wifi", "type": "comm"}],
   "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "plugins": [
+    {
+      "name": "cordova-plugin-chrome-apps-sockets-tcp"
+    }
+  ],
   "index-file": "index.html",
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b03",
