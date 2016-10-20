@@ -1,7 +1,7 @@
 {
-  "name": "adafruit-bluefruit-rfdata",
+  "name": "adafruit-bluefruit-rf-data-gatherer",
   "version": "1.0.0",
-  "title": "Adafruit Bluefruit RF Data Gatherer",
+  "title": "Adafruit Bluefruit RF Data",
   "description": "App using Adafruit's Bluefruit LE UART Friend sending data between Arduino Unos.",
   "tags": [
     {
@@ -35,5 +35,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/adafruit-bluefruit-rf-data-gatherer.html",
   "long-description": "Advanced app using Adafruit's Bluefruit LE UART Friend to send data between Arduino Unos using 433 MHz transmitter-receiver modules.",
-  "cordova-id": "com.evothings.demos.adafruitbluefruitrfdata"
+  "cordova-id": "com.evothings.demos.adafruitbluefruitrfdatagatherer"
 }
