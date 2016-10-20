@@ -35,5 +35,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/adafruit-bluefruit-led-onoff.html",
   "long-description": "Simple app to control a LED using Adafruit's Bluefruit LE UART Friend board.",
-  "cordova-id": "com.evothings.demos.adafruitbluefruitledonoff"
+  "cordova-id": "com.evothings.examples.adafruitbluefruitledonoff"
 }

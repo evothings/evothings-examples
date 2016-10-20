@@ -31,5 +31,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/arduino-ble.html",
   "long-description": "Basic example app to get started with Bluetooth Low Energy (BLE) using an Arduino and a BLE shield.",
-  "cordova-id": "com.evothings.demos.arduinoble"
+  "cordova-id": "com.evothings.examples.arduinoble"
 }

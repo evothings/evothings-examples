@@ -31,5 +31,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/arduino101-led-onoff.html",
   "long-description": "Simple app to get started with the Arduino/Genuino 101 and Bluetooth Low Energy (BLE) communication.",
-  "cordova-id": "com.evothings.demos.arduino101ledonoff"
+  "cordova-id": "com.evothings.examples.arduino101ledonoff"
 }

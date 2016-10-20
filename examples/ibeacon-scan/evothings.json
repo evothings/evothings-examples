@@ -2,22 +2,37 @@
   "name": "ibeacon-scan",
   "version": "1.0.0",
   "title": "iBeacon Scan",
-  "description": "App that scans for iBeacons to be used as a starting point for iBeacons apps",
+  "description": "App that scans for iBeacons to be used as a starting point for iBeacons apps.",
   "tags": [
-    {"label": "ibeacon", "type": "platform"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "ibeacon",
+      "type": "platform"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [
     {
-      "name": "de.appplant.cordova.plugin.local-notification"
-    }
-    ,
+      "name": "com.unarin.cordova.beacon",
+      "version": "3.4.3"
+    },
     {
-      "name": "com.unarin.cordova.beacon"
+      "name": "de.appplant.cordova.plugin.local-notification",
+      "version": "0.8.4"
     }
   ],
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b3f",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/ibeacon-scan.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/ibeacon-scan.html",
+  "long-description": "App that scans for iBeacons to be used as a starting point for iBeacons apps.",
+  "cordova-id": "com.evothings.examples.ibeaconscan"
 }

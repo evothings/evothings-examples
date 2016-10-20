@@ -31,5 +31,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/arduino-led-onoff-ble.html",
   "long-description": "Simple app to control an Arduino using Bluetooth Low Energy (BLE).",
-  "cordova-id": "com.evothings.demos.arduinoledonoffble"
+  "cordova-id": "com.evothings.examples.arduinoledonoffble"
 }

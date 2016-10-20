@@ -30,5 +30,5 @@
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b06",
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/arduino-scriptable-tcp.html",
-  "cordova-id": "com.evothings.demos.arduinoscriptabletcp"
+  "cordova-id": "com.evothings.examples.arduinoscriptabletcp"
 }

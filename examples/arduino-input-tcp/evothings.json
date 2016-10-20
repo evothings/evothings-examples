@@ -30,5 +30,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/arduino-input-tcp.html",
   "long-description": "An app demonstrating how to read analog input from the Arduino using TCP over WiFi and a WiFi shield or an Ethernet shield.",
-  "cordova-id": "com.evothings.demos.arduinoinputtcp"
+  "cordova-id": "com.evothings.examples.arduinoinputtcp"
 }

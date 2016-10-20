@@ -35,5 +35,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/bluno-helloworld.html",
   "long-description": "Simple app to get started with the Bluno Bluetooth Low Energy (BLE) board.",
-  "cordova-id": "com.evothings.demos.blunohelloworld"
+  "cordova-id": "com.evothings.examples.blunohelloworld"
 }

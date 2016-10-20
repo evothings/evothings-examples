@@ -16,5 +16,5 @@
   "icon": "app-icon.png",
   "doc-url": "http://evothings.com/2.2/doc/examples/template-basic-app.html",
   "long-description": "A basic template for a simple Evothings app.",
-  "cordova-id": "com.evothings.demos.templatebasicapp"
+  "cordova-id": "com.evothings.examples.templatebasicapp"
 }
