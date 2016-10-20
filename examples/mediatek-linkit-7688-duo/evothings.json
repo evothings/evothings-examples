@@ -4,18 +4,32 @@
   "title": "MediaTek LinkIt Smart 7688 Duo",
   "description": "App to control the MediaTek LinkIt Smart 7688 Duo using Wifi.",
   "tags": [
-    {"label": "mediatek", "type": "vendor"},
-    {"label": "wifi", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "mediatek",
+      "type": "vendor"
+    },
+    {
+      "label": "wifi",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [
     {
-      "name": "cordova-plugin-ble",
-      "version": "2.0.0"
+      "name": "cordova-plugin-http",
+      "version": "v0.2.2"
     }
   ],
   "index-file": "index.html",
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b1b",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/mediatek-linkit-7688-duo.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/mediatek-linkit-7688-duo.html",
+  "long-description": "App to control the MediaTek LinkIt Smart 7688 Duo using Wifi.",
+  "cordova-id": "com.evothings.examples.mediateklinkit7688duo"
 }

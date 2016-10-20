@@ -4,9 +4,19 @@
   "title": "Microbit Sensors",
   "description": "App that reads sensor data from the BBC Micro:bit using BLE for connection.",
   "tags": [
-    {"label": "microbit", "type": "vendor"},
-    {"label": "mbed", "type": "platform"},
-    {"label": "ble", "type": "comm"}],
+    {
+      "label": "microbit",
+      "type": "vendor"
+    },
+    {
+      "label": "mbed",
+      "type": "platform"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
   "libraries": [],
   "plugins": [
     {
@@ -17,5 +27,7 @@
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b17",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/microbit-sensors.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/microbit-sensors.html",
+  "long-description": "App that reads sensor data from the BBC Micro:bit using BLE for connection.",
+  "cordova-id": "com.evothings.examples.microbitsensors"
 }

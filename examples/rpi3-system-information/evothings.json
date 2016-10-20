@@ -1,13 +1,28 @@
 {
   "name": "rpi3-system-information",
   "version": "1.0.0",
-  "title": "Raspberry Pi 3 - System Information",
+  "title": "Raspberry Pi 3 - System Info",
   "description": "App to control your Raspberry Pi 3 using BLE.",
   "tags": [
-    {"label": "nodejs", "type": "platform"},
-    {"label": "raspberrypi", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "nodejs",
+      "type": "platform"
+    },
+    {
+      "label": "raspberrypi",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [
     {
       "name": "cordova-plugin-ble",
@@ -18,5 +33,7 @@
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b1a",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/rpi3-system-information.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/rpi3-system-information.html",
+  "long-description": "App to control your Raspberry Pi 3 using BLE.",
+  "cordova-id": "com.evothings.examples.rpi3systeminformation"
 }

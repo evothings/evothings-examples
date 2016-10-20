@@ -2,13 +2,28 @@
   "name": "hue-lights",
   "version": "1.0.0",
   "title": "Philips Hue Demo",
-  "description": "Simple app to control your Philips Hue lights",
+  "description": "Simple app to control your Philips Hue lights.",
   "tags": [
-    {"label": "philips-hue", "type": "platform"},
-    {"label": "wifi", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "philips-hue",
+      "type": "platform"
+    },
+    {
+      "label": "wifi",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b1f",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/hue-lights.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/hue-lights.html",
+  "plugins": [],
+  "long-description": "Simple app to control your Philips Hue lights.",
+  "cordova-id": "com.evothings.examples.huelights"
 }

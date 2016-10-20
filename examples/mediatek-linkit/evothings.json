@@ -2,21 +2,40 @@
   "name": "mediatek-linkit",
   "version": "1.0.0",
   "title": "MediaTek Linkit ONE - Position",
-  "description": "Advanced app using GPS and Wifi on the MediaTek LinkIt ONE to get a position and display on Google Maps.",
+  "description": "Advanced app using GPS and Wifi on the MediaTek LinkIt ONE with Google Maps.",
   "tags": [
-    {"label": "mediatek", "type": "vendor"},
-    {"label": "gps", "type": "comm"},
-    {"label": "wifi", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "mediatek",
+      "type": "vendor"
+    },
+    {
+      "label": "gps",
+      "type": "comm"
+    },
+    {
+      "label": "wifi",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [
     {
-      "name": "cordova-plugin-ble",
-      "version": "2.0.0"
+      "name": "cordova-plugin-chrome-apps-sockets-tcp"
+    },
+    {
+      "name": "cordova-plugin-geolocation"
     }
   ],
   "index-file": "index.html",
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8bef",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/mediatek-linkit.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/mediatek-linkit.html",
+  "long-description": "Advanced app using GPS and Wifi on the MediaTek LinkIt ONE to get a position and display on Google Maps.",
+  "cordova-id": "com.evothings.examples.mediateklinkit"
 }

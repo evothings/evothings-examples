@@ -2,11 +2,21 @@
   "name": "microbit-led",
   "version": "1.0.0",
   "title": "Microbit LED",
-  "description": "App that writes text to on the BBC Micro:bit displaying it on the LED matrix using BLE for connection.",
+  "description": "App that writes text on the BBC Micro:bit using the LED matrix and BLE.",
   "tags": [
-    {"label": "microbit", "type": "vendor"},
-    {"label": "mbed", "type": "platform"},
-    {"label": "ble", "type": "comm"}],
+    {
+      "label": "microbit",
+      "type": "vendor"
+    },
+    {
+      "label": "mbed",
+      "type": "platform"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
   "libraries": [],
   "plugins": [
     {
@@ -17,5 +27,7 @@
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b15",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/microbit-led.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/microbit-led.html",
+  "long-description": "App that writes text on the BBC Micro:bit using the LED matrix and BLE for connection.",
+  "cordova-id": "com.evothings.examples.microbitled"
 }
