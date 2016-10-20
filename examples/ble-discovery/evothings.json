@@ -5,7 +5,11 @@
   "description": "App to discover Bluetooth Low Energy (BLE) devices and display data.",
   "long-description": "App to discover Bluetooth Low Energy (BLE) devices and then connect to and display data for a BLE device.",
   "tags": [
-    {"label": "ble", "type": "comm"}],
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
   "libraries": [],
   "plugins": [
     {

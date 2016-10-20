@@ -4,10 +4,17 @@
   "title": "Basic Template App",
   "description": "A basic template for a simple Evothings app.",
   "tags": [],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
   "plugins": [],
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b13",
   "icon": "app-icon.png",
-  "doc-url": "http://evothings.com/2.2/doc/examples/template-basic-app.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/template-basic-app.html",
+  "long-description": "A basic template for a simple Evothings app.",
+  "cordova-id": "com.evothings.demos.templatebasicapp"
 }
