@@ -29,7 +29,8 @@
   ],
   "plugins": [
     {
-      "name": "com.unarin.cordova.beacon"
+      "name": "cordova-plugin-ibeacon",
+      "version": "3.4.3"
     }
   ],
   "index-file": "index.html",
