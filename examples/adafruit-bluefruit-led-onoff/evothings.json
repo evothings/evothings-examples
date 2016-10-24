@@ -1,7 +1,7 @@
 {
   "name": "adafruit-bluefruit-led-onoff",
   "version": "1.0.0",
-  "title": "Adafruit Bluefruit LE UART Friend LED On/Off",
+  "title": "Adafruit Bluefruit LE UART LED",
   "description": "Simple app to control a LED using Adafruit's Bluefruit LE UART Friend board.",
   "tags": [
     {
