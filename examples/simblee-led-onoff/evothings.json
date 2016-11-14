@@ -1,8 +1,8 @@
 {
   "name": "simblee-led-onoff",
   "version": "1.0",
-  "title": "RFduino LED On/Off",
-  "description": "Simple app to control the RFduino using BLE.",
+  "title": "Simblee LED On/Off",
+  "description": "Simple app to control the Simblee using BLE.",
   "tags": [
     {
       "label": "arduino",
