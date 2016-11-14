@@ -1,6 +1,6 @@
 // Code for Simblee LED On Off example.
 // For Simblee (RFD77201) connected to Simblee RGB Shield (RFD22122).
-// Evothings AB, 2014
+// Daniel L. , 2016
 
 #include <SimbleeBLE.h>
 
