@@ -5,7 +5,7 @@ evothings.loadScript('libs/evothings/easyble/easyble.js')
 
 /**
  * @namespace
- * @author Patrik D.
+ * @author Daniel L.
  * @description <p>Functions for communicating with an Simblee board.</p>
  * <p>It is safe practise to call function {@link evothings.scriptsLoaded}
  * to ensure dependent libraries are loaded before calling functions
