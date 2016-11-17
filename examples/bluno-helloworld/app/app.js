@@ -27,10 +27,8 @@ document.addEventListener(
 
 var app = {};
 
-//app.DFRBLU_SERVICE_UUID = 'dfb0';
 app.DFRBLU_SERVICE_UUID = '0000dfb0-0000-1000-8000-00805f9b34fb';
 app.DFRBLU_CHAR_RXTX_UUID = '0000dfb1-0000-1000-8000-00805f9b34fb';
-app.DFRBLU_TX_UUID_DESCRIPTOR = '00002902-0000-1000-8000-00805f9b34fb';
 
 app.initialize = function()
 {
@@ -119,11 +117,13 @@ app.connectTo = function(address)
 			$('#controlView').show();
 
 			device.enableNotification(
+			  app.DFRBLU_SERVICE_UUID,
 				app.DFRBLU_CHAR_RXTX_UUID,
 				app.receivedData,
 				function(errorCode) {
 					console.log('BLE enableNotification error: ' + errorCode);
-				});
+				},
+				{ writeConfigDescriptor: false });
 		}
 
 		function onServiceFailure(errorCode)
