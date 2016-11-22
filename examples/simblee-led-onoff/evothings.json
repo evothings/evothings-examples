@@ -1,0 +1,31 @@
+{
+  "name": "simblee-led-onoff",
+  "version": "1.0",
+  "title": "Simblee LED On/Off",
+  "description": "Simple app to control the Simblee using BLE.",
+  "tags": [
+    {
+      "label": "arduino",
+      "type": "platform"
+    },
+    {
+      "label": "simblee",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "index-file": "index.html",
+  "app-dir": "app",
+  "uuid": "a33b392a-98bc-4812-aad7-023bcf6c4830",
+  "icon": "app-icon.png",
+  "doc-url": "https://evothings.com/2.1/doc/examples/simblee-led-onoff.html"
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<!--
+This is an example app that demonstrates how to control an
+Simblee RFD77201 board using BLE (Bluetooth Low Energy).
+
+Please note that this example requires an Simblee RFD77201 plus
+and RGB LED Button shield (RFD22122). In addition, an
+USB shield (RFD22121) is needed for programming the
+Simblee from a PC or Mac.
+-->
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Simblee LED On/Off</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<style>
+	div {
+		margin: 10px 0px;
+	}
+	button {
+		margin: 5px 0px;
+	}
+	.lead {
+		font-weight: bold;
+	}
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<script src="libs/evothings/simbleeble/simbleeble.js"></script>
+
+</head>
+
+<body>
+
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+
+	<h1>Simblee LED On/Off</h1>
+
+	<p id="info" class="lead">Initializing...</p>
+
+	<button type="button" class="yellow" onclick="app.connect()">
+		Connect
+	</button>
+
+	<br />
+
+	<button type="button" class="blue" onclick="app.ledOn()">
+		Blue Led On
+	</button>
+
+	<button type="button" class="charcoal" onclick="app.ledOff()">
+		Blue Led Off
+	</button>
+
+	<h2>Instructions</h2>
+	<p>This example requires a Simblee RFD77201 and an Simblee RGB
+	LED Button shield (RFD22122). You also need an Simblee USB shield
+	for programming the Simblee from a PC/Mac.</p>
+
+	<!-- TODO: Image is missing.
+	<p><img src="Simblee_Image.png" style="max-height:30%;" /></p>
+	-->
+
+	<!-- JavaScript code for the app -->
+
+	<script>
+	// Short name for Simblee BLE library.
+	var simbleeble = evothings.simbleeble;
+
+	// Application object.
+	var app = {};
+
+	// Connected device.
+	app.device = null;
+
+	// Turn on LED.
+	app.ledOn = function()
+	{
+		app.device && app.device.writeDataArray(new Uint8Array([1]));
+	};
+
+	// Turn off LED.
+	app.ledOff = function()
+	{
+		app.device && app.device.writeDataArray(new Uint8Array([0]));
+	};
+
+	app.showMessage = function(info)
+	{
+		document.getElementById("info").innerHTML = info;
+	};
+
+	// Called when BLE and other native functions are available.
+	app.onDeviceReady = function()
+	{
+		app.showMessage('Press the yellow button to connect');
+	};
+
+	app.connect = function()
+	{
+		console.log("close");
+		simbleeble.close();
+
+		// Wait 500 ms for close to complete before connecting.
+		setTimeout(function()
+		{
+			console.log("connecting");
+			app.showMessage("Connecting...");
+			simbleeble.connect(
+				"Simblee",
+				function(device)
+				{
+					console.log("connected");
+					app.showMessage("Connected");
+					app.device = device;
+				},
+				function(errorCode)
+				{
+					app.showMessage("Connect error: " + errorCode);
+				});
+			},
+			500);
+	};
+
+	// When the app is fully loaded the "deviceready" event is triggered.
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
+	</script>
+</body>
+</html>

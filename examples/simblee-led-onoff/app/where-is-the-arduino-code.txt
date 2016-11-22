@@ -1,0 +1,6 @@
+The folder with the Arduino .ino file is in the parent folder.
+
+Each Arduino example has a parent folder with these child folders:
+* one folder with the mobile app code files (HTML/JS)
+* one folder with the Arduino sketch(es) to be loaded
+  onto the microcontroller board using the Arduino IDE
