@@ -33,5 +33,5 @@
   "uuid": "c30e1780-282b-4ea9-a0fc-e70a4137468e",
   "icon": "app-icon.png",
   "cordova-id": "com.evothings.samples.bluemix.mqtt.painter",
-  "doc-url": "https://evothings.com/2.2/doc/examples/hello-world.html"
+  "doc-url": "https://evothings.com/2.2/doc/examples/bluemix-mqtt-painter.html"
 }
