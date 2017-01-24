@@ -1,7 +1,7 @@
 var app = {};
 
 app.XDK = {};
-app.XDK.name = 'XDK_DEMO';
+app.XDK.names = ['XDK_DEMO', 'XDKdemo'];
 app.XDK.serviceUUID_1 = '00005301-0000-0041-4C50-574953450000';
 app.XDK.serviceUUID_2 = '00005302-0000-0041-4C50-574953450000';
 app.XDK.serviceUUID_3 = '00005303-0000-0041-4C50-574953450000';
@@ -41,7 +41,7 @@ app.connect = function () {
     app.setStatus("Starting scan");
     evothings.easyble.startScan(
         function (device) {
-            if (device.name == app.XDK.name) {
+            if (app.XDK.names.indexOf(device.name) != -1) {
                 evothings.easyble.stopScan();
                 app.XDK.device = device;
                 app.setStatus("XDK device found");
@@ -55,7 +55,7 @@ app.connect = function () {
                         app.XDK.device.readServices(
                             [app.XDK.serviceUUID_1],
                             function () {
-                                app.setStatus("BLE services available for " + app.XDK.name);
+                                app.setStatus("BLE services available for " + app.XDK.device.name);
 
                                 app.XDK.device.writeDescriptor(
                                     app.XDK.serviceUUID_3,
