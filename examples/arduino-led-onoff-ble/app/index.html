@@ -11,7 +11,7 @@ Please note that you must use a BLE shield for this example to work.
 	<meta name="viewport" content="width=device-width, user-scalable=no,
 		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-	<title>Arduino LED On/Off BLE</title>
+	<title>Relay On/Off BLE</title>
 
 	<style>
 		@import 'ui/css/evothings-app.css';
@@ -46,7 +46,7 @@ Please note that you must use a BLE shield for this example to work.
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
-	<h1>Arduino LED On/Off BLE</h1>
+	<h1>Relay On/Off BLE</h1>
 
 	<p id="info">Initializing...</p>
 
@@ -54,11 +54,11 @@ Please note that you must use a BLE shield for this example to work.
 
 	<br />
 
-	<button class="green wide big" onclick="app.ledOn()">LED ON</button>
+	<button class="green wide big" onclick="app.On()">LED ON</button>
 
 	<br />
 
-	<button class="red wide big" onclick="app.ledOff()">LED OFF</button>
+	<button class="red wide big" onclick="app.Off()">LED OFF</button>
 
 	<script>
 	// Application object.
@@ -68,13 +68,13 @@ Please note that you must use a BLE shield for this example to work.
 	app.device = null;
 
 	// Turn on LED.
-	app.ledOn = function()
+	app.On = function()
 	{
 		app.device && app.device.writeDataArray(new Uint8Array([1]));
 	}
 
 	// Turn off LED.
-	app.ledOff = function()
+	app.Off = function()
 	{
 		app.device && app.device.writeDataArray(new Uint8Array([0]));
 	}
@@ -99,7 +99,7 @@ Please note that you must use a BLE shield for this example to work.
 			function(device)
 			{
 				app.device = device;
-				app.showMessage('Connected! Touch buttons to turn LED on/off.');
+				app.showMessage('Connected! Touch buttons to turn on/off.');
 			},
 			function(errorCode)
 			{
