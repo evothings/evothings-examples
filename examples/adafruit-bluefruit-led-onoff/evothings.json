@@ -1,16 +1,39 @@
 {
   "name": "adafruit-bluefruit-led-onoff",
-  "version": "1.0",
-  "title": "Adafruit Bluefruit LE UART Friend LED On/Off",
-  "description": "Simple app to control a LED using Adafruit's Bluefruit LE UART Friend board",
+  "version": "1.0.0",
+  "title": "Adafruit Bluefruit LE UART LED",
+  "description": "Simple app to control a LED using Adafruit's Bluefruit LE UART Friend board.",
   "tags": [
-    {"label": "arduino", "type": "platform"},
-    {"label": "adafruit", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "arduino",
+      "type": "platform"
+    },
+    {
+      "label": "adafruit",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "app-dir": "app",
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b18",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/adafruit-bluefruit-led-onoff.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/adafruit-bluefruit-led-onoff.html",
+  "long-description": "Simple app to control a LED using Adafruit's Bluefruit LE UART Friend board.",
+  "cordova-id": "com.evothings.examples.adafruitbluefruitledonoff"
 }

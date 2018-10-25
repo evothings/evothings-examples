@@ -1,0 +1,8 @@
+{
+  "name": "mdl",
+  "versions": ["1.2.1"],
+  "title": "Material Design Lite",
+  "description": "Material Design Lite lets you add a Material Design look and feel to your websites. It doesn’t rely on any JavaScript frameworks and aims to optimize for cross-device use, gracefully degrade in older browsers, and offer an experience that is immediately accessible. Material Design Icons are included from https://github.com/jossef/material-design-icons-iconfont",
+  "icon" :"app-icon.png",
+  "doc-url" :"https://getmdl.io"
+}

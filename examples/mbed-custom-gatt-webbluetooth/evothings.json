@@ -1,20 +1,49 @@
 {
   "name": "mbed-custom-gatt-webbluetooth",
-  "version": "1.0",
-  "title": "mbed Evothings GATT Web Bluetooth",
-  "description": "Simple app using Web Bluetooth, ARM mbed and the Nordic Semiconductor nRF51 DK or other mbed compatible hardware.",
+  "version": "1.0.0",
+  "title": "mbed Custom GATT Web Bluetooth",
+  "description": "Simple app using Web Bluetooth, ARM mbed and the Nordic nRF51 DK.",
   "tags": [
-    {"label": "nordic", "type": "vendor"},
-    {"label": "mbed", "type": "platform"},
-    {"label": "es6", "type": "platform"},
-    {"label": "webbluetooth", "type": "protocol"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "nordic",
+      "type": "vendor"
+    },
+    {
+      "label": "mbed",
+      "type": "platform"
+    },
+    {
+      "label": "es6",
+      "type": "platform"
+    },
+    {
+      "label": "webbluetooth",
+      "type": "protocol"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "app-dir": "app",
   "www-dir": "www",
   "index-file": "index.html",
   "dont-build": ["libs", "ui"],
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8d02",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/mbed-custom-gatt-webbluetooth.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/mbed-custom-gatt-webbluetooth.html",
+  "long-description": "Simple app using Web Bluetooth, ARM mbed and the Nordic Semiconductor nRF51 DK or other mbed compatible hardware.",
+  "cordova-id": "com.evothings.examples.mbedcustomgattwebbluetooth"
 }

@@ -1,0 +1,30 @@
+{
+  "name": "cordova-basic",
+  "version": "1.0.0",
+  "title": "Cordova Basic",
+  "description": "Simple app for basic features such as compass, vibration and native dialogs.",
+  "long-description": "Simple app to use some basic features such as compass, vibration and native dialogs",
+  "tags": [],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-device-orientation"
+    },
+    {
+      "name": "cordova-plugin-dialogs"
+    },
+    {
+      "name": "cordova-plugin-vibration"
+    }
+  ],
+  "index-file": "index.html",
+  "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b0e",
+  "icon": "app-icon.png",
+  "cordova-id": "com.evothings.examples.cordovabasic",
+  "doc-url": "http://evothings.com/2.2/doc/examples/cordova-basic.html"
+}

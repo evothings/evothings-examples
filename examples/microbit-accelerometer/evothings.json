@@ -1,15 +1,38 @@
 {
   "name": "microbit-accelerometer",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Microbit Accelerometer",
-  "description": "App that reads and displays accelerometer data from the BBC Micro:bit using BLE for connection.",
+  "description": "App that reads and displays accelerometer data from the BBC Micro:bit using BLE.",
   "tags": [
-    {"label": "microbit", "type": "vendor"},
-    {"label": "mbed", "type": "platform"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "microbit",
+      "type": "vendor"
+    },
+    {
+      "label": "mbed",
+      "type": "platform"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b16",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/microbit-accelerometer.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/microbit-accelerometer.html",
+  "long-description": "App that reads and displays accelerometer data from the BBC Micro:bit using BLE for connection.",
+  "cordova-id": "com.evothings.examples.microbitaccelerometer"
 }

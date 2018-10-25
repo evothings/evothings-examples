@@ -1,15 +1,35 @@
 {
   "name": "dialog-iotsensor",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Dialog - IoT Sensor",
-  "description": "Advanced app to use a starting point developing apps using the Dialog Semiconductor DA14583 IoT Sensor Kit",
+  "description": "Advanced app using the Dialog Semiconductor DA14583 IoT Sensor Kit.",
   "tags": [
-	  {"label": "dialog", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "dialog",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "index-file": "index.html",
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703ee2f8b03",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/dialog-iotsensor.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/dialog-iotsensor.html",
+  "long-description": "Advanced app to use a starting point developing apps using the Dialog Semiconductor DA14583 IoT Sensor Kit.",
+  "cordova-id": "com.evothings.examples.dialogiotsensor"
 }

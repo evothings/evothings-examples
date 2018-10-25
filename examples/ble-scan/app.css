@@ -1,0 +1,63 @@
+/* CSS for the BLE Scan app. We use Material Design Lite (MDL)
+and tweak some of the standard layout settings below. */
+
+/* Set spacing for page content. */
+.page-content
+{
+  margin: 10px 15px;;
+}
+
+/* Info text margins. */
+.app-info
+{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Give some space before and after Start/Stop buttons. */
+.app-buttons
+{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* BLE devices are shown as cards, we style them a bit. */
+.mdl-card
+{
+  min-height: 100px;
+  margin: 15px 0px;
+  width: 100%;
+}
+
+/* Make card title display more tightly. */
+.mdl-card__title
+{
+  padding-bottom: 6px;
+}
+
+/* Color of card text. */
+.mdl-card__supporting-text
+{
+  color: rgba(0,0,0,0.67);
+}
+
+/* Custom modification of the "burger icon" for the
+drawer menu. We move it to give room for a back button icon. */
+.mdl-layout__drawer-button
+{
+  left: 35px;
+}
+
+/* Show and position the back button icon (this probably breaks
+Material Design rules. :) */
+.mdl-layout-icon
+{
+  display: block !important;
+  left: 10px !important;
+}
+
+/* Also move the header with the title to give room for back icon. */
+.mdl-layout__header-row
+{
+  padding-left: 100px;
+}

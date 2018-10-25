@@ -1,15 +1,38 @@
 {
   "name": "redbearlab-simplecontrol",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "RedBearLab - Simple Control",
-  "description": "App to communicate in both directions (Read/Write) with your RedBearLab BLE boards.",
+  "description": "App to communicate in both directions with your RedBearLab BLE boards.",
   "tags": [
-    {"label": "arduino", "type": "platform"},
-    {"label": "redbearlabs", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "arduino",
+      "type": "platform"
+    },
+    {
+      "label": "redbearlabs",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "index-file": "index.html",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8baf",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/redbearlab-simplecontrol.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/redbearlab-simplecontrol.html",
+  "long-description": "App to communicate in both directions (Read/Write) with your RedBearLab BLE boards.",
+  "cordova-id": "com.evothings.examples.redbearlabsimplecontrol"
 }

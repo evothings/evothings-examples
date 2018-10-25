@@ -1,15 +1,30 @@
 {
   "name": "dialog-blinky",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Dialog - Blinky",
-  "description": "App to get started using DA1458x Bluetooth Low Energy (BLE) development kits from Dialog Semiconductor",
+  "description": "App to get started using DA1458x BLE development kits from Dialog Semiconductor.",
   "tags": [
-	  {"label": "dialog", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
+    {
+      "label": "dialog",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
   "libraries": [],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "index-file": "index.html",
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703ee2f8b01",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/dialog-blinky.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/dialog-blinky.html",
+  "long-description": "App to get started using DA1458x Bluetooth Low Energy (BLE) development kits from Dialog Semiconductor",
+  "cordova-id": "com.evothings.examples.dialogblinky"
 }

@@ -1,0 +1,37 @@
+{
+  "name": "bluemix-mqtt-painter",
+  "version": "1.0.0",
+  "title": "Bluemix MQTT Painter",
+  "description": "A cooperative drawing app for Bluemix MQTT. See DOC for requirements.",
+  "long-description": "A demo app for Bluemix MQTT showing cooperative drawing. For this application to work you need to get an account on Bluemix and edit the source code with proper credentials.",
+  "tags": [
+    {
+      "label": "mqtt",
+      "type": "protocol"
+    },
+    {
+      "label": "ibm",
+      "type": "vendor"
+    },
+    {
+      "label": "bluemix",
+      "type": "platform"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-device"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "mqttws",
+      "version": "3.1"
+    }
+  ],
+  "index-file": "index.html",
+  "uuid": "c30e1780-282b-4ea9-a0fc-e70a4137468e",
+  "icon": "app-icon.png",
+  "cordova-id": "com.evothings.samples.bluemix.mqtt.painter",
+  "doc-url": "https://evothings.com/2.2/doc/examples/bluemix-mqtt-painter.html"
+}

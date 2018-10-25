@@ -1,16 +1,39 @@
 {
   "name": "nordic-nrf51-ble",
-  "version": "1.0",
-  "title": "Nordic Semiconductor nRF51-DK BLE",
+  "version": "1.0.0",
+  "title": "Nordic nRF51-DK BLE",
   "description": "Simple app to control a Nordic Semiconductor nRF51 DK development kit using BLE.",
   "tags": [
-    {"label": "nordic", "type": "vendor"},
-    {"label": "mbed", "type": "platform"},
-    {"label": "ble", "type": "comm"}],
-  "libraries": [{"name": "jquery", "version": "2.1.1"}],
+    {
+      "label": "nordic",
+      "type": "vendor"
+    },
+    {
+      "label": "mbed",
+      "type": "platform"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "jquery",
+      "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
+    }
+  ],
   "index-file": "index.html",
   "app-dir": "app",
   "uuid": "fe860e6e-d35e-4bd0-831a-7703cc2f8b7f",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/nordic-nRF51-ble.html"
+  "doc-url": "http://evothings.com/2.2/doc/examples/nordic-nRF51-ble.html",
+  "long-description": "Simple app to control a Nordic Semiconductor nRF51 DK development kit using BLE.",
+  "cordova-id": "com.evothings.examples.nordicnrf51ble"
 }

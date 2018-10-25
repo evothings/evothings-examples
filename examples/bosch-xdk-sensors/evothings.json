@@ -1,19 +1,34 @@
 {
   "name": "bosch-xdk-sensors",
   "title": "Bosch XDK Sensors",
-  "description": "Sample application for the Bosch XDK device that shows raw numeric sensor data in real time.",
-  "version": "1.0",
+  "description": "Sample application for the Bosch XDK device showing sensor data in real time.",
+  "long-description": "Sample application for the Bosch XDK device that shows raw numeric sensor data in real time.",
+  "version": "1.0.0",
   "index-file": "index.html",
   "uuid": "4325411e-443e-4328-81ca-f2e7881ee5a9",
   "icon": "app-icon.png",
-  "doc-url": "https://evothings.com/2.1/doc/examples/bosch-xdk-sensors.html",
+  "cordova-id": "com.evothings.examples.boschxdksensors",
+  "doc-url": "https://evothings.com/2.2/doc/examples/bosch-xdk-sensors.html",
   "tags": [
-    {"label": "bosch", "type": "vendor"},
-    {"label": "ble", "type": "comm"}],
+    {
+      "label": "bosch",
+      "type": "vendor"
+    },
+    {
+      "label": "ble",
+      "type": "comm"
+    }
+  ],
   "libraries": [
     {
       "name": "jquery",
       "version": "2.1.1"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "cordova-plugin-ble",
+      "version": "2.0.0"
     }
   ]
 }
